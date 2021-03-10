@@ -1,0 +1,8 @@
+<resources>
+  <string name="app_name">Dr.Betting</string>
+  <string name="title_home">Home</string>
+  <string name="title_dashboard">Dashboard</string>
+  <string name="title_notifications">Notifications</string>
+  <string name="contact">Contact administrator</string>
+  <string name="tech_support">Contact techical support</string>
+</resources>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/mobile_navigation"
+  app:startDestination="@+id/navigation_football">
+
+  <fragment
+    android:id="@+id/navigation_football"
+    android:name="com.twoplaytech.drbetting.ui.football.FootballFragment"
+    android:label="Football"
+      tools:layout="@layout/fragment_base" />
+
+  <fragment
+    android:id="@+id/navigation_basketball"
+    android:name="com.twoplaytech.drbetting.ui.basketball.BasketballFragment"
+    android:label="Basketball"
+      tools:layout="@layout/fragment_base" />
+
+  <fragment
+    android:id="@+id/navigation_tennis"
+    android:name="com.twoplaytech.drbetting.ui.tennis.TennisFragment"
+    android:label="Tennis"
+      tools:layout="@layout/fragment_base"/>
+  <fragment
+      android:id="@+id/navigation_handball"
+      android:name="com.twoplaytech.drbetting.ui.handball.HandballFragment"
+      android:label="Handball"
+      tools:layout="@layout/fragment_base" />
+  <fragment
+      android:id="@+id/navigation_volleyball"
+      android:name="com.twoplaytech.drbetting.ui.volleyball.VolleyballFragment"
+      android:label="Volleyball"
+      tools:layout="@layout/fragment_base" />
+</navigation>

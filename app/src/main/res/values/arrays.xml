@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="contact_options">
+        <item>@string/contact</item>
+        <item>@string/tech_support</item>
+    </array>
+</resources>
