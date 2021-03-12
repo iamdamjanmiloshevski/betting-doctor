@@ -21,7 +21,13 @@ class HandballFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        initBinding(inflater,container)
+        initBinding(inflater, container)
+        initPager(
+            listOf(
+                HandballOlderFragment.getInstance(),
+                HandballUpcomingFragment.getInstance()
+            )
+        )
         return binding.root
     }
 }

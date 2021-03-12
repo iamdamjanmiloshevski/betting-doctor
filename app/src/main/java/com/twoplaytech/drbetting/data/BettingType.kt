@@ -1,9 +1,6 @@
-package com.twoplaytech.drbetting.ui.basketball
+package com.twoplaytech.drbetting.data
 
 import com.google.firebase.Timestamp
-import com.twoplaytech.drbetting.data.Sport
-import com.twoplaytech.drbetting.data.Team
-import com.twoplaytech.drbetting.data.TypeStatus
 import com.twoplaytech.drbetting.util.Constants.BETTING_TIP
 import com.twoplaytech.drbetting.util.Constants.GAME_TIME
 import com.twoplaytech.drbetting.util.Constants.LEAGUE_NAME
@@ -26,7 +23,7 @@ data class BettingType(
     var teamHome: Team? = null,
     var teamAway: Team? = null,
     var gameTime: Date? = null,
-    var bettingTip: String = "",
+    var bettingType: String = "",
     var status: TypeStatus? = null,
     var result: String = "",
     var id: String = "",
@@ -50,7 +47,7 @@ data class BettingType(
         } else {
             null
         }
-        bettingTip = if (data.containsKey(BETTING_TIP)) {
+        bettingType = if (data.containsKey(BETTING_TIP)) {
             data[BETTING_TIP] as String
         } else {
             ""

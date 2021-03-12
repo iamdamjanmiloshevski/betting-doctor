@@ -6,8 +6,8 @@
         <import type="com.twoplaytech.drbetting.util.ExtensionsKt" />
 
         <variable
-            name="type"
-            type="com.twoplaytech.drbetting.ui.basketball.BettingType" />
+            name="bettingType"
+            type="com.twoplaytech.drbetting.data.BettingType" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -42,7 +42,7 @@
                         android:layout_height="60dp"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="5dp"
-                        app:sportIcon="@{type.sport}" />
+                        app:sportIcon="@{bettingType.sport}" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tv_date"
@@ -53,7 +53,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginTop="5dp"
                         android:gravity="center"
-                        android:text="@{ExtensionsKt.convertDateToStringFormat(type.gameTime)}"
+                        android:text="@{ExtensionsKt.convertDateToStringFormat(bettingType.gameTime)}"
                         android:textSize="18sp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
@@ -65,7 +65,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginBottom="10dp"
                         android:gravity="center"
-                        android:text="@{ExtensionsKt.getTime(type.gameTime)}"
+                        android:text="@{ExtensionsKt.getTime(bettingType.gameTime)}"
                         android:textSize="18sp" />
                 </RelativeLayout>
 
@@ -81,7 +81,7 @@
                         android:layout_alignParentTop="true"
                         android:layout_centerHorizontal="true"
                         android:gravity="center"
-                        android:text="@{type.leagueName}"
+                        android:text="@{bettingType.leagueName}"
                         android:textColor="#000"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -96,8 +96,8 @@
                             android:id="@+id/iv_team_home"
                             android:layout_width="40dp"
                             android:layout_height="64dp"
-                            app:team="@{type.teamHome}"
-                            app:sport="@{type.sport}"
+                            app:team="@{bettingType.teamHome}"
+                            app:sport="@{bettingType.sport}"
                             android:layout_marginStart="5dp" />
 
                         <androidx.appcompat.widget.AppCompatTextView
@@ -111,14 +111,14 @@
                             android:layout_toEndOf="@id/iv_team_home"
                             android:gravity="center"
                             android:textSize="16sp"
-                            app:game="@{type}" />
+                            app:game="@{bettingType}" />
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/iv_team_away"
                             android:layout_width="40dp"
                             android:layout_height="64dp"
-                            app:team="@{type.teamHome}"
-                            app:sport="@{type.sport}"
+                            app:team="@{bettingType.teamHome}"
+                            app:sport="@{bettingType.sport}"
                             android:layout_alignParentEnd="true"
                             android:layout_marginEnd="5dp" />
                     </RelativeLayout>
@@ -150,7 +150,7 @@
                                 android:layout_below="@id/tv_betting"
                                 android:layout_centerHorizontal="true"
                                 android:gravity="center"
-                                android:text="@{type.bettingTip}"
+                                android:text="@{bettingType.bettingType}"
                                 android:textSize="16sp" />
                         </RelativeLayout>
 
@@ -174,7 +174,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_below="@id/tv_result"
                                 android:layout_centerInParent="true"
-                                android:text="@{type.result}"
+                                android:text="@{bettingType.result}"
                                 android:textSize="16sp" />
                         </RelativeLayout>
 
@@ -199,7 +199,7 @@
                                 android:layout_below="@id/tv_status"
                                 android:layout_centerHorizontal="true"
                                 android:gravity="center"
-                                app:result="@{type.status}" />
+                                app:result="@{bettingType.status}" />
                         </RelativeLayout>
                     </LinearLayout>
                 </RelativeLayout>

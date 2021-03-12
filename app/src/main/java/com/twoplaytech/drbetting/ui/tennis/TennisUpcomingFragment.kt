@@ -1,4 +1,4 @@
-package com.twoplaytech.drbetting.ui.football
+package com.twoplaytech.drbetting.ui.tennis
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.twoplaytech.drbetting.data.Sport
 import com.twoplaytech.drbetting.ui.common.BaseChildFragment
+import com.twoplaytech.drbetting.ui.football.FootballUpcomingFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 /*
@@ -15,7 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
     © 2Play Tech  2021. All rights reserved
 */
 @AndroidEntryPoint
-class FootballTodayFragment : BaseChildFragment() {
+class TennisUpcomingFragment : BaseChildFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -27,13 +28,14 @@ class FootballTodayFragment : BaseChildFragment() {
     }
 
     override fun initUI() {
+        binding.noDataView.setVisible(false)
         setUpDataAdapter()
-        requestTodayData(Sport.FOOTBALL)
+        requestTodayData(Sport.TENNIS)
     }
 
     companion object {
-        fun getInstance(): FootballTodayFragment {
-            return FootballTodayFragment()
+        fun getInstance(): FootballUpcomingFragment {
+            return FootballUpcomingFragment()
         }
     }
 }

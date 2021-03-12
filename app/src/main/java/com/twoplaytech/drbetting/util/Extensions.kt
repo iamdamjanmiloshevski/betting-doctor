@@ -25,7 +25,7 @@ fun String.checkImageExtension(): Boolean {
 fun Query.asFirestoreQueryLiveData(): FirestoreQueryLiveData {
     return FirestoreQueryLiveData(this)
 }
-fun yesterday(): Date {
+fun older(): Date {
     val calendar = Calendar.getInstance();
     calendar.add(Calendar.DAY_OF_MONTH, -1)
     return calendar.time

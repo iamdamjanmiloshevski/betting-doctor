@@ -1,8 +1,6 @@
 package com.twoplaytech.drbetting.ui.common
 
-import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -31,7 +29,7 @@ abstract class BaseFragment : Fragment(), IBaseView {
         TabLayoutMediator(binding.tabs, binding.vpTabs) { tab, position ->
             when (position) {
                 0 -> tab.text = "Older"
-                1 -> tab.text = "Today"
+                1 -> tab.text = "Upcoming"
             }
         }.attach()
     }

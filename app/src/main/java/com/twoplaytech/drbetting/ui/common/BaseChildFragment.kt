@@ -1,15 +1,17 @@
 package com.twoplaytech.drbetting.ui.common
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.DocumentChange
+import com.twoplaytech.drbetting.data.BettingType
 import com.twoplaytech.drbetting.data.Sport
 import com.twoplaytech.drbetting.databinding.FragmentChildBinding
 import com.twoplaytech.drbetting.ui.adapters.BettingTipsRecyclerViewAdapter
-import com.twoplaytech.drbetting.ui.basketball.BettingType
 
 /*
     Author: Damjan Miloshevski 
@@ -21,7 +23,7 @@ abstract class BaseChildFragment : Fragment(), IBaseView {
     protected lateinit var binding: FragmentChildBinding
     override val viewModel: BettingTipsViewModel by activityViewModels()
     private val bettingTips = mutableListOf<BettingType>()
-    private val adapter: BettingTipsRecyclerViewAdapter =
+    protected val adapter: BettingTipsRecyclerViewAdapter =
         BettingTipsRecyclerViewAdapter(bettingTips)
 
     override fun initBinding(inflater: LayoutInflater, container: ViewGroup?) {
@@ -32,10 +34,18 @@ abstract class BaseChildFragment : Fragment(), IBaseView {
         binding.rvBettingTips.adapter = adapter
         binding.rvBettingTips.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onChanged() {
+                val isVisible = adapter.itemCount > 0
+                binding.rvBettingTips.visibility = if (isVisible) View.VISIBLE else View.GONE
+                binding.noDataView.setVisible(!isVisible)
+                binding.progressBar.visibility = View.GONE
+            }
+        })
     }
 
     fun requestTodayData(type: Sport) {
-        viewModel.getTodayTips(type.value).observe(this, {
+        viewModel.getUpcomingTips(type.value).observe(this, {
             for (doc in it!!.documentChanges) {
                 val tip = BettingType(doc.document.data)
                 tip.id = doc.document.id
@@ -66,9 +76,11 @@ abstract class BaseChildFragment : Fragment(), IBaseView {
                     }
                 }
             }
-            if (bettingTips.isNotEmpty()) {
-                adapter.notifyDataSetChanged()
-            }
+            adapter.notifyDataSetChanged()
         })
+    }
+
+    fun requestOlderData(type: Sport) {
+        viewModel.getOlderTips(type.value)
     }
 }

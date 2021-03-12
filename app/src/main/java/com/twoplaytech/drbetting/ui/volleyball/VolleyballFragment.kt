@@ -21,7 +21,13 @@ class VolleyballFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        initBinding(inflater,container)
+        initBinding(inflater, container)
+        initPager(
+            listOf(
+                VolleyballOlderFragment.getInstance(),
+                VolleyballUpcomingFragment.getInstance()
+            )
+        )
         return binding.root
     }
 }

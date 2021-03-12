@@ -1,4 +1,4 @@
-package com.twoplaytech.drbetting.ui.football
+package com.twoplaytech.drbetting.ui.handball
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,7 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
     © 2Play Tech  2021. All rights reserved
 */
 @AndroidEntryPoint
-class FootballOlderFragment:BaseChildFragment(),Observer<Resource<List<BettingType>>> {
+class HandballOlderFragment:BaseChildFragment(),Observer<Resource<List<BettingType>>> {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,31 +32,31 @@ class FootballOlderFragment:BaseChildFragment(),Observer<Resource<List<BettingTy
     override fun initUI() {
         binding.noDataView.setVisible(false)
         setUpDataAdapter()
-        requestOlderData(Sport.FOOTBALL)
+        requestOlderData(Sport.HANDBALL)
         viewModel.observeOnOlderTips().observe(viewLifecycleOwner, this)
     }
     companion object{
-        fun getInstance():FootballOlderFragment{
-            return FootballOlderFragment()
+        fun getInstance():HandballOlderFragment{
+            return HandballOlderFragment()
         }
     }
 
 
 
     override fun onChanged(resource: Resource<List<BettingType>>) {
-       when(resource.status){
-           Status.SUCCESS -> {
-               binding.progressBar.visibility = View.GONE
-               val data = resource.data as List<BettingType>
-               adapter.addData(data)
-           }
-           Status.LOADING -> {
-               binding.progressBar.visibility = View.VISIBLE
-           }
-           Status.ERROR -> {
+        when(resource.status){
+            Status.SUCCESS -> {
+                binding.progressBar.visibility = View.GONE
+                val data = resource.data as List<BettingType>
+                adapter.addData(data)
+            }
+            Status.LOADING -> {
+                binding.progressBar.visibility = View.VISIBLE
+            }
+            Status.ERROR -> {
 
 
-           }
-       }
+            }
+        }
     }
 }
