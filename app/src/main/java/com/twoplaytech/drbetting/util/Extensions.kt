@@ -1,5 +1,8 @@
 package com.twoplaytech.drbetting.util
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.drawable.Drawable
 import com.google.firebase.firestore.Query
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.common.FirestoreQueryLiveData
@@ -38,6 +41,38 @@ fun Sport.getSportPlaceHolder(): Int {
         Sport.HANDBALL -> R.drawable.handball_ball
         Sport.VOLLEYBALL -> R.drawable.volleyball_ball
         else -> R.drawable.soccer_ball
+    }
+}
+fun Sport.getSportColor(): Int {
+    return when (this) {
+        Sport.FOOTBALL -> R.color.blue
+        Sport.BASKETBALL -> R.color.orange
+        Sport.TENNIS -> R.color.seagreen
+        Sport.HANDBALL -> R.color.cyan
+        Sport.VOLLEYBALL -> R.color.violet
+        else -> R.color.blue
+    }
+}
+
+@SuppressLint("UseCompatLoadingForDrawables")
+fun Sport.getSportDrawable(context: Context): Drawable? {
+    return when (this) {
+        Sport.FOOTBALL -> context.getDrawable(R.drawable.gradient_blue)
+        Sport.BASKETBALL -> context.getDrawable(R.drawable.gradient_orange)
+        Sport.TENNIS -> context.getDrawable(R.drawable.gradient_green)
+        Sport.HANDBALL -> context.getDrawable(R.drawable.gradient_cyan)
+        Sport.VOLLEYBALL -> context.getDrawable(R.drawable.gradient_violet)
+        else -> context.getDrawable(R.drawable.gradient_blue)
+    }
+}
+fun Sport.getSportResource():Int{
+    return when (this) {
+        Sport.FOOTBALL -> R.drawable.gradient_blue
+        Sport.BASKETBALL -> R.drawable.gradient_orange
+        Sport.TENNIS -> R.drawable.gradient_green
+        Sport.HANDBALL -> R.drawable.gradient_cyan
+        Sport.VOLLEYBALL -> R.drawable.gradient_violet
+        else -> R.drawable.gradient_blue
     }
 }
 fun Date.convertDateToStringFormat(): String {

@@ -5,4 +5,11 @@
   <string name="title_notifications">Notifications</string>
   <string name="contact">Contact administrator</string>
   <string name="tech_support">Contact techical support</string>
+    <string name="older_tab">Older</string>
+  <string name="upcoming_tab">Upcoming</string>
+    <string name="heading_football">Football</string>
+  <string name="heading_basketball">Basketball</string>
+  <string name="heading_handball">Handball</string>
+  <string name="heading_tennis">Tennis</string>
+  <string name="heading_volleyball">Volleyball</string>
 </resources>

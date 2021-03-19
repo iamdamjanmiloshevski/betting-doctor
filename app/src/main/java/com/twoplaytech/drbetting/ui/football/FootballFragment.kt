@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.twoplaytech.drbetting.R
+import com.twoplaytech.drbetting.data.Sport
 import com.twoplaytech.drbetting.ui.common.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -16,6 +18,7 @@ class FootballFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         initBinding(inflater, container)
+        changeTheme(R.string.heading_football,Sport.FOOTBALL)
         initPager(
             listOf(
                 FootballOlderFragment.getInstance(),

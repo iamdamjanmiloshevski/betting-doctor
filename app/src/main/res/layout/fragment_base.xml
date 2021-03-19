@@ -1,21 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabs"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/actionBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:tabStripEnabled="false"
-        app:tabTextAppearance="@style/MyCustomTextAppearance"
-        app:tabGravity="fill"
-        app:tabMode="fixed" />
+        android:elevation="0dp"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="0dp">
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/vp_tabs"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/tabs" />
-</RelativeLayout>
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.AppBarOverlay" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+   <androidx.constraintlayout.widget.ConstraintLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       app:layout_behavior="@string/appbar_scrolling_view_behavior">
+       <com.google.android.material.tabs.TabLayout
+           android:id="@+id/tabs"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:tabStripEnabled="false"
+           app:tabTextColor="@color/silver"
+           app:tabSelectedTextColor="@color/white"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintStart_toEndOf="parent"
+           app:layout_constraintTop_toTopOf="parent"
+           app:tabIndicatorColor="@color/white"
+           app:tabTextAppearance="@style/MyCustomTextAppearance"
+           app:tabGravity="fill"
+           app:tabMode="fixed" />
+
+       <androidx.viewpager2.widget.ViewPager2
+           android:id="@+id/vp_tabs"
+           android:layout_width="match_parent"
+           app:layout_constraintTop_toBottomOf="@id/tabs"
+           android:layout_height="0dp"
+           app:layout_constraintBottom_toBottomOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintEnd_toEndOf="parent" />
+   </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

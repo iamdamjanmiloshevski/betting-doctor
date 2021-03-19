@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:title="Settings"
+        android:icon="@drawable/ic_settings"
+        android:orderInCategory="1"
+        android:id="@+id/action_settings"
+        app:showAsAction="always"/>
+    <item android:title="About us"
+        android:orderInCategory="2"
+        android:icon="@drawable/ic_about"/>
+    <item android:title="Disclaimer"
+        android:icon="@drawable/ic_disclaimer"
+        android:orderInCategory="3"
+        app:showAsAction="ifRoom"/>
+    <item android:title="Feedback"
+        android:orderInCategory="4"/>
+    <item android:title="Contact"
+        android:orderInCategory="5"/>
+</menu>

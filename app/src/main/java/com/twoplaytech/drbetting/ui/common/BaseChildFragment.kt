@@ -25,11 +25,9 @@ abstract class BaseChildFragment : Fragment(), IBaseView {
     private val bettingTips = mutableListOf<BettingType>()
     protected val adapter: BettingTipsRecyclerViewAdapter =
         BettingTipsRecyclerViewAdapter(bettingTips)
-
     override fun initBinding(inflater: LayoutInflater, container: ViewGroup?) {
         binding = FragmentChildBinding.inflate(inflater, container, false)
     }
-
     override fun setUpDataAdapter() {
         binding.rvBettingTips.adapter = adapter
         binding.rvBettingTips.layoutManager =
