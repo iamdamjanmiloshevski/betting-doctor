@@ -24,11 +24,11 @@
 
 package com.twoplaytech.drbetting.ui.common
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.MenuRes
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
@@ -40,6 +40,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import com.twoplaytech.drbetting.R
+import com.twoplaytech.drbetting.SettingsActivity
 import com.twoplaytech.drbetting.data.Sport
 import com.twoplaytech.drbetting.databinding.FragmentBaseBinding
 import com.twoplaytech.drbetting.ui.adapters.ChildFragmentViewPager2PagerAdapter
@@ -97,8 +98,7 @@ abstract class BaseFragment : Fragment(), IBaseView, Toolbar.OnMenuItemClickList
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.action_settings -> {
-                Toast.makeText(requireContext(), "Settings", Toast.LENGTH_SHORT)
-                    .show()
+                startActivity(Intent(requireContext(), SettingsActivity::class.java))
                 true
             }
             else -> false

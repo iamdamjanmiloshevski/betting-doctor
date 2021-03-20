@@ -27,34 +27,39 @@ package com.twoplaytech.drbetting.ui.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.twoplaytech.drbetting.data.BettingType
-import com.twoplaytech.drbetting.databinding.ItemTipBinding
-import com.twoplaytech.drbetting.ui.viewholders.TipViewHolder
+import com.twoplaytech.drbetting.R
+import com.twoplaytech.drbetting.common.ISettingsItem
+import com.twoplaytech.drbetting.data.SettingsItem
+import com.twoplaytech.drbetting.databinding.ItemSettingsBinding
+import com.twoplaytech.drbetting.ui.viewholders.SettingsViewHolder
 
 /*
     Author: Damjan Miloshevski 
-    Created on 3/10/21 1:20 PM
-
+    Created on 3/20/21 8:43 PM
 */
-class BettingTipsRecyclerViewAdapter(private val types: MutableList<BettingType>) :
-    RecyclerView.Adapter<TipViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TipViewHolder {
+class SettingsRecyclerViewAdapter():RecyclerView.Adapter<SettingsViewHolder>() {
+    private val items = listOf<SettingsItem>(
+        SettingsItem.AboutUs("AboutUs", R.drawable.ic_about),
+        SettingsItem.Contact("Contact",R.drawable.ic_contact),
+        SettingsItem.Feedback("Feedback",R.drawable.ic_about),
+        SettingsItem.RateUs("Rate Us",R.drawable.ic_rate_us),
+        SettingsItem.PrivacyPolicy("Privacy Policy",R.drawable.ic_privacy),
+        SettingsItem.TermsOfUse("Terms of Use",R.drawable.ic_terms),
+        SettingsItem.ThirdPartySoftware("Third Party software",R.drawable.ic_about),
+        SettingsItem.Language("Language",R.drawable.ic_about)
+    )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SettingsViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = ItemTipBinding.inflate(inflater, parent, false)
-        return TipViewHolder(binding)
+        val binding = ItemSettingsBinding.inflate(inflater,parent,false)
+        return SettingsViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: TipViewHolder, position: Int) {
-        val bettingType = types[position]
-        holder.binding.bettingType = bettingType
+    override fun onBindViewHolder(holder: SettingsViewHolder, position: Int) {
+        val item = items[position]
+        holder.binding.item = item as ISettingsItem
     }
 
     override fun getItemCount(): Int {
-        return types.size
-    }
-
-    fun addData(types: List<BettingType>) {
-        this.types.addAll(types)
-        notifyDataSetChanged()
+        return items.size
     }
 }

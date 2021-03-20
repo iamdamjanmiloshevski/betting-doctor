@@ -24,11 +24,13 @@
 
 package com.twoplaytech.drbetting.ui.common
 
+import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.twoplaytech.drbetting.R
+import com.twoplaytech.drbetting.common.ISettingsItem
 import com.twoplaytech.drbetting.data.BettingType
 import com.twoplaytech.drbetting.data.Sport
 import com.twoplaytech.drbetting.data.Team
@@ -75,4 +77,12 @@ fun getSportIcon(view: AppCompatImageView, tipSport: Sport) {
         Sport.VOLLEYBALL -> view.setImageResource(R.drawable.volleyball_ball)
 
     }
+}
+@BindingAdapter("itemIcon")
+fun loadItemIcon(view:ImageView,item:ISettingsItem){
+    Glide.with(view)
+        .load(item.icon)
+        .fitCenter()
+        .placeholder(R.drawable.progress_animation)
+        .into(view)
 }

@@ -22,14 +22,26 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.ui.viewholders
+package com.twoplaytech.drbetting
 
-import androidx.recyclerview.widget.RecyclerView
-import com.twoplaytech.drbetting.databinding.ItemTipBinding
+import android.os.Bundle
+import android.view.LayoutInflater
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.twoplaytech.drbetting.databinding.ActivitySettingsBinding
+import com.twoplaytech.drbetting.ui.adapters.SettingsRecyclerViewAdapter
 
-/*
-    Author: Damjan Miloshevski 
-    Created on 3/10/21 1:20 PM
-
-*/
-class TipViewHolder(val binding:ItemTipBinding):RecyclerView.ViewHolder(binding.root)
+class SettingsActivity : AppCompatActivity() {
+    private lateinit var binding: ActivitySettingsBinding
+    private val settingsAdapter = SettingsRecyclerViewAdapter()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivitySettingsBinding.inflate(LayoutInflater.from(this))
+        setContentView(binding.root)
+        binding.rvItems.apply {
+            this.adapter = settingsAdapter
+            layoutManager =
+                LinearLayoutManager(this@SettingsActivity, LinearLayoutManager.VERTICAL, false)
+        }
+    }
+}

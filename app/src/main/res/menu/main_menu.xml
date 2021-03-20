@@ -35,10 +35,4 @@
         android:icon="@drawable/ic_disclaimer"
         android:orderInCategory="2"
         app:showAsAction="ifRoom"/>
-    <item android:title="@string/item_feedback"
-        android:orderInCategory="3"
-        app:showAsAction="never"/>
-    <item android:title="@string/item_contact"
-        android:orderInCategory="4"
-        app:showAsAction="never"/>
 </menu>

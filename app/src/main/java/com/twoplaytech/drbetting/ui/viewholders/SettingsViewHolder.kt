@@ -25,11 +25,11 @@
 package com.twoplaytech.drbetting.ui.viewholders
 
 import androidx.recyclerview.widget.RecyclerView
-import com.twoplaytech.drbetting.databinding.ItemTipBinding
+import com.twoplaytech.drbetting.databinding.ItemSettingsBinding
 
 /*
     Author: Damjan Miloshevski 
-    Created on 3/10/21 1:20 PM
-
+    Created on 3/20/21 8:43 PM
 */
-class TipViewHolder(val binding:ItemTipBinding):RecyclerView.ViewHolder(binding.root)
+class SettingsViewHolder( val binding: ItemSettingsBinding) :
+    RecyclerView.ViewHolder(binding.root)

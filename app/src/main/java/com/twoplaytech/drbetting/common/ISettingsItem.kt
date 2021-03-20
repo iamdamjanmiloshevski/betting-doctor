@@ -22,14 +22,13 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.ui.viewholders
-
-import androidx.recyclerview.widget.RecyclerView
-import com.twoplaytech.drbetting.databinding.ItemTipBinding
+package com.twoplaytech.drbetting.common
 
 /*
     Author: Damjan Miloshevski 
-    Created on 3/10/21 1:20 PM
-
+    Created on 3/20/21 8:24 PM
 */
-class TipViewHolder(val binding:ItemTipBinding):RecyclerView.ViewHolder(binding.root)
+interface ISettingsItem {
+    val name: String
+    val icon: Int
+}
