@@ -25,6 +25,7 @@
 package com.twoplaytech.drbetting.data
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import com.twoplaytech.drbetting.common.ISettingsItem
 
 /*
@@ -32,27 +33,29 @@ import com.twoplaytech.drbetting.common.ISettingsItem
     Created on 3/20/21 8:23 PM
 */
 sealed class SettingsItem {
-    data class AboutUs(override val name: String, @DrawableRes override val icon: Int) :
+    data class AboutUs(@StringRes override val name: Int, @DrawableRes override val icon: Int) :
         ISettingsItem, SettingsItem()
 
-    data class Contact(override val name: String, @DrawableRes override val icon: Int) :
+    data class Contact(@StringRes override val name: Int, @DrawableRes override val icon: Int) :
         ISettingsItem, SettingsItem()
 
-    data class Feedback(override val name: String, @DrawableRes override val icon: Int) :
+    data class Feedback(@StringRes override val name: Int, @DrawableRes override val icon: Int) :
         ISettingsItem, SettingsItem()
 
-    data class RateUs(override val name: String, @DrawableRes override val icon: Int) :
+    data class RateUs(@StringRes override val name: Int, @DrawableRes override val icon: Int) :
         ISettingsItem, SettingsItem()
 
-    data class PrivacyPolicy(override val name: String, @DrawableRes override val icon: Int) :
+    data class PrivacyPolicy(@StringRes override val name: Int, @DrawableRes override val icon: Int) :
         ISettingsItem, SettingsItem()
 
-    data class TermsOfUse(override val name: String, @DrawableRes override val icon: Int) :
+    data class TermsOfUse(@StringRes override val name: Int, @DrawableRes override val icon: Int) :
         ISettingsItem, SettingsItem()
 
-    data class ThirdPartySoftware(override val name: String, @DrawableRes override val icon: Int) :
+    data class ThirdPartySoftware(@StringRes override val name: Int, @DrawableRes override val icon: Int) :
         ISettingsItem, SettingsItem()
 
-    data class Language(override val name: String, @DrawableRes override val icon: Int) :
+    data class Language(@StringRes override val name: Int, @DrawableRes override val icon: Int) :
+        ISettingsItem, SettingsItem()
+    data class Notifications(@StringRes override val name: Int, @DrawableRes override val icon: Int) :
         ISettingsItem, SettingsItem()
 }

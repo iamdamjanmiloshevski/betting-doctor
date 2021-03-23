@@ -27,6 +27,7 @@ package com.twoplaytech.drbetting.util
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.Drawable
+import androidx.core.content.ContextCompat
 import com.google.firebase.firestore.Query
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.common.FirestoreQueryLiveData
@@ -48,14 +49,17 @@ fun String.checkImageExtension(): Boolean {
             this.endsWith(".png", true) ||
             this.endsWith(".gif", true)
 }
+
 fun Query.asFirestoreQueryLiveData(): FirestoreQueryLiveData {
     return FirestoreQueryLiveData(this)
 }
+
 fun older(): Date {
     val calendar = Calendar.getInstance();
     calendar.add(Calendar.DAY_OF_MONTH, -1)
     return calendar.time
 }
+
 fun Sport.getSportPlaceHolder(): Int {
     return when (this) {
         Sport.FOOTBALL -> R.drawable.soccer_ball
@@ -66,6 +70,7 @@ fun Sport.getSportPlaceHolder(): Int {
         else -> R.drawable.soccer_ball
     }
 }
+
 fun Sport.getSportColor(): Int {
     return when (this) {
         Sport.FOOTBALL -> R.color.blue
@@ -80,15 +85,16 @@ fun Sport.getSportColor(): Int {
 @SuppressLint("UseCompatLoadingForDrawables")
 fun Sport.getSportDrawable(context: Context): Drawable? {
     return when (this) {
-        Sport.FOOTBALL -> context.getDrawable(R.drawable.gradient_blue)
-        Sport.BASKETBALL -> context.getDrawable(R.drawable.gradient_orange)
-        Sport.TENNIS -> context.getDrawable(R.drawable.gradient_green)
-        Sport.HANDBALL -> context.getDrawable(R.drawable.gradient_cyan)
-        Sport.VOLLEYBALL -> context.getDrawable(R.drawable.gradient_violet)
-        else -> context.getDrawable(R.drawable.gradient_blue)
+        Sport.FOOTBALL -> ContextCompat.getDrawable(context,R.drawable.gradient_blue)
+        Sport.BASKETBALL -> ContextCompat.getDrawable(context,R.drawable.gradient_orange)
+        Sport.TENNIS -> ContextCompat.getDrawable(context,R.drawable.gradient_green)
+        Sport.HANDBALL -> ContextCompat.getDrawable(context,R.drawable.gradient_cyan)
+        Sport.VOLLEYBALL -> ContextCompat.getDrawable(context,R.drawable.gradient_violet)
+        else -> ContextCompat.getDrawable(context,R.drawable.gradient_blue)
     }
 }
-fun Sport.getSportResource():Int{
+
+fun Sport.getSportResource(): Int {
     return when (this) {
         Sport.FOOTBALL -> R.drawable.gradient_blue
         Sport.BASKETBALL -> R.drawable.gradient_orange
@@ -98,6 +104,7 @@ fun Sport.getSportResource():Int{
         else -> R.drawable.gradient_blue
     }
 }
+
 fun Date.convertDateToStringFormat(): String {
     val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH)
     return simpleDateFormat.format(this)
@@ -112,3 +119,26 @@ fun today(): Date {
     val calendar = Calendar.getInstance()
     return calendar.time
 }
+
+fun Context.getRandomBackground(): Pair<Drawable?, Int> {
+    val random = Random()
+    val indexes = IntArray(5)
+    val idx = random.nextInt(indexes.size)
+    val sports = listOf(
+        Sport.FOOTBALL.getSportDrawable(this),
+        Sport.BASKETBALL.getSportDrawable(this),
+        Sport.TENNIS.getSportDrawable(this),
+        Sport.HANDBALL.getSportDrawable(this),
+        Sport.VOLLEYBALL.getSportDrawable(this),
+    )
+    val colors = listOf(
+        R.color.blue,
+        R.color.orange,
+        R.color.seagreen,
+        R.color.cyan,
+        R.color.violet
+    )
+
+    return Pair(sports[idx], colors[idx])
+}
+

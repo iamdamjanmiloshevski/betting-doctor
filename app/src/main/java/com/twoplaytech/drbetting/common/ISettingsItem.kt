@@ -29,6 +29,6 @@ package com.twoplaytech.drbetting.common
     Created on 3/20/21 8:24 PM
 */
 interface ISettingsItem {
-    val name: String
+    val name: Int
     val icon: Int
 }

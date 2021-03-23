@@ -22,14 +22,24 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.ui.viewholders
+package com.twoplaytech.drbetting.ui.settings
 
-import androidx.recyclerview.widget.RecyclerView
-import com.twoplaytech.drbetting.databinding.ItemSettingsBinding
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.twoplaytech.drbetting.data.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 /*
     Author: Damjan Miloshevski 
-    Created on 3/20/21 8:43 PM
+    Created on 3/23/21 1:53 PM
 */
-class SettingsViewHolder(val binding: ItemSettingsBinding) :
-    RecyclerView.ViewHolder(binding.root)
+@HiltViewModel
+class SettingsViewModel @Inject constructor():ViewModel() {
+    private val urlObserver = MutableLiveData<Resource<String>>()
+
+    fun setUrl(url:String){
+        urlObserver.value = Resource.success(null,url)
+    }
+    fun observeUrl() = urlObserver
+}

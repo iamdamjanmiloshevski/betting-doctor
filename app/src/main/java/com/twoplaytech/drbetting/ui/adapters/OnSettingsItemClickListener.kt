@@ -22,14 +22,14 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.ui.viewholders
+package com.twoplaytech.drbetting.ui.adapters
 
-import androidx.recyclerview.widget.RecyclerView
-import com.twoplaytech.drbetting.databinding.ItemSettingsBinding
+import com.twoplaytech.drbetting.data.SettingsItem
 
 /*
     Author: Damjan Miloshevski 
-    Created on 3/20/21 8:43 PM
+    Created on 3/23/21 11:55 AM
 */
-class SettingsViewHolder(val binding: ItemSettingsBinding) :
-    RecyclerView.ViewHolder(binding.root)
+interface OnSettingsItemClickListener {
+    fun onSettingsItemClick(item:SettingsItem)
+}

@@ -22,14 +22,19 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.ui.viewholders
+package com.twoplaytech.drbetting.ui.common
 
-import androidx.recyclerview.widget.RecyclerView
-import com.twoplaytech.drbetting.databinding.ItemSettingsBinding
+import androidx.appcompat.widget.Toolbar
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.twoplaytech.drbetting.data.Sport
 
-/*
-    Author: Damjan Miloshevski 
-    Created on 3/20/21 8:43 PM
-*/
-class SettingsViewHolder(val binding: ItemSettingsBinding) :
-    RecyclerView.ViewHolder(binding.root)
+interface IBaseActivityView {
+    fun initUI(){}
+    fun changeTheme(
+        navView: BottomNavigationView? = null,
+        sport: Sport? = null,
+        toolbar: Toolbar? = null
+    ) {
+    }
+    fun observeData(){}
+}

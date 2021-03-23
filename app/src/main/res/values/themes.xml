@@ -38,9 +38,20 @@
     <!-- Customize your theme here. -->
     <item name="android:textColor">@color/black</item>
   </style>
+
   <style name="MyCustomTextAppearance" parent="TextAppearance.Design.Tab">
     <item name="textAllCaps">false</item>
     <item name="android:textAllCaps">false</item>
   </style>
+
   <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+  <style name="Theme.DrBetting.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+  <style name="Theme.DrBetting.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+  <style name="Theme.DrBetting.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
