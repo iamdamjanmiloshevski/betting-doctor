@@ -22,21 +22,23 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.ui.common
+package com.twoplaytech.drbetting
 
-import android.view.View
-import androidx.appcompat.widget.Toolbar
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.twoplaytech.drbetting.data.Sport
+import android.os.Bundle
+import android.view.LayoutInflater
+import com.twoplaytech.drbetting.databinding.ActivityAppInfoBinding
+import com.twoplaytech.drbetting.ui.common.BaseActivity
+import com.twoplaytech.drbetting.util.getVersionName
+import com.twoplaytech.drbetting.util.writeCopyright
 
-interface IBaseActivityView {
-    fun initUI(){}
-    fun changeTheme(
-        navView: BottomNavigationView? = null,
-        sport: Sport? = null,
-        toolbar: Toolbar? = null,
-        view: View? = null
-    ) {
+class AppInfoActivity : BaseActivity() {
+    private lateinit var binding: ActivityAppInfoBinding
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityAppInfoBinding.inflate(LayoutInflater.from(this))
+        setContentView(binding.root)
+        changeTheme(view = binding.background)
+        binding.tvCopyright.text = this.writeCopyright()
+        binding.tvAppVersion.text = getString(R.string.version, this.getVersionName())
     }
-    fun observeData(){}
 }

@@ -26,14 +26,20 @@ package com.twoplaytech.drbetting.util
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
+import android.view.LayoutInflater
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.google.firebase.firestore.Query
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.common.FirestoreQueryLiveData
 import com.twoplaytech.drbetting.data.Sport
+import com.twoplaytech.drbetting.databinding.DialogDisclaimerBinding
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 /*
     Author: Damjan Miloshevski 
@@ -85,12 +91,12 @@ fun Sport.getSportColor(): Int {
 @SuppressLint("UseCompatLoadingForDrawables")
 fun Sport.getSportDrawable(context: Context): Drawable? {
     return when (this) {
-        Sport.FOOTBALL -> ContextCompat.getDrawable(context,R.drawable.gradient_blue)
-        Sport.BASKETBALL -> ContextCompat.getDrawable(context,R.drawable.gradient_orange)
-        Sport.TENNIS -> ContextCompat.getDrawable(context,R.drawable.gradient_green)
-        Sport.HANDBALL -> ContextCompat.getDrawable(context,R.drawable.gradient_cyan)
-        Sport.VOLLEYBALL -> ContextCompat.getDrawable(context,R.drawable.gradient_violet)
-        else -> ContextCompat.getDrawable(context,R.drawable.gradient_blue)
+        Sport.FOOTBALL -> ContextCompat.getDrawable(context, R.drawable.gradient_blue)
+        Sport.BASKETBALL -> ContextCompat.getDrawable(context, R.drawable.gradient_orange)
+        Sport.TENNIS -> ContextCompat.getDrawable(context, R.drawable.gradient_green)
+        Sport.HANDBALL -> ContextCompat.getDrawable(context, R.drawable.gradient_cyan)
+        Sport.VOLLEYBALL -> ContextCompat.getDrawable(context, R.drawable.gradient_violet)
+        else -> ContextCompat.getDrawable(context, R.drawable.gradient_blue)
     }
 }
 
@@ -142,3 +148,32 @@ fun Context.getRandomBackground(): Pair<Drawable?, Int> {
     return Pair(sports[idx], colors[idx])
 }
 
+fun Context.showDisclaimer() {
+    val dialog = AlertDialog.Builder(this)
+    dialog.setCancelable(false)
+    dialog.setTitle(R.string.item_disclaimer)
+    val inflater = LayoutInflater.from(this)
+    val dialogBinding = DialogDisclaimerBinding.inflate(inflater)
+    dialog.setView(dialogBinding.root)
+    dialog.setPositiveButton(android.R.string.ok) { disclaimerDialog, _ ->
+        disclaimerDialog.dismiss()
+    }
+    dialogBinding.webView.loadUrl("https://betting-tips-2-odds.firebaseapp.com/disclaimer.html")
+    dialog.show()
+}
+fun Context.writeCopyright():String{
+    val dateFormatter = SimpleDateFormat("YYYY")
+    val calendar = Calendar.getInstance()
+    val date = dateFormatter.format(calendar.time)
+    return this.getString(R.string.copyright, date)
+}
+fun Context.getVersionName():String?{
+    return try {
+        val pInfo: PackageInfo =
+            this.packageManager.getPackageInfo(this.getPackageName(), 0)
+        pInfo.versionName
+    } catch (e: PackageManager.NameNotFoundException) {
+        e.printStackTrace()
+        null
+    }
+}

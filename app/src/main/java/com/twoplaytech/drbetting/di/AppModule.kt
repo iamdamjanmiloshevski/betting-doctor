@@ -22,21 +22,26 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.ui.common
+package com.twoplaytech.drbetting.di
 
-import android.view.View
-import androidx.appcompat.widget.Toolbar
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.twoplaytech.drbetting.data.Sport
+import android.content.Context
+import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
-interface IBaseActivityView {
-    fun initUI(){}
-    fun changeTheme(
-        navView: BottomNavigationView? = null,
-        sport: Sport? = null,
-        toolbar: Toolbar? = null,
-        view: View? = null
-    ) {
-    }
-    fun observeData(){}
+/*
+    Author: Damjan Miloshevski 
+    Created on 3/29/21 12:11 PM
+*/
+@Module
+@InstallIn(SingletonComponent::class)
+class AppModule {
+    @Singleton
+    @Provides
+    fun provideSharedPreferencesManager(@ApplicationContext context: Context) =
+        SharedPreferencesManager(context)
 }

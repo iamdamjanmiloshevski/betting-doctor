@@ -24,6 +24,9 @@
 
 package com.twoplaytech.drbetting.ui.common
 
+import android.content.pm.ActivityInfo
+import android.os.Bundle
+import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -39,7 +42,18 @@ import com.twoplaytech.drbetting.util.getSportResource
     Created on 3/23/21 1:08 PM
 */
 abstract class BaseActivity : AppCompatActivity(), IBaseActivityView {
-    override fun changeTheme(navView: BottomNavigationView?, sport: Sport?, toolbar: Toolbar?) {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    }
+
+    override fun changeTheme(
+        navView: BottomNavigationView?,
+        sport: Sport?,
+        toolbar: Toolbar?,
+        view: View?
+    ) {
         if (navView != null && sport != null) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -55,9 +69,26 @@ abstract class BaseActivity : AppCompatActivity(), IBaseActivityView {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                 window.statusBarColor = ContextCompat.getColor(this, sport.getSportColor())
             }
-        } else if(toolbar!=null) {
+        } else if (toolbar != null) {
             val backgrounds = this.getRandomBackground()
             toolbar.background = backgrounds.first
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            }
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                window.statusBarColor = ContextCompat.getColor(this, backgrounds.second)
+            }
+        } else if (view != null) {
+            val backgrounds = this.getRandomBackground()
+            view.background = backgrounds.first
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            }
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                window.statusBarColor = ContextCompat.getColor(this, backgrounds.second)
+            }
+        } else {
+            val backgrounds = this.getRandomBackground()
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             }

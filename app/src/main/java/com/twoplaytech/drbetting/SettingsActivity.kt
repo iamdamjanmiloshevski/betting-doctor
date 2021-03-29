@@ -24,7 +24,9 @@
 
 package com.twoplaytech.drbetting
 
+import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -113,25 +115,27 @@ class SettingsActivity : BaseActivity(), OnSettingsItemClickListener {
 
     override fun onSettingsItemClick(item: SettingsItem) {
         when (item) {
-            is SettingsItem.AboutUs -> {
-
-            }
-            is SettingsItem.Contact -> {
-            }
-            is SettingsItem.Feedback -> {
-            }
-            is SettingsItem.Language -> {
+            is SettingsItem.AppInfo -> {
+                startActivity(Intent(this, AppInfoActivity::class.java))
             }
             is SettingsItem.PrivacyPolicy -> {
-                viewModel.setUrl("https://betting-tips-2-odds.firebaseapp.com/privacy_policy.html")
+                viewModel.setUrl(PRIVACY_POLICY)
             }
             is SettingsItem.RateUs -> {
+                startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("market://details?id=$packageName")
+                    )
+                )
             }
             is SettingsItem.TermsOfUse -> {
-                viewModel.setUrl("https://betting-tips-2-odds.firebaseapp.com/terms_and_conditions.html")
+                viewModel.setUrl(TERMS_OF_USE)
             }
             is SettingsItem.ThirdPartySoftware -> {
+                viewModel.setUrl(THIRD_PARTY_SOFTWARE)
             }
+            else -> return
         }
     }
 
@@ -172,5 +176,12 @@ class SettingsActivity : BaseActivity(), OnSettingsItemClickListener {
         } else {
             super.onBackPressed()
         }
+    }
+
+    companion object {
+        const val PRIVACY_POLICY = "https://betting-tips-2-odds.firebaseapp.com/privacy-policy.html"
+        const val TERMS_OF_USE = "https://betting-tips-2-odds.firebaseapp.com/terms-of-use.html"
+        const val THIRD_PARTY_SOFTWARE =
+            "https://betting-tips-2-odds.firebaseapp.com/third-party.html"
     }
 }

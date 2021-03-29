@@ -22,21 +22,24 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.ui.common
+package com.twoplaytech.drbetting.persistence
 
-import android.view.View
-import androidx.appcompat.widget.Toolbar
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.twoplaytech.drbetting.data.Sport
+import android.security.keystore.KeyGenParameterSpec
 
-interface IBaseActivityView {
-    fun initUI(){}
-    fun changeTheme(
-        navView: BottomNavigationView? = null,
-        sport: Sport? = null,
-        toolbar: Toolbar? = null,
-        view: View? = null
-    ) {
+/*
+    Author: Damjan Miloshevski 
+    Created on 3/29/21 12:03 PM
+*/
+interface IPreferences {
+    companion object{
+        val KEY_IS_FIRST_APP_LAUNCH: String = "KEY_IS_FIRST_APP_LAUNCH"
     }
-    fun observeData(){}
+    val keyGenParameterSpec: KeyGenParameterSpec
+    val masterKeyAlias: String
+    fun saveString(key: String, value: String)
+    fun saveBoolean(key:String,value:Boolean)
+    fun getString(key: String): String?
+    fun getBoolean(key:String):Boolean
 }
+
+

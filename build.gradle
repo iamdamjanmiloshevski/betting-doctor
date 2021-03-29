@@ -27,6 +27,19 @@ allprojects {
 ext{
   firebaseBomVersion = '26.6.0'
   glideVersion = '4.12.0'
+  xCryptoVersion = '1.0.0-rc04'
+  targetSdkVersion = 30
+  minSdkVersion = 23
+  buildToolsVersion = "30.0.3"
+  majorVersion = 1//MAJOR version when you make incompatible API changes
+  minorVersion = 0 //MINOR version when you add functionality in a backwards compatible manner
+  patchVersion = 0 //PATCH version when you make backwards compatible bug fixes
+  versionCodeNum = 1
+  versionClassifier = null
+  isSnapshot = false
+  isAlpha = false
+  isBeta = false
+  alphaOrBetaVersion = 0
 }
 
 task clean(type: Delete) {

@@ -22,21 +22,15 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.ui.common
+package com.twoplaytech.drbetting
 
-import android.view.View
-import androidx.appcompat.widget.Toolbar
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.twoplaytech.drbetting.data.Sport
+import android.content.Intent
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 
-interface IBaseActivityView {
-    fun initUI(){}
-    fun changeTheme(
-        navView: BottomNavigationView? = null,
-        sport: Sport? = null,
-        toolbar: Toolbar? = null,
-        view: View? = null
-    ) {
+class SplashActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        startActivity(Intent(this, MainActivity::class.java))
     }
-    fun observeData(){}
 }

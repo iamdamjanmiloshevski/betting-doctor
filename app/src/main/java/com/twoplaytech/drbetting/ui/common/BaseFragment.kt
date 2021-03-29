@@ -45,6 +45,7 @@ import com.twoplaytech.drbetting.data.Sport
 import com.twoplaytech.drbetting.databinding.FragmentBaseBinding
 import com.twoplaytech.drbetting.ui.adapters.ChildFragmentViewPager2PagerAdapter
 import com.twoplaytech.drbetting.util.getSportResource
+import com.twoplaytech.drbetting.util.showDisclaimer
 
 /*
     Author: Damjan Miloshevski 
@@ -99,6 +100,10 @@ abstract class BaseFragment : Fragment(), IBaseView, Toolbar.OnMenuItemClickList
         return when (item?.itemId) {
             R.id.action_settings -> {
                 startActivity(Intent(requireContext(), SettingsActivity::class.java))
+                true
+            }
+            R.id.action_disclaimer -> {
+                requireContext().showDisclaimer()
                 true
             }
             else -> false

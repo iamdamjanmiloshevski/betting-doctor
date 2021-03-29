@@ -24,23 +24,31 @@
 
 package com.twoplaytech.drbetting
 
+import android.content.Context
 import android.os.Bundle
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.twoplaytech.drbetting.data.Sport
+import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_IS_FIRST_APP_LAUNCH
+import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
 import com.twoplaytech.drbetting.ui.common.BaseActivity
+import com.twoplaytech.drbetting.util.showDisclaimer
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
     private var navView: BottomNavigationView? = null
+
+    @Inject
+    lateinit var preferencesManager: SharedPreferencesManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        showDisclaimer(this)
         navView = findViewById(R.id.nav_view)
-
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -56,12 +64,20 @@ class MainActivity : BaseActivity() {
         navView?.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.navigation_football -> changeTheme(navView,Sport.FOOTBALL)
-                R.id.navigation_basketball -> changeTheme(navView,Sport.BASKETBALL)
-                R.id.navigation_tennis -> changeTheme(navView,Sport.TENNIS)
-                R.id.navigation_handball -> changeTheme(navView,Sport.HANDBALL)
-                R.id.navigation_volleyball -> changeTheme(navView,Sport.VOLLEYBALL)
+                R.id.navigation_football -> changeTheme(navView, Sport.FOOTBALL)
+                R.id.navigation_basketball -> changeTheme(navView, Sport.BASKETBALL)
+                R.id.navigation_tennis -> changeTheme(navView, Sport.TENNIS)
+                R.id.navigation_handball -> changeTheme(navView, Sport.HANDBALL)
+                R.id.navigation_volleyball -> changeTheme(navView, Sport.VOLLEYBALL)
             }
+        }
+    }
+
+    private fun showDisclaimer(context: Context) {
+        val isAppFirstLaunch = preferencesManager.getBoolean(KEY_IS_FIRST_APP_LAUNCH)
+        if (isAppFirstLaunch) {
+            context.showDisclaimer()
+            preferencesManager.saveBoolean(KEY_IS_FIRST_APP_LAUNCH, false)
         }
     }
 }

@@ -41,15 +41,11 @@ import com.twoplaytech.drbetting.ui.viewholders.SettingsViewHolder
 class SettingsRecyclerViewAdapter() :
     RecyclerView.Adapter<SettingsViewHolder>() {
     private val items = listOf<SettingsItem>(
-        SettingsItem.AboutUs(R.string.about_us, R.drawable.ic_about),
-        SettingsItem.Contact(R.string.item_contact, R.drawable.ic_contact),
-        SettingsItem.Feedback(R.string.item_feedback, R.drawable.ic_feedback),
+        SettingsItem.AppInfo(R.string.app_info, R.drawable.ic_about),
         SettingsItem.RateUs(R.string.rate_us, R.drawable.ic_rate_us),
         SettingsItem.PrivacyPolicy(R.string.privacy_policy, R.drawable.ic_privacy),
         SettingsItem.TermsOfUse(R.string.terms_of_use, R.drawable.ic_terms),
         SettingsItem.ThirdPartySoftware(R.string.third_party_software, R.drawable.ic_third_party),
-        SettingsItem.Notifications(R.string.push_notifications,R.drawable.ic_notifications),
-        SettingsItem.Language(R.string.language, R.drawable.ic_language)
     )
     private var listener: OnSettingsItemClickListener? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SettingsViewHolder {

@@ -33,7 +33,7 @@ import com.twoplaytech.drbetting.common.ISettingsItem
     Created on 3/20/21 8:23 PM
 */
 sealed class SettingsItem {
-    data class AboutUs(@StringRes override val name: Int, @DrawableRes override val icon: Int) :
+    data class AppInfo(@StringRes override val name: Int, @DrawableRes override val icon: Int) :
         ISettingsItem, SettingsItem()
 
     data class Contact(@StringRes override val name: Int, @DrawableRes override val icon: Int) :
