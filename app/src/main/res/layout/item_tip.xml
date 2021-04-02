@@ -45,6 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="1.5dp"
+            android:background="@color/white"
             app:cardCornerRadius="20dp"
             app:cardMaxElevation="25dp">
 
@@ -77,6 +78,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginTop="5dp"
                         android:gravity="center"
+                        android:textColor="@color/black"
                         android:text="@{ExtensionsKt.convertDateToStringFormat(bettingType.gameTime)}"
                         android:textSize="18sp" />
 
@@ -89,6 +91,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginBottom="10dp"
                         android:gravity="center"
+                        android:textColor="@color/black"
                         android:text="@{ExtensionsKt.getTime(bettingType.gameTime)}"
                         android:textSize="18sp" />
                 </RelativeLayout>
@@ -106,8 +109,8 @@
                         android:layout_centerHorizontal="true"
                         android:gravity="center"
                         android:text="@{bettingType.leagueName}"
-                        android:textColor="#000"
                         android:textSize="16sp"
+                        android:textColor="@color/black"
                         android:textStyle="bold" />
 
                     <RelativeLayout
@@ -135,6 +138,7 @@
                             android:layout_toEndOf="@id/iv_team_home"
                             android:gravity="center"
                             android:textSize="16sp"
+                            android:textColor="@color/black"
                             app:game="@{bettingType}" />
 
                         <androidx.appcompat.widget.AppCompatImageView
@@ -165,6 +169,7 @@
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginBottom="5dp"
                                 android:text="Betting"
+                                android:textColor="@color/black"
                                 android:textAllCaps="true" />
 
                             <androidx.appcompat.widget.AppCompatTextView
@@ -174,6 +179,7 @@
                                 android:layout_below="@id/tv_betting"
                                 android:layout_centerHorizontal="true"
                                 android:gravity="center"
+                                android:textColor="@color/black"
                                 android:text="@{bettingType.bettingType}"
                                 android:textSize="16sp" />
                         </RelativeLayout>
@@ -190,6 +196,7 @@
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginBottom="5dp"
                                 android:text="Result"
+                                android:textColor="@color/black"
                                 android:textAllCaps="true" />
 
                             <androidx.appcompat.widget.AppCompatTextView
@@ -199,6 +206,7 @@
                                 android:layout_below="@id/tv_result"
                                 android:layout_centerInParent="true"
                                 android:text="@{bettingType.result}"
+                                android:textColor="@color/black"
                                 android:textSize="16sp" />
                         </RelativeLayout>
 
@@ -214,6 +222,7 @@
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginBottom="5dp"
                                 android:text="Status"
+                                android:textColor="@color/black"
                                 android:textAllCaps="true" />
 
                             <androidx.appcompat.widget.AppCompatImageView

@@ -25,14 +25,12 @@
 package com.twoplaytech.drbetting.ui.common
 
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.ViewGroup
 import androidx.annotation.MenuRes
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -40,10 +38,10 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import com.twoplaytech.drbetting.R
-import com.twoplaytech.drbetting.SettingsActivity
 import com.twoplaytech.drbetting.data.Sport
 import com.twoplaytech.drbetting.databinding.FragmentBaseBinding
 import com.twoplaytech.drbetting.ui.adapters.ChildFragmentViewPager2PagerAdapter
+import com.twoplaytech.drbetting.ui.settings.SettingsActivity
 import com.twoplaytech.drbetting.util.getSportResource
 import com.twoplaytech.drbetting.util.showDisclaimer
 
@@ -88,11 +86,6 @@ abstract class BaseFragment : Fragment(), IBaseView, Toolbar.OnMenuItemClickList
 
     override fun setupMenu(toolbar: Toolbar, @MenuRes menuRes: Int) {
         toolbar.inflateMenu(menuRes)
-        val colorInt = ContextCompat.getColor(requireContext(), R.color.white)
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            toolbar.menu.findItem(R.id.action_disclaimer).iconTintList =
-                ColorStateList.valueOf(colorInt)
-        }
         toolbar.setOnMenuItemClickListener(this)
     }
 

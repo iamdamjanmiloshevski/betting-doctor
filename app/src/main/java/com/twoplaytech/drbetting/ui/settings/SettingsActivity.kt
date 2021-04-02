@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting
+package com.twoplaytech.drbetting.ui.settings
 
 import android.content.Intent
 import android.graphics.Bitmap
@@ -41,13 +41,14 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.twoplaytech.drbetting.AppInfoActivity
+import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.data.SettingsItem
 import com.twoplaytech.drbetting.data.Status
 import com.twoplaytech.drbetting.databinding.ActivitySettingsBinding
 import com.twoplaytech.drbetting.ui.adapters.OnSettingsItemClickListener
 import com.twoplaytech.drbetting.ui.adapters.SettingsRecyclerViewAdapter
 import com.twoplaytech.drbetting.ui.common.BaseActivity
-import com.twoplaytech.drbetting.ui.settings.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ MIT License
   ~
   ~ Copyright (c)  2021 Damjan Miloshevski
@@ -23,21 +22,19 @@
   ~ SOFTWARE.
   -->
 
-<resources>
-  <color name="purple_200">#FFBB86FC</color>
-  <color name="purple_500">#FF6200EE</color>
-  <color name="purple_700">#FF3700B3</color>
-  <color name="teal_200">#FF03DAC5</color>
-  <color name="teal_700">#FF018786</color>
-  <color name="black">#000000</color>
-  <color name="white">#FFFFFF</color>
-  <color name="blue">#327DBE</color>
-  <color name="silver">#c0c0c0</color>
-  <color name="orange">#A5443F</color>
-  <color name="seagreen">#2e8b57</color>
-  <color name="cyan">#008b8b</color>
-  <color name="violet">#9C27B0</color>
-  <color name="error_color">#E53B44</color>
-  <color name="silver_chalice">#A3A3A3</color>
-  <color name="splash_green">#77BB3D</color>
-</resources>
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="330dp"
+    android:height="330dp"
+    android:viewportWidth="330"
+    android:viewportHeight="330">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M165,0C74.019,0 0,74.02 0,165.001C0,255.982 74.019,330 165,330s165,-74.018 165,-164.999C330,74.02 255.981,0 165,0zM165,300c-74.44,0 -135,-60.56 -135,-134.999C30,90.562 90.56,30 165,30s135,60.562 135,135.001C300,239.44 239.439,300 165,300z"/>
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M164.998,70c-11.026,0 -19.996,8.976 -19.996,20.009c0,11.023 8.97,19.991 19.996,19.991c11.026,0 19.996,-8.968 19.996,-19.991C184.994,78.976 176.024,70 164.998,70z"/>
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M165,140c-8.284,0 -15,6.716 -15,15v90c0,8.284 6.716,15 15,15c8.284,0 15,-6.716 15,-15v-90C180,146.716 173.284,140 165,140z"/>
+</vector>
