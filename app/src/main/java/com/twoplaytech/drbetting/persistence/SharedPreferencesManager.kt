@@ -57,11 +57,22 @@ class SharedPreferencesManager(context: Context) : IPreferences {
         sharedPreferences.edit().putBoolean(key, value).apply()
     }
 
+    override fun saveInteger(key: String, value: Int) {
+        sharedPreferences.edit().apply {
+            putInt(key,value)
+            apply()
+        }
+    }
+
     override fun getString(key: String): String? {
         return sharedPreferences.getString(key, null)
     }
 
     override fun getBoolean(key: String): Boolean {
         return sharedPreferences.getBoolean(key, true)
+    }
+
+    override fun getInteger(key: String): Int {
+        return sharedPreferences.getInt(key,0)
     }
 }

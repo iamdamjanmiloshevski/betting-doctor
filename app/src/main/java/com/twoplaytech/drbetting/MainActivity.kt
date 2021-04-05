@@ -32,18 +32,14 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.twoplaytech.drbetting.data.Sport
 import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_IS_FIRST_APP_LAUNCH
-import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
 import com.twoplaytech.drbetting.ui.common.BaseActivity
 import com.twoplaytech.drbetting.util.showDisclaimer
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
     private var navView: BottomNavigationView? = null
 
-    @Inject
-    lateinit var preferencesManager: SharedPreferencesManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -80,4 +76,5 @@ class MainActivity : BaseActivity() {
             preferencesManager.saveBoolean(KEY_IS_FIRST_APP_LAUNCH, false)
         }
     }
+
 }

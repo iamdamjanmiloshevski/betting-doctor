@@ -36,16 +36,20 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ProgressBar
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.twoplaytech.drbetting.AppInfoActivity
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.data.SettingsItem
 import com.twoplaytech.drbetting.data.Status
 import com.twoplaytech.drbetting.databinding.ActivitySettingsBinding
+import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_DARK_MODE
 import com.twoplaytech.drbetting.ui.adapters.OnSettingsItemClickListener
 import com.twoplaytech.drbetting.ui.adapters.SettingsRecyclerViewAdapter
 import com.twoplaytech.drbetting.ui.common.BaseActivity
@@ -60,6 +64,7 @@ class SettingsActivity : BaseActivity(), OnSettingsItemClickListener {
     private lateinit var webView: WebView
     private lateinit var settingsItems: RecyclerView
     private lateinit var toolbar: Toolbar
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(LayoutInflater.from(this))
@@ -136,6 +141,24 @@ class SettingsActivity : BaseActivity(), OnSettingsItemClickListener {
             is SettingsItem.ThirdPartySoftware -> {
                 viewModel.setUrl(THIRD_PARTY_SOFTWARE)
             }
+            is SettingsItem.NightMode -> {
+                val darkMode = preferencesManager.getInteger(KEY_DARK_MODE)
+                MaterialDialog(this).show {
+                    title(R.string.dark_mode)
+                    cancelable(false)
+                    listItemsSingleChoice(
+                        R.array.dark_mode_options,
+                        initialSelection = darkMode
+                    ) { _, index, _ ->
+                        when (index) {
+                            0 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                            1 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                            2 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                        }
+                        preferencesManager.saveInteger(KEY_DARK_MODE,index)
+                    }
+                }
+            }
             else -> return
         }
     }
@@ -168,6 +191,7 @@ class SettingsActivity : BaseActivity(), OnSettingsItemClickListener {
             }
         }
     }
+
 
     override fun onBackPressed() {
         if (webView.isVisible) {

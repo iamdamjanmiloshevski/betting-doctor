@@ -23,12 +23,7 @@
   -->
 
 <resources>
-    <string name="app_name">Dr.Betting</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
-    <string name="contact">Contact administrator</string>
-    <string name="tech_support">Contact techical support</string>
+    <string name="app_name" translatable="false">Dr.Betting</string>
     <string name="older_tab">Older</string>
     <string name="upcoming_tab">Upcoming</string>
     <string name="heading_football">Football</string>
@@ -48,6 +43,16 @@
     <string name="third_party_software">Third party software</string>
     <string name="language">Language</string>
     <string name="push_notifications">Push Notifications</string>
-    <string name="copyright">© %s 2Play Tech</string>
+    <string name="copyright" translatable="false">© %s 2Play Tech</string>
     <string name="version">Version %s</string>
+    <string name="dark_mode">Dark mode</string>
+    <string-array name="dark_mode_options">
+        <item>On</item>
+        <item>Off</item>
+        <item>System default</item>
+    </string-array>
+    <string-array name="languages">
+        <item>Macedonian - Македонски (Северна Македонија) </item>
+        <item>English (United States of America)</item>
+    </string-array>
 </resources>

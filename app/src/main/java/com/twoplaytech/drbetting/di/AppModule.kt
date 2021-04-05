@@ -26,6 +26,7 @@ package com.twoplaytech.drbetting.di
 
 import android.content.Context
 import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
+import com.twoplaytech.drbetting.util.AppContextWrapper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,9 +40,16 @@ import javax.inject.Singleton
 */
 @Module
 @InstallIn(SingletonComponent::class)
-class AppModule {
+object AppModule {
     @Singleton
     @Provides
     fun provideSharedPreferencesManager(@ApplicationContext context: Context) =
         SharedPreferencesManager(context)
+
+    @Singleton
+    @Provides
+    fun providesAppContextWrapper(
+        @ApplicationContext context: Context,
+        preferencesManager: SharedPreferencesManager
+    ) = AppContextWrapper(context, preferencesManager)
 }

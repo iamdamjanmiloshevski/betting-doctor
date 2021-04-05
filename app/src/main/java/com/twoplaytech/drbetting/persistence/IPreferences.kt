@@ -33,13 +33,17 @@ import android.security.keystore.KeyGenParameterSpec
 interface IPreferences {
     companion object{
         val KEY_IS_FIRST_APP_LAUNCH: String = "KEY_IS_FIRST_APP_LAUNCH"
+        val KEY_DARK_MODE = "KEY_DARK_MODE"
+        val KEY_LOCALE = "KEY_LOCALE"
     }
     val keyGenParameterSpec: KeyGenParameterSpec
     val masterKeyAlias: String
     fun saveString(key: String, value: String)
     fun saveBoolean(key:String,value:Boolean)
+    fun saveInteger(key: String,value:Int)
     fun getString(key: String): String?
     fun getBoolean(key:String):Boolean
+    fun getInteger(key: String):Int
 }
 
 

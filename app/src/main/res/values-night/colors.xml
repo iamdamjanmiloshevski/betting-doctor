@@ -40,4 +40,5 @@
     <color name="error_color">#E53B44</color>
     <color name="silver_chalice">#A3A3A3</color>
     <color name="splash_green">#77BB3D</color>
+    <color name="icon_tint">#FFFFFF</color>
 </resources>

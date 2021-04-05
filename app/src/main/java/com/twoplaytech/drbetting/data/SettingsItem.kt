@@ -58,4 +58,6 @@ sealed class SettingsItem {
         ISettingsItem, SettingsItem()
     data class Notifications(@StringRes override val name: Int, @DrawableRes override val icon: Int) :
         ISettingsItem, SettingsItem()
+    data class NightMode(@StringRes override val name: Int, @DrawableRes override val icon: Int) :
+    ISettingsItem, SettingsItem()
 }

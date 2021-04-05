@@ -40,6 +40,7 @@ ext{
   isAlpha = false
   isBeta = false
   alphaOrBetaVersion = 0
+  materialDialogsVersion = '3.3.0'
 }
 
 task clean(type: Delete) {
