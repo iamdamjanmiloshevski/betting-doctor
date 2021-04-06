@@ -218,3 +218,5 @@ fabric.properties
 gradle.properties
 /gradlew
 /gradlew.bat
+/app/src/admin/google-services.json
+/app/src/client/google-services.json

@@ -12,7 +12,6 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        applicationId "com.twoplaytech.drbetting"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode generateVersionCode(versionCodeNum)
@@ -30,7 +29,27 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    flavorDimensions "default"
+
+    productFlavors {
+        client {
+            dimension "default"
+            applicationId "com.twoplaytech.drbetting"
+            manifestPlaceholders = [appLabel:"Doctor Betting"]
+            resValue "string", "app_name", "Doctor Betting"
+        }
+
+        admin {
+            dimension "default"
+            manifestPlaceholders = [appLabel:"Doctor Betting Admin"]
+            applicationId "com.twoplaytech.drbetting.admin"
+            resValue "string", "app_name", "Doctor Betting Admin"
+        }
+    }
     signingConfigs {
+        debug {
+        }
         release {
             if (project.hasProperty('RELEASE_STORE_FILE')) {
                 storeFile file(RELEASE_STORE_FILE)

@@ -22,15 +22,15 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting
+package com.twoplaytech.drbetting.admin
 
-import android.content.Intent
 import android.os.Bundle
-import com.twoplaytech.drbetting.ui.common.BaseActivity
+import androidx.appcompat.app.AppCompatActivity
+import com.twoplaytech.drbetting.R
 
-class SplashActivity : BaseActivity() {
+class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        startActivity(Intent(this, MainActivity::class.java))
+        setContentView(R.layout.activity_login)
     }
 }

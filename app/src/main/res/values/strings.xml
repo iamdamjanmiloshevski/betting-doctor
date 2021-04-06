@@ -23,7 +23,6 @@
   -->
 
 <resources>
-    <string name="app_name" translatable="false">Dr.Betting</string>
     <string name="older_tab">Older</string>
     <string name="upcoming_tab">Upcoming</string>
     <string name="heading_football">Football</string>
@@ -42,7 +41,6 @@
     <string name="terms_of_use">Terms of Use</string>
     <string name="third_party_software">Third party software</string>
     <string name="language">Language</string>
-    <string name="push_notifications">Push Notifications</string>
     <string name="copyright" translatable="false">© %s 2Play Tech</string>
     <string name="version">Version %s</string>
     <string name="dark_mode">Dark mode</string>

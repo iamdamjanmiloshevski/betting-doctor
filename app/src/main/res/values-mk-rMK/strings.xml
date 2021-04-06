@@ -24,7 +24,6 @@
   -->
 
 <resources>
-    <string name="app_name">Dr.Betting</string>
     <string name="older_tab">Поминати</string>
     <string name="upcoming_tab">Наскоро</string>
     <string name="heading_football">Фудбал</string>
