@@ -22,15 +22,38 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.admin
+package com.twoplaytech.drbetting.admin.repository
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.twoplaytech.drbetting.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import timber.log.Timber
+import javax.inject.Singleton
 
-class LoginActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+/*
+    Author: Damjan Miloshevski 
+    Created on 4/7/21 1:30 PM
+*/
+@Singleton
+object FirebaseRepository {
+    private val auth: FirebaseAuth = Firebase.auth
+
+    fun signIn(email: String, password: String, callback: (Boolean) -> Unit) {
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Timber.i("Login success")
+                    callback.invoke(true)
+                }
+            }.addOnCanceledListener {
+                Timber.e("Login cancelled")
+                callback.invoke(false)
+            }.addOnFailureListener { exception ->
+                Timber.e("Login cancelled ${exception.message}")
+                callback.invoke(false)
+            }
     }
+
+    fun getUser(): FirebaseUser = auth.currentUser
 }

@@ -39,4 +39,5 @@ interface IBaseActivityView {
     ) {
     }
     fun observeData(){}
+    fun initBinding(){}
 }

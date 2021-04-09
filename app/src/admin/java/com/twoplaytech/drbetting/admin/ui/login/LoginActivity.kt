@@ -22,39 +22,27 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.di
+package com.twoplaytech.drbetting.admin.ui.login
 
-import android.content.Context
-import com.twoplaytech.drbetting.admin.repository.FirebaseRepository
-import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
-import com.twoplaytech.drbetting.util.AppContextWrapper
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import android.os.Bundle
+import android.view.LayoutInflater
+import com.twoplaytech.drbetting.databinding.ActivityLoginBinding
+import com.twoplaytech.drbetting.ui.common.BaseActivity
 
-/*
-    Author: Damjan Miloshevski 
-    Created on 3/29/21 12:11 PM
-*/
-@Module
-@InstallIn(SingletonComponent::class)
-object AppModule {
-    @Singleton
-    @Provides
-    fun provideSharedPreferencesManager(@ApplicationContext context: Context) =
-        SharedPreferencesManager(context)
+class LoginActivity : BaseActivity() {
+    private lateinit var binding: ActivityLoginBinding
 
-    @Singleton
-    @Provides
-    fun providesAppContextWrapper(
-        @ApplicationContext context: Context,
-        preferencesManager: SharedPreferencesManager
-    ) = AppContextWrapper(context, preferencesManager)
 
-    @Singleton
-    @Provides
-    fun providesFirebaseRepository() = FirebaseRepository
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initBinding()
+        setContentView(binding.root)
+        binding.toolbar.title = "Login"
+        setSupportActionBar(binding.toolbar)
+    }
+
+    override fun initBinding() {
+        super.initBinding()
+        binding = ActivityLoginBinding.inflate(LayoutInflater.from(this))
+    }
 }

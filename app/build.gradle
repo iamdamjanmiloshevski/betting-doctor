@@ -126,6 +126,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx'
+    implementation 'com.google.firebase:firebase-auth-ktx'
     //endregion
 
     //region Glide
@@ -140,6 +141,10 @@ dependencies {
 
     //region Material Dialogs
     implementation "com.afollestad.material-dialogs:core:$materialDialogsVersion"
+    //endregion
+
+    //region Timber logger
+    implementation "com.jakewharton.timber:timber:$timberLoggerVersion"
     //endregion
 
     testImplementation 'junit:junit:4.+'

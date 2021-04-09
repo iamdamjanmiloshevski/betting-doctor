@@ -22,39 +22,28 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.di
+package com.twoplaytech.drbetting.admin.ui.login
 
-import android.content.Context
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.twoplaytech.drbetting.admin.repository.FirebaseRepository
-import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
-import com.twoplaytech.drbetting.util.AppContextWrapper
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 /*
     Author: Damjan Miloshevski 
-    Created on 3/29/21 12:11 PM
+    Created on 4/7/21 2:57 PM
 */
-@Module
-@InstallIn(SingletonComponent::class)
-object AppModule {
-    @Singleton
-    @Provides
-    fun provideSharedPreferencesManager(@ApplicationContext context: Context) =
-        SharedPreferencesManager(context)
+@HiltViewModel
+class LoginViewModel @Inject constructor(private val repository: FirebaseRepository) :
+    ViewModel() {
+    private val loginObserver: MutableLiveData<Boolean> = MutableLiveData()
 
-    @Singleton
-    @Provides
-    fun providesAppContextWrapper(
-        @ApplicationContext context: Context,
-        preferencesManager: SharedPreferencesManager
-    ) = AppContextWrapper(context, preferencesManager)
+    fun login(email: String, password: String) {
+        repository.signIn(email, password, callback = {
+            loginObserver.value = it
+        })
+    }
 
-    @Singleton
-    @Provides
-    fun providesFirebaseRepository() = FirebaseRepository
+    fun observeLogin() = loginObserver
 }
