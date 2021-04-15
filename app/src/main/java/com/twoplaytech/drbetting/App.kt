@@ -26,6 +26,7 @@ package com.twoplaytech.drbetting
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
+import timber.log.Timber
 
 /*
     Author: Damjan Miloshevski 
@@ -33,4 +34,9 @@ import dagger.hilt.android.HiltAndroidApp
 
 */
 @HiltAndroidApp
-class App : Application()
+class App : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        Timber.plant(Timber.DebugTree())
+    }
+}

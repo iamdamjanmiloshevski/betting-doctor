@@ -12,11 +12,7 @@
         <activity
             android:name="com.twoplaytech.drbetting.admin.ui.login.LoginActivity"
             android:label="@string/title_activity_login"
-            android:theme="@style/Theme.DrBetting.NoActionBar"></activity>
-        <activity
-            android:name="com.twoplaytech.drbetting.admin.ui.AdminActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/Theme.DrBetting.NoActionBar" />
+            android:theme="@style/Theme.DrBetting.NoActionBar"/>
         <activity android:name="com.twoplaytech.drbetting.admin.SplashActivity">
             android:noHistory="true"
             android:theme="@style/SplashScreenTheme">

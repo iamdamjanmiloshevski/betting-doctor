@@ -26,9 +26,12 @@ package com.twoplaytech.drbetting.admin.ui.login
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import com.twoplaytech.drbetting.databinding.ActivityLoginBinding
 import com.twoplaytech.drbetting.ui.common.BaseActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity : BaseActivity() {
     private lateinit var binding: ActivityLoginBinding
 
@@ -37,7 +40,7 @@ class LoginActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         initBinding()
         setContentView(binding.root)
-        binding.toolbar.title = "Login"
+        binding.toolbar.visibility = View.GONE
         setSupportActionBar(binding.toolbar)
     }
 

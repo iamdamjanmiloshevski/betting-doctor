@@ -31,31 +31,33 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.twoplaytech.drbetting.databinding.FragmentLoginBinding
-import com.twoplaytech.drbetting.repository.FirestoreRepository
 import com.twoplaytech.drbetting.ui.common.BaseFragment
-import javax.inject.Inject
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
+@AndroidEntryPoint
 class LoginFragment : BaseFragment() {
     private lateinit var loginBinding: FragmentLoginBinding
-    private val loginViewModel:LoginViewModel by viewModels()
 
-    @Inject
-    lateinit var repository: FirestoreRepository
+    private val loginViewModel: LoginViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         initBinding(inflater, container)
-
-        loginViewModel.observeLogin().observe(viewLifecycleOwner, Observer {
-            Toast.makeText(requireContext(),"$it",Toast.LENGTH_SHORT).show()
+        loginViewModel.observeLogin().observe(viewLifecycleOwner, {
+            Toast.makeText(requireContext(), "$it", Toast.LENGTH_SHORT).show()
         })
+        loginBinding.btLogin.setOnClickListener {
+            loginViewModel.login(
+                loginBinding.etEmail.text.toString(),
+                loginBinding.etPassword.text.toString()
+            )
+        }
         return loginBinding.root
     }
 

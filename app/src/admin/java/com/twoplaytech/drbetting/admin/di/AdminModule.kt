@@ -22,34 +22,23 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.di
+package com.twoplaytech.drbetting.admin.di
 
-import android.content.Context
-import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
-import com.twoplaytech.drbetting.util.AppContextWrapper
+import com.twoplaytech.drbetting.admin.repository.FirebaseRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 /*
     Author: Damjan Miloshevski 
-    Created on 3/29/21 12:11 PM
+    Created on 4/15/21 3:45 PM
 */
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
+class AdminModule {
     @Singleton
     @Provides
-    fun provideSharedPreferencesManager(@ApplicationContext context: Context) =
-        SharedPreferencesManager(context)
-
-    @Singleton
-    @Provides
-    fun providesAppContextWrapper(
-        @ApplicationContext context: Context,
-        preferencesManager: SharedPreferencesManager
-    ) = AppContextWrapper(context, preferencesManager)
+    fun providesFirebaseRepository() = FirebaseRepository
 }

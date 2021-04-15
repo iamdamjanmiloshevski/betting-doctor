@@ -26,10 +26,11 @@ package com.twoplaytech.drbetting.admin.ui.login
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.auth.FirebaseUser
 import com.twoplaytech.drbetting.admin.repository.FirebaseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import timber.log.Timber
 import javax.inject.Inject
-
 /*
     Author: Damjan Miloshevski 
     Created on 4/7/21 2:57 PM
@@ -38,12 +39,20 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(private val repository: FirebaseRepository) :
     ViewModel() {
     private val loginObserver: MutableLiveData<Boolean> = MutableLiveData()
+    private val userObserver: MutableLiveData<FirebaseUser> = MutableLiveData()
 
     fun login(email: String, password: String) {
+        Timber.e("$email")
+        Timber.e("$password")
         repository.signIn(email, password, callback = {
             loginObserver.value = it
         })
     }
 
+    fun getUser() {
+        userObserver.value = repository.getUser()
+    }
+
     fun observeLogin() = loginObserver
+    fun observeCurrentUser() = userObserver
 }
