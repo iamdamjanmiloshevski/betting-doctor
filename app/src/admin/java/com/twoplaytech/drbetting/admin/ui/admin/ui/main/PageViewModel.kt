@@ -22,28 +22,22 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.admin.ui.login
+package com.twoplaytech.drbetting.admin.ui.admin.ui.main
 
-import android.os.Bundle
-import android.view.View
-import com.twoplaytech.drbetting.databinding.ActivityLoginBinding
-import com.twoplaytech.drbetting.ui.common.BaseActivity
-import dagger.hilt.android.AndroidEntryPoint
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 
-@AndroidEntryPoint
-class LoginActivity : BaseActivity() {
-    private lateinit var binding: ActivityLoginBinding
+class PageViewModel : ViewModel() {
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        initBinding()
-        setContentView(binding.root)
-        binding.toolbar.visibility = View.GONE
-        setSupportActionBar(binding.toolbar)
+    private val _index = MutableLiveData<Int>()
+    val text: LiveData<String> = Transformations.map(_index) {
+        "Hello world from section: $it"
     }
 
-     override fun initBinding() {
-        binding = ActivityLoginBinding.inflate(layoutInflater)
+    fun setIndex(index: Int) {
+        _index.value = index
     }
 }

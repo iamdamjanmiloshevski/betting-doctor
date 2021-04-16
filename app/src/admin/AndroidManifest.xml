@@ -3,22 +3,25 @@
 
     <application
         android:name="com.twoplaytech.drbetting.App"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DrBetting">
         <activity
+            android:name="com.twoplaytech.drbetting.admin.ui.admin.AdminActivity"
+            android:label="@string/title_activity_admin"
+            android:theme="@style/Theme.DrBetting.NoActionBar" />
+        <activity
             android:name="com.twoplaytech.drbetting.admin.ui.login.LoginActivity"
             android:label="@string/title_activity_login"
-            android:theme="@style/Theme.DrBetting.NoActionBar"/>
+            android:theme="@style/Theme.DrBetting.NoActionBar" />
         <activity android:name="com.twoplaytech.drbetting.admin.SplashActivity">
             android:noHistory="true"
             android:theme="@style/SplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

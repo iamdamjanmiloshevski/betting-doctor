@@ -49,4 +49,5 @@ interface IBaseView {
     fun changeTheme(@StringRes titleStringRes: Int, sport: Sport) {}
     fun setupToolbar(@StringRes titleRes: Int, sport: Sport) {}
     fun setupMenu(toolbar: Toolbar,@MenuRes menuRes:Int){}
+    fun observeData(){}
 }

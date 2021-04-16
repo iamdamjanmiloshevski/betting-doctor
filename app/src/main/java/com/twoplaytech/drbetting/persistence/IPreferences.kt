@@ -35,6 +35,8 @@ interface IPreferences {
         val KEY_IS_FIRST_APP_LAUNCH: String = "KEY_IS_FIRST_APP_LAUNCH"
         val KEY_DARK_MODE = "KEY_DARK_MODE"
         val KEY_LOCALE = "KEY_LOCALE"
+        val LOGGED_IN = "KEY_LOGGED_IN"
+        val USER_CREDENTIALS = "KEY_USER_CREDENTIALS"
     }
     val keyGenParameterSpec: KeyGenParameterSpec
     val masterKeyAlias: String

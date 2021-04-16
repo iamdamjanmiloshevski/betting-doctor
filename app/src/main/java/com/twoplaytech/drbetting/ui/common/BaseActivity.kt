@@ -29,12 +29,10 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.twoplaytech.drbetting.data.Sport
-import com.twoplaytech.drbetting.persistence.IPreferences
 import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
 import com.twoplaytech.drbetting.util.AppContextWrapper
 import com.twoplaytech.drbetting.util.getRandomBackground
@@ -57,11 +55,11 @@ abstract class BaseActivity : AppCompatActivity(), IBaseActivityView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        when (preferencesManager.getInteger(IPreferences.KEY_DARK_MODE)) {
-            0 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            1 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            2 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-        }
+//        when (preferencesManager.getInteger(IPreferences.KEY_DARK_MODE)) {
+//            0 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+//            1 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+//            2 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+//        }
     }
     override fun changeTheme(
         navView: BottomNavigationView?,

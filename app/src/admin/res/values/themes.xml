@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<!--
   ~ MIT License
   ~
   ~ Copyright (c)  2021 Damjan Miloshevski
@@ -22,15 +22,13 @@
   ~ SOFTWARE.
   -->
 
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
-    app:startDestination="@id/LoginFragment">
+<resources>
 
-    <fragment
-        android:id="@+id/LoginFragment"
-        android:name="com.twoplaytech.drbetting.admin.ui.login.LoginFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_login"/>
-</navigation>
+    <style name="Theme.DrBetting.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="Theme.DrBetting.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.DrBetting.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+</resources>

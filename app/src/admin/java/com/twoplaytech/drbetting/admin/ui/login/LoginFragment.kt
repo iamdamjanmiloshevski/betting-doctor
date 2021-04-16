@@ -24,44 +24,168 @@
 
 package com.twoplaytech.drbetting.admin.ui.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.twoplaytech.drbetting.R
+import com.twoplaytech.drbetting.admin.common.Status
+import com.twoplaytech.drbetting.admin.common.TextWatcher
+import com.twoplaytech.drbetting.admin.ui.admin.AdminActivity
+import com.twoplaytech.drbetting.admin.util.dispatchCredentialsDialog
+import com.twoplaytech.drbetting.admin.util.isValidEmail
+import com.twoplaytech.drbetting.admin.util.isValidPasswordFormat
 import com.twoplaytech.drbetting.databinding.FragmentLoginBinding
 import com.twoplaytech.drbetting.ui.common.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
 @AndroidEntryPoint
 class LoginFragment : BaseFragment() {
     private lateinit var loginBinding: FragmentLoginBinding
 
     private val loginViewModel: LoginViewModel by viewModels()
 
+    private var email: String = ""
+    private var pwd: String = ""
+    private var credentialsSaved = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         initBinding(inflater, container)
-        loginViewModel.observeLogin().observe(viewLifecycleOwner, {
-            Toast.makeText(requireContext(), "$it", Toast.LENGTH_SHORT).show()
-        })
-        loginBinding.btLogin.setOnClickListener {
-            loginViewModel.login(
-                loginBinding.etEmail.text.toString(),
-                loginBinding.etPassword.text.toString()
-            )
-        }
+        initUI()
+        initListeners()
         return loginBinding.root
+    }
+
+    private fun initListeners() {
+        loginBinding.btLogin.setOnClickListener {
+            when {
+                email.isNullOrEmpty() -> {
+                    loginBinding.lytEmail.error = getString(R.string.email_blank_msg)
+                    loginViewModel.enableLogin(false)
+                }
+                pwd.isNullOrEmpty() -> {
+                    loginBinding.lytPassword.error = getString(R.string.pwd_blank_msg)
+                    loginViewModel.enableLogin(false)
+                }
+                else -> loginViewModel.login(email, pwd)
+            }
+        }
+        loginBinding.etEmail.addTextChangedListener(TextWatcher { emailInput ->
+            if (!emailInput.toString().isValidEmail()) {
+                loginViewModel.enableLogin(false)
+                loginBinding.lytEmail.error = getString(R.string.invalid_email_format_msg)
+            } else {
+                loginViewModel.enableLogin(true)
+                loginBinding.lytEmail.error = null
+                email = emailInput.toString()
+            }
+        })
+        loginBinding.etPassword.addTextChangedListener(TextWatcher { passwordInput ->
+            if (passwordInput.isValidPasswordFormat()) {
+                loginBinding.lytPassword.error = null
+                loginViewModel.enableLogin(true)
+                pwd = passwordInput.toString()
+            } else {
+                loginViewModel.enableLogin(false)
+                loginBinding.lytPassword.error =
+                    getString(R.string.login_error_msg)
+            }
+        })
+    }
+
+    override fun observeData() {
+        loginViewModel.observeLogin().observe(viewLifecycleOwner, { resource ->
+            when (resource.status) {
+                Status.SUCCESS -> {
+                    proceedToApp()
+                }
+                Status.ERROR -> {
+                    loginBinding.lytEmail.error = resource.message
+                }
+                Status.LOADING -> TODO()
+            }
+        })
+        loginViewModel.observeAlreadyLoggedIn().observe(viewLifecycleOwner, { loggedIn ->
+            if (loggedIn) {
+                enter()
+            }
+        })
+        loginViewModel.observeForCredentials().observe(viewLifecycleOwner, { resource ->
+            when (resource.status) {
+                Status.SUCCESS -> {
+                    if(resource.data != null){
+                        val credentials = resource.data
+                        email = credentials.first
+                        pwd = credentials.second
+                        credentialsSaved = true
+                    }else {
+                        email = loginBinding.etEmail.text.toString()
+                        pwd = loginBinding.etPassword.text.toString()
+                    }
+                    if(!email.isNullOrEmpty())loginBinding.etEmail.setText(email)
+                    if(!pwd.isNullOrEmpty()) loginBinding.etPassword.setText(pwd)
+                }
+                Status.ERROR -> {
+                    email = loginBinding.etEmail.text.toString()
+                    pwd = loginBinding.etPassword.text.toString()
+                }
+                Status.LOADING -> TODO()
+            }
+        })
+        loginViewModel.observeLoginEnabled().observe(viewLifecycleOwner, { isEnabled ->
+            loginBinding.btLogin.isEnabled = isEnabled
+        })
+    }
+
+    private fun proceedToApp() {
+        val shouldKeepUserSignedIn = loginBinding.cbKeepMeSignedIn.isChecked
+        if (shouldKeepUserSignedIn) {
+            loginViewModel.saveLogin(shouldKeepUserSignedIn)
+            askForCredentialsSave()
+        } else {
+            loginViewModel.saveLogin(false)
+            askForCredentialsSave()
+        }
+    }
+
+    private fun askForCredentialsSave() {
+        if(!credentialsSaved){
+            requireContext().dispatchCredentialsDialog { shouldSaveCredentials ->
+                if (shouldSaveCredentials) {
+                    loginViewModel.saveUserCredentials(email, pwd)
+                    enter()
+                } else {
+                    enter()
+                }
+            }
+        }else {
+           enter()
+        }
+    }
+
+
+    override fun initUI() {
+        loginViewModel.enableLogin(false)
+        loginViewModel.checkIfUserIsAlreadySignedIn()
+        loginViewModel.retrieveCredentials()
     }
 
     override fun initBinding(inflater: LayoutInflater, container: ViewGroup?) {
         loginBinding = FragmentLoginBinding.inflate(inflater, container, false)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        observeData()
+    }
+    private fun enter(){
+        val intent = Intent(this.requireContext(),AdminActivity::class.java)
+        startActivity(intent)
+        this.requireActivity().finish()
     }
 }

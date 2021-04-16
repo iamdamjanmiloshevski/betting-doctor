@@ -39,21 +39,20 @@ import javax.inject.Singleton
 object FirebaseRepository {
     private val auth: FirebaseAuth = Firebase.auth
 
-    fun signIn(email: String, password: String, callback: (Boolean) -> Unit) {
+    fun signIn(email: String, password: String, callback: (Boolean,message:String?) -> Unit) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    Timber.i("Login success")
-                    callback.invoke(true)
+                    callback.invoke(true,null)
                 }
             }.addOnCanceledListener {
                 Timber.e("Login cancelled")
-                callback.invoke(false)
+                callback.invoke(false,"Login canceled!")
             }.addOnFailureListener { exception ->
                 Timber.e("Login cancelled ${exception.message}")
-                callback.invoke(false)
+                callback.invoke(false,exception.message)
             }
     }
 
-    fun getUser(): FirebaseUser = auth.currentUser
+    fun getUser(): FirebaseUser? = auth.currentUser
 }

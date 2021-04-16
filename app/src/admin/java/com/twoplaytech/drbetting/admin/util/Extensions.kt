@@ -22,28 +22,35 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.admin.ui.login
+package com.twoplaytech.drbetting.admin.util
 
-import android.os.Bundle
-import android.view.View
-import com.twoplaytech.drbetting.databinding.ActivityLoginBinding
-import com.twoplaytech.drbetting.ui.common.BaseActivity
-import dagger.hilt.android.AndroidEntryPoint
+import android.content.Context
+import com.afollestad.materialdialogs.MaterialDialog
+import com.twoplaytech.drbetting.R
 
-@AndroidEntryPoint
-class LoginActivity : BaseActivity() {
-    private lateinit var binding: ActivityLoginBinding
+/*
+    Author: Damjan Miloshevski 
+    Created on 4/16/21 12:55 PM
+*/
+fun String.isValidEmail(): Boolean {
+    return android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
+}
 
+fun CharSequence?.isValidPasswordFormat(): Boolean {
+    return if (this.isNullOrEmpty()) false
+    else this.toString().length >= 6
+}
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        initBinding()
-        setContentView(binding.root)
-        binding.toolbar.visibility = View.GONE
-        setSupportActionBar(binding.toolbar)
-    }
-
-     override fun initBinding() {
-        binding = ActivityLoginBinding.inflate(layoutInflater)
+fun Context.dispatchCredentialsDialog(callback: (shouldSaveCredentials: Boolean) -> Unit) {
+    MaterialDialog(this).show {
+        cancelable(false)
+        title(R.string.save_credentials_title_msg)
+        message(R.string.save_credentials_msg)
+        positiveButton(android.R.string.ok, null) {
+            callback.invoke(true)
+        }
+        negativeButton(R.string.dont_save_option) {
+            callback.invoke(false)
+        }
     }
 }

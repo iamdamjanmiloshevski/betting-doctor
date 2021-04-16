@@ -26,33 +26,83 @@ package com.twoplaytech.drbetting.admin.ui.login
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.auth.FirebaseUser
+import com.twoplaytech.drbetting.admin.common.Resource
 import com.twoplaytech.drbetting.admin.repository.FirebaseRepository
+import com.twoplaytech.drbetting.persistence.IPreferences.Companion.LOGGED_IN
+import com.twoplaytech.drbetting.persistence.IPreferences.Companion.USER_CREDENTIALS
+import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import timber.log.Timber
+import org.json.JSONObject
 import javax.inject.Inject
+
 /*
     Author: Damjan Miloshevski 
     Created on 4/7/21 2:57 PM
 */
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val repository: FirebaseRepository) :
+class LoginViewModel @Inject constructor(
+    private val repository: FirebaseRepository,
+    private val preferencesManager: SharedPreferencesManager
+) :
     ViewModel() {
-    private val loginObserver: MutableLiveData<Boolean> = MutableLiveData()
-    private val userObserver: MutableLiveData<FirebaseUser> = MutableLiveData()
+    private val loginObserver: MutableLiveData<Resource<Boolean>> = MutableLiveData()
+    private val loginEnabledObserver = MutableLiveData<Boolean>()
+    private val alreadyLoggedIn = MutableLiveData<Boolean>()
+    private val credentialsObserver = MutableLiveData<Resource<Pair<String, String>>>()
+    private val KEY_EMAIL = "email"
+    private val KEY_PASSWORD = "password"
 
     fun login(email: String, password: String) {
-        Timber.e("$email")
-        Timber.e("$password")
-        repository.signIn(email, password, callback = {
-            loginObserver.value = it
+        repository.signIn(email, password, callback = { loginStatus, errorMessage ->
+            if (!errorMessage.isNullOrEmpty()) {
+                loginObserver.value = Resource.error(errorMessage, null)
+            } else loginObserver.value = Resource.success(null, loginStatus)
         })
     }
 
-    fun getUser() {
-        userObserver.value = repository.getUser()
+    fun enableLogin(enable: Boolean) {
+        loginEnabledObserver.value = enable
     }
 
+    fun checkIfUserIsAlreadySignedIn() {
+        val user = repository.getUser()
+        val shouldKeepUserSignedIn = preferencesManager.getBoolean(LOGGED_IN)
+        alreadyLoggedIn.value = user != null && shouldKeepUserSignedIn
+    }
+
+    fun retrieveCredentials() {
+        val json = preferencesManager.getString(USER_CREDENTIALS)
+        if (json.isNullOrEmpty()) {
+            credentialsObserver.value = Resource.error(null, null)
+        } else {
+            credentialsObserver.value = Resource.success(null, json.deserializeCredentials())
+        }
+    }
+
+    fun observeLoginEnabled() = loginEnabledObserver
     fun observeLogin() = loginObserver
-    fun observeCurrentUser() = userObserver
+    fun observeAlreadyLoggedIn() = alreadyLoggedIn
+    fun observeForCredentials() = credentialsObserver
+
+
+    fun saveLogin(shouldStayLoggedIn: Boolean) {
+        preferencesManager.saveBoolean(LOGGED_IN, shouldStayLoggedIn)
+    }
+
+    fun saveUserCredentials(email: String, password: String) {
+        val jsonObject = JSONObject()
+        jsonObject.put(KEY_EMAIL, email)
+        jsonObject.put(KEY_PASSWORD, password)
+        preferencesManager.saveString(
+            USER_CREDENTIALS,
+            jsonObject.toString()
+        )
+    }
+
+    private fun String.deserializeCredentials(): Pair<String, String> {
+        val jsonObject = JSONObject(this)
+        val email = jsonObject.getString(KEY_EMAIL)
+        val password = jsonObject.getString(KEY_PASSWORD)
+        return Pair(email, password)
+    }
 }

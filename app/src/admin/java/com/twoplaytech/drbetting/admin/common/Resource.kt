@@ -22,28 +22,29 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.admin.ui.login
+package com.twoplaytech.drbetting.admin.common
 
-import android.os.Bundle
-import android.view.View
-import com.twoplaytech.drbetting.databinding.ActivityLoginBinding
-import com.twoplaytech.drbetting.ui.common.BaseActivity
-import dagger.hilt.android.AndroidEntryPoint
+/*
+    Author: Damjan Miloshevski 
+    Created on 4/16/21 12:45 PM
+*/
+class Resource<T> private constructor(val status: Status, val data: T?, val message: String?) {
+    companion object {
+        fun <T> success(msg: String?,data: T): Resource<T> {
+            return Resource(Status.SUCCESS, data, msg)
+        }
 
-@AndroidEntryPoint
-class LoginActivity : BaseActivity() {
-    private lateinit var binding: ActivityLoginBinding
+        fun <T> error(msg: String?, data: T?): Resource<T> {
+            return Resource(Status.ERROR, data, msg)
+        }
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        initBinding()
-        setContentView(binding.root)
-        binding.toolbar.visibility = View.GONE
-        setSupportActionBar(binding.toolbar)
+        fun <T> loading(msg: String?,data: T?): Resource<T> {
+            return Resource(Status.LOADING, data, msg)
+        }
     }
-
-     override fun initBinding() {
-        binding = ActivityLoginBinding.inflate(layoutInflater)
-    }
+}
+enum class Status {
+    SUCCESS,
+    ERROR,
+    LOADING
 }
