@@ -30,6 +30,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import com.google.android.material.snackbar.Snackbar
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.common.Status
 import com.twoplaytech.drbetting.admin.common.TextWatcher
@@ -50,7 +51,7 @@ class LoginFragment : BaseFragment() {
     private var email: String = ""
     private var pwd: String = ""
     private var credentialsSaved = false
-
+    private var backgroundId = 0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -105,9 +106,14 @@ class LoginFragment : BaseFragment() {
                     proceedToApp()
                 }
                 Status.ERROR -> {
-                    loginBinding.lytEmail.error = resource.message
+                    Snackbar.make(
+                        loginBinding.lytLogin,
+                        resource.message.toString(),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                 }
-                Status.LOADING -> TODO()
+                Status.LOADING -> {
+                }
             }
         })
         loginViewModel.observeAlreadyLoggedIn().observe(viewLifecycleOwner, { loggedIn ->
@@ -118,17 +124,17 @@ class LoginFragment : BaseFragment() {
         loginViewModel.observeForCredentials().observe(viewLifecycleOwner, { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
-                    if(resource.data != null){
+                    if (resource.data != null) {
                         val credentials = resource.data
                         email = credentials.first
                         pwd = credentials.second
                         credentialsSaved = true
-                    }else {
+                    } else {
                         email = loginBinding.etEmail.text.toString()
                         pwd = loginBinding.etPassword.text.toString()
                     }
-                    if(!email.isNullOrEmpty())loginBinding.etEmail.setText(email)
-                    if(!pwd.isNullOrEmpty()) loginBinding.etPassword.setText(pwd)
+                    if (!email.isNullOrEmpty()) loginBinding.etEmail.setText(email)
+                    if (!pwd.isNullOrEmpty()) loginBinding.etPassword.setText(pwd)
                 }
                 Status.ERROR -> {
                     email = loginBinding.etEmail.text.toString()
@@ -154,7 +160,7 @@ class LoginFragment : BaseFragment() {
     }
 
     private fun askForCredentialsSave() {
-        if(!credentialsSaved){
+        if (!credentialsSaved) {
             requireContext().dispatchCredentialsDialog { shouldSaveCredentials ->
                 if (shouldSaveCredentials) {
                     loginViewModel.saveUserCredentials(email, pwd)
@@ -163,13 +169,17 @@ class LoginFragment : BaseFragment() {
                     enter()
                 }
             }
-        }else {
-           enter()
+        } else {
+            enter()
         }
     }
 
 
     override fun initUI() {
+        arguments?.let {
+            backgroundId = it.getInt(KEY_BACKGROUND_RESOURCE)
+            loginBinding.lytLogin.setBackgroundResource(backgroundId)
+        }
         loginViewModel.enableLogin(false)
         loginViewModel.checkIfUserIsAlreadySignedIn()
         loginViewModel.retrieveCredentials()
@@ -183,9 +193,14 @@ class LoginFragment : BaseFragment() {
         super.onResume()
         observeData()
     }
-    private fun enter(){
-        val intent = Intent(this.requireContext(),AdminActivity::class.java)
+
+    private fun enter() {
+        val intent = Intent(this.requireContext(), AdminActivity::class.java)
         startActivity(intent)
         this.requireActivity().finish()
+    }
+
+    companion object {
+        const val KEY_BACKGROUND_RESOURCE = "backgroundId"
     }
 }

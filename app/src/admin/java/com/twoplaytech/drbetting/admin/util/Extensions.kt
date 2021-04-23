@@ -27,6 +27,7 @@ package com.twoplaytech.drbetting.admin.util
 import android.content.Context
 import com.afollestad.materialdialogs.MaterialDialog
 import com.twoplaytech.drbetting.R
+import java.util.*
 
 /*
     Author: Damjan Miloshevski 
@@ -53,4 +54,25 @@ fun Context.dispatchCredentialsDialog(callback: (shouldSaveCredentials: Boolean)
             callback.invoke(false)
         }
     }
+}
+
+fun getRandomBackground(): Pair<Int, Int> {
+    val random = Random()
+    val indexes = IntArray(5)
+    val idx = random.nextInt(indexes.size)
+    val sports = listOf(
+        R.drawable.gradient_blue,
+        R.drawable.gradient_orange,
+        R.drawable.gradient_green,
+        R.drawable.gradient_cyan,
+        R.drawable.gradient_violet,
+    )
+    val colors = listOf(
+        R.color.blue,
+        R.color.orange,
+        R.color.seagreen,
+        R.color.cyan,
+        R.color.violet
+    )
+    return Pair(sports[idx], colors[idx])
 }

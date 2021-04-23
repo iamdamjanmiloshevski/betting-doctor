@@ -55,11 +55,6 @@ abstract class BaseActivity : AppCompatActivity(), IBaseActivityView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-//        when (preferencesManager.getInteger(IPreferences.KEY_DARK_MODE)) {
-//            0 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-//            1 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-//            2 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-//        }
     }
     override fun changeTheme(
         navView: BottomNavigationView?,
