@@ -113,6 +113,10 @@ class LoginFragment : BaseFragment() {
                     ).show()
                 }
                 Status.LOADING -> {
+                    val msg = resource.message
+                    msg?.let {
+                        displayLoader(it)
+                    }
                 }
             }
         })
@@ -140,12 +144,19 @@ class LoginFragment : BaseFragment() {
                     email = loginBinding.etEmail.text.toString()
                     pwd = loginBinding.etPassword.text.toString()
                 }
-                Status.LOADING -> TODO()
+                Status.LOADING -> {}
             }
         })
         loginViewModel.observeLoginEnabled().observe(viewLifecycleOwner, { isEnabled ->
             loginBinding.btLogin.isEnabled = isEnabled
         })
+    }
+
+    private fun displayLoader(loadingMessage: String) {
+        loginBinding.loadingView.show(true)
+        loginBinding.loadingView.setText(loadingMessage)
+        loginBinding.loadingView.setBackground(backgroundId)
+        loginBinding.btLogin.visibility = View.GONE
     }
 
     private fun proceedToApp() {
@@ -180,6 +191,7 @@ class LoginFragment : BaseFragment() {
             backgroundId = it.getInt(KEY_BACKGROUND_RESOURCE)
             loginBinding.lytLogin.setBackgroundResource(backgroundId)
         }
+        loginBinding.loadingView.show(false)
         loginViewModel.enableLogin(false)
         loginViewModel.checkIfUserIsAlreadySignedIn()
         loginViewModel.retrieveCredentials()

@@ -53,6 +53,7 @@ class LoginViewModel @Inject constructor(
     private val KEY_PASSWORD = "password"
 
     fun login(email: String, password: String) {
+        loginObserver.value = Resource.loading("Signing in. Please wait!", null)
         repository.signIn(email, password, callback = { loginStatus, errorMessage ->
             if (!errorMessage.isNullOrEmpty()) {
                 loginObserver.value = Resource.error(errorMessage, null)
