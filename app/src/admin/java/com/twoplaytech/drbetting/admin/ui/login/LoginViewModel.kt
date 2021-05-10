@@ -24,8 +24,10 @@
 
 package com.twoplaytech.drbetting.admin.ui.login
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.common.Resource
 import com.twoplaytech.drbetting.admin.repository.FirebaseRepository
 import com.twoplaytech.drbetting.persistence.IPreferences.Companion.LOGGED_IN
@@ -41,6 +43,7 @@ import javax.inject.Inject
 */
 @HiltViewModel
 class LoginViewModel @Inject constructor(
+    private val context: Context,
     private val repository: FirebaseRepository,
     private val preferencesManager: SharedPreferencesManager
 ) :
@@ -53,7 +56,7 @@ class LoginViewModel @Inject constructor(
     private val KEY_PASSWORD = "password"
 
     fun login(email: String, password: String) {
-        loginObserver.value = Resource.loading("Signing in. Please wait!", null)
+        loginObserver.value = Resource.loading(context.getString(R.string.signing_in_msg), null)
         repository.signIn(email, password, callback = { loginStatus, errorMessage ->
             if (!errorMessage.isNullOrEmpty()) {
                 loginObserver.value = Resource.error(errorMessage, null)
