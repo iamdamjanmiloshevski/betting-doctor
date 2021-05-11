@@ -24,22 +24,14 @@
 
 package com.twoplaytech.drbetting.ui.common
 
-import android.view.View
-import android.widget.LinearLayout
-import androidx.appcompat.widget.Toolbar
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.twoplaytech.drbetting.data.Sport
+import com.twoplaytech.drbetting.data.BettingType
 
-interface IBaseActivityView {
-    fun initUI(){}
-    fun changeTheme(
-        navView: BottomNavigationView? = null,
-        sport: Sport? = null,
-        toolbar: Toolbar? = null,
-        view: View? = null,
-        appBarLayout: LinearLayout? = null
-    ) {
-    }
-    fun observeData(){}
-    fun initBinding(){}
+/*
+    Author: Damjan Miloshevski 
+    Created on 11.5.21 15:57
+    Project: Dr.Betting
+    © 2Play Tech  2021. All rights reserved
+*/
+interface OnBettingTipClickedListener {
+    fun onTipClick(tip:BettingType)
 }

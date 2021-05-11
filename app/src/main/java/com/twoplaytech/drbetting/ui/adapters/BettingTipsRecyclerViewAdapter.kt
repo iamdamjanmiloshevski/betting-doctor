@@ -29,6 +29,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.twoplaytech.drbetting.data.BettingType
 import com.twoplaytech.drbetting.databinding.ItemTipBinding
+import com.twoplaytech.drbetting.ui.common.OnBettingTipClickedListener
 import com.twoplaytech.drbetting.ui.viewholders.TipViewHolder
 
 /*
@@ -38,6 +39,8 @@ import com.twoplaytech.drbetting.ui.viewholders.TipViewHolder
 */
 class BettingTipsRecyclerViewAdapter(private val types: MutableList<BettingType>) :
     RecyclerView.Adapter<TipViewHolder>() {
+    private var listener:OnBettingTipClickedListener? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TipViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemTipBinding.inflate(inflater, parent, false)
@@ -47,6 +50,9 @@ class BettingTipsRecyclerViewAdapter(private val types: MutableList<BettingType>
     override fun onBindViewHolder(holder: TipViewHolder, position: Int) {
         val bettingType = types[position]
         holder.binding.bettingType = bettingType
+        holder.binding.root.setOnClickListener {
+            listener?.onTipClick(bettingType)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -56,5 +62,8 @@ class BettingTipsRecyclerViewAdapter(private val types: MutableList<BettingType>
     fun addData(types: List<BettingType>) {
         this.types.addAll(types)
         notifyDataSetChanged()
+    }
+    fun setOnBettingTipClickedListener(listener: OnBettingTipClickedListener){
+        this.listener = listener
     }
 }

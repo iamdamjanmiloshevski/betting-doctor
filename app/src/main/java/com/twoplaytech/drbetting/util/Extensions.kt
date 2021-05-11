@@ -41,6 +41,7 @@ import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.common.FirestoreQueryLiveData
 import com.twoplaytech.drbetting.data.Sport
 import com.twoplaytech.drbetting.databinding.DialogDisclaimerBinding
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -114,7 +115,17 @@ fun Sport.getSportResource(): Int {
         else -> R.drawable.gradient_blue
     }
 }
-
+ fun Int.getSportFromIndex():Sport{
+     Timber.e("$this")
+    return when(this){
+        0 -> Sport.FOOTBALL
+        1 -> Sport.BASKETBALL
+        2 -> Sport.TENNIS
+        3 -> Sport.HANDBALL
+        4 -> Sport.VOLLEYBALL
+        else -> Sport.FOOTBALL
+    }
+}
 fun Date.convertDateToStringFormat(): String {
     val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH)
     return simpleDateFormat.format(this)

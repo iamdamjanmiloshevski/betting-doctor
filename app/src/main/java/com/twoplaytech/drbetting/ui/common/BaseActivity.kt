@@ -28,6 +28,7 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -60,7 +61,8 @@ abstract class BaseActivity : AppCompatActivity(), IBaseActivityView {
         navView: BottomNavigationView?,
         sport: Sport?,
         toolbar: Toolbar?,
-        view: View?
+        view: View?,
+        appBarLayout: LinearLayout?
     ) {
         if (navView != null && sport != null) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
@@ -70,7 +72,16 @@ abstract class BaseActivity : AppCompatActivity(), IBaseActivityView {
                 window.statusBarColor = ContextCompat.getColor(this, sport.getSportColor())
             }
             navView.setBackgroundResource(sport.getSportResource())
-        } else if (sport != null) {
+        } else if(appBarLayout!= null && sport != null){
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            }
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                window.statusBarColor = ContextCompat.getColor(this, sport.getSportColor())
+            }
+            appBarLayout?.setBackgroundResource(sport.getSportResource())
+        }
+        else if (sport != null) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             }

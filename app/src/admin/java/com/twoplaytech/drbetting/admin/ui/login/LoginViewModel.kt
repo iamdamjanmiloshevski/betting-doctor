@@ -34,6 +34,7 @@ import com.twoplaytech.drbetting.persistence.IPreferences.Companion.LOGGED_IN
 import com.twoplaytech.drbetting.persistence.IPreferences.Companion.USER_CREDENTIALS
 import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import org.json.JSONObject
 import javax.inject.Inject
 
@@ -43,17 +44,15 @@ import javax.inject.Inject
 */
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val context: Context,
+    @ApplicationContext private val context: Context,
     private val repository: FirebaseRepository,
     private val preferencesManager: SharedPreferencesManager
-) :
+):
     ViewModel() {
     private val loginObserver: MutableLiveData<Resource<Boolean>> = MutableLiveData()
     private val loginEnabledObserver = MutableLiveData<Boolean>()
     private val alreadyLoggedIn = MutableLiveData<Boolean>()
     private val credentialsObserver = MutableLiveData<Resource<Pair<String, String>>>()
-    private val KEY_EMAIL = "email"
-    private val KEY_PASSWORD = "password"
 
     fun login(email: String, password: String) {
         loginObserver.value = Resource.loading(context.getString(R.string.signing_in_msg), null)
@@ -108,5 +107,10 @@ class LoginViewModel @Inject constructor(
         val email = jsonObject.getString(KEY_EMAIL)
         val password = jsonObject.getString(KEY_PASSWORD)
         return Pair(email, password)
+    }
+
+    companion object {
+        private const val KEY_EMAIL = "email"
+        private const val KEY_PASSWORD = "password"
     }
 }

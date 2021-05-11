@@ -41,7 +41,19 @@
     <string name="save_credentials_msg">Do you want to save your credentials for future use?\n\nYour credentials are encrypted and known only to you</string>
     <string name="dont_save_option">Don\'t save</string>
     <string name="title_activity_admin">AdminActivity</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_1">Older</string>
+    <string name="tab_text_2">Upcoming</string>
     <string name="title_activity_login2">LoginActivity2</string>
+    <string name="signing_in_msg">Signing in. Please wait!</string>
+    <string-array name="types">
+        <item>Older</item>
+        <item>Upcoming</item>
+    </string-array>
+    <string-array name="sports">
+        <item>Football</item>
+        <item>Basketball</item>
+        <item>Tennis</item>
+        <item>Handball</item>
+        <item>Volleyball</item>
+    </string-array>
 </resources>

@@ -106,6 +106,7 @@ class LoginFragment : BaseFragment() {
                     proceedToApp()
                 }
                 Status.ERROR -> {
+                    displayLoader(false)
                     Snackbar.make(
                         loginBinding.lytLogin,
                         resource.message.toString(),
@@ -115,7 +116,7 @@ class LoginFragment : BaseFragment() {
                 Status.LOADING -> {
                     val msg = resource.message
                     msg?.let {
-                        displayLoader(it)
+                        displayLoader(true,it)
                     }
                 }
             }
@@ -152,11 +153,19 @@ class LoginFragment : BaseFragment() {
         })
     }
 
-    private fun displayLoader(loadingMessage: String) {
-        loginBinding.loadingView.show(true)
-        loginBinding.loadingView.setText(loadingMessage)
-        loginBinding.loadingView.setBackground(backgroundId)
-        loginBinding.btLogin.visibility = View.GONE
+    private fun displayLoader(shouldDisplay:Boolean,loadingMessage: String = "") {
+        when(shouldDisplay){
+            true -> {
+                loginBinding.loadingView.show(true)
+                loginBinding.loadingView.setText(loadingMessage)
+                loginBinding.loadingView.setBackground(backgroundId)
+                loginBinding.btLogin.visibility = View.GONE
+            } else -> {
+            loginBinding.loadingView.show(false)
+            loginBinding.btLogin.visibility = View.VISIBLE
+            }
+        }
+
     }
 
     private fun proceedToApp() {
