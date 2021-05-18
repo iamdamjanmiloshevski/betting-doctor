@@ -67,7 +67,7 @@ fun Query.asFirestoreQueryLiveData(): FirestoreQueryLiveData {
 
 fun older(): Date {
     val calendar = Calendar.getInstance();
-    calendar.add(Calendar.DAY_OF_MONTH, -1)
+    calendar.add(Calendar.DATE, -1)
     return calendar.time
 }
 

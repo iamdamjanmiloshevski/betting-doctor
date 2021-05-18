@@ -10,6 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DrBetting">
         <activity
+            android:name="com.twoplaytech.drbetting.admin.ui.admin.BettingTipActivity"
+            android:label="@string/title_activity_betting_tip"
+            android:theme="@style/Theme.DrBetting.NoActionBar"></activity>
+        <activity
             android:name="com.twoplaytech.drbetting.admin.ui.admin.AdminActivity"
             android:label="@string/title_activity_admin"
             android:theme="@style/Theme.DrBetting.NoActionBar" />
@@ -22,6 +26,7 @@
             android:theme="@style/SplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

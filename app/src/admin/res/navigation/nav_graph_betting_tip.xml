@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ MIT License
   ~
   ~ Copyright (c)  2021 Damjan Miloshevski
@@ -22,14 +22,24 @@
   ~ SOFTWARE.
   -->
 
-<resources>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph2"
+    app:startDestination="@id/FirstFragment">
 
-    <style name="Theme.DrBetting.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
+    <fragment
+        android:id="@+id/FirstFragment"
+        android:name="com.twoplaytech.drbetting.admin.ui.admin.BettingTipFragment"
+        tools:layout="@layout/fragment_betting_tip">
+        <argument
+            android:name="betting_tip"
+            app:argType="com.twoplaytech.drbetting.data.BettingType"
+            android:defaultValue="@null"
+            app:nullable="true" />
+        <argument app:argType="integer"
+            android:defaultValue="0"
+            android:name="type"/>
+    </fragment>
 
-    <style name="Theme.DrBetting.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="Theme.DrBetting.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-</resources>
+</navigation>

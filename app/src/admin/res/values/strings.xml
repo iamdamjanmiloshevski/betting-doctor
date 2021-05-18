@@ -56,4 +56,20 @@
         <item>Handball</item>
         <item>Volleyball</item>
     </string-array>
+    <string-array name="statuses">
+        <item>Won</item>
+        <item>Lost</item>
+        <item>Unknown</item>
+    </string-array>
+    <string name="title_activity_betting_tip">BettingTipActivity</string>
+    <string name="hint_league_title">League</string>
+    <string name="hint_league">Ex. England - Premier League </string>
+    <string name="hint_betting_tip_heading">Betting Tip</string>
+    <string name="hint_betting_tip">Ex. x2</string>
+    <string name="hint_game_time_heading">Game time</string>
+    <string name="hint_game_time">Ex. 17/05/2021 15:22</string>
+    <string name="title_sport_heading">Sport</string>
+    <string name="title_sport">Football</string>
+    <string name="title_status_heading">Status</string>
+    <string name="title_status">Unknown</string>
 </resources>

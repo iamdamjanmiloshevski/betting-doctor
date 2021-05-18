@@ -36,6 +36,7 @@ import com.twoplaytech.drbetting.util.Constants.SPORT
 import com.twoplaytech.drbetting.util.asFirestoreQueryLiveData
 import com.twoplaytech.drbetting.util.older
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.*
 import javax.inject.Inject
 
 /*
@@ -52,7 +53,7 @@ class BettingTipsViewModel @Inject constructor(private val repository: Firestore
     fun getUpcomingTips(type: String): FirestoreQueryLiveData {
         return repository.getBettingTips()
             .whereEqualTo(SPORT, type)
-            .whereGreaterThan(GAME_TIME, older())
+            .whereGreaterThanOrEqualTo(GAME_TIME, Calendar.getInstance().time)
             .orderBy(GAME_TIME, Query.Direction.DESCENDING)
             .asFirestoreQueryLiveData()
     }

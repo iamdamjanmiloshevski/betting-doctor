@@ -24,20 +24,21 @@
 
 package com.twoplaytech.drbetting.admin.ui.admin
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.DocumentChange
 import com.twoplaytech.drbetting.R
+import com.twoplaytech.drbetting.admin.util.Constants.VIEW_TYPE_EDIT
+import com.twoplaytech.drbetting.admin.util.Constants.VIEW_TYPE_NEW
 import com.twoplaytech.drbetting.data.BettingType
 import com.twoplaytech.drbetting.data.Sport
 import com.twoplaytech.drbetting.data.Status
@@ -49,7 +50,8 @@ import com.twoplaytech.drbetting.ui.common.OnBettingTipClickedListener
 import com.twoplaytech.drbetting.util.getSportColor
 import com.twoplaytech.drbetting.util.getSportFromIndex
 
-class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,OnBettingTipClickedListener {
+class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
+    OnBettingTipClickedListener {
     private lateinit var binding: ActivityAdminBinding
     private var typeSelected = 1
     private var sportSelected = 0
@@ -65,8 +67,9 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,OnBetti
         initUI()
         observeData()
         binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            val intent = Intent(this, BettingTipActivity::class.java)
+            intent.putExtra("type", VIEW_TYPE_NEW)
+            startActivity(intent)
         }
     }
 
@@ -167,7 +170,8 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,OnBetti
     }
 
     private fun changeFabColor(sport: Sport) {
-        binding.fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this,sport.getSportColor()))
+        binding.fab.backgroundTintList =
+            ColorStateList.valueOf(ContextCompat.getColor(this, sport.getSportColor()))
     }
 
     private fun changeData(sport: Sport, typeSelected: Int) {
@@ -224,6 +228,8 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,OnBetti
     }
 
     override fun onTipClick(tip: BettingType) {
-        Toast.makeText(this,"${tip.teamHome}",Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, BettingTipActivity::class.java)
+        intent.putExtra("type", VIEW_TYPE_EDIT)
+        startActivity(intent)
     }
 }

@@ -22,44 +22,18 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.admin.views
+package com.twoplaytech.drbetting.admin.common
 
-import android.content.Context
-import android.util.AttributeSet
-import android.view.LayoutInflater
-import android.view.View
-import androidx.annotation.DrawableRes
-import androidx.constraintlayout.widget.ConstraintLayout
-import com.twoplaytech.drbetting.admin.common.ICustomView
-import com.twoplaytech.drbetting.databinding.ViewLoadingBinding
+import com.twoplaytech.drbetting.data.Sport
+import com.twoplaytech.drbetting.data.TypeStatus
 
 /*
     Author: Damjan Miloshevski 
-    Created on 10.5.21 14:57
+    Created on 18.5.21 11:21
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-class LoadingView(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs),ICustomView {
-    private lateinit var binding: ViewLoadingBinding
-
-    init {
-        val inflater = LayoutInflater.from(context)
-        initBinding(inflater)
-    }
-
-    fun show(showView:Boolean){
-        binding.progressView.visibility = if(showView) View.VISIBLE else View.GONE
-    }
-
-    fun setBackground(@DrawableRes backgroundResource:Int){
-        binding.progressView.setBackgroundResource(backgroundResource)
-    }
-
-    fun setText(message:String){
-        binding.tvLoadingMsg.text = message
-    }
-
-    override fun initBinding(inflater: LayoutInflater) {
-        binding = ViewLoadingBinding.inflate(inflater, this, true)
-    }
+interface OnDropdownItemSelectedListener {
+    fun onSportClicked(sport:Sport)
+    fun onStatusClicked(status:TypeStatus)
 }

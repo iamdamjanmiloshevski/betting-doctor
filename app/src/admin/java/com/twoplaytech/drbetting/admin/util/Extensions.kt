@@ -25,6 +25,8 @@
 package com.twoplaytech.drbetting.admin.util
 
 import android.content.Context
+import android.widget.TextView
+import androidx.annotation.DrawableRes
 import com.afollestad.materialdialogs.MaterialDialog
 import com.twoplaytech.drbetting.R
 import java.util.*
@@ -75,4 +77,7 @@ fun getRandomBackground(): Pair<Int, Int> {
         R.color.violet
     )
     return Pair(sports[idx], colors[idx])
+}
+fun TextView.changeDrawable(@DrawableRes resource:Int){
+   this.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,resource, 0)
 }

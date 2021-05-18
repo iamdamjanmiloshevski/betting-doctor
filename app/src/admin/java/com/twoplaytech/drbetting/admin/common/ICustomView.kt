@@ -22,22 +22,18 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.admin.ui.admin.ui.main
+package com.twoplaytech.drbetting.admin.common
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import android.util.AttributeSet
+import android.view.LayoutInflater
 
-class PageViewModel : ViewModel() {
-
-    private val _index = MutableLiveData<Int>()
-    val text: LiveData<String> = Transformations.map(_index) {
-        "Hello world from section: $it"
-    }
-
-    fun setIndex(index: Int) {
-        _index.value = index
-    }
+/*
+    Author: Damjan Miloshevski 
+    Created on 18.5.21 11:11
+    Project: Dr.Betting
+    © 2Play Tech  2021. All rights reserved
+*/
+interface ICustomView {
+    fun initBinding(inflater: LayoutInflater)
+    fun extractAttributes(attrs: AttributeSet){}
 }

@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ MIT License
   ~
   ~ Copyright (c)  2021 Damjan Miloshevski
@@ -22,14 +22,10 @@
   ~ SOFTWARE.
   -->
 
-<resources>
-
-    <style name="Theme.DrBetting.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="Theme.DrBetting.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="Theme.DrBetting.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-</resources>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_save"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:title="Save"/>
+</menu>

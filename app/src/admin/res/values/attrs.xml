@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ MIT License
   ~
   ~ Copyright (c)  2021 Damjan Miloshevski
@@ -23,13 +23,16 @@
   -->
 
 <resources>
-
-    <style name="Theme.DrBetting.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="Theme.DrBetting.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="Theme.DrBetting.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <declare-styleable name="InputView">
+        <attr name="hint" format="reference"/>
+        <attr name="inputTitle" format="reference"/>
+        <attr name="type" format="enum">
+            <enum name="input" value="0"/>
+            <enum name="datepicker" value="1"/>
+        </attr>
+    </declare-styleable>
+    <declare-styleable name="ChooserView">
+        <attr name="chooserTitle" format="reference"/>
+        <attr name="items" format="reference"/>
+    </declare-styleable>
 </resources>
