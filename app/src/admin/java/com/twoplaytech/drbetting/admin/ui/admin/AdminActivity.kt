@@ -33,10 +33,14 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.DocumentChange
 import com.twoplaytech.drbetting.R
+import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_ARGS
+import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_TIP
+import com.twoplaytech.drbetting.admin.util.Constants.KEY_TYPE
 import com.twoplaytech.drbetting.admin.util.Constants.VIEW_TYPE_EDIT
 import com.twoplaytech.drbetting.admin.util.Constants.VIEW_TYPE_NEW
 import com.twoplaytech.drbetting.data.BettingType
@@ -67,9 +71,7 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         initUI()
         observeData()
         binding.fab.setOnClickListener { view ->
-            val intent = Intent(this, BettingTipActivity::class.java)
-            intent.putExtra("type", VIEW_TYPE_NEW)
-            startActivity(intent)
+            this.navigateToTips(VIEW_TYPE_NEW)
         }
     }
 
@@ -228,8 +230,15 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
     }
 
     override fun onTipClick(tip: BettingType) {
+       this.navigateToTips(VIEW_TYPE_EDIT,tip)
+    }
+    private fun navigateToTips(viewType:Int, tip:BettingType?=null){
         val intent = Intent(this, BettingTipActivity::class.java)
-        intent.putExtra("type", VIEW_TYPE_EDIT)
+        val args = bundleOf(
+            KEY_TYPE to viewType,
+            KEY_BETTING_TIP to tip
+        )
+        intent.putExtra(KEY_BETTING_ARGS,args)
         startActivity(intent)
     }
 }

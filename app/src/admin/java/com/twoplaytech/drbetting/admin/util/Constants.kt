@@ -33,4 +33,7 @@ package com.twoplaytech.drbetting.admin.util
 object Constants {
     const val VIEW_TYPE_NEW = 0
     const val VIEW_TYPE_EDIT = 1
+    const val KEY_TYPE = "type"
+    const val KEY_BETTING_TIP = "betting_tip"
+    const val KEY_BETTING_ARGS = "KEY_BETTING_ARGS"
 }

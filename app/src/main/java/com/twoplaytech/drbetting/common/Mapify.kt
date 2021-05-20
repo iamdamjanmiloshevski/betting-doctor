@@ -22,20 +22,14 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.data
-
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+package com.twoplaytech.drbetting.common
 
 /*
     Author: Damjan Miloshevski 
-    Created on 3/10/21 12:27 PM
+    Created on 20.5.21 15:33
+    Project: Dr.Betting
+    © 2Play Tech  2021. All rights reserved
 */
-@Parcelize
-enum class Sport(val value: String):Parcelable {
-    FOOTBALL("0"),
-    BASKETBALL("1"),
-    TENNIS("2"),
-    HANDBALL("3"),
-    VOLLEYBALL("4")
+interface Mapify {
+    fun mapify():Map<String,Any>
 }

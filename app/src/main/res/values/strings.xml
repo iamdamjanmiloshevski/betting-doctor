@@ -44,6 +44,16 @@
     <string name="copyright" translatable="false">© %s 2Play Tech</string>
     <string name="version">Version %s</string>
     <string name="dark_mode">Dark mode</string>
+    <string name="new_betting_tip_title">Add new betting tip</string>
+    <string name="update_betting_tip_title">Update betting tip</string>
+    <string name="team_home_error">Please provide a home team name!</string>
+    <string name="team_away_error">Please provide a away team name!</string>
+    <string name="league_name_error">Please provide a League name!</string>
+    <string name="betting_tip_error">Please provide a betting tip!</string>
+    <string name="result_error">Please provide a result!</string>
+    <string name="game_time_error">Please provide a game time!</string>
+    <string name="result_title">Result</string>
+    <string name="result_hint">Ex. (1-0) for unknown you can type /</string>
     <string-array name="dark_mode_options">
         <item>On</item>
         <item>Off</item>

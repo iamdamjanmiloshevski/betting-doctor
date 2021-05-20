@@ -26,7 +26,9 @@ package com.twoplaytech.drbetting.repository
 
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.twoplaytech.drbetting.data.BettingType
 import com.twoplaytech.drbetting.util.Constants.TIPS
+import timber.log.Timber
 import javax.inject.Inject
 
 /*
@@ -37,5 +39,36 @@ import javax.inject.Inject
 class FirestoreRepository @Inject constructor(private val db: FirebaseFirestore) : IRepository {
     override fun getBettingTips(): CollectionReference {
         return db.collection(TIPS)
+    }
+
+    override fun saveBettingTip(
+        bettingType: BettingType,
+        successCallback: (String) -> Unit,
+        failureCallback: (String) -> Unit
+    ) {
+        db.collection(TIPS).document().set(bettingType.mapify()).addOnCompleteListener {
+            if (it.isSuccessful) {
+                successCallback.invoke("Success")
+            }
+        }.addOnFailureListener {
+            Timber.e(it)
+            failureCallback.invoke(it.message!!)
+        }
+    }
+
+    override fun updateBettingTip(
+        bettingType: BettingType,
+        successCallback: (String) -> Unit,
+        failureCallback: (String) -> Unit
+    ) {
+        db.collection(TIPS).document(bettingType.id).update(bettingType.mapify())
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    successCallback.invoke("Success")
+                }
+            }.addOnFailureListener {
+            Timber.e(it)
+            failureCallback.invoke(it.message!!)
+        }
     }
 }

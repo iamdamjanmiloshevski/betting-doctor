@@ -26,41 +26,117 @@ package com.twoplaytech.drbetting.admin.ui.admin
 
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.common.OnDropdownItemSelectedListener
+import com.twoplaytech.drbetting.admin.util.Constants
+import com.twoplaytech.drbetting.admin.util.Constants.KEY_TYPE
 import com.twoplaytech.drbetting.admin.util.Constants.VIEW_TYPE_EDIT
 import com.twoplaytech.drbetting.admin.util.Constants.VIEW_TYPE_NEW
-import com.twoplaytech.drbetting.data.BettingType
-import com.twoplaytech.drbetting.data.Sport
-import com.twoplaytech.drbetting.data.TypeStatus
+import com.twoplaytech.drbetting.admin.views.ChooserView
+import com.twoplaytech.drbetting.data.*
 import com.twoplaytech.drbetting.databinding.FragmentBettingTipBinding
+import com.twoplaytech.drbetting.ui.common.BaseFragment
 import java.util.*
 
-class BettingTipFragment : Fragment(), OnDropdownItemSelectedListener {
+class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
 
-    private lateinit var binding: FragmentBettingTipBinding
+    private lateinit var _binding: FragmentBettingTipBinding
     private var bettingTip: BettingType? = null
     private var cancel = false
+    private var sportChosen = Sport.FOOTBALL
+    private var statusChosen = TypeStatus.UNKNOWN
     private var type = VIEW_TYPE_NEW
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentBettingTipBinding.inflate(inflater, container, false)
+        _binding = FragmentBettingTipBinding.inflate(inflater, container, false)
         setHasOptionsMenu(true)
-        binding.cvSports.setOnDropDownItemSelectedListener(this)
-        binding.cvStatus.setOnDropDownItemSelectedListener(this)
+        _binding.cvSports.setOnDropDownItemSelectedListener(this)
+        _binding.cvStatus.setOnDropDownItemSelectedListener(this)
         arguments?.let {
-            bettingTip = it.getSerializable("betting_tip") as BettingType?
-            type = it.getInt("type")
+            bettingTip = it.getParcelable(Constants.KEY_BETTING_TIP)
+            type = it.getInt(KEY_TYPE)
         }
-        when(type){
-            VIEW_TYPE_NEW -> activity?.title = "Add new betting tip"
-            VIEW_TYPE_EDIT -> activity?.title = "Update betting tip"
+        when (type) {
+            VIEW_TYPE_NEW -> activity?.title = getString(R.string.new_betting_tip_title)
+            VIEW_TYPE_EDIT -> activity?.title = getString(R.string.update_betting_tip_title)
         }
-        return binding.root
+        populateExistingTip(bettingTip)
+        return _binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        observeData()
+    }
+
+    private fun populateExistingTip(bettingTip: BettingType?) {
+        bettingTip?.let {
+            with(_binding) {
+                this.tvLeague.setText(bettingTip.leagueName)
+                this.tvHome.populate(bettingTip.teamHome)
+                this.tvAway.populate(bettingTip.teamAway)
+                this.tvBettingTip.setText(bettingTip.bettingType)
+                this.tvResult.setText(bettingTip.result)
+                bettingTip.gameTime?.let { date ->
+                    this.tvGameTime.setDate(date)
+                }
+                bettingTip.sport?.select(this.cvSports)
+                bettingTip.bettingType.select(this.cvStatus)
+            }
+        } ?: return
+    }
+
+    override fun observeData() {
+        viewModel.observeValidation().observe(viewLifecycleOwner, { hasErrors ->
+            when (hasErrors) {
+                true -> {
+
+                }
+                false -> {
+                    if (bettingTip != null) {
+                        bettingTip?.let {
+                            viewModel.saveBettingTip(it,true)
+                        }
+                    } else viewModel.saveBettingTip(getTipFromInput())
+                }
+            }
+        })
+        viewModel.observeForSavedTip().observe(viewLifecycleOwner, { resource ->
+            when (resource.status) {
+                Status.SUCCESS -> {
+                    activity?.finish()
+                }
+                Status.ERROR -> {
+                }
+                Status.LOADING -> {
+
+                }
+            }
+        })
+    }
+
+    private fun getTipFromInput(): BettingType {
+        val league = _binding.tvLeague.getInput<String?>() as String
+        val bettingTip = _binding.tvBettingTip.getInput<String?>() as String
+        val gameTime = _binding.tvGameTime.getInput<Date?>()
+        val result = _binding.tvResult.getInput<String?>() as String
+        val teamHomeName = _binding.tvHome.getTeamName()
+        val teamAwayName = _binding.tvAway.getTeamName()
+        val teamHome = Team(teamHomeName)
+        val teamAway = Team(teamAwayName)
+        return BettingType(
+            league,
+            teamHome,
+            teamAway,
+            gameTime,
+            bettingTip,
+            statusChosen,
+            result,
+            sport = sportChosen
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -70,44 +146,73 @@ class BettingTipFragment : Fragment(), OnDropdownItemSelectedListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_save -> {
-
-                val league = binding.tvLeague.getInput<String>()
-                val bettingTip = binding.tvBettingTip.getInput<String?>()
-                val gameTime = binding.tvGameTime.getInput<Date?>()
-                val teamHome = binding.tvHome.getTeamName()
-                val teamAway = binding.tvAway.getTeamName()
-                cancel = if (teamHome.isNullOrEmpty()) {
-                    binding.tvHome.setError("Please provide a home team name!")
-                    true
-                } else false
-                cancel = if (teamAway.isNullOrEmpty()) {
-                    binding.tvAway.setError("Please provide a home team name!")
-                    true
-                } else false
-                cancel = if (league.isNullOrEmpty()) {
-                    binding.tvLeague.setError("Please provide a League name!")
-                    true
-                } else false
-                cancel = if (bettingTip.isNullOrEmpty()) {
-                    binding.tvBettingTip.setError("Please provide a betting tip!")
-                    true
-                } else false
-                cancel = if (gameTime == null) {
-                    binding.tvGameTime.setError("Please provide a game time!")
-                    true
-                } else false
+                viewModel.validate(validateFields())
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
+    private fun validateFields(): Boolean {
+        val league = _binding.tvLeague.getInput<String>()
+        val bettingTip = _binding.tvBettingTip.getInput<String?>()
+        val gameTime = _binding.tvGameTime.getInput<Date?>()
+        val teamHome = _binding.tvHome.getTeamName()
+        val teamAway = _binding.tvAway.getTeamName()
+        val result = _binding.tvResult.getInput<String?>() as String
+        cancel = if (teamHome.isNullOrEmpty()) {
+            _binding.tvHome.setError(R.string.team_home_error)
+            true
+        } else false
+        cancel = if (teamAway.isNullOrEmpty()) {
+            _binding.tvAway.setError(R.string.team_away_error)
+            true
+        } else false
+        cancel = if (league.isNullOrEmpty()) {
+            _binding.tvLeague.setError(R.string.league_name_error)
+            true
+        } else false
+        cancel = if (bettingTip.isNullOrEmpty()) {
+            _binding.tvBettingTip.setError(R.string.betting_tip_error)
+            true
+        } else false
+        cancel = if (result.isNullOrEmpty()) {
+            _binding.tvBettingTip.setError(R.string.result_error)
+            true
+        } else false
+        cancel = if (gameTime == null) {
+            _binding.tvGameTime.setError(R.string.game_time_error)
+            true
+        } else false
+        return cancel
+    }
+
 
     override fun onSportClicked(sport: Sport) {
-
+        val bettingTipActivity = activity as BettingTipActivity
+        bettingTipActivity.changeThemePerSport(sport = sport)
+        if (bettingTip != null) bettingTip?.sport = sport else sportChosen = sport
     }
 
     override fun onStatusClicked(status: TypeStatus) {
+        if (bettingTip != null) bettingTip?.status = status else statusChosen = status
+    }
 
+    private fun Sport.select(chooserView: ChooserView) {
+        when (this) {
+            Sport.FOOTBALL -> chooserView.setSelection(0)
+            Sport.BASKETBALL -> chooserView.setSelection(2)
+            Sport.TENNIS -> chooserView.setSelection(3)
+            Sport.HANDBALL -> chooserView.setSelection(4)
+            Sport.VOLLEYBALL -> chooserView.setSelection(5)
+        }
+    }
+
+    private fun String.select(chooserView: ChooserView) {
+        when (this) {
+            "0" -> chooserView.setSelection(3)
+            "1" -> chooserView.setSelection(1)
+            "2" -> chooserView.setSelection(2)
+        }
     }
 }

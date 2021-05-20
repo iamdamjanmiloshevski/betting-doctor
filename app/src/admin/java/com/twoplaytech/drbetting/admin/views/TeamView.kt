@@ -28,10 +28,12 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import androidx.annotation.StringRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.common.ICustomView
 import com.twoplaytech.drbetting.admin.common.TextWatcher
+import com.twoplaytech.drbetting.data.Team
 import com.twoplaytech.drbetting.databinding.ItemTeamBinding
 
 /*
@@ -85,13 +87,20 @@ class TeamView(context: Context, attributeSet: AttributeSet) :
         isExpanded = false
     }
 
-    fun setError(error: String?) {
-        if (error != null) {
+    fun setError(@StringRes errorRes: Int?) {
+        if (errorRes != null) {
             hasError = true
-            binding.etTeamName.error = error
+            binding.etTeamName.error = context.getString(errorRes)
         } else {
             hasError = false
             binding.etTeamName.error = null
+        }
+    }
+
+    fun populate(team:Team?){
+        team?.let {
+            binding.etTeamName.setText(it.name)
+            binding.etTeamLogo.setText(it.logo)
         }
     }
 

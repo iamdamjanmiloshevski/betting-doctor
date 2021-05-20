@@ -25,7 +25,9 @@
 
 package com.twoplaytech.drbetting.data
 
+import android.os.Parcelable
 import com.google.firebase.Timestamp
+import com.twoplaytech.drbetting.common.Mapify
 import com.twoplaytech.drbetting.util.Constants.BETTING_TIP
 import com.twoplaytech.drbetting.util.Constants.GAME_TIME
 import com.twoplaytech.drbetting.util.Constants.LEAGUE_NAME
@@ -34,7 +36,7 @@ import com.twoplaytech.drbetting.util.Constants.SPORT
 import com.twoplaytech.drbetting.util.Constants.STATUS
 import com.twoplaytech.drbetting.util.Constants.TEAM_AWAY
 import com.twoplaytech.drbetting.util.Constants.TEAM_HOME
-import java.io.Serializable
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 /*
@@ -42,6 +44,7 @@ import java.util.*
     Created on 3/10/21 12:26 PM
 
 */
+@Parcelize
 data class BettingType(
     var leagueName: String = "",
     var teamHome: Team? = null,
@@ -52,7 +55,7 @@ data class BettingType(
     var result: String = "",
     var id: String = "",
     var sport: Sport? = null
-) : Serializable {
+) : Parcelable,Mapify {
     constructor(data: Map<String, Any>) : this() {
         leagueName = if (data.containsKey(LEAGUE_NAME)) {
             data[LEAGUE_NAME] as String
@@ -87,7 +90,7 @@ data class BettingType(
         } else {
             "N/A"
         }
-        if (data.containsKey(STATUS) &&data[STATUS] != null) {
+        if (data.containsKey(STATUS) && data[STATUS] != null) {
             val statusType = data[STATUS] as String
             status = getStatus(statusType)
         }
@@ -107,13 +110,35 @@ data class BettingType(
             else -> Sport.FOOTBALL
         }
     }
-    private fun getStatus(status:String):TypeStatus{
-        return when(status){
+
+    private fun getStatus(status: String): TypeStatus {
+        return when (status) {
             "0" -> TypeStatus.UNKNOWN
             "1" -> TypeStatus.WON
             "2" -> TypeStatus.LOST
             else -> TypeStatus.UNKNOWN
         }
+    }
+
+    override fun mapify(): Map<String, Any> {
+        val gameTime =
+            this.gameTime?.let { Timestamp(it) } ?: Timestamp(Calendar.getInstance().time)
+        val status = this.status?.let { it.value } ?: TypeStatus.UNKNOWN.value
+        val sport = this.sport?.let { it.value } ?: Sport.FOOTBALL.value
+        val teamHome =
+            this.teamHome?.let { it.mapify() } ?: mapOf("name" to "teamHome", "logo" to "")
+        val teamAway =
+            this.teamAway?.let { it.mapify() } ?: mapOf("name" to "teamAway", "logo" to "")
+        return mapOf(
+            "leagueName" to this.leagueName,
+            "gameTime" to gameTime,
+            "result" to this.result,
+            "bettingTip" to this.bettingType,
+            "sport" to sport,
+            "status" to status,
+            "teamAway" to teamAway,
+            "teamHome" to teamHome
+        )
     }
 }
 

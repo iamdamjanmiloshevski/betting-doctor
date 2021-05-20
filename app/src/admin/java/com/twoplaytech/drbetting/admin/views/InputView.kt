@@ -28,14 +28,15 @@ import android.content.Context
 import android.text.InputType
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import androidx.annotation.StringRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.datetime.dateTimePicker
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.common.ICustomView
 import com.twoplaytech.drbetting.admin.common.TextWatcher
+import com.twoplaytech.drbetting.admin.util.beautify
 import com.twoplaytech.drbetting.databinding.ViewInputBinding
-import java.text.SimpleDateFormat
 import java.util.*
 
 /*
@@ -100,8 +101,10 @@ class InputView(context: Context, attrs: AttributeSet) :
         binding = ViewInputBinding.inflate(inflater, this, true)
     }
 
-    fun setError(error: String? = null) {
-        binding.inputHeader.error = error
+    fun setError(@StringRes errorRes: Int? = null) {
+        binding.inputHeader.error = errorRes?.let {
+            context.getString(it)
+        } ?: null
         requestLayout()
     }
 
@@ -113,13 +116,26 @@ class InputView(context: Context, attrs: AttributeSet) :
         }
     }
 
+    fun setText(text: String) {
+        binding.etField.setText(text)
+        binding.etField.setSelection(text.length)
+        invalidate()
+        requestLayout()
+    }
+
+    fun setDate(date: Date) {
+        binding.etField.setText(date.beautify())
+        gameTime = date
+        invalidate()
+        requestLayout()
+    }
+
     private fun Context.showDatePicker() {
         MaterialDialog(context).show {
             dateTimePicker(show24HoursView = true) { _, dateTime ->
                 // Use dateTime (Calendar)
                 gameTime = dateTime.time
-                val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm")
-                binding.etField.setText(sdf.format(dateTime.time))
+                binding.etField.setText(dateTime.time.beautify())
             }
         }
     }

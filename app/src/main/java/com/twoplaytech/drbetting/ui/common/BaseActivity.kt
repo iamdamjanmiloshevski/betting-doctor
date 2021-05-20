@@ -35,10 +35,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.twoplaytech.drbetting.data.Sport
 import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
-import com.twoplaytech.drbetting.util.AppContextWrapper
-import com.twoplaytech.drbetting.util.getRandomBackground
-import com.twoplaytech.drbetting.util.getSportColor
-import com.twoplaytech.drbetting.util.getSportResource
+import com.twoplaytech.drbetting.util.*
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -50,6 +47,7 @@ import javax.inject.Inject
 abstract class BaseActivity : AppCompatActivity(), IBaseActivityView {
     @Inject
     lateinit var preferencesManager: SharedPreferencesManager
+
     @Inject
     lateinit var appContextWrapper: AppContextWrapper
 
@@ -57,6 +55,7 @@ abstract class BaseActivity : AppCompatActivity(), IBaseActivityView {
         super.onCreate(savedInstanceState)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
+
     override fun changeTheme(
         navView: BottomNavigationView?,
         sport: Sport?,
@@ -72,7 +71,7 @@ abstract class BaseActivity : AppCompatActivity(), IBaseActivityView {
                 window.statusBarColor = ContextCompat.getColor(this, sport.getSportColor())
             }
             navView.setBackgroundResource(sport.getSportResource())
-        } else if(appBarLayout!= null && sport != null){
+        } else if (appBarLayout != null && sport != null) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             }
@@ -80,8 +79,15 @@ abstract class BaseActivity : AppCompatActivity(), IBaseActivityView {
                 window.statusBarColor = ContextCompat.getColor(this, sport.getSportColor())
             }
             appBarLayout?.setBackgroundResource(sport.getSportResource())
-        }
-        else if (sport != null) {
+        } else if (toolbar != null && sport != null) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            }
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                window.statusBarColor = ContextCompat.getColor(this, sport.getSportColor())
+            }
+            toolbar.background = sport.getSportDrawable(this)
+        } else if (sport != null) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             }

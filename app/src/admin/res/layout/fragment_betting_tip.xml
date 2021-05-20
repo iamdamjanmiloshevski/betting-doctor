@@ -96,6 +96,17 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="10dp"
+            app:hint="@string/result_hint"
+            app:inputTitle="@string/result_title"
+            app:type="input"
+            android:id="@+id/tv_result"/>
+        <com.twoplaytech.drbetting.admin.views.InputView
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_result"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="10dp"
             app:inputTitle="@string/hint_game_time_heading"
             app:hint="@string/hint_game_time"
             app:type="datepicker"

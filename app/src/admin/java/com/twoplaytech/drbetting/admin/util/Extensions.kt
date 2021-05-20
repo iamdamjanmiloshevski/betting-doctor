@@ -29,6 +29,7 @@ import android.widget.TextView
 import androidx.annotation.DrawableRes
 import com.afollestad.materialdialogs.MaterialDialog
 import com.twoplaytech.drbetting.R
+import java.text.SimpleDateFormat
 import java.util.*
 
 /*
@@ -80,4 +81,8 @@ fun getRandomBackground(): Pair<Int, Int> {
 }
 fun TextView.changeDrawable(@DrawableRes resource:Int){
    this.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,resource, 0)
+}
+fun Date.beautify():String{
+    val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm")
+    return sdf.format(this)
 }

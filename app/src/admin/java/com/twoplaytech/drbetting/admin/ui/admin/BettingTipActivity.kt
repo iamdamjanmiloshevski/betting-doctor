@@ -33,6 +33,11 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.util.Constants
+import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_ARGS
+import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_TIP
+import com.twoplaytech.drbetting.admin.util.Constants.KEY_TYPE
+import com.twoplaytech.drbetting.data.BettingType
+import com.twoplaytech.drbetting.data.Sport
 import com.twoplaytech.drbetting.databinding.ActivityBettingTipBinding
 import com.twoplaytech.drbetting.ui.common.BaseActivity
 
@@ -40,15 +45,20 @@ class BettingTipActivity : BaseActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityBettingTipBinding
-    private lateinit  var navController:NavController
+    private lateinit var navController: NavController
     private var viewType = Constants.VIEW_TYPE_NEW
+    private var bettingTip: BettingType? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding()
         setContentView(binding.root)
         intent.extras?.let {
-            viewType = it.getInt("type")
+            val args = it.getBundle(KEY_BETTING_ARGS)
+            args?.let { bettingArgs ->
+                viewType = bettingArgs.getInt(KEY_TYPE)
+                bettingTip = bettingArgs.getParcelable(KEY_BETTING_TIP)
+            }
         }
         initUI()
 
@@ -62,12 +72,22 @@ class BettingTipActivity : BaseActivity() {
     override fun initUI() {
         setSupportActionBar(binding.toolbar)
         navController = findNavController(R.id.nav_host_fragment_content_betting_tip)
-        navController.setGraph(R.navigation.nav_graph_betting_tip, bundleOf("type" to viewType))
+        navController.setGraph(
+            R.navigation.nav_graph_betting_tip, bundleOf(
+                KEY_TYPE to viewType,
+                KEY_BETTING_TIP to bettingTip
+            )
+        )
         appBarConfiguration = AppBarConfiguration(navController.graph)
+        setSupportActionBar(binding.toolbar)
         setupActionBarWithNavController(navController, appBarConfiguration)
     }
 
     override fun initBinding() {
         binding = ActivityBettingTipBinding.inflate(layoutInflater)
+    }
+
+    fun changeThemePerSport(sport: Sport?) {
+        changeTheme(sport = sport, toolbar = binding.toolbar)
     }
 }

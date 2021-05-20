@@ -48,7 +48,8 @@ import javax.inject.Inject
 class BettingTipsViewModel @Inject constructor(private val repository: FirestoreRepository) :
     ViewModel() {
     private val olderTipsObserver = MutableLiveData<Resource<List<BettingType>>>()
-
+    private val fieldValidatorObserver = MutableLiveData<Boolean>()
+    private val saveObserver = MutableLiveData<Resource<Boolean>>()
 
     fun getUpcomingTips(type: String): FirestoreQueryLiveData {
         return repository.getBettingTips()
@@ -85,6 +86,30 @@ class BettingTipsViewModel @Inject constructor(private val repository: Firestore
                 olderTipsObserver.value = Resource.error(exception.localizedMessage, null)
             }
     }
+
+    fun validate(validate: Boolean) {
+        fieldValidatorObserver.value = validate
+    }
+
+    fun observeValidation() = fieldValidatorObserver
+
+    fun saveBettingTip(bettingType: BettingType,shouldUpdate:Boolean=false) {
+      if(shouldUpdate){
+          repository.updateBettingTip(bettingType, successCallback = {
+              saveObserver.value = Resource.success(it, true)
+          }, failureCallback = {
+              saveObserver.value = Resource.error(it, false)
+          })
+      }else{
+          repository.saveBettingTip(bettingType, successCallback = {
+              saveObserver.value = Resource.success(it, true)
+          }, failureCallback = {
+              saveObserver.value = Resource.error(it, false)
+          })
+      }
+    }
+
+    fun observeForSavedTip() = saveObserver
 
     fun observeOnOlderTips() = olderTipsObserver
 }

@@ -25,6 +25,7 @@
 package com.twoplaytech.drbetting.repository
 
 import com.google.firebase.firestore.CollectionReference
+import com.twoplaytech.drbetting.data.BettingType
 
 /*
     Author: Damjan Miloshevski 
@@ -33,4 +34,10 @@ import com.google.firebase.firestore.CollectionReference
 */
 interface IRepository {
     fun getBettingTips(): CollectionReference
+    fun saveBettingTip(bettingType: BettingType,
+                       successCallback: (String) -> Unit,
+                       failureCallback: (String) -> Unit)
+    fun updateBettingTip(bettingType: BettingType,
+                         successCallback: (String) -> Unit,
+                         failureCallback: (String) -> Unit)
 }

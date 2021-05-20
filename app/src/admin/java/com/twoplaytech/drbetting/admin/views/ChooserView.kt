@@ -120,4 +120,9 @@ class ChooserView(context: Context, attrs: AttributeSet) : ConstraintLayout(cont
     fun setOnDropDownItemSelectedListener(listener: OnDropdownItemSelectedListener) {
         this.listener = listener
     }
+    fun setSelection(idx:Int){
+        binding.spItems.setSelection(idx)
+        invalidate()
+        requestLayout()
+    }
 }
