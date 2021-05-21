@@ -72,4 +72,6 @@
     <string name="title_sport">Football</string>
     <string name="title_status_heading">Status</string>
     <string name="title_status">Unknown</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_settings">Settings</string>
 </resources>

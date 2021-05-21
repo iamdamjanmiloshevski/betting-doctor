@@ -47,7 +47,7 @@ class LoginViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val repository: FirebaseRepository,
     private val preferencesManager: SharedPreferencesManager
-):
+) :
     ViewModel() {
     private val loginObserver: MutableLiveData<Resource<Boolean>> = MutableLiveData()
     private val loginEnabledObserver = MutableLiveData<Boolean>()
@@ -61,6 +61,13 @@ class LoginViewModel @Inject constructor(
                 loginObserver.value = Resource.error(errorMessage, null)
             } else loginObserver.value = Resource.success(null, loginStatus)
         })
+    }
+
+    fun logout() {
+        repository.logout {
+            saveLogin(false)
+            loginObserver.value = Resource.success(null, false)
+        }
     }
 
     fun enableLogin(enable: Boolean) {

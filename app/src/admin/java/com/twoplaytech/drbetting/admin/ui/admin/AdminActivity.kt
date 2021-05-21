@@ -26,18 +26,26 @@ package com.twoplaytech.drbetting.admin.ui.admin
 
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.os.Build
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.PopupMenu
 import android.widget.Spinner
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.materialdialogs.MaterialDialog
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.DocumentChange
 import com.twoplaytech.drbetting.R
+import com.twoplaytech.drbetting.admin.ui.login.LoginActivity
+import com.twoplaytech.drbetting.admin.ui.login.LoginViewModel
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_ARGS
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_TIP
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_TYPE
@@ -55,11 +63,12 @@ import com.twoplaytech.drbetting.util.getSportColor
 import com.twoplaytech.drbetting.util.getSportFromIndex
 
 class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
-    OnBettingTipClickedListener {
+    OnBettingTipClickedListener, PopupMenu.OnMenuItemClickListener, View.OnClickListener {
     private lateinit var binding: ActivityAdminBinding
     private var typeSelected = 1
     private var sportSelected = 0
     private val viewModel: BettingTipsViewModel by viewModels()
+    private val loginViewModel: LoginViewModel by viewModels()
     private val bettingTips = mutableListOf<BettingType>()
     private val adapter: BettingTipsRecyclerViewAdapter =
         BettingTipsRecyclerViewAdapter(bettingTips)
@@ -89,6 +98,7 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                 binding.progressBar.visibility = View.GONE
             }
         })
+        binding.ivMore.setOnClickListener(this)
         initSpinners()
     }
 
@@ -117,6 +127,30 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                 }
                 Status.ERROR -> {
 
+
+                }
+            }
+        })
+        loginViewModel.observeLogin().observe(this, Observer {
+            when (it.status) {
+                com.twoplaytech.drbetting.admin.common.Status.SUCCESS -> {
+                    when (it.data) {
+                        true -> {
+                        }
+                        false -> {
+                            startActivity(Intent(this, LoginActivity::class.java))
+                            finish()
+                        }
+                    }
+                }
+                com.twoplaytech.drbetting.admin.common.Status.ERROR -> {
+                    Snackbar.make(
+                        binding.adminView,
+                        it.message.toString(),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+                com.twoplaytech.drbetting.admin.common.Status.LOADING -> {
 
                 }
             }
@@ -230,15 +264,55 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
     }
 
     override fun onTipClick(tip: BettingType) {
-       this.navigateToTips(VIEW_TYPE_EDIT,tip)
+        this.navigateToTips(VIEW_TYPE_EDIT, tip)
     }
-    private fun navigateToTips(viewType:Int, tip:BettingType?=null){
+
+    private fun navigateToTips(viewType: Int, tip: BettingType? = null) {
         val intent = Intent(this, BettingTipActivity::class.java)
         val args = bundleOf(
             KEY_TYPE to viewType,
             KEY_BETTING_TIP to tip
         )
-        intent.putExtra(KEY_BETTING_ARGS,args)
+        intent.putExtra(KEY_BETTING_ARGS, args)
         startActivity(intent)
+    }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.action_logout -> {
+                MaterialDialog(this).show {
+                    cancelable(false)
+                    title(R.string.logout_title)
+                    message(R.string.log_out_msg)
+                    positiveButton(android.R.string.ok,null) {
+                        loginViewModel.logout()
+                    }
+                    negativeButton(android.R.string.cancel,null) {
+                        dismiss()
+                    }
+                }
+                true
+            }
+            R.id.action_settings -> {
+                true
+            }
+            else -> false
+        }
+    }
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.iv_more -> showMenu(binding.ivMore)
+        }
+    }
+
+    private fun showMenu(anchor: View?) {
+        val popup = PopupMenu(this, anchor)
+        popup.menuInflater.inflate(R.menu.menu_admin, popup.menu)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            popup.setForceShowIcon(true)
+        }
+        popup.setOnMenuItemClickListener(this)
+        popup.show()
     }
 }

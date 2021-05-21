@@ -28,6 +28,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/silver_chalice"
+    android:id="@+id/admin_view"
     tools:context=".admin.ui.admin.AdminActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -59,14 +60,14 @@
                 android:backgroundTint="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/sp_type"
-                app:layout_constraintEnd_toStartOf="@id/iv_settings"
+                app:layout_constraintEnd_toStartOf="@id/iv_more"
                 app:layout_constraintTop_toTopOf="parent"/>
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:minHeight="?actionBarSize"
-                android:src="@drawable/ic_baseline_settings_24"
-                android:id="@+id/iv_settings"
+                android:src="@drawable/ic_baseline_more_vert_24"
+                android:id="@+id/iv_more"
                 android:padding="@dimen/appbar_padding"
                 app:layout_constraintEnd_toEndOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>

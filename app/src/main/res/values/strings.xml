@@ -54,6 +54,8 @@
     <string name="game_time_error">Please provide a game time!</string>
     <string name="result_title">Result</string>
     <string name="result_hint">Ex. (1-0) for unknown you can type /</string>
+    <string name="logout_title">Log out?</string>
+    <string name="log_out_msg">Are you sure that you want to log out?</string>
     <string-array name="dark_mode_options">
         <item>On</item>
         <item>Off</item>
