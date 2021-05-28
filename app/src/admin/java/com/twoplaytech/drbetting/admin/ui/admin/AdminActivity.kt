@@ -46,21 +46,23 @@ import com.google.firebase.firestore.DocumentChange
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.ui.login.LoginActivity
 import com.twoplaytech.drbetting.admin.ui.login.LoginViewModel
+import com.twoplaytech.drbetting.admin.util.Constants
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_ARGS
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_TIP
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_TYPE
 import com.twoplaytech.drbetting.admin.util.Constants.VIEW_TYPE_EDIT
-import com.twoplaytech.drbetting.admin.util.Constants.VIEW_TYPE_NEW
 import com.twoplaytech.drbetting.data.BettingType
 import com.twoplaytech.drbetting.data.Sport
 import com.twoplaytech.drbetting.data.Status
 import com.twoplaytech.drbetting.databinding.ActivityAdminBinding
+import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_VIEW_TYPE
 import com.twoplaytech.drbetting.ui.adapters.BettingTipsRecyclerViewAdapter
 import com.twoplaytech.drbetting.ui.common.BaseActivity
 import com.twoplaytech.drbetting.ui.common.BettingTipsViewModel
 import com.twoplaytech.drbetting.ui.common.OnBettingTipClickedListener
 import com.twoplaytech.drbetting.util.getSportColor
 import com.twoplaytech.drbetting.util.getSportFromIndex
+import timber.log.Timber
 
 class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
     OnBettingTipClickedListener, PopupMenu.OnMenuItemClickListener, View.OnClickListener {
@@ -77,14 +79,13 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         super.onCreate(savedInstanceState)
         initBinding()
         setContentView(binding.root)
+        getExtras(intent)
         initUI()
         observeData()
-        binding.fab.setOnClickListener { view ->
-            this.navigateToTips(VIEW_TYPE_NEW)
-        }
     }
 
     override fun initUI() {
+        binding.fab.setOnClickListener(this)
         binding.noDataView.setVisible(false)
         adapter.setOnBettingTipClickedListener(this)
         binding.rvBettingTips.adapter = adapter
@@ -114,6 +115,7 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
     }
 
     override fun observeData() {
+        adapter.clear()
         viewModel.observeOnOlderTips().observe(this, { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
@@ -161,6 +163,13 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         binding = ActivityAdminBinding.inflate(layoutInflater)
     }
 
+    override fun getExtras(intent: Intent) {
+        intent.extras?.let {
+            typeSelected = preferencesManager.getInteger(KEY_VIEW_TYPE)
+            sportSelected = it.getInt(KEY_SPORT)
+            binding.spSport.setSelection(sportSelected)
+        }
+    }
 
     private fun Spinner.initTypesSpinner() {
         ArrayAdapter.createFromResource(
@@ -222,7 +231,9 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
     }
 
     fun requestTodayData(type: Sport) {
-        bettingTips.clear()
+        binding.noDataView.setVisible(false)
+        binding.progressBar.visibility = View.VISIBLE
+        binding.rvBettingTips.visibility = View.GONE
         viewModel.getUpcomingTips(type.value).observe(this, {
             for (doc in it!!.documentChanges) {
                 val tip = BettingType(doc.document.data)
@@ -254,12 +265,13 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                     }
                 }
             }
+            binding.rvBettingTips.visibility = View.VISIBLE
+            binding.progressBar.visibility = View.GONE
             adapter.notifyDataSetChanged()
         })
     }
 
     fun requestOlderData(type: Sport) {
-        bettingTips.clear()
         viewModel.getOlderTips(type.value)
     }
 
@@ -267,7 +279,9 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         this.navigateToTips(VIEW_TYPE_EDIT, tip)
     }
 
+
     private fun navigateToTips(viewType: Int, tip: BettingType? = null) {
+        preferencesManager.saveInteger(KEY_VIEW_TYPE, typeSelected)
         val intent = Intent(this, BettingTipActivity::class.java)
         val args = bundleOf(
             KEY_TYPE to viewType,
@@ -277,6 +291,11 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         startActivity(intent)
     }
 
+    override fun onResume() {
+        super.onResume()
+        Timber.e("items ${bettingTips.size}")
+    }
+
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.action_logout -> {
@@ -284,10 +303,10 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                     cancelable(false)
                     title(R.string.logout_title)
                     message(R.string.log_out_msg)
-                    positiveButton(android.R.string.ok,null) {
+                    positiveButton(android.R.string.ok, null) {
                         loginViewModel.logout()
                     }
-                    negativeButton(android.R.string.cancel,null) {
+                    negativeButton(android.R.string.cancel, null) {
                         dismiss()
                     }
                 }
@@ -303,6 +322,7 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.iv_more -> showMenu(binding.ivMore)
+            R.id.fab -> this.navigateToTips(Constants.VIEW_TYPE_NEW)
         }
     }
 
@@ -314,5 +334,14 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         }
         popup.setOnMenuItemClickListener(this)
         popup.show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.rvBettingTips.adapter = null
+    }
+
+    companion object {
+        const val KEY_SPORT = "KEY_SPORT"
     }
 }

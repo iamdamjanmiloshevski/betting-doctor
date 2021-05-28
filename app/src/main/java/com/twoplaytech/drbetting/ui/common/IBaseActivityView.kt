@@ -24,6 +24,7 @@
 
 package com.twoplaytech.drbetting.ui.common
 
+import android.content.Intent
 import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar
@@ -42,4 +43,5 @@ interface IBaseActivityView {
     }
     fun observeData(){}
     fun initBinding(){}
+    fun getExtras(intent: Intent){}
 }

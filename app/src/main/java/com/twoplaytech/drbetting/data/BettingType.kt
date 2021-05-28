@@ -30,6 +30,7 @@ import com.google.firebase.Timestamp
 import com.twoplaytech.drbetting.common.Mapify
 import com.twoplaytech.drbetting.util.Constants.BETTING_TIP
 import com.twoplaytech.drbetting.util.Constants.GAME_TIME
+import com.twoplaytech.drbetting.util.Constants.ID
 import com.twoplaytech.drbetting.util.Constants.LEAGUE_NAME
 import com.twoplaytech.drbetting.util.Constants.RESULT
 import com.twoplaytech.drbetting.util.Constants.SPORT
@@ -57,6 +58,11 @@ data class BettingType(
     var sport: Sport? = null
 ) : Parcelable,Mapify {
     constructor(data: Map<String, Any>) : this() {
+         id = if  (data.containsKey(ID)) {
+            data[ID] as String
+        } else {
+            ""
+        }
         leagueName = if (data.containsKey(LEAGUE_NAME)) {
             data[LEAGUE_NAME] as String
         } else {
@@ -130,6 +136,7 @@ data class BettingType(
         val teamAway =
             this.teamAway?.let { it.mapify() } ?: mapOf("name" to "teamAway", "logo" to "")
         return mapOf(
+            "id" to this.id,
             "leagueName" to this.leagueName,
             "gameTime" to gameTime,
             "result" to this.result,

@@ -46,9 +46,11 @@ class FirestoreRepository @Inject constructor(private val db: FirebaseFirestore)
         successCallback: (String) -> Unit,
         failureCallback: (String) -> Unit
     ) {
-        db.collection(TIPS).document().set(bettingType.mapify()).addOnCompleteListener {
+        val id = db.collection(TIPS).document().id
+        bettingType.id = id
+        db.collection(TIPS).document(id).set(bettingType.mapify()).addOnCompleteListener {
             if (it.isSuccessful) {
-                successCallback.invoke("Success")
+                successCallback.invoke("Betting tip added successfully!" )
             }
         }.addOnFailureListener {
             Timber.e(it)
@@ -64,7 +66,7 @@ class FirestoreRepository @Inject constructor(private val db: FirebaseFirestore)
         db.collection(TIPS).document(bettingType.id).update(bettingType.mapify())
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    successCallback.invoke("Success")
+                    successCallback.invoke("Betting tip ${bettingType.id} updated successfully!" )
                 }
             }.addOnFailureListener {
             Timber.e(it)

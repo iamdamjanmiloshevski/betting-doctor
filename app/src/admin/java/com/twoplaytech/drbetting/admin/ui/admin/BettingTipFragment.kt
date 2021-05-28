@@ -24,14 +24,13 @@
 
 package com.twoplaytech.drbetting.admin.ui.admin
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.common.OnDropdownItemSelectedListener
+import com.twoplaytech.drbetting.admin.ui.admin.AdminActivity.Companion.KEY_SPORT
 import com.twoplaytech.drbetting.admin.util.Constants
-import com.twoplaytech.drbetting.admin.util.Constants.KEY_TYPE
-import com.twoplaytech.drbetting.admin.util.Constants.VIEW_TYPE_EDIT
-import com.twoplaytech.drbetting.admin.util.Constants.VIEW_TYPE_NEW
 import com.twoplaytech.drbetting.admin.views.ChooserView
 import com.twoplaytech.drbetting.data.*
 import com.twoplaytech.drbetting.databinding.FragmentBettingTipBinding
@@ -45,7 +44,7 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
     private var cancel = false
     private var sportChosen = Sport.FOOTBALL
     private var statusChosen = TypeStatus.UNKNOWN
-    private var type = VIEW_TYPE_NEW
+    private  var sportChosenIdx = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,11 +56,6 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
         _binding.cvStatus.setOnDropDownItemSelectedListener(this)
         arguments?.let {
             bettingTip = it.getParcelable(Constants.KEY_BETTING_TIP)
-            type = it.getInt(KEY_TYPE)
-        }
-        when (type) {
-            VIEW_TYPE_NEW -> activity?.title = getString(R.string.new_betting_tip_title)
-            VIEW_TYPE_EDIT -> activity?.title = getString(R.string.update_betting_tip_title)
         }
         populateExistingTip(bettingTip)
         return _binding.root
@@ -84,9 +78,9 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
                     this.tvGameTime.setDate(date)
                 }
                 bettingTip.sport?.select(this.cvSports)
-                bettingTip.bettingType.select(this.cvStatus)
+                bettingTip.status?.select(this.cvStatus)
             }
-        } ?: return
+        } ?: statusChosen.select(_binding.cvStatus)
     }
 
     override fun observeData() {
@@ -96,18 +90,20 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
 
                 }
                 false -> {
-                    if (bettingTip != null) {
-                        bettingTip?.let {
-                            viewModel.saveBettingTip(it,true)
-                        }
-                    } else viewModel.saveBettingTip(getTipFromInput())
+                    bettingTip?.let {
+                        viewModel.saveBettingTip(getTipFromInput(it.id), true)
+                    } ?: viewModel.saveBettingTip(getTipFromInput())
                 }
             }
         })
         viewModel.observeForSavedTip().observe(viewLifecycleOwner, { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
-                    activity?.finish()
+                    val intent = Intent(activity, AdminActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    intent.putExtra(KEY_SPORT,sportChosenIdx)
+                    activity?.startActivity(intent)
+                    activity?.finishAffinity()
                 }
                 Status.ERROR -> {
                 }
@@ -118,7 +114,7 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
         })
     }
 
-    private fun getTipFromInput(): BettingType {
+    private fun getTipFromInput(id: String? = null): BettingType {
         val league = _binding.tvLeague.getInput<String?>() as String
         val bettingTip = _binding.tvBettingTip.getInput<String?>() as String
         val gameTime = _binding.tvGameTime.getInput<Date?>()
@@ -127,16 +123,20 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
         val teamAwayName = _binding.tvAway.getTeamName()
         val teamHome = Team(teamHomeName)
         val teamAway = Team(teamAwayName)
-        return BettingType(
-            league,
-            teamHome,
-            teamAway,
-            gameTime,
-            bettingTip,
-            statusChosen,
-            result,
+        val bettingType = BettingType(
+            leagueName = league,
+            teamHome = teamHome,
+            teamAway = teamAway,
+            gameTime = gameTime,
+            bettingType = bettingTip,
+            status = statusChosen,
+            result = result,
             sport = sportChosen
         )
+        id?.let {
+            bettingType.id = it
+        }
+        return bettingType
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -191,28 +191,35 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
     override fun onSportClicked(sport: Sport) {
         val bettingTipActivity = activity as BettingTipActivity
         bettingTipActivity.changeThemePerSport(sport = sport)
-        if (bettingTip != null) bettingTip?.sport = sport else sportChosen = sport
+        sportChosen = sport
+       sportChosenIdx = when(sport){
+            Sport.FOOTBALL -> 0
+            Sport.BASKETBALL -> 1
+            Sport.TENNIS -> 2
+            Sport.HANDBALL -> 3
+            Sport.VOLLEYBALL -> 4
+        }
     }
 
     override fun onStatusClicked(status: TypeStatus) {
-        if (bettingTip != null) bettingTip?.status = status else statusChosen = status
+        statusChosen = status
     }
 
     private fun Sport.select(chooserView: ChooserView) {
         when (this) {
             Sport.FOOTBALL -> chooserView.setSelection(0)
-            Sport.BASKETBALL -> chooserView.setSelection(2)
-            Sport.TENNIS -> chooserView.setSelection(3)
-            Sport.HANDBALL -> chooserView.setSelection(4)
-            Sport.VOLLEYBALL -> chooserView.setSelection(5)
+            Sport.BASKETBALL -> chooserView.setSelection(1)
+            Sport.TENNIS -> chooserView.setSelection(2)
+            Sport.HANDBALL -> chooserView.setSelection(3)
+            Sport.VOLLEYBALL -> chooserView.setSelection(4)
         }
     }
 
-    private fun String.select(chooserView: ChooserView) {
+    private fun TypeStatus.select(chooserView: ChooserView) {
         when (this) {
-            "0" -> chooserView.setSelection(3)
-            "1" -> chooserView.setSelection(1)
-            "2" -> chooserView.setSelection(2)
+            TypeStatus.UNKNOWN -> chooserView.setSelection(2)
+            TypeStatus.WON -> chooserView.setSelection(0)
+            TypeStatus.LOST -> chooserView.setSelection(1)
         }
     }
 }

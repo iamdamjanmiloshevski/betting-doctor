@@ -22,21 +22,29 @@
   ~ SOFTWARE.
   -->
 
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph2"
-    app:startDestination="@id/BettingTipsFragment">
-
-    <fragment
-        android:id="@+id/BettingTipsFragment"
-        android:name="com.twoplaytech.drbetting.admin.ui.admin.BettingTipFragment"
-        tools:layout="@layout/fragment_betting_tip">
-        <argument
-            android:name="betting_tip"
-            app:argType="com.twoplaytech.drbetting.data.BettingType"
-            android:defaultValue="@null"
-            app:nullable="true" />
-    </fragment>
-
-</navigation>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/tip_won"
+        android:id="@+id/tv_status_icon"
+      android:layout_margin="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/text1"
+        android:singleLine="true"
+        app:layout_constraintStart_toEndOf="@id/tv_status_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="0dp"
+        android:text="Won"
+        android:layout_marginStart="10dp"
+        android:gravity="center_vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="match_parent"
+        android:ellipsize="marquee"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

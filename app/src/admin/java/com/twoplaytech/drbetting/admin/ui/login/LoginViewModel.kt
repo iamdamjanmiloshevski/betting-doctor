@@ -30,8 +30,8 @@ import androidx.lifecycle.ViewModel
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.common.Resource
 import com.twoplaytech.drbetting.admin.repository.FirebaseRepository
-import com.twoplaytech.drbetting.persistence.IPreferences.Companion.LOGGED_IN
-import com.twoplaytech.drbetting.persistence.IPreferences.Companion.USER_CREDENTIALS
+import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_LOGGED_IN
+import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_USER_CREDENTIALS
 import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -76,12 +76,12 @@ class LoginViewModel @Inject constructor(
 
     fun checkIfUserIsAlreadySignedIn() {
         val user = repository.getUser()
-        val shouldKeepUserSignedIn = preferencesManager.getBoolean(LOGGED_IN)
+        val shouldKeepUserSignedIn = preferencesManager.getBoolean(KEY_LOGGED_IN)
         alreadyLoggedIn.value = user != null && shouldKeepUserSignedIn
     }
 
     fun retrieveCredentials() {
-        val json = preferencesManager.getString(USER_CREDENTIALS)
+        val json = preferencesManager.getString(KEY_USER_CREDENTIALS)
         if (json.isNullOrEmpty()) {
             credentialsObserver.value = Resource.error(null, null)
         } else {
@@ -96,7 +96,7 @@ class LoginViewModel @Inject constructor(
 
 
     fun saveLogin(shouldStayLoggedIn: Boolean) {
-        preferencesManager.saveBoolean(LOGGED_IN, shouldStayLoggedIn)
+        preferencesManager.saveBoolean(KEY_LOGGED_IN, shouldStayLoggedIn)
     }
 
     fun saveUserCredentials(email: String, password: String) {
@@ -104,7 +104,7 @@ class LoginViewModel @Inject constructor(
         jsonObject.put(KEY_EMAIL, email)
         jsonObject.put(KEY_PASSWORD, password)
         preferencesManager.saveString(
-            USER_CREDENTIALS,
+            KEY_USER_CREDENTIALS,
             jsonObject.toString()
         )
     }

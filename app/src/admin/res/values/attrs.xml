@@ -34,5 +34,9 @@
     <declare-styleable name="ChooserView">
         <attr name="chooserTitle" format="reference"/>
         <attr name="items" format="reference"/>
+        <attr name="chooserType" format="enum">
+            <enum name="status" value="0"/>
+            <enum name="sport" value="1"/>
+        </attr>
     </declare-styleable>
 </resources>

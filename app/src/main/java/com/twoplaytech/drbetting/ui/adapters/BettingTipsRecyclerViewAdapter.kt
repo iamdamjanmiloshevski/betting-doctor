@@ -66,4 +66,8 @@ class BettingTipsRecyclerViewAdapter(private val types: MutableList<BettingType>
     fun setOnBettingTipClickedListener(listener: OnBettingTipClickedListener){
         this.listener = listener
     }
+    fun clear(){
+        this.types.clear()
+        notifyDataSetChanged()
+    }
 }

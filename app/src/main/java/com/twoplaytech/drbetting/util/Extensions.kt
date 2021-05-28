@@ -25,6 +25,7 @@
 package com.twoplaytech.drbetting.util
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
@@ -38,6 +39,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import com.google.firebase.firestore.Query
 import com.twoplaytech.drbetting.R
+import com.twoplaytech.drbetting.admin.ui.admin.AdminActivity
 import com.twoplaytech.drbetting.common.FirestoreQueryLiveData
 import com.twoplaytech.drbetting.data.Sport
 import com.twoplaytech.drbetting.databinding.DialogDisclaimerBinding
@@ -202,6 +204,12 @@ fun FragmentActivity.restartApp() {
     i?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
     i?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     startActivity(i)
+    this.finishAffinity()
+}
+ fun <T:Activity> Activity.startActivityWithClearTask(destination:Class<T>){
+    val intent = Intent(this, destination)
+    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+    this.startActivity(intent)
     this.finishAffinity()
 }
 

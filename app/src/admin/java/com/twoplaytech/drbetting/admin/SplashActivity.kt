@@ -24,18 +24,16 @@
 
 package com.twoplaytech.drbetting.admin
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.twoplaytech.drbetting.admin.ui.login.LoginActivity
+import com.twoplaytech.drbetting.util.startActivityWithClearTask
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val intent = Intent(this, LoginActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent)
+        this.startActivityWithClearTask(LoginActivity::class.java)
     }
 }
