@@ -220,6 +220,7 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
     }
 
     private fun changeData(sport: Sport, typeSelected: Int) {
+        adapter.clear()
         when (typeSelected) {
             0 -> requestOlderData(sport)
             1 -> requestTodayData(sport)
