@@ -24,6 +24,7 @@
 
 package com.twoplaytech.drbetting.ui.common
 
+import android.graphics.drawable.PictureDrawable
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
@@ -35,6 +36,8 @@ import com.twoplaytech.drbetting.data.BettingType
 import com.twoplaytech.drbetting.data.Sport
 import com.twoplaytech.drbetting.data.Team
 import com.twoplaytech.drbetting.data.TypeStatus
+import com.twoplaytech.drbetting.glide.GlideApp
+import com.twoplaytech.drbetting.glide.SvgSoftwareLayerSetter
 import com.twoplaytech.drbetting.util.getSportPlaceHolder
 
 /*
@@ -59,12 +62,21 @@ fun setResult(view: AppCompatImageView, status: TypeStatus) {
 
 @BindingAdapter("team","sport")
 fun loadTeamLogo(view:AppCompatImageView,team:Team,sport: Sport){
-    Glide.with(view)
-        .load(team.logo)
-        .fitCenter()
-        .error(sport.getSportPlaceHolder())
-        .placeholder(R.drawable.progress_animation)
-        .into(view)
+    if(team.logo.endsWith(".svg")){
+        val requestBuilder = GlideApp.with(view.context)
+            .`as`(PictureDrawable::class.java)
+            .listener(SvgSoftwareLayerSetter())
+            requestBuilder.load(team.logo)
+            .error(sport.getSportPlaceHolder())
+            .into(view)
+    }else{
+        GlideApp.with(view.context)
+            .load(team.logo)
+            .fitCenter()
+            .error(sport.getSportPlaceHolder())
+            .placeholder(R.drawable.progress_animation)
+            .into(view)
+    }
 }
 
 @BindingAdapter("sportIcon")

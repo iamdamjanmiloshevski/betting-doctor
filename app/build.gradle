@@ -124,9 +124,13 @@ dependencies {
 
     //region Glide
     implementation "com.github.bumptech.glide:glide:$glideVersion"
-    annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
+    implementation "com.github.bumptech.glide:annotations:$glideVersion"
+    kapt "com.github.bumptech.glide:compiler:$glideVersion"
     //endregion
 
+    //region Caverock SVG
+    implementation "com.caverock:$caverockVersion"
+    //endregion
 
     //region AndroidX Security
     implementation "androidx.security:security-crypto:$xCryptoVersion"

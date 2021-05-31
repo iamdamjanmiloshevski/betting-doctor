@@ -39,7 +39,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import com.google.firebase.firestore.Query
 import com.twoplaytech.drbetting.R
-import com.twoplaytech.drbetting.admin.ui.admin.AdminActivity
 import com.twoplaytech.drbetting.common.FirestoreQueryLiveData
 import com.twoplaytech.drbetting.data.Sport
 import com.twoplaytech.drbetting.databinding.DialogDisclaimerBinding
@@ -60,6 +59,7 @@ fun String.checkImageExtension(): Boolean {
     return this.endsWith(".jpg", true) ||
             this.endsWith(".jpeg", true) ||
             this.endsWith(".png", true) ||
+            this.endsWith(".svg") ||
             this.endsWith(".gif", true)
 }
 

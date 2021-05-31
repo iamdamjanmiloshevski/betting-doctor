@@ -145,7 +145,7 @@
                             android:id="@+id/iv_team_away"
                             android:layout_width="40dp"
                             android:layout_height="64dp"
-                            app:team="@{bettingType.teamHome}"
+                            app:team="@{bettingType.teamAway}"
                             app:sport="@{bettingType.sport}"
                             android:layout_alignParentEnd="true"
                             android:layout_marginEnd="5dp" />

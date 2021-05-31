@@ -121,8 +121,10 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
         val result = _binding.tvResult.getInput<String?>() as String
         val teamHomeName = _binding.tvHome.getTeamName()
         val teamAwayName = _binding.tvAway.getTeamName()
-        val teamHome = Team(teamHomeName)
-        val teamAway = Team(teamAwayName)
+        val teamHomeLogo = _binding.tvHome.getTeamLogoUrl() ?: ""
+        val teamAwayLogo = _binding.tvAway.getTeamLogoUrl() ?: ""
+        val teamHome = Team(teamHomeName,teamHomeLogo)
+        val teamAway = Team(teamAwayName,teamAwayLogo)
         val bettingType = BettingType(
             leagueName = league,
             teamHome = teamHome,
