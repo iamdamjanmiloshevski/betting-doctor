@@ -24,7 +24,7 @@
 
 package com.twoplaytech.drbetting.ui.common
 
-import com.twoplaytech.drbetting.data.BettingType
+import com.twoplaytech.drbetting.data.BettingTip
 
 /*
     Author: Damjan Miloshevski 
@@ -33,5 +33,6 @@ import com.twoplaytech.drbetting.data.BettingType
     © 2Play Tech  2021. All rights reserved
 */
 interface OnBettingTipClickedListener {
-    fun onTipClick(tip:BettingType)
+    fun onTipClick(tip:BettingTip)
+    fun onTipLongClick(tip: BettingTip)
 }

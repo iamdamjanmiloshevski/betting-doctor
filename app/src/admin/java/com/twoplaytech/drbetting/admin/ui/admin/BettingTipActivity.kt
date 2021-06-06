@@ -35,7 +35,7 @@ import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.util.Constants
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_TIP
 import com.twoplaytech.drbetting.admin.util.Constants.VIEW_TYPE_NEW
-import com.twoplaytech.drbetting.data.BettingType
+import com.twoplaytech.drbetting.data.BettingTip
 import com.twoplaytech.drbetting.data.Sport
 import com.twoplaytech.drbetting.databinding.ActivityBettingTipBinding
 import com.twoplaytech.drbetting.ui.common.BaseActivity
@@ -46,7 +46,7 @@ class BettingTipActivity : BaseActivity() {
     private lateinit var binding: ActivityBettingTipBinding
     private lateinit var navController: NavController
     private var viewType = VIEW_TYPE_NEW
-    private var bettingTip: BettingType? = null
+    private var bettingTip: BettingTip? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -32,7 +32,7 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.common.ISettingsItem
-import com.twoplaytech.drbetting.data.BettingType
+import com.twoplaytech.drbetting.data.BettingTip
 import com.twoplaytech.drbetting.data.Sport
 import com.twoplaytech.drbetting.data.Team
 import com.twoplaytech.drbetting.data.TypeStatus
@@ -46,8 +46,8 @@ import com.twoplaytech.drbetting.util.getSportPlaceHolder
 
 */
 @BindingAdapter("game")
-fun setGameName(view: AppCompatTextView, bettingType: BettingType) {
-    val game = "${bettingType.teamHome?.name} - ${bettingType.teamAway?.name}"
+fun setGameName(view: AppCompatTextView, bettingTip: BettingTip) {
+    val game = "${bettingTip.teamHome?.name} - ${bettingTip.teamAway?.name}"
     view.text = game
 }
 

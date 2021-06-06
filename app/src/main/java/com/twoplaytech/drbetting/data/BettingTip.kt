@@ -46,7 +46,7 @@ import java.util.*
 
 */
 @Parcelize
-data class BettingType(
+data class BettingTip(
     var leagueName: String = "",
     var teamHome: Team? = null,
     var teamAway: Team? = null,

@@ -40,11 +40,11 @@ import java.util.*
 class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
 
     private lateinit var _binding: FragmentBettingTipBinding
-    private var bettingTip: BettingType? = null
+    private var bettingTip: BettingTip? = null
     private var cancel = false
     private var sportChosen = Sport.FOOTBALL
     private var statusChosen = TypeStatus.UNKNOWN
-    private  var sportChosenIdx = 0
+    private var sportChosenIdx = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,7 +66,7 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
         observeData()
     }
 
-    private fun populateExistingTip(bettingTip: BettingType?) {
+    private fun populateExistingTip(bettingTip: BettingTip?) {
         bettingTip?.let {
             with(_binding) {
                 this.tvLeague.setText(bettingTip.leagueName)
@@ -101,7 +101,7 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
                 Status.SUCCESS -> {
                     val intent = Intent(activity, AdminActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                    intent.putExtra(KEY_SPORT,sportChosenIdx)
+                    intent.putExtra(KEY_SPORT, sportChosenIdx)
                     activity?.startActivity(intent)
                     activity?.finishAffinity()
                 }
@@ -114,7 +114,7 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
         })
     }
 
-    private fun getTipFromInput(id: String? = null): BettingType {
+    private fun getTipFromInput(id: String? = null): BettingTip {
         val league = _binding.tvLeague.getInput<String?>() as String
         val bettingTip = _binding.tvBettingTip.getInput<String?>() as String
         val gameTime = _binding.tvGameTime.getInput<Date?>()
@@ -123,9 +123,9 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
         val teamAwayName = _binding.tvAway.getTeamName()
         val teamHomeLogo = _binding.tvHome.getTeamLogoUrl() ?: ""
         val teamAwayLogo = _binding.tvAway.getTeamLogoUrl() ?: ""
-        val teamHome = Team(teamHomeName,teamHomeLogo)
-        val teamAway = Team(teamAwayName,teamAwayLogo)
-        val bettingType = BettingType(
+        val teamHome = Team(teamHomeName, teamHomeLogo)
+        val teamAway = Team(teamAwayName, teamAwayLogo)
+        val bettingType = BettingTip(
             leagueName = league,
             teamHome = teamHome,
             teamAway = teamAway,
@@ -194,7 +194,7 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
         val bettingTipActivity = activity as BettingTipActivity
         bettingTipActivity.changeThemePerSport(sport = sport)
         sportChosen = sport
-       sportChosenIdx = when(sport){
+        sportChosenIdx = when (sport) {
             Sport.FOOTBALL -> 0
             Sport.BASKETBALL -> 1
             Sport.TENNIS -> 2

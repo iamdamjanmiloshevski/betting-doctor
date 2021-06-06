@@ -27,7 +27,7 @@ package com.twoplaytech.drbetting.ui.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.twoplaytech.drbetting.data.BettingType
+import com.twoplaytech.drbetting.data.BettingTip
 import com.twoplaytech.drbetting.databinding.ItemTipBinding
 import com.twoplaytech.drbetting.ui.common.OnBettingTipClickedListener
 import com.twoplaytech.drbetting.ui.viewholders.TipViewHolder
@@ -37,7 +37,7 @@ import com.twoplaytech.drbetting.ui.viewholders.TipViewHolder
     Created on 3/10/21 1:20 PM
 
 */
-class BettingTipsRecyclerViewAdapter(private val types: MutableList<BettingType>) :
+class BettingTipsRecyclerViewAdapter(private val tips: MutableList<BettingTip>) :
     RecyclerView.Adapter<TipViewHolder>() {
     private var listener:OnBettingTipClickedListener? = null
 
@@ -48,26 +48,31 @@ class BettingTipsRecyclerViewAdapter(private val types: MutableList<BettingType>
     }
 
     override fun onBindViewHolder(holder: TipViewHolder, position: Int) {
-        val bettingType = types[position]
-        holder.binding.bettingType = bettingType
+        val bettingTip = tips[position]
+        holder.binding.bettingType = bettingTip
         holder.binding.root.setOnClickListener {
-            listener?.onTipClick(bettingType)
+            listener?.onTipClick(bettingTip)
+        }
+        holder.binding.root.setOnLongClickListener {
+            listener?.onTipLongClick(bettingTip)
+            true
         }
     }
 
     override fun getItemCount(): Int {
-        return types.size
+        return tips.size
     }
 
-    fun addData(types: List<BettingType>) {
-        this.types.addAll(types)
+    fun addData(tips: List<BettingTip>) {
+        this.tips.addAll(tips)
         notifyDataSetChanged()
     }
     fun setOnBettingTipClickedListener(listener: OnBettingTipClickedListener){
         this.listener = listener
     }
     fun clear(){
-        this.types.clear()
+        this.tips.clear()
         notifyDataSetChanged()
     }
+
 }

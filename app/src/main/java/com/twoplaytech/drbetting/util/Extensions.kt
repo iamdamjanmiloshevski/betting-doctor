@@ -69,7 +69,7 @@ fun Query.asFirestoreQueryLiveData(): FirestoreQueryLiveData {
 
 fun older(): Date {
     val calendar = Calendar.getInstance();
-    calendar.add(Calendar.DATE, -1)
+    calendar.add(Calendar.HOUR_OF_DAY, -1)
     return calendar.time
 }
 
@@ -118,7 +118,6 @@ fun Sport.getSportResource(): Int {
     }
 }
  fun Int.getSportFromIndex():Sport{
-     Timber.e("$this")
     return when(this){
         0 -> Sport.FOOTBALL
         1 -> Sport.BASKETBALL

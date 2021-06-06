@@ -30,10 +30,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.PopupMenu
-import android.widget.Spinner
+import android.widget.*
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -51,7 +48,7 @@ import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_ARGS
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_TIP
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_TYPE
 import com.twoplaytech.drbetting.admin.util.Constants.VIEW_TYPE_EDIT
-import com.twoplaytech.drbetting.data.BettingType
+import com.twoplaytech.drbetting.data.BettingTip
 import com.twoplaytech.drbetting.data.Sport
 import com.twoplaytech.drbetting.data.Status
 import com.twoplaytech.drbetting.databinding.ActivityAdminBinding
@@ -62,7 +59,6 @@ import com.twoplaytech.drbetting.ui.common.BettingTipsViewModel
 import com.twoplaytech.drbetting.ui.common.OnBettingTipClickedListener
 import com.twoplaytech.drbetting.util.getSportColor
 import com.twoplaytech.drbetting.util.getSportFromIndex
-import timber.log.Timber
 
 class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
     OnBettingTipClickedListener, PopupMenu.OnMenuItemClickListener, View.OnClickListener {
@@ -71,7 +67,7 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
     private var sportSelected = 0
     private val viewModel: BettingTipsViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
-    private val bettingTips = mutableListOf<BettingType>()
+    private val bettingTips = mutableListOf<BettingTip>()
     private val adapter: BettingTipsRecyclerViewAdapter =
         BettingTipsRecyclerViewAdapter(bettingTips)
 
@@ -120,7 +116,7 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
             when (resource.status) {
                 Status.SUCCESS -> {
                     binding.progressBar.visibility = View.GONE
-                    val data = resource.data as List<BettingType>
+                    val data = resource.data as List<BettingTip>
                     adapter.addData(data)
                 }
                 Status.LOADING -> {
@@ -154,6 +150,17 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                 }
                 com.twoplaytech.drbetting.admin.common.Status.LOADING -> {
 
+                }
+            }
+        })
+        viewModel.observeDeletedTip().observe(this, { resource ->
+            when (resource.status) {
+                Status.SUCCESS -> {
+                    changeData(sportSelected.getSportFromIndex(), typeSelected)
+                }
+                Status.ERROR -> {
+                }
+                Status.LOADING -> {
                 }
             }
         })
@@ -237,7 +244,7 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         binding.rvBettingTips.visibility = View.GONE
         viewModel.getUpcomingTips(type.value).observe(this, {
             for (doc in it!!.documentChanges) {
-                val tip = BettingType(doc.document.data)
+                val tip = BettingTip(doc.document.data)
                 tip.id = doc.document.id
                 when (doc.type) {
                     DocumentChange.Type.ADDED -> {
@@ -276,12 +283,25 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         viewModel.getOlderTips(type.value)
     }
 
-    override fun onTipClick(tip: BettingType) {
+    override fun onTipClick(tip: BettingTip) {
         this.navigateToTips(VIEW_TYPE_EDIT, tip)
     }
 
+    override fun onTipLongClick(tip: BettingTip) {
+        MaterialDialog(this).show {
+            cancelable(false)
+            title(null, "Delete tip?")
+            message(null, "Are you sure that you want to delete this tip?")
+            positiveButton(android.R.string.ok, null) {
+                viewModel.deleteBettingTip(tip)
+            }
+            negativeButton(android.R.string.cancel, null) {
+                dismiss()
+            }
+        }
+    }
 
-    private fun navigateToTips(viewType: Int, tip: BettingType? = null) {
+    private fun navigateToTips(viewType: Int, tip: BettingTip? = null) {
         preferencesManager.saveInteger(KEY_VIEW_TYPE, typeSelected)
         val intent = Intent(this, BettingTipActivity::class.java)
         val args = bundleOf(
@@ -290,11 +310,6 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         )
         intent.putExtra(KEY_BETTING_ARGS, args)
         startActivity(intent)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Timber.e("items ${bettingTips.size}")
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {

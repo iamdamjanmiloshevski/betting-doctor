@@ -28,7 +28,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.Query
 import com.twoplaytech.drbetting.common.FirestoreQueryLiveData
-import com.twoplaytech.drbetting.data.BettingType
+import com.twoplaytech.drbetting.data.BettingTip
 import com.twoplaytech.drbetting.data.Resource
 import com.twoplaytech.drbetting.repository.FirestoreRepository
 import com.twoplaytech.drbetting.util.Constants.GAME_TIME
@@ -47,9 +47,10 @@ import javax.inject.Inject
 @HiltViewModel
 class BettingTipsViewModel @Inject constructor(private val repository: FirestoreRepository) :
     ViewModel() {
-    private val olderTipsObserver = MutableLiveData<Resource<List<BettingType>>>()
+    private val olderTipsObserver = MutableLiveData<Resource<List<BettingTip>>>()
     private val fieldValidatorObserver = MutableLiveData<Boolean>()
     private val saveObserver = MutableLiveData<Resource<Boolean>>()
+    private val deleteObserver = MutableLiveData<Resource<Boolean>>()
 
     fun getUpcomingTips(type: String): FirestoreQueryLiveData {
         return repository.getBettingTips()
@@ -61,7 +62,7 @@ class BettingTipsViewModel @Inject constructor(private val repository: Firestore
 
     fun getOlderTips(type: String) {
         olderTipsObserver.value = Resource.loading(null, null)
-        val olderTips = mutableListOf<BettingType>()
+        val olderTips = mutableListOf<BettingTip>()
         olderTips.clear()
         repository.getBettingTips()
             .whereEqualTo(SPORT, type)
@@ -69,7 +70,7 @@ class BettingTipsViewModel @Inject constructor(private val repository: Firestore
             .orderBy(GAME_TIME, Query.Direction.DESCENDING)
             .get().addOnSuccessListener { documents ->
                 for (document in documents) {
-                    val bettingTip = BettingType(document.data)
+                    val bettingTip = BettingTip(document.data)
                     if (!olderTips.contains(bettingTip)) {
                         olderTips.add(bettingTip)
                     }
@@ -91,25 +92,35 @@ class BettingTipsViewModel @Inject constructor(private val repository: Firestore
         fieldValidatorObserver.value = validate
     }
 
-    fun observeValidation() = fieldValidatorObserver
-
-    fun saveBettingTip(bettingType: BettingType,shouldUpdate:Boolean=false) {
-      if(shouldUpdate){
-          repository.updateBettingTip(bettingType, successCallback = {
-              saveObserver.value = Resource.success(it, true)
-          }, failureCallback = {
-              saveObserver.value = Resource.error(it, false)
-          })
-      }else{
-          repository.saveBettingTip(bettingType, successCallback = {
-              saveObserver.value = Resource.success(it, true)
-          }, failureCallback = {
-              saveObserver.value = Resource.error(it, false)
-          })
-      }
+    fun saveBettingTip(bettingTip: BettingTip, shouldUpdate: Boolean = false) {
+        if (shouldUpdate) {
+            repository.updateBettingTip(bettingTip, successCallback = {
+                saveObserver.value = Resource.success(it, true)
+            }, failureCallback = {
+                saveObserver.value = Resource.error(it, false)
+            })
+        } else {
+            repository.saveBettingTip(bettingTip, successCallback = {
+                saveObserver.value = Resource.success(it, true)
+            }, failureCallback = {
+                saveObserver.value = Resource.error(it, false)
+            })
+        }
     }
 
+    fun deleteBettingTip(bettingTip: BettingTip) {
+        repository.deleteBettingTip(bettingTip, successCallback = {
+            deleteObserver.value = Resource.success(it, true)
+        }, failureCallback = {
+            deleteObserver.value = Resource.error(it, false)
+        })
+    }
+
+    fun observeValidation() = fieldValidatorObserver
+
     fun observeForSavedTip() = saveObserver
+
+    fun observeDeletedTip() = deleteObserver
 
     fun observeOnOlderTips() = olderTipsObserver
 }
