@@ -153,6 +153,23 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                 }
             }
         })
+        viewModel.observeForSavedTip().observe(this, { resource ->
+            when (resource.status) {
+                Status.SUCCESS -> {
+                    changeData(sportSelected.getSportFromIndex(), typeSelected)
+//                    val intent = Intent(activity, AdminActivity::class.java)
+//                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+//                    intent.putExtra(KEY_SPORT, sportChosenIdx)
+//                    activity?.startActivity(intent)
+//                    activity?.finishAffinity()
+                }
+                Status.ERROR -> {
+                }
+                Status.LOADING -> {
+
+                }
+            }
+        })
         viewModel.observeDeletedTip().observe(this, { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {

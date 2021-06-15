@@ -24,12 +24,10 @@
 
 package com.twoplaytech.drbetting.admin.ui.admin
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.common.OnDropdownItemSelectedListener
-import com.twoplaytech.drbetting.admin.ui.admin.AdminActivity.Companion.KEY_SPORT
 import com.twoplaytech.drbetting.admin.util.Constants
 import com.twoplaytech.drbetting.admin.views.ChooserView
 import com.twoplaytech.drbetting.data.*
@@ -99,11 +97,7 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
         viewModel.observeForSavedTip().observe(viewLifecycleOwner, { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
-                    val intent = Intent(activity, AdminActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                    intent.putExtra(KEY_SPORT, sportChosenIdx)
-                    activity?.startActivity(intent)
-                    activity?.finishAffinity()
+                    activity?.finish()
                 }
                 Status.ERROR -> {
                 }
