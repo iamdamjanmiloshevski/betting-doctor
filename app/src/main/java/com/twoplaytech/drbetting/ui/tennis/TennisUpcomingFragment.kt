@@ -30,7 +30,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.twoplaytech.drbetting.data.Sport
 import com.twoplaytech.drbetting.ui.common.BaseChildFragment
-import com.twoplaytech.drbetting.ui.football.FootballUpcomingFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 /*
@@ -57,8 +56,8 @@ class TennisUpcomingFragment : BaseChildFragment() {
     }
 
     companion object {
-        fun getInstance(): FootballUpcomingFragment {
-            return FootballUpcomingFragment()
+        fun getInstance(): TennisUpcomingFragment {
+            return TennisUpcomingFragment()
         }
     }
 }

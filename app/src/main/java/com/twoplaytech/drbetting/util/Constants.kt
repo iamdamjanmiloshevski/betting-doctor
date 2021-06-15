@@ -31,6 +31,7 @@ package com.twoplaytech.drbetting.util
 */
 object Constants {
     //Betting tip constants
+    const val ID = "id"
     const val LEAGUE_NAME = "leagueName"
     const val TEAM_HOME = "teamHome"
     const val TEAM_AWAY = "teamAway"

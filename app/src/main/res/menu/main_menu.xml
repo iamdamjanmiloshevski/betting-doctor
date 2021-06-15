@@ -30,6 +30,11 @@
         android:orderInCategory="1"
         android:id="@+id/action_settings"
         app:showAsAction="always"/>
+    <item android:id="@+id/action_admin_settings"
+        android:orderInCategory="2"
+        app:showAsAction="always"
+        android:title="Open Admin panel"
+        android:icon="@drawable/ic_admin"/>
     <item android:title="@string/item_disclaimer"
         android:id="@+id/action_disclaimer"
         android:icon="@drawable/ic_disclaimer"

@@ -24,7 +24,9 @@
 
 package com.twoplaytech.drbetting.ui.common
 
+import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.ViewGroup
@@ -95,6 +97,10 @@ abstract class BaseFragment : Fragment(), IBaseView, Toolbar.OnMenuItemClickList
                 startActivity(Intent(requireContext(), SettingsActivity::class.java))
                 true
             }
+            R.id.action_admin_settings -> {
+                activity?.openAdmin()
+                true
+            }
             R.id.action_disclaimer -> {
                 requireContext().showDisclaimer()
                 true
@@ -102,4 +108,15 @@ abstract class BaseFragment : Fragment(), IBaseView, Toolbar.OnMenuItemClickList
             else -> false
         }
     }
+}
+
+ private fun Activity.openAdmin() {
+    val packageName = "com.twoplaytech.drbetting.admin"
+    var intent = this.packageManager.getLaunchIntentForPackage(packageName)
+    if (intent == null) {
+        intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse("market://details?id=$packageName")
+    }
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    this.startActivity(intent)
 }

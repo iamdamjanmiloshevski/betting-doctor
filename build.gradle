@@ -3,7 +3,7 @@ buildscript {
   ext.kotlin_version = "1.4.31"
   ext.hilt_version = '2.33-beta'
   ext.google_services_version = '4.3.5'
-  ext.gradle_version = '4.1.2'
+  ext.gradle_version = '4.2.0'
   ext.crashlytics_gradle_version = '2.5.1'
   repositories {
     google()
@@ -25,7 +25,7 @@ allprojects {
   }
 }
 ext{
-  firebaseBomVersion = '26.6.0'
+  firebaseBomVersion = '26.8.0'
   glideVersion = '4.12.0'
   xCryptoVersion = '1.0.0-rc04'
   targetSdkVersion = 30
@@ -33,14 +33,16 @@ ext{
   buildToolsVersion = "30.0.3"
   majorVersion = 1//MAJOR version when you make incompatible API changes
   minorVersion = 0 //MINOR version when you add functionality in a backwards compatible manner
-  patchVersion = 1 //PATCH version when you make backwards compatible bug fixes
-  versionCodeNum = 3
+  patchVersion = 0 //PATCH version when you make backwards compatible bug fixes
+  versionCodeNum = 1
   versionClassifier = null
   isSnapshot = false
   isAlpha = false
   isBeta = false
   alphaOrBetaVersion = 0
   materialDialogsVersion = '3.3.0'
+  timberLoggerVersion = '4.7.1'
+  caverockVersion = 'androidsvg-aar:1.4'
 }
 
 task clean(type: Delete) {

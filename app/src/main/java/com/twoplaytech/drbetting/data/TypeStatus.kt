@@ -24,11 +24,15 @@
 
 package com.twoplaytech.drbetting.data
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
 /*
     Author: Damjan Miloshevski 
     Created on 3/10/21 3:21 PM
 */
-enum class TypeStatus(value: String) {
+@Parcelize
+enum class TypeStatus(val value: String):Parcelable {
     UNKNOWN("0"),
     WON("1"),
     LOST("2")

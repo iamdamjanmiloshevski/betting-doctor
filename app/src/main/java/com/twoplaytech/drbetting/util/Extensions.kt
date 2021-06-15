@@ -25,6 +25,7 @@
 package com.twoplaytech.drbetting.util
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
@@ -41,6 +42,7 @@ import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.common.FirestoreQueryLiveData
 import com.twoplaytech.drbetting.data.Sport
 import com.twoplaytech.drbetting.databinding.DialogDisclaimerBinding
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -57,6 +59,7 @@ fun String.checkImageExtension(): Boolean {
     return this.endsWith(".jpg", true) ||
             this.endsWith(".jpeg", true) ||
             this.endsWith(".png", true) ||
+            this.endsWith(".svg") ||
             this.endsWith(".gif", true)
 }
 
@@ -66,7 +69,7 @@ fun Query.asFirestoreQueryLiveData(): FirestoreQueryLiveData {
 
 fun older(): Date {
     val calendar = Calendar.getInstance();
-    calendar.add(Calendar.DAY_OF_MONTH, -1)
+    calendar.add(Calendar.HOUR_OF_DAY, -1)
     return calendar.time
 }
 
@@ -114,7 +117,16 @@ fun Sport.getSportResource(): Int {
         else -> R.drawable.gradient_blue
     }
 }
-
+ fun Int.getSportFromIndex():Sport{
+    return when(this){
+        0 -> Sport.FOOTBALL
+        1 -> Sport.BASKETBALL
+        2 -> Sport.TENNIS
+        3 -> Sport.HANDBALL
+        4 -> Sport.VOLLEYBALL
+        else -> Sport.FOOTBALL
+    }
+}
 fun Date.convertDateToStringFormat(): String {
     val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH)
     return simpleDateFormat.format(this)
@@ -191,6 +203,12 @@ fun FragmentActivity.restartApp() {
     i?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
     i?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     startActivity(i)
+    this.finishAffinity()
+}
+ fun <T:Activity> Activity.startActivityWithClearTask(destination:Class<T>){
+    val intent = Intent(this, destination)
+    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+    this.startActivity(intent)
     this.finishAffinity()
 }
 

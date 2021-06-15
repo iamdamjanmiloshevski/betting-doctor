@@ -22,15 +22,17 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting
+package com.twoplaytech.drbetting.ui.common
 
-import android.content.Intent
-import android.os.Bundle
-import com.twoplaytech.drbetting.ui.common.BaseActivity
+import com.twoplaytech.drbetting.data.BettingTip
 
-class SplashActivity : BaseActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        startActivity(Intent(this, MainActivity::class.java))
-    }
+/*
+    Author: Damjan Miloshevski 
+    Created on 11.5.21 15:57
+    Project: Dr.Betting
+    © 2Play Tech  2021. All rights reserved
+*/
+interface OnBettingTipClickedListener {
+    fun onTipClick(tip:BettingTip)
+    fun onTipLongClick(tip: BettingTip)
 }

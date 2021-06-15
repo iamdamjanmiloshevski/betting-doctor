@@ -24,7 +24,9 @@
 
 package com.twoplaytech.drbetting.ui.common
 
+import android.content.Intent
 import android.view.View
+import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.twoplaytech.drbetting.data.Sport
@@ -35,8 +37,11 @@ interface IBaseActivityView {
         navView: BottomNavigationView? = null,
         sport: Sport? = null,
         toolbar: Toolbar? = null,
-        view: View? = null
+        view: View? = null,
+        appBarLayout: LinearLayout? = null
     ) {
     }
     fun observeData(){}
+    fun initBinding(){}
+    fun getExtras(intent: Intent){}
 }

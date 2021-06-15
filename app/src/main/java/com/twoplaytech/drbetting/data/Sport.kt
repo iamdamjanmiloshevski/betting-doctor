@@ -24,11 +24,15 @@
 
 package com.twoplaytech.drbetting.data
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
 /*
     Author: Damjan Miloshevski 
     Created on 3/10/21 12:27 PM
 */
-enum class Sport(var value: String) {
+@Parcelize
+enum class Sport(val value: String):Parcelable {
     FOOTBALL("0"),
     BASKETBALL("1"),
     TENNIS("2"),

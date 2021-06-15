@@ -32,7 +32,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.DocumentChange
-import com.twoplaytech.drbetting.data.BettingType
+import com.twoplaytech.drbetting.data.BettingTip
 import com.twoplaytech.drbetting.data.Sport
 import com.twoplaytech.drbetting.databinding.FragmentChildBinding
 import com.twoplaytech.drbetting.ui.adapters.BettingTipsRecyclerViewAdapter
@@ -45,7 +45,7 @@ import com.twoplaytech.drbetting.ui.adapters.BettingTipsRecyclerViewAdapter
 abstract class BaseChildFragment : Fragment(), IBaseView {
     protected lateinit var binding: FragmentChildBinding
     override val viewModel: BettingTipsViewModel by activityViewModels()
-    private val bettingTips = mutableListOf<BettingType>()
+    private val bettingTips = mutableListOf<BettingTip>()
     protected val adapter: BettingTipsRecyclerViewAdapter =
         BettingTipsRecyclerViewAdapter(bettingTips)
     override fun initBinding(inflater: LayoutInflater, container: ViewGroup?) {
@@ -68,7 +68,7 @@ abstract class BaseChildFragment : Fragment(), IBaseView {
     fun requestTodayData(type: Sport) {
         viewModel.getUpcomingTips(type.value).observe(this, {
             for (doc in it!!.documentChanges) {
-                val tip = BettingType(doc.document.data)
+                val tip = BettingTip(doc.document.data)
                 tip.id = doc.document.id
                 when (doc.type) {
                     DocumentChange.Type.ADDED -> {

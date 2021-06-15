@@ -26,7 +26,9 @@ package com.twoplaytech.drbetting.repository
 
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.twoplaytech.drbetting.data.BettingTip
 import com.twoplaytech.drbetting.util.Constants.TIPS
+import timber.log.Timber
 import javax.inject.Inject
 
 /*
@@ -37,5 +39,53 @@ import javax.inject.Inject
 class FirestoreRepository @Inject constructor(private val db: FirebaseFirestore) : IRepository {
     override fun getBettingTips(): CollectionReference {
         return db.collection(TIPS)
+    }
+
+    override fun saveBettingTip(
+        bettingTip: BettingTip,
+        successCallback: (String) -> Unit,
+        failureCallback: (String) -> Unit
+    ) {
+        val id = db.collection(TIPS).document().id
+        bettingTip.id = id
+        db.collection(TIPS).document(id).set(bettingTip.mapify()).addOnCompleteListener {
+            if (it.isSuccessful) {
+                successCallback.invoke("Betting tip added successfully!")
+            }
+        }.addOnFailureListener {
+            Timber.e(it)
+            failureCallback.invoke(it.message ?: "error")
+        }
+    }
+
+    override fun updateBettingTip(
+        bettingTip: BettingTip,
+        successCallback: (String) -> Unit,
+        failureCallback: (String) -> Unit
+    ) {
+        db.collection(TIPS).document(bettingTip.id).update(bettingTip.mapify())
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    successCallback.invoke("Betting tip ${bettingTip.id} updated successfully!")
+                }
+            }.addOnFailureListener {
+                Timber.e(it)
+                failureCallback.invoke(it.message ?: "error")
+            }
+    }
+
+    override fun deleteBettingTip(
+        bettingTip: BettingTip,
+        successCallback: (String) -> Unit,
+        failureCallback: (String) -> Unit
+    ) {
+        db.collection(TIPS).document(bettingTip.id)
+            .delete()
+            .addOnSuccessListener {
+                successCallback.invoke("Betting tip ${bettingTip.id} has been deleted successfully!")
+            }.addOnFailureListener {
+                Timber.e(it)
+                failureCallback.invoke(it.message ?: "error")
+            }
     }
 }

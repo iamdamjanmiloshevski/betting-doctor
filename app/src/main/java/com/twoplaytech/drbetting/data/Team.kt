@@ -24,17 +24,20 @@
 
 package com.twoplaytech.drbetting.data
 
+import android.os.Parcelable
+import com.twoplaytech.drbetting.common.Mapify
 import com.twoplaytech.drbetting.util.Constants.TEAM_LOGO
 import com.twoplaytech.drbetting.util.Constants.TEAM_NAME
 import com.twoplaytech.drbetting.util.checkImageExtension
-import java.io.Serializable
+import kotlinx.android.parcel.Parcelize
 
 /*
     Author: Damjan Miloshevski 
     Created on 3/10/21 12:26 PM
 
 */
-data class Team(var name: String = "", var logo: String = "") : Serializable {
+@Parcelize
+data class Team(var name: String = "", var logo: String = "") : Parcelable,Mapify {
     constructor(data: Map<*, *>) : this() {
         name = if (data.containsKey(TEAM_NAME)
             && data[TEAM_NAME] != null) {
@@ -52,5 +55,11 @@ data class Team(var name: String = "", var logo: String = "") : Serializable {
         } else {
             ""
         }
+    }
+    override fun mapify():Map<String,Any>{
+        return mapOf(
+            "name" to this.name,
+            "logo" to this.logo
+        )
     }
 }
