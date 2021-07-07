@@ -22,14 +22,16 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.repository
+package com.twoplaytech.drbetting.network
 
-import android.content.Context
 import com.twoplaytech.drbetting.BuildConfig
+import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 import javax.inject.Singleton
 
 /*
@@ -39,18 +41,45 @@ import javax.inject.Singleton
     © 2Play Tech  2021. All rights reserved
 */
 @Singleton
-class ApiManager(context: Context) {
+class ApiManager @Inject constructor(private val sharedPreferencesManager: SharedPreferencesManager) {
+    private var api: BettingDoctorAPI
+
     private val retrofit = Retrofit.Builder()
         .baseUrl(BuildConfig.BASE_URL)
+        .client(httpClient())
         .addConverterFactory(GsonConverterFactory.create())
-        .build
+        .build()
 
-    private fun httpClient() {
+    private fun httpClient(): OkHttpClient {
         val client = OkHttpClient.Builder()
+        client.connectTimeout(30, TimeUnit.SECONDS)
+            .callTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+        client.authenticator(TokenAuthenticator(sharedPreferencesManager))
         client.addInterceptor(
             if (BuildConfig.DEBUG) HttpLoggingInterceptor().setLevel(
                 HttpLoggingInterceptor.Level.BODY
             ) else HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE)
         )
+        return client.build()
     }
+
+    init {
+        api = retrofit.create(BettingDoctorAPI::class.java)
+    }
+
+    companion object {
+        var INSTANCE: ApiManager? = null
+        fun getInstance(preferencesManager: SharedPreferencesManager): ApiManager {
+            if (INSTANCE == null) {
+                synchronized(ApiManager::class.java) {
+                    if (INSTANCE == null) INSTANCE = ApiManager(preferencesManager)
+                }
+            }
+            return INSTANCE as ApiManager
+        }
+    }
+
+    fun api() = api
 }

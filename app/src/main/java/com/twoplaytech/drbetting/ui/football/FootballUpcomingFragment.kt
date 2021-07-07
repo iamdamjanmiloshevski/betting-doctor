@@ -28,7 +28,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.twoplaytech.drbetting.data.Sport
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.twoplaytech.drbetting.data.BettingTip2
+import com.twoplaytech.drbetting.data.Sport2
+import com.twoplaytech.drbetting.data.Status
+import com.twoplaytech.drbetting.ui.adapters.BettingTipsRecyclerViewAdapter2
 import com.twoplaytech.drbetting.ui.common.BaseChildFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -39,6 +45,7 @@ import dagger.hilt.android.AndroidEntryPoint
 */
 @AndroidEntryPoint
 class FootballUpcomingFragment : BaseChildFragment() {
+    private val tipsAdapter = BettingTipsRecyclerViewAdapter2(mutableListOf())
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -51,8 +58,33 @@ class FootballUpcomingFragment : BaseChildFragment() {
 
     override fun initUI() {
         binding.noDataView.setVisible(false)
-        setUpDataAdapter()
-        requestTodayData(Sport.FOOTBALL)
+        //setUpDataAdapter()
+        binding.rvBettingTips.adapter = tipsAdapter
+        binding.rvBettingTips.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onChanged() {
+                val isVisible = adapter.itemCount > 0
+                binding.rvBettingTips.visibility = if (isVisible) View.VISIBLE else View.GONE
+                binding.noDataView.setVisible(!isVisible)
+                binding.progressBar.visibility = View.GONE
+            }
+        })
+        //requestTodayData(Sport.FOOTBALL)
+        viewModel.getBettingTips(Sport2.FOOTBALL,true)
+        viewModel.observeTips().observe(viewLifecycleOwner, { resource->
+            when(resource.status){
+                Status.SUCCESS ->{
+                    val items = resource.data as List<BettingTip2>
+                   tipsAdapter.addData(items)
+                }
+                Status.ERROR -> {
+                    Toast.makeText(requireContext(),"Something went wrong", Toast.LENGTH_SHORT).show()
+                }
+                Status.LOADING -> {
+                }
+            }
+        })
     }
 
     companion object {

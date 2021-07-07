@@ -41,6 +41,7 @@ import com.google.firebase.firestore.Query
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.common.FirestoreQueryLiveData
 import com.twoplaytech.drbetting.data.Sport
+import com.twoplaytech.drbetting.data.Sport2
 import com.twoplaytech.drbetting.databinding.DialogDisclaimerBinding
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -83,7 +84,16 @@ fun Sport.getSportPlaceHolder(): Int {
         else -> R.drawable.soccer_ball
     }
 }
-
+fun String.getSportPlaceHolder(): Int {
+    return when (this) {
+        "Football" -> R.drawable.soccer_ball
+        "Basketball" -> R.drawable.basketball_ball
+        "Tennis" -> R.drawable.tennis_ball
+        "Handball" -> R.drawable.handball_ball
+        "Volleyball" -> R.drawable.volleyball_ball
+        else -> R.drawable.soccer_ball
+    }
+}
 fun Sport.getSportColor(): Int {
     return when (this) {
         Sport.FOOTBALL -> R.color.blue

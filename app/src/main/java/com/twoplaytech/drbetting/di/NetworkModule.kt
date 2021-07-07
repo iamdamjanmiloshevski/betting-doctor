@@ -25,6 +25,8 @@
 package com.twoplaytech.drbetting.di
 
 import com.google.firebase.firestore.FirebaseFirestore
+import com.twoplaytech.drbetting.network.ApiManager
+import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -38,7 +40,14 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
+
     @Singleton
     @Provides
     fun provideFirebaseFirestore() = FirebaseFirestore.getInstance()
+
+    @Singleton
+    @Provides
+    fun provideApiManager(preferencesManager: SharedPreferencesManager) =
+        ApiManager.getInstance(preferencesManager)
+
 }

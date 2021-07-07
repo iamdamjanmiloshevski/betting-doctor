@@ -38,7 +38,7 @@ import javax.inject.Singleton
     Author: Damjan Miloshevski 
     Created on 3/29/21 12:11 PM
 */
-@Module
+@Module(includes = [NetworkModule::class])
 @InstallIn(SingletonComponent::class)
 object AppModule {
     @Singleton

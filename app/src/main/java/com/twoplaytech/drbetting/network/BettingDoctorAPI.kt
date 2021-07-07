@@ -22,7 +22,13 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.repository
+package com.twoplaytech.drbetting.network
+
+import com.twoplaytech.drbetting.data.BettingTip2
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.PUT
+import retrofit2.http.Path
 
 /*
     Author: Damjan Miloshevski 
@@ -31,4 +37,25 @@ package com.twoplaytech.drbetting.repository
     © 2Play Tech  2021. All rights reserved
 */
 interface BettingDoctorAPI {
+    @GET("betting_tips")
+    suspend fun getBettingTips(): List<BettingTip2>
+
+    @GET("betting_tips/{id}")
+    suspend fun getBettingTipById(@Path("id") tipId: String): BettingTip2
+
+    @GET("betting_tips/{sport}/upcoming")
+    suspend fun getUpcomingBettingTipsBySport(@Path("sport") sport: String): List<BettingTip2>
+
+    @GET("betting_tips/{sport}/older")
+    suspend fun getOlderBettingTipsBySport(@Path("sport") sport: String): List<BettingTip2>
+
+    @PUT("betting_tips/{id}")
+    suspend fun updateBettingTip(@Path("id") tipId: String): BettingTip2
+
+    @DELETE("betting_tips/{id}")
+    suspend fun deleteBettingTip(@Path("id") tipId: String)
+
+    @DELETE("betting_tips")
+    suspend fun deleteBettingTips()
+
 }

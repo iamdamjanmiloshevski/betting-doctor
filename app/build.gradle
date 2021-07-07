@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id  'kotlin-android-extensions'
+    id 'kotlin-android-extensions'
     id 'dagger.hilt.android.plugin'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
@@ -17,9 +17,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode generateVersionCode(versionCodeNum)
         versionName generateVersionName()
-
+        buildConfigField("String", "BASE_URL", '"https://betting-doctor.herokuapp.com/api/v1/"')
         multiDexEnabled true
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -138,7 +137,17 @@ dependencies {
     //region Material Dialogs
     implementation "com.afollestad.material-dialogs:core:$materialDialogsVersion"
     implementation "com.afollestad.material-dialogs:datetime:$materialDialogsVersion"
+    //endregion
 
+    //region Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    //endregion
+
+    //region OkHttp
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:$okHttpVersion"))
+    implementation("com.squareup.okhttp3:okhttp")
+    implementation("com.squareup.okhttp3:logging-interceptor")
     //endregion
 
     //region Timber logger
