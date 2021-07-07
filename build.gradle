@@ -43,6 +43,8 @@ ext{
   materialDialogsVersion = '3.3.0'
   timberLoggerVersion = '4.7.1'
   caverockVersion = 'androidsvg-aar:1.4'
+  retrofitVersion = '2.9.0'
+  okHttpVersion = '4.9.0'
 }
 
 task clean(type: Delete) {
