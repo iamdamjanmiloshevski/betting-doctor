@@ -19,3 +19,11 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keep class com.twoplaytech.drbetting.data.BettingTip
+-keep class com.twoplaytech.drbetting.data.Team
+-keep class com.twoplaytech.drbetting.data.Sport
+-keep class com.twoplaytech.drbetting.data.Status
+-keep class com.twoplaytech.drbetting.data.BettingTip
+-keep class com.twoplaytech.drbetting.data.Resource
+-keep class com.twoplaytech.drbetting.data.Result

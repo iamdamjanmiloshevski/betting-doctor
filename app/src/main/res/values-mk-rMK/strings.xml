@@ -44,4 +44,16 @@
     <string name="language">Јазик</string>
     <string name="version">Верзија %s</string>
     <string name="dark_mode">Ноќен режим</string>
+    <string name="new_betting_tip_title">Додади нов тип</string>
+    <string name="update_betting_tip_title">Ажурирај тип</string>
+    <string name="team_home_error">Ве молиме внесете име на домашниот тим!</string>
+    <string name="team_away_error">Ве молиме внесете име на гостинскиот тим!</string>
+    <string name="league_name_error">Ве молиме внесете име на Лигата</string>
+    <string name="betting_tip_error">Ве молиме внесете тип!</string>
+    <string name="result_error">Ве молиме внесете резултат</string>
+    <string name="game_time_error">Ве молиме внесете време!</string>
+    <string name="result_title">Резултат</string>
+    <string name="result_hint">Пр. (1-0) за непознат може да внесете /</string>
+    <string name="logout_title">Одјава?</string>
+    <string name="log_out_msg">Дали сте сигурни дека сакате да се одјавите?</string>
 </resources>

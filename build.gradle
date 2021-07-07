@@ -34,7 +34,7 @@ ext{
   majorVersion = 1//MAJOR version when you make incompatible API changes
   minorVersion = 0 //MINOR version when you add functionality in a backwards compatible manner
   patchVersion = 0 //PATCH version when you make backwards compatible bug fixes
-  versionCodeNum = 1
+  versionCodeNum = 2
   versionClassifier = null
   isSnapshot = false
   isAlpha = false

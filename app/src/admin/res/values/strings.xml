@@ -23,16 +23,16 @@
   -->
 
 <resources>
-    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_login" translatable="false">LoginActivity</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
+    <string name="first_fragment_label" translatable="false">First Fragment</string>
+    <string name="second_fragment_label" translatable="false">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="hello_first_fragment" translatable="false">Hello first fragment</string>
+    <string name="hello_second_fragment" translatable="false">Hello second fragment. Arg: %1$s</string>
+    <string name="title_activity_main" translatable="false">MainActivity</string>
     <string name="email_blank_msg">Email cannot be blank!</string>
     <string name="pwd_blank_msg">Password cannot be blank!</string>
     <string name="invalid_email_format_msg">Invalid email format!</string>
@@ -40,10 +40,10 @@
     <string name="save_credentials_title_msg">Save credentials?</string>
     <string name="save_credentials_msg">Do you want to save your credentials for future use?\n\nYour credentials are encrypted and known only to you</string>
     <string name="dont_save_option">Don\'t save</string>
-    <string name="title_activity_admin">AdminActivity</string>
+    <string name="title_activity_admin" translatable="false">AdminActivity</string>
     <string name="tab_text_1">Older</string>
     <string name="tab_text_2">Upcoming</string>
-    <string name="title_activity_login2">LoginActivity2</string>
+    <string name="title_activity_login2" translatable="false">LoginActivity2</string>
     <string name="signing_in_msg">Signing in. Please wait!</string>
     <string-array name="types">
         <item>Older</item>
@@ -61,15 +61,15 @@
         <item>Lost</item>
         <item>Unknown</item>
     </string-array>
-    <string name="title_activity_betting_tip">BettingTipActivity</string>
+    <string name="title_activity_betting_tip" translatable="false">BettingTipActivity</string>
     <string name="hint_league_title">League</string>
     <string name="hint_league">Ex. England - Premier League </string>
-    <string name="hint_betting_tip_heading">Betting Tip</string>
-    <string name="hint_betting_tip">Ex. x2</string>
+    <string name="hint_betting_tip_heading" translatable="false">Betting Tip</string>
+    <string name="hint_betting_tip" translatable="false">Ex. x2</string>
     <string name="hint_game_time_heading">Game time</string>
-    <string name="hint_game_time">Ex. 17/05/2021 15:22</string>
+    <string name="hint_game_time" translatable="false">Ex. 17/05/2021 15:22</string>
     <string name="title_sport_heading">Sport</string>
-    <string name="title_sport">Football</string>
+    <string name="title_sport" translatable="false">Football</string>
     <string name="title_status_heading">Status</string>
     <string name="title_status">Unknown</string>
     <string name="action_logout">Logout</string>
