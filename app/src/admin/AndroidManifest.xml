@@ -23,7 +23,7 @@
             android:label="@string/title_activity_login"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.DrBetting.NoActionBar" />
-        <activity android:name="com.twoplaytech.drbetting.admin.SplashActivity">
+        <activity android:name="com.twoplaytech.drbetting.admin.SplashActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/SplashScreenTheme">
