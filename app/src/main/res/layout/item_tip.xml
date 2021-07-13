@@ -68,7 +68,7 @@
                         android:layout_height="60dp"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="5dp"
-                        app:sportIcon="@{bettingType.sport}" />
+                        android:src="@drawable/soccer_ball"/>
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tv_date"
@@ -126,6 +126,7 @@
                             android:layout_height="64dp"
                             app:team="@{bettingType.teamHome}"
                             app:sport="@{bettingType.sport}"
+                            android:src="@drawable/soccer_ball"
                             android:layout_marginStart="5dp" />
 
                         <androidx.appcompat.widget.AppCompatTextView

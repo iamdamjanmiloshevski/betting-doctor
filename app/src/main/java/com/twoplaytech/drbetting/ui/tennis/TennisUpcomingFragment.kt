@@ -52,7 +52,11 @@ class TennisUpcomingFragment : BaseChildFragment() {
     override fun initUI() {
         binding.noDataView.setVisible(false)
         setUpDataAdapter()
-        requestTodayData(Sport.TENNIS)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getBettingTips(Sport.Tennis,true)
     }
 
     companion object {

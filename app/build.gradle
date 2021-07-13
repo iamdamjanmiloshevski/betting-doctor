@@ -144,6 +144,10 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     //endregion
 
+    //region Gson
+    implementation "com.google.code.gson:gson:$gsonVersion"
+    //endregion
+
     //region OkHttp
     implementation(platform("com.squareup.okhttp3:okhttp-bom:$okHttpVersion"))
     implementation("com.squareup.okhttp3:okhttp")

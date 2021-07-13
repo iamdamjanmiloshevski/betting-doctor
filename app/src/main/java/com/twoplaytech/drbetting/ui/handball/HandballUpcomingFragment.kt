@@ -52,7 +52,11 @@ class HandballUpcomingFragment : BaseChildFragment() {
     override fun initUI() {
         binding.noDataView.setVisible(false)
         setUpDataAdapter()
-        requestTodayData(Sport.HANDBALL)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getBettingTips(Sport.Handball,true)
     }
 
     companion object {

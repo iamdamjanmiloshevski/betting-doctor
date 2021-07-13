@@ -42,7 +42,7 @@ class TennisFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         initBinding(inflater, container)
-        changeTheme(R.string.heading_tennis,Sport.TENNIS)
+        changeTheme(R.string.heading_tennis, Sport.Tennis)
         initPager(
             listOf(
                 TennisOlderFragment.getInstance(),

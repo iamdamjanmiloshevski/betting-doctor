@@ -33,6 +33,6 @@ import com.twoplaytech.drbetting.data.BettingTip
     © 2Play Tech  2021. All rights reserved
 */
 interface OnBettingTipClickedListener {
-    fun onTipClick(tip:BettingTip)
+    fun onTipClick(tip: BettingTip)
     fun onTipLongClick(tip: BettingTip)
 }

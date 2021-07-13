@@ -25,17 +25,24 @@
 package com.twoplaytech.drbetting.data
 
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
-
 /*
-    Author: Damjan Miloshevski 
-    Created on 3/10/21 12:27 PM
+    Author: Damjan Miloshevski
+    Created on 7.7.21 14:06
+    Project: Dr.Betting
+    © 2Play Tech  2021. All rights reserved
 */
 @Parcelize
-enum class Sport(val value: String):Parcelable {
-    FOOTBALL("0"),
-    BASKETBALL("1"),
-    TENNIS("2"),
-    HANDBALL("3"),
-    VOLLEYBALL("4")
+enum class Sport:Parcelable {
+    @SerializedName("Football")
+    Football,
+    @SerializedName("Basketball")
+    Basketball,
+    @SerializedName("Tennis")
+    Tennis,
+    @SerializedName("Handball")
+    Handball,
+    @SerializedName("Volleyball")
+    Volleyball
 }

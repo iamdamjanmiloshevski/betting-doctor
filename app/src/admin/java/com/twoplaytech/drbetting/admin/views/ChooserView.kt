@@ -74,15 +74,15 @@ class ChooserView(context: Context, attrs: AttributeSet) : ConstraintLayout(cont
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         if (items == R.array.sports) {
             when (position) {
-                0 -> listener?.onSportClicked(Sport.FOOTBALL)
+                0 -> listener?.onSportClicked(Sport.Football)
                     ?: throw RuntimeException("${ChooserView::class.simpleName} must implement OnDropdownItemSelectedListener")
-                1 -> listener?.onSportClicked(Sport.BASKETBALL)
+                1 -> listener?.onSportClicked(Sport.Basketball)
                     ?: throw RuntimeException("${ChooserView::class.simpleName} must implement OnDropdownItemSelectedListener")
-                2 -> listener?.onSportClicked(Sport.TENNIS)
+                2 -> listener?.onSportClicked(Sport.Tennis)
                     ?: throw RuntimeException("${ChooserView::class.simpleName} must implement OnDropdownItemSelectedListener")
-                3 -> listener?.onSportClicked(Sport.HANDBALL)
+                3 -> listener?.onSportClicked(Sport.Handball)
                     ?: throw RuntimeException("${ChooserView::class.simpleName} must implement OnDropdownItemSelectedListener")
-                4 -> listener?.onSportClicked(Sport.VOLLEYBALL)
+                4 -> listener?.onSportClicked(Sport.Volleyball)
                     ?: throw RuntimeException("${ChooserView::class.simpleName} must implement OnDropdownItemSelectedListener")
             }
         } else {

@@ -27,24 +27,15 @@ package com.twoplaytech.drbetting.ui.common
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.firestore.Query
-import com.twoplaytech.drbetting.common.FirestoreQueryLiveData
 import com.twoplaytech.drbetting.data.BettingTip
-import com.twoplaytech.drbetting.data.BettingTip2
 import com.twoplaytech.drbetting.data.Resource
-import com.twoplaytech.drbetting.data.Sport2
+import com.twoplaytech.drbetting.data.Sport
 import com.twoplaytech.drbetting.repository.BettingTipsRepository
-import com.twoplaytech.drbetting.repository.FirestoreRepository
-import com.twoplaytech.drbetting.util.Constants.GAME_TIME
-import com.twoplaytech.drbetting.util.Constants.SPORT
-import com.twoplaytech.drbetting.util.asFirestoreQueryLiveData
-import com.twoplaytech.drbetting.util.older
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 /*
@@ -54,7 +45,6 @@ import javax.inject.Inject
 */
 @HiltViewModel
 class BettingTipsViewModel @Inject constructor(
-    private val repository: FirestoreRepository,
     private val bettingTipsRepository: BettingTipsRepository
 ) :
     ViewModel() {
@@ -62,51 +52,16 @@ class BettingTipsViewModel @Inject constructor(
     private val fieldValidatorObserver = MutableLiveData<Boolean>()
     private val saveObserver = MutableLiveData<Resource<Boolean>>()
     private val deleteObserver = MutableLiveData<Resource<Boolean>>()
-    private val bettingTipsObserver = MutableLiveData<Resource<List<BettingTip2>>>()
+    private val bettingTipsObserver = MutableLiveData<Resource<List<BettingTip>>>()
 
-    fun getUpcomingTips(type: String): FirestoreQueryLiveData {
-        return repository.getBettingTips()
-            .whereEqualTo(SPORT, type)
-            .whereGreaterThanOrEqualTo(GAME_TIME, Calendar.getInstance().time)
-            .orderBy(GAME_TIME, Query.Direction.DESCENDING)
-            .asFirestoreQueryLiveData()
-    }
-
-    fun getOlderTips(type: String) {
-        olderTipsObserver.value = Resource.loading(null, null)
-        val olderTips = mutableListOf<BettingTip>()
-        olderTips.clear()
-        repository.getBettingTips()
-            .whereEqualTo(SPORT, type)
-            .whereLessThanOrEqualTo(GAME_TIME, older())
-            .orderBy(GAME_TIME, Query.Direction.DESCENDING)
-            .get().addOnSuccessListener { documents ->
-                for (document in documents) {
-                    val bettingTip = BettingTip(document.data)
-                    if (!olderTips.contains(bettingTip)) {
-                        olderTips.add(bettingTip)
-                    }
-                }
-            }.addOnCompleteListener { task ->
-                if (task.isComplete) {
-                    if (olderTips.isNotEmpty()) {
-                        olderTipsObserver.value = Resource.success(null, olderTips)
-                    } else {
-                        olderTipsObserver.value = Resource.success("No data", listOf())
-                    }
-                }
-            }.addOnFailureListener { exception ->
-                olderTipsObserver.value = Resource.error(exception.localizedMessage, null)
-            }
-    }
 
     fun validate(validate: Boolean) {
         fieldValidatorObserver.value = validate
     }
 
-    fun getBettingTips(sport2: Sport2,upcoming:Boolean) {
+    fun getBettingTips(sport: Sport, upcoming:Boolean) {
         viewModelScope.launch {
-            bettingTipsRepository.getBettingTipsBySport(sport2,upcoming)
+            bettingTipsRepository.getBettingTipsBySport(sport,upcoming)
                 .catch { exception ->
                     Timber.e(exception)
                     bettingTipsObserver.value = Resource.error(exception.message, null)
@@ -115,30 +70,6 @@ class BettingTipsViewModel @Inject constructor(
                     bettingTipsObserver.value = Resource.success(null, items)
                 }
         }
-    }
-
-    fun saveBettingTip(bettingTip: BettingTip, shouldUpdate: Boolean = false) {
-        if (shouldUpdate) {
-            repository.updateBettingTip(bettingTip, successCallback = {
-                saveObserver.value = Resource.success(it, true)
-            }, failureCallback = {
-                saveObserver.value = Resource.error(it, false)
-            })
-        } else {
-            repository.saveBettingTip(bettingTip, successCallback = {
-                saveObserver.value = Resource.success(it, true)
-            }, failureCallback = {
-                saveObserver.value = Resource.error(it, false)
-            })
-        }
-    }
-
-    fun deleteBettingTip(bettingTip: BettingTip) {
-        repository.deleteBettingTip(bettingTip, successCallback = {
-            deleteObserver.value = Resource.success(it, true)
-        }, failureCallback = {
-            deleteObserver.value = Resource.error(it, false)
-        })
     }
 
     fun observeValidation() = fieldValidatorObserver

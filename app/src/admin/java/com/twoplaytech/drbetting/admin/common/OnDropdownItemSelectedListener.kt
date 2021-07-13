@@ -34,6 +34,6 @@ import com.twoplaytech.drbetting.data.TypeStatus
     © 2Play Tech  2021. All rights reserved
 */
 interface OnDropdownItemSelectedListener {
-    fun onSportClicked(sport:Sport)
-    fun onStatusClicked(status:TypeStatus)
+    fun onSportClicked(sport: Sport)
+    fun onStatusClicked(status: TypeStatus)
 }

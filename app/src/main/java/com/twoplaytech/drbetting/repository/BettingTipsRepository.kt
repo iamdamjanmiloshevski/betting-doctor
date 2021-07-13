@@ -24,8 +24,7 @@
 
 package com.twoplaytech.drbetting.repository
 
-import com.twoplaytech.drbetting.data.BettingTip2
-import com.twoplaytech.drbetting.data.Sport2
+import com.twoplaytech.drbetting.data.*
 import com.twoplaytech.drbetting.network.ApiManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -41,9 +40,9 @@ import kotlin.coroutines.CoroutineContext
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-class BettingTipsRepository @Inject constructor(private val apiManager: ApiManager) : IRepository2,
+class BettingTipsRepository @Inject constructor(private val apiManager: ApiManager) : IRepository,
     CoroutineScope {
-    override fun getBettingTips(): Flow<List<BettingTip2>> {
+    override fun getBettingTips(): Flow<List<BettingTip>> {
         return flow {
             val items = apiManager.api().getBettingTips()
             emit(items)
@@ -53,16 +52,30 @@ class BettingTipsRepository @Inject constructor(private val apiManager: ApiManag
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO
 
-    override fun getBettingTipsBySport(sport: Sport2, upcoming: Boolean): Flow<List<BettingTip2>> {
+    override fun getBettingTipsBySport(sport: Sport, upcoming: Boolean): Flow<List<BettingTip>> {
         return when (upcoming) {
             true -> flow {
-                val items = apiManager.api().getUpcomingBettingTipsBySport(sport.value)
+                val items = apiManager.api().getUpcomingBettingTipsBySport(sport)
                 emit(items)
             }.flowOn(coroutineContext)
             false -> flow {
-                val items = apiManager.api().getOlderBettingTipsBySport(sport.value)
+                val items = apiManager.api().getOlderBettingTipsBySport(sport)
                 emit(items)
             }.flowOn(coroutineContext)
         }
+    }
+
+    override fun register(userInput: UserInput): Flow<Message> {
+        return flow {
+            val message = apiManager.api().register(userInput)
+            emit(message)
+        }.flowOn(coroutineContext)
+    }
+
+    override fun signIn(userInput: UserInput): Flow<AccessToken> {
+        return flow {
+            val accessToken = apiManager.api().signIn(userInput)
+            emit(accessToken)
+        }.flowOn(coroutineContext)
     }
 }

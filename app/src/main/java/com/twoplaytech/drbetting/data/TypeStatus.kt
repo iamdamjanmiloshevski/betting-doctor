@@ -25,15 +25,21 @@
 package com.twoplaytech.drbetting.data
 
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 /*
     Author: Damjan Miloshevski 
-    Created on 3/10/21 3:21 PM
+    Created on 7.7.21 14:58
+    Project: Dr.Betting
+    © 2Play Tech  2021. All rights reserved
 */
 @Parcelize
-enum class TypeStatus(val value: String):Parcelable {
-    UNKNOWN("0"),
-    WON("1"),
-    LOST("2")
+enum class TypeStatus : Parcelable {
+    @SerializedName("UNKNOWN")
+    UNKNOWN,
+    @SerializedName("WON")
+    WON,
+    @SerializedName("LOST")
+    LOST
 }

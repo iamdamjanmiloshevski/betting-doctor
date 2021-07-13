@@ -47,7 +47,7 @@ class HandballFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         initBinding(inflater, container)
-        changeTheme(R.string.heading_handball,Sport.HANDBALL)
+        changeTheme(R.string.heading_handball, Sport.Handball)
         initPager(
             listOf(
                 HandballOlderFragment.getInstance(),

@@ -24,11 +24,8 @@
 
 package com.twoplaytech.drbetting.network
 
-import com.twoplaytech.drbetting.data.BettingTip2
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.PUT
-import retrofit2.http.Path
+import com.twoplaytech.drbetting.data.*
+import retrofit2.http.*
 
 /*
     Author: Damjan Miloshevski 
@@ -37,25 +34,31 @@ import retrofit2.http.Path
     © 2Play Tech  2021. All rights reserved
 */
 interface BettingDoctorAPI {
-    @GET("betting_tips")
-    suspend fun getBettingTips(): List<BettingTip2>
+    @GET("betting-tips")
+    suspend fun getBettingTips(): List<BettingTip>
 
-    @GET("betting_tips/{id}")
-    suspend fun getBettingTipById(@Path("id") tipId: String): BettingTip2
+    @GET("betting-tips/{id}")
+    suspend fun getBettingTipById(@Path("id") tipId: String): BettingTip
 
-    @GET("betting_tips/{sport}/upcoming")
-    suspend fun getUpcomingBettingTipsBySport(@Path("sport") sport: String): List<BettingTip2>
+    @GET("betting-tips/{sport}/upcoming")
+    suspend fun getUpcomingBettingTipsBySport(@Path("sport") sport: Sport): List<BettingTip>
 
-    @GET("betting_tips/{sport}/older")
-    suspend fun getOlderBettingTipsBySport(@Path("sport") sport: String): List<BettingTip2>
+    @GET("betting-tips/{sport}/older")
+    suspend fun getOlderBettingTipsBySport(@Path("sport") sport: Sport): List<BettingTip>
 
-    @PUT("betting_tips/{id}")
-    suspend fun updateBettingTip(@Path("id") tipId: String): BettingTip2
+    @PUT("betting-tips/{id}")
+    suspend fun updateBettingTip(@Path("id") tipId: String): BettingTip
 
-    @DELETE("betting_tips/{id}")
+    @DELETE("betting-tips/{id}")
     suspend fun deleteBettingTip(@Path("id") tipId: String)
 
-    @DELETE("betting_tips")
+    @DELETE("betting-tips")
     suspend fun deleteBettingTips()
+
+    @POST("users/register")
+    suspend fun register(@Body userInput: UserInput):Message
+
+    @POST("users/signin")
+    suspend fun signIn(@Body userInput: UserInput):AccessToken
 
 }

@@ -27,13 +27,13 @@ package com.twoplaytech.drbetting.ui.common
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.firestore.DocumentChange
 import com.twoplaytech.drbetting.data.BettingTip
-import com.twoplaytech.drbetting.data.Sport
+import com.twoplaytech.drbetting.data.Status
 import com.twoplaytech.drbetting.databinding.FragmentChildBinding
 import com.twoplaytech.drbetting.ui.adapters.BettingTipsRecyclerViewAdapter
 
@@ -65,43 +65,24 @@ abstract class BaseChildFragment : Fragment(), IBaseView {
         })
     }
 
-    fun requestTodayData(type: Sport) {
-        viewModel.getUpcomingTips(type.value).observe(this, {
-            for (doc in it!!.documentChanges) {
-                val tip = BettingTip(doc.document.data)
-                tip.id = doc.document.id
-                when (doc.type) {
-                    DocumentChange.Type.ADDED -> {
-                        if (!bettingTips.contains(tip)) {
-                            bettingTips.add(tip)
-                        }
-                    }
-                    DocumentChange.Type.MODIFIED -> {
-                        for (i in bettingTips.indices) {
-                            val footballTip = bettingTips[i]
-                            if (footballTip?.id == tip.id) {
-                                bettingTips[i] = tip
-                            }
-                        }
-                        adapter.notifyDataSetChanged()
-                    }
-                    DocumentChange.Type.REMOVED -> {
-                        val iterator = bettingTips.iterator()
-                        while (iterator.hasNext()) {
-                            val bettingType = iterator.next()
-                            if (bettingType == tip) {
-                                iterator.remove()
-                            }
-                        }
-                        adapter.notifyDataSetChanged()
-                    }
+    override fun observeData() {
+        viewModel.observeTips().observe(viewLifecycleOwner, { resource->
+            when(resource.status){
+                Status.SUCCESS ->{
+                    val items = resource.data as List<BettingTip>
+                    adapter.addData(items)
+                }
+                Status.ERROR -> {
+                    Toast.makeText(requireContext(),"Something went wrong", Toast.LENGTH_SHORT).show()
+                }
+                Status.LOADING -> {
                 }
             }
-            adapter.notifyDataSetChanged()
         })
     }
 
-    fun requestOlderData(type: Sport) {
-        viewModel.getOlderTips(type.value)
+    override fun onResume() {
+        super.onResume()
+        observeData()
     }
 }

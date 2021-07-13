@@ -40,7 +40,7 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
     private lateinit var _binding: FragmentBettingTipBinding
     private var bettingTip: BettingTip? = null
     private var cancel = false
-    private var sportChosen = Sport.FOOTBALL
+    private var sportChosen = Sport.Football
     private var statusChosen = TypeStatus.UNKNOWN
     private var sportChosenIdx = 0
 
@@ -75,7 +75,7 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
                 bettingTip.gameTime?.let { date ->
                     this.tvGameTime.setDate(date)
                 }
-                bettingTip.sport?.select(this.cvSports)
+                bettingTip.sport.select(this.cvSports)
                 bettingTip.status?.select(this.cvStatus)
             }
         } ?: statusChosen.select(_binding.cvStatus)
@@ -88,9 +88,9 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
 
                 }
                 false -> {
-                    bettingTip?.let {
-                        viewModel.saveBettingTip(getTipFromInput(it.id), true)
-                    } ?: viewModel.saveBettingTip(getTipFromInput())
+//                    bettingTip?.let {
+//                        viewModel.saveBettingTip(getTipFromInput(it.id), true)
+//                    } ?: viewModel.saveBettingTip(getTipFromInput())
                 }
             }
         })
@@ -120,18 +120,17 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
         val teamHome = Team(teamHomeName, teamHomeLogo)
         val teamAway = Team(teamAwayName, teamAwayLogo)
         val bettingType = BettingTip(
+            _id = id!!,
             leagueName = league,
             teamHome = teamHome,
             teamAway = teamAway,
-            gameTime = gameTime,
+            gameTime = gameTime!!,
             bettingType = bettingTip,
             status = statusChosen,
             result = result,
             sport = sportChosen
         )
-        id?.let {
-            bettingType.id = it
-        }
+
         return bettingType
     }
 
@@ -189,11 +188,11 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
         bettingTipActivity.changeThemePerSport(sport = sport)
         sportChosen = sport
         sportChosenIdx = when (sport) {
-            Sport.FOOTBALL -> 0
-            Sport.BASKETBALL -> 1
-            Sport.TENNIS -> 2
-            Sport.HANDBALL -> 3
-            Sport.VOLLEYBALL -> 4
+            Sport.Football -> 0
+            Sport.Basketball -> 1
+            Sport.Tennis -> 2
+            Sport.Handball -> 3
+            Sport.Volleyball -> 4
         }
     }
 
@@ -203,11 +202,11 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
 
     private fun Sport.select(chooserView: ChooserView) {
         when (this) {
-            Sport.FOOTBALL -> chooserView.setSelection(0)
-            Sport.BASKETBALL -> chooserView.setSelection(1)
-            Sport.TENNIS -> chooserView.setSelection(2)
-            Sport.HANDBALL -> chooserView.setSelection(3)
-            Sport.VOLLEYBALL -> chooserView.setSelection(4)
+            Sport.Football -> chooserView.setSelection(0)
+            Sport.Basketball -> chooserView.setSelection(1)
+            Sport.Tennis -> chooserView.setSelection(2)
+            Sport.Handball -> chooserView.setSelection(3)
+            Sport.Volleyball -> chooserView.setSelection(4)
         }
     }
 

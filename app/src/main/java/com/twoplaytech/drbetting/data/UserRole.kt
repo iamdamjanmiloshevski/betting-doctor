@@ -22,25 +22,17 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.admin.common
-
-import android.text.Editable
-import android.text.TextWatcher
-
+package com.twoplaytech.drbetting.data
+import com.google.gson.annotations.SerializedName
 /*
     Author: Damjan Miloshevski 
-    Created on 4/16/21 12:51 PM
+    Created on 13.7.21 13:49
+    Project: Dr.Betting
+    © 2Play Tech  2021. All rights reserved
 */
-class TextWatcher(private val callback:(textChanged:CharSequence?)->Unit): TextWatcher {
-    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-    }
-
-    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-        callback.invoke(s)
-    }
-
-    override fun afterTextChanged(s: Editable?) {
-
-    }
+enum class UserRole {
+    @SerializedName("ADMIN")
+    ADMIN,
+    @SerializedName("CUSTOMER")
+    CUSTOMER
 }

@@ -22,42 +22,32 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.admin.repository
+package com.twoplaytech.drbetting.common
 
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import timber.log.Timber
-import javax.inject.Singleton
-
+import android.text.Editable
+import android.text.TextWatcher
 /*
     Author: Damjan Miloshevski 
-    Created on 4/7/21 1:30 PM
+    Created on 13.7.21 14:52
+    Project: Dr.Betting
+    © 2Play Tech  2021. All rights reserved
 */
-@Singleton
-object FirebaseRepository {
-    private val auth: FirebaseAuth = Firebase.auth
 
-    fun signIn(email: String, password: String, callback: (Boolean, message: String?) -> Unit) {
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    callback.invoke(true, null)
-                }
-            }.addOnCanceledListener {
-                Timber.e("Login cancelled")
-                callback.invoke(false, "Login canceled!")
-            }.addOnFailureListener { exception ->
-                Timber.e("Login cancelled ${exception.message}")
-                callback.invoke(false, exception.message)
-            }
+
+/*
+    Author: Damjan Miloshevski
+    Created on 4/16/21 12:51 PM
+*/
+class TextWatcher(private val callback:(textChanged:CharSequence?)->Unit): TextWatcher {
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
     }
 
-    fun logout(callback: () -> Unit) {
-        auth.signOut()
-        callback.invoke()
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        callback.invoke(s)
     }
 
-    fun getUser(): FirebaseUser? = auth.currentUser
+    override fun afterTextChanged(s: Editable?) {
+
+    }
 }

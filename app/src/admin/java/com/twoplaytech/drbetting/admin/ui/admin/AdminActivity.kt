@@ -34,29 +34,24 @@ import android.widget.*
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
-import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.firestore.DocumentChange
 import com.twoplaytech.drbetting.R
-import com.twoplaytech.drbetting.admin.ui.login.LoginActivity
-import com.twoplaytech.drbetting.admin.ui.login.LoginViewModel
 import com.twoplaytech.drbetting.admin.util.Constants
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_ARGS
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_TIP
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_TYPE
 import com.twoplaytech.drbetting.admin.util.Constants.VIEW_TYPE_EDIT
-import com.twoplaytech.drbetting.data.BettingTip
-import com.twoplaytech.drbetting.data.Sport
-import com.twoplaytech.drbetting.data.Status
+import com.twoplaytech.drbetting.data.*
+import com.twoplaytech.drbetting.data.Status.*
 import com.twoplaytech.drbetting.databinding.ActivityAdminBinding
 import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_VIEW_TYPE
 import com.twoplaytech.drbetting.ui.adapters.BettingTipsRecyclerViewAdapter
 import com.twoplaytech.drbetting.ui.common.BaseActivity
 import com.twoplaytech.drbetting.ui.common.BettingTipsViewModel
 import com.twoplaytech.drbetting.ui.common.OnBettingTipClickedListener
+import com.twoplaytech.drbetting.ui.login.LoginViewModel
 import com.twoplaytech.drbetting.util.getSportColor
 import com.twoplaytech.drbetting.util.getSportFromIndex
 
@@ -112,75 +107,49 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
 
     override fun observeData() {
         adapter.clear()
-        viewModel.observeOnOlderTips().observe(this, { resource ->
+        viewModel.observeTips().observe(this, { resource ->
             when (resource.status) {
-                Status.SUCCESS -> {
-                    binding.progressBar.visibility = View.GONE
-                    val data = resource.data as List<BettingTip>
-                    adapter.addData(data)
+                SUCCESS -> {
+                    val items = resource.data as List<BettingTip>
+                    adapter.addData(items)
                 }
-                Status.LOADING -> {
-                    binding.noDataView.setVisible(false)
-                    binding.progressBar.visibility = View.VISIBLE
+                ERROR -> {
+                    Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
                 }
-                Status.ERROR -> {
-
-
+                LOADING -> {
                 }
             }
         })
-        loginViewModel.observeLogin().observe(this, Observer {
-            when (it.status) {
-                com.twoplaytech.drbetting.admin.common.Status.SUCCESS -> {
-                    when (it.data) {
-                        true -> {
-                        }
-                        false -> {
-                            startActivity(Intent(this, LoginActivity::class.java))
-                            finish()
-                        }
-                    }
-                }
-                com.twoplaytech.drbetting.admin.common.Status.ERROR -> {
-                    Snackbar.make(
-                        binding.adminView,
-                        it.message.toString(),
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                }
-                com.twoplaytech.drbetting.admin.common.Status.LOADING -> {
-
-                }
-            }
-        })
-        viewModel.observeForSavedTip().observe(this, { resource ->
-            when (resource.status) {
-                Status.SUCCESS -> {
-                    changeData(sportSelected.getSportFromIndex(), typeSelected)
+        viewModel.observeForSavedTip().observe(this,
+            { resource ->
+                when (resource.status) {
+                    SUCCESS -> {
+                        changeData(sportSelected.getSportFromIndex(), typeSelected)
 //                    val intent = Intent(activity, AdminActivity::class.java)
 //                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
 //                    intent.putExtra(KEY_SPORT, sportChosenIdx)
 //                    activity?.startActivity(intent)
 //                    activity?.finishAffinity()
-                }
-                Status.ERROR -> {
-                }
-                Status.LOADING -> {
+                    }
+                    ERROR -> {
+                    }
+                    LOADING -> {
 
+                    }
                 }
-            }
-        })
-        viewModel.observeDeletedTip().observe(this, { resource ->
-            when (resource.status) {
-                Status.SUCCESS -> {
-                    changeData(sportSelected.getSportFromIndex(), typeSelected)
+            })
+        viewModel.observeDeletedTip().observe(this,
+            { resource ->
+                when (resource.status) {
+                    SUCCESS -> {
+                        changeData(sportSelected.getSportFromIndex(), typeSelected)
+                    }
+                    ERROR -> {
+                    }
+                    LOADING -> {
+                    }
                 }
-                Status.ERROR -> {
-                }
-                Status.LOADING -> {
-                }
-            }
-        })
+            })
     }
 
     override fun initBinding() {
@@ -255,53 +224,23 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
 
     }
 
-    fun requestTodayData(type: Sport) {
+    fun requestTodayData(sport: Sport) {
         binding.noDataView.setVisible(false)
         binding.progressBar.visibility = View.VISIBLE
         binding.rvBettingTips.visibility = View.GONE
-        viewModel.getUpcomingTips(type.value).observe(this, {
-            for (doc in it!!.documentChanges) {
-                val tip = BettingTip(doc.document.data)
-                tip.id = doc.document.id
-                when (doc.type) {
-                    DocumentChange.Type.ADDED -> {
-                        if (!bettingTips.contains(tip)) {
-                            bettingTips.add(tip)
-                        }
-                    }
-                    DocumentChange.Type.MODIFIED -> {
-                        for (i in bettingTips.indices) {
-                            val footballTip = bettingTips[i]
-                            if (footballTip?.id == tip.id) {
-                                bettingTips[i] = tip
-                            }
-                        }
-                        adapter.notifyDataSetChanged()
-                    }
-                    DocumentChange.Type.REMOVED -> {
-                        val iterator = bettingTips.iterator()
-                        while (iterator.hasNext()) {
-                            val bettingType = iterator.next()
-                            if (bettingType == tip) {
-                                iterator.remove()
-                            }
-                        }
-                        adapter.notifyDataSetChanged()
-                    }
-                }
-            }
-            binding.rvBettingTips.visibility = View.VISIBLE
-            binding.progressBar.visibility = View.GONE
-            adapter.notifyDataSetChanged()
-        })
+        viewModel.getBettingTips(sport, true)
     }
 
-    fun requestOlderData(type: Sport) {
-        viewModel.getOlderTips(type.value)
+
+    fun requestOlderData(sport: Sport) {
+        binding.noDataView.setVisible(false)
+        binding.progressBar.visibility = View.VISIBLE
+        binding.rvBettingTips.visibility = View.GONE
+        viewModel.getBettingTips(sport, false)
     }
 
     override fun onTipClick(tip: BettingTip) {
-        this.navigateToTips(VIEW_TYPE_EDIT, tip)
+         this.navigateToTips(VIEW_TYPE_EDIT, tip)
     }
 
     override fun onTipLongClick(tip: BettingTip) {
@@ -310,7 +249,7 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
             title(null, "Delete tip?")
             message(null, "Are you sure that you want to delete this tip?")
             positiveButton(android.R.string.ok, null) {
-                viewModel.deleteBettingTip(tip)
+                //viewModel.deleteBettingTip(tip)
             }
             negativeButton(android.R.string.cancel, null) {
                 dismiss()

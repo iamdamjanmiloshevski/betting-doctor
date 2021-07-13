@@ -24,31 +24,18 @@
 
 package com.twoplaytech.drbetting.repository
 
-import com.google.firebase.firestore.CollectionReference
-import com.twoplaytech.drbetting.data.BettingTip
+import com.twoplaytech.drbetting.data.*
+import kotlinx.coroutines.flow.Flow
 
 /*
     Author: Damjan Miloshevski 
-    Created on 3/10/21 1:07 PM
-
+    Created on 7.7.21 12:18
+    Project: Dr.Betting
+    © 2Play Tech  2021. All rights reserved
 */
 interface IRepository {
-    fun getBettingTips(): CollectionReference
-    fun saveBettingTip(
-        bettingTip: BettingTip,
-        successCallback: (String) -> Unit,
-        failureCallback: (String) -> Unit
-    )
-
-    fun updateBettingTip(
-        bettingTip: BettingTip,
-        successCallback: (String) -> Unit,
-        failureCallback: (String) -> Unit
-    )
-
-    fun deleteBettingTip(
-        bettingTip: BettingTip,
-        successCallback: (String) -> Unit,
-        failureCallback: (String) -> Unit
-    )
+    fun getBettingTips(): Flow<List<BettingTip>>
+    fun getBettingTipsBySport(sport: Sport, upcoming: Boolean = false): Flow<List<BettingTip>>
+    fun register(userInput: UserInput):Flow<Message>
+    fun signIn(userInput: UserInput): Flow<AccessToken>
 }

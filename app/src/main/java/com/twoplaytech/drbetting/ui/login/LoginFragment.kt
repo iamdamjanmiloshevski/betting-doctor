@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.admin.ui.login
+package com.twoplaytech.drbetting.ui.login
 
 import android.content.Intent
 import android.os.Bundle
@@ -32,12 +32,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.google.android.material.snackbar.Snackbar
 import com.twoplaytech.drbetting.R
-import com.twoplaytech.drbetting.admin.common.Status
-import com.twoplaytech.drbetting.admin.common.TextWatcher
 import com.twoplaytech.drbetting.admin.ui.admin.AdminActivity
 import com.twoplaytech.drbetting.admin.util.dispatchCredentialsDialog
 import com.twoplaytech.drbetting.admin.util.isValidEmail
 import com.twoplaytech.drbetting.admin.util.isValidPasswordFormat
+import com.twoplaytech.drbetting.common.TextWatcher
+import com.twoplaytech.drbetting.data.Status
 import com.twoplaytech.drbetting.databinding.FragmentLoginBinding
 import com.twoplaytech.drbetting.ui.common.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,15 +65,15 @@ class LoginFragment : BaseFragment() {
     private fun initListeners() {
         loginBinding.btLogin.setOnClickListener {
             when {
-                email.isNullOrEmpty() -> {
+                email.isEmpty() -> {
                     loginBinding.lytEmail.error = getString(R.string.email_blank_msg)
                     loginViewModel.enableLogin(false)
                 }
-                pwd.isNullOrEmpty() -> {
+                pwd.isEmpty() -> {
                     loginBinding.lytPassword.error = getString(R.string.pwd_blank_msg)
                     loginViewModel.enableLogin(false)
                 }
-                else -> loginViewModel.login(email, pwd)
+                else -> loginViewModel.login(requireContext(),email, pwd)
             }
         }
         loginBinding.etEmail.addTextChangedListener(TextWatcher { emailInput ->
@@ -138,8 +138,8 @@ class LoginFragment : BaseFragment() {
                         email = loginBinding.etEmail.text.toString()
                         pwd = loginBinding.etPassword.text.toString()
                     }
-                    if (!email.isNullOrEmpty()) loginBinding.etEmail.setText(email)
-                    if (!pwd.isNullOrEmpty()) loginBinding.etPassword.setText(pwd)
+                    if (email.isNotEmpty()) loginBinding.etEmail.setText(email)
+                    if (pwd.isNotEmpty()) loginBinding.etPassword.setText(pwd)
                 }
                 Status.ERROR -> {
                     email = loginBinding.etEmail.text.toString()

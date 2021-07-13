@@ -64,6 +64,7 @@ class BettingTipsRecyclerViewAdapter(private val tips: MutableList<BettingTip>) 
     }
 
     fun addData(tips: List<BettingTip>) {
+        this.tips.clear()
         this.tips.addAll(tips)
         notifyDataSetChanged()
     }

@@ -32,7 +32,7 @@ import androidx.annotation.StringRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.common.ICustomView
-import com.twoplaytech.drbetting.admin.common.TextWatcher
+import com.twoplaytech.drbetting.common.TextWatcher
 import com.twoplaytech.drbetting.data.Team
 import com.twoplaytech.drbetting.databinding.ItemTeamBinding
 

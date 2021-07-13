@@ -28,11 +28,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
-import com.twoplaytech.drbetting.data.BettingTip
-import com.twoplaytech.drbetting.data.Resource
 import com.twoplaytech.drbetting.data.Sport
-import com.twoplaytech.drbetting.data.Status
 import com.twoplaytech.drbetting.ui.common.BaseChildFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -42,7 +38,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 */
 @AndroidEntryPoint
-class VolleyballOlderFragment:BaseChildFragment(),Observer<Resource<List<BettingTip>>> {
+class VolleyballOlderFragment:BaseChildFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -55,8 +51,6 @@ class VolleyballOlderFragment:BaseChildFragment(),Observer<Resource<List<Betting
     override fun initUI() {
         binding.noDataView.setVisible(false)
         setUpDataAdapter()
-        requestOlderData(Sport.VOLLEYBALL)
-        viewModel.observeOnOlderTips().observe(viewLifecycleOwner, this)
     }
     companion object{
         fun getInstance():VolleyballOlderFragment{
@@ -64,22 +58,8 @@ class VolleyballOlderFragment:BaseChildFragment(),Observer<Resource<List<Betting
         }
     }
 
-
-
-    override fun onChanged(resource: Resource<List<BettingTip>>) {
-        when(resource.status){
-            Status.SUCCESS -> {
-                binding.progressBar.visibility = View.GONE
-                val data = resource.data as List<BettingTip>
-                adapter.addData(data)
-            }
-            Status.LOADING -> {
-                binding.progressBar.visibility = View.VISIBLE
-            }
-            Status.ERROR -> {
-
-
-            }
-        }
+    override fun onResume() {
+        super.onResume()
+        viewModel.getBettingTips(Sport.Volleyball,false)
     }
 }

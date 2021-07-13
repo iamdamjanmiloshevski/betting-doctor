@@ -45,6 +45,7 @@ ext{
   caverockVersion = 'androidsvg-aar:1.4'
   retrofitVersion = '2.9.0'
   okHttpVersion = '4.9.0'
+  gsonVersion = '2.8.7'
 }
 
 task clean(type: Delete) {

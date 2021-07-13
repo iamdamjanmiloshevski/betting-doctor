@@ -41,9 +41,8 @@ import com.google.firebase.firestore.Query
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.common.FirestoreQueryLiveData
 import com.twoplaytech.drbetting.data.Sport
-import com.twoplaytech.drbetting.data.Sport2
+import com.twoplaytech.drbetting.data.TypeStatus
 import com.twoplaytech.drbetting.databinding.DialogDisclaimerBinding
-import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -76,14 +75,15 @@ fun older(): Date {
 
 fun Sport.getSportPlaceHolder(): Int {
     return when (this) {
-        Sport.FOOTBALL -> R.drawable.soccer_ball
-        Sport.BASKETBALL -> R.drawable.basketball_ball
-        Sport.TENNIS -> R.drawable.tennis_ball
-        Sport.HANDBALL -> R.drawable.handball_ball
-        Sport.VOLLEYBALL -> R.drawable.volleyball_ball
+        Sport.Football -> R.drawable.soccer_ball
+        Sport.Basketball -> R.drawable.basketball_ball
+        Sport.Tennis -> R.drawable.tennis_ball
+        Sport.Handball -> R.drawable.handball_ball
+        Sport.Volleyball -> R.drawable.volleyball_ball
         else -> R.drawable.soccer_ball
     }
 }
+
 fun String.getSportPlaceHolder(): Int {
     return when (this) {
         "Football" -> R.drawable.soccer_ball
@@ -94,13 +94,14 @@ fun String.getSportPlaceHolder(): Int {
         else -> R.drawable.soccer_ball
     }
 }
+
 fun Sport.getSportColor(): Int {
     return when (this) {
-        Sport.FOOTBALL -> R.color.blue
-        Sport.BASKETBALL -> R.color.orange
-        Sport.TENNIS -> R.color.seagreen
-        Sport.HANDBALL -> R.color.cyan
-        Sport.VOLLEYBALL -> R.color.violet
+        Sport.Football -> R.color.blue
+        Sport.Basketball -> R.color.orange
+        Sport.Tennis -> R.color.seagreen
+        Sport.Handball -> R.color.cyan
+        Sport.Volleyball -> R.color.violet
         else -> R.color.blue
     }
 }
@@ -108,35 +109,37 @@ fun Sport.getSportColor(): Int {
 @SuppressLint("UseCompatLoadingForDrawables")
 fun Sport.getSportDrawable(context: Context): Drawable? {
     return when (this) {
-        Sport.FOOTBALL -> ContextCompat.getDrawable(context, R.drawable.gradient_blue)
-        Sport.BASKETBALL -> ContextCompat.getDrawable(context, R.drawable.gradient_orange)
-        Sport.TENNIS -> ContextCompat.getDrawable(context, R.drawable.gradient_green)
-        Sport.HANDBALL -> ContextCompat.getDrawable(context, R.drawable.gradient_cyan)
-        Sport.VOLLEYBALL -> ContextCompat.getDrawable(context, R.drawable.gradient_violet)
+        Sport.Football -> ContextCompat.getDrawable(context, R.drawable.gradient_blue)
+        Sport.Basketball -> ContextCompat.getDrawable(context, R.drawable.gradient_orange)
+        Sport.Tennis -> ContextCompat.getDrawable(context, R.drawable.gradient_green)
+        Sport.Handball -> ContextCompat.getDrawable(context, R.drawable.gradient_cyan)
+        Sport.Volleyball -> ContextCompat.getDrawable(context, R.drawable.gradient_violet)
         else -> ContextCompat.getDrawable(context, R.drawable.gradient_blue)
     }
 }
 
 fun Sport.getSportResource(): Int {
     return when (this) {
-        Sport.FOOTBALL -> R.drawable.gradient_blue
-        Sport.BASKETBALL -> R.drawable.gradient_orange
-        Sport.TENNIS -> R.drawable.gradient_green
-        Sport.HANDBALL -> R.drawable.gradient_cyan
-        Sport.VOLLEYBALL -> R.drawable.gradient_violet
+        Sport.Football -> R.drawable.gradient_blue
+        Sport.Basketball -> R.drawable.gradient_orange
+        Sport.Tennis -> R.drawable.gradient_green
+        Sport.Handball -> R.drawable.gradient_cyan
+        Sport.Volleyball -> R.drawable.gradient_violet
         else -> R.drawable.gradient_blue
     }
 }
- fun Int.getSportFromIndex():Sport{
-    return when(this){
-        0 -> Sport.FOOTBALL
-        1 -> Sport.BASKETBALL
-        2 -> Sport.TENNIS
-        3 -> Sport.HANDBALL
-        4 -> Sport.VOLLEYBALL
-        else -> Sport.FOOTBALL
+
+fun Int.getSportFromIndex(): Sport {
+    return when (this) {
+        0 -> Sport.Football
+        1 -> Sport.Basketball
+        2 -> Sport.Tennis
+        3 -> Sport.Handball
+        4 -> Sport.Volleyball
+        else -> Sport.Football
     }
 }
+
 fun Date.convertDateToStringFormat(): String {
     val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH)
     return simpleDateFormat.format(this)
@@ -157,11 +160,11 @@ fun Context.getRandomBackground(): Pair<Drawable?, Int> {
     val indexes = IntArray(5)
     val idx = random.nextInt(indexes.size)
     val sports = listOf(
-        Sport.FOOTBALL.getSportDrawable(this),
-        Sport.BASKETBALL.getSportDrawable(this),
-        Sport.TENNIS.getSportDrawable(this),
-        Sport.HANDBALL.getSportDrawable(this),
-        Sport.VOLLEYBALL.getSportDrawable(this),
+        Sport.Football.getSportDrawable(this),
+        Sport.Basketball.getSportDrawable(this),
+        Sport.Tennis.getSportDrawable(this),
+        Sport.Handball.getSportDrawable(this),
+        Sport.Volleyball.getSportDrawable(this),
     )
     val colors = listOf(
         R.color.blue,
@@ -187,13 +190,15 @@ fun Context.showDisclaimer() {
     dialogBinding.webView.loadUrl("https://betting-tips-2-odds.firebaseapp.com/disclaimer.html")
     dialog.show()
 }
-fun Context.writeCopyright():String{
+
+fun Context.writeCopyright(): String {
     val dateFormatter = SimpleDateFormat("YYYY")
     val calendar = Calendar.getInstance()
     val date = dateFormatter.format(calendar.time)
     return this.getString(R.string.copyright, date)
 }
-fun Context.getVersionName():String?{
+
+fun Context.getVersionName(): String? {
     return try {
         val pInfo: PackageInfo =
             this.packageManager.getPackageInfo(this.getPackageName(), 0)
@@ -203,10 +208,12 @@ fun Context.getVersionName():String?{
         null
     }
 }
+
 fun Context.isDarkThemeOn(): Boolean {
     return resources.configuration.uiMode and
             Configuration.UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_YES
 }
+
 fun FragmentActivity.restartApp() {
     val i = this.packageManager
         .getLaunchIntentForPackage(baseContext.packageName)
@@ -215,10 +222,20 @@ fun FragmentActivity.restartApp() {
     startActivity(i)
     this.finishAffinity()
 }
- fun <T:Activity> Activity.startActivityWithClearTask(destination:Class<T>){
+
+fun <T : Activity> Activity.startActivityWithClearTask(destination: Class<T>) {
     val intent = Intent(this, destination)
     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
     this.startActivity(intent)
     this.finishAffinity()
+}
+
+fun String.toStatus(): TypeStatus {
+    return when (this) {
+        "UNKNOWN" -> TypeStatus.UNKNOWN
+        "LOST" -> TypeStatus.LOST
+        "WON" -> TypeStatus.WON
+        else -> throw Exception("Unknown type status")
+    }
 }
 

@@ -24,22 +24,17 @@
 
 package com.twoplaytech.drbetting.data
 
-import java.util.*
-
 /*
     Author: Damjan Miloshevski 
-    Created on 7.7.21 12:27
+    Created on 13.7.21 13:49
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-data class BettingTip2(
-    var leagueName: String,
-    var teamHome: Team?,
-    var teamAway: Team?,
-    var gameTime: Date,
-    var bettingType: String,
-    var status: Int,
-    var result: String,
-    var _id: String,
-    var sport: String
+data class User(
+    val _id: String,
+    var name: String,
+    var surname: String="",
+    var avatarUrl: String?="",
+    var email: String="",
+    var role:UserRole = UserRole.CUSTOMER
 )

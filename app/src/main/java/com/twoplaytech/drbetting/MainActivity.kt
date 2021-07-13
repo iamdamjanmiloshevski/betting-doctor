@@ -60,11 +60,11 @@ class MainActivity : BaseActivity() {
         navView?.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.navigation_football -> changeTheme(navView, Sport.FOOTBALL)
-                R.id.navigation_basketball -> changeTheme(navView, Sport.BASKETBALL)
-                R.id.navigation_tennis -> changeTheme(navView, Sport.TENNIS)
-                R.id.navigation_handball -> changeTheme(navView, Sport.HANDBALL)
-                R.id.navigation_volleyball -> changeTheme(navView, Sport.VOLLEYBALL)
+                R.id.navigation_football -> changeTheme(navView, Sport.Football)
+                R.id.navigation_basketball -> changeTheme(navView, Sport.Basketball)
+                R.id.navigation_tennis -> changeTheme(navView, Sport.Tennis)
+                R.id.navigation_handball -> changeTheme(navView, Sport.Handball)
+                R.id.navigation_volleyball -> changeTheme(navView, Sport.Volleyball)
             }
         }
     }

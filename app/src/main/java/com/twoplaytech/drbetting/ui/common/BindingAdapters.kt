@@ -32,7 +32,10 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.common.ISettingsItem
-import com.twoplaytech.drbetting.data.*
+import com.twoplaytech.drbetting.data.BettingTip
+import com.twoplaytech.drbetting.data.Sport
+import com.twoplaytech.drbetting.data.Team
+import com.twoplaytech.drbetting.data.TypeStatus
 import com.twoplaytech.drbetting.glide.GlideApp
 import com.twoplaytech.drbetting.glide.SvgSoftwareLayerSetter
 import com.twoplaytech.drbetting.util.getSportPlaceHolder
@@ -48,12 +51,6 @@ fun setGameName(view: AppCompatTextView, bettingTip: BettingTip) {
     view.text = game
 }
 
-@BindingAdapter("game2")
-fun setGameName2(view: AppCompatTextView, bettingTip: BettingTip2) {
-    val game = "${bettingTip.teamHome?.name} - ${bettingTip.teamAway?.name}"
-    view.text = game
-}
-
 @BindingAdapter("result")
 fun setResult(view: AppCompatImageView, status: TypeStatus) {
     when (status) {
@@ -63,44 +60,17 @@ fun setResult(view: AppCompatImageView, status: TypeStatus) {
     }
 }
 
-@BindingAdapter("result2")
-fun setResult2(view: AppCompatImageView, status: Int) {
-    when (status) {
-        0 -> view.setImageResource(R.drawable.tip_unknown)
-        1 -> view.setImageResource(R.drawable.tip_won)
-        2 -> view.setImageResource(R.drawable.tip_lost)
-    }
-}
+@BindingAdapter("team", "sport")
+fun loadTeamLogo(view: AppCompatImageView, team: Team, sport: Sport) {
 
-@BindingAdapter("team","sport")
-fun loadTeamLogo(view:AppCompatImageView,team:Team,sport: Sport){
-    if(team.logo.endsWith(".svg")){
-        val requestBuilder = GlideApp.with(view.context)
-            .`as`(PictureDrawable::class.java)
-            .listener(SvgSoftwareLayerSetter())
-            requestBuilder.load(team.logo)
-            .error(sport.getSportPlaceHolder())
-            .into(view)
-    }else{
-        GlideApp.with(view.context)
-            .load(team.logo)
-            .fitCenter()
-            .error(sport.getSportPlaceHolder())
-            .placeholder(R.drawable.progress_animation)
-            .into(view)
-    }
-}
-
-@BindingAdapter("team2","sport2")
-fun loadTeamLogo2(view:AppCompatImageView,team:Team,sport: String){
-    if(team.logo.endsWith(".svg")){
+    if (team.logo.endsWith(".svg")) {
         val requestBuilder = GlideApp.with(view.context)
             .`as`(PictureDrawable::class.java)
             .listener(SvgSoftwareLayerSetter())
         requestBuilder.load(team.logo)
             .error(sport.getSportPlaceHolder())
             .into(view)
-    }else{
+    } else {
         GlideApp.with(view.context)
             .load(team.logo)
             .fitCenter()
@@ -113,16 +83,17 @@ fun loadTeamLogo2(view:AppCompatImageView,team:Team,sport: String){
 @BindingAdapter("sportIcon")
 fun getSportIcon(view: AppCompatImageView, tipSport: Sport) {
     when (tipSport) {
-        Sport.FOOTBALL -> view.setImageResource(R.drawable.soccer_ball)
-        Sport.BASKETBALL -> view.setImageResource(R.drawable.basketball_ball)
-        Sport.TENNIS -> view.setImageResource(R.drawable.tennis_ball)
-        Sport.HANDBALL -> view.setImageResource(R.drawable.handball_ball)
-        Sport.VOLLEYBALL -> view.setImageResource(R.drawable.volleyball_ball)
+        Sport.Football -> view.setImageResource(R.drawable.soccer_ball)
+        Sport.Basketball -> view.setImageResource(R.drawable.basketball_ball)
+        Sport.Tennis -> view.setImageResource(R.drawable.tennis_ball)
+        Sport.Handball -> view.setImageResource(R.drawable.handball_ball)
+        Sport.Volleyball -> view.setImageResource(R.drawable.volleyball_ball)
 
     }
 }
+
 @BindingAdapter("itemIcon")
-fun loadItemIcon(view:ImageView,item:ISettingsItem){
+fun loadItemIcon(view: ImageView, item: ISettingsItem) {
     Glide.with(view)
         .load(item.icon)
         .fitCenter()
