@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.ui.login
+package com.twoplaytech.drbetting.admin.ui.login
 
 import android.os.Bundle
 import android.view.View
@@ -31,10 +31,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
 import com.twoplaytech.drbetting.R
+import com.twoplaytech.drbetting.admin.ui.login.LoginFragment.Companion.KEY_BACKGROUND_RESOURCE
 import com.twoplaytech.drbetting.admin.util.getRandomBackground
 import com.twoplaytech.drbetting.databinding.ActivityLoginBinding
 import com.twoplaytech.drbetting.ui.common.BaseActivity
-import com.twoplaytech.drbetting.ui.login.LoginFragment.Companion.KEY_BACKGROUND_RESOURCE
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

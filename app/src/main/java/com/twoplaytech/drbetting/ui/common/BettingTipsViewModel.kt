@@ -55,6 +55,7 @@ class BettingTipsViewModel @Inject constructor(
     private val bettingTipsObserver = MutableLiveData<Resource<List<BettingTip>>>()
 
 
+
     fun validate(validate: Boolean) {
         fieldValidatorObserver.value = validate
     }

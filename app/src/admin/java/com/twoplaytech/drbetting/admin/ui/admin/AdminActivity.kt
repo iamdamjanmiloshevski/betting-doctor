@@ -38,6 +38,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.twoplaytech.drbetting.R
+import com.twoplaytech.drbetting.admin.ui.login.LoginViewModel
 import com.twoplaytech.drbetting.admin.util.Constants
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_ARGS
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_TIP
@@ -51,7 +52,6 @@ import com.twoplaytech.drbetting.ui.adapters.BettingTipsRecyclerViewAdapter
 import com.twoplaytech.drbetting.ui.common.BaseActivity
 import com.twoplaytech.drbetting.ui.common.BettingTipsViewModel
 import com.twoplaytech.drbetting.ui.common.OnBettingTipClickedListener
-import com.twoplaytech.drbetting.ui.login.LoginViewModel
 import com.twoplaytech.drbetting.util.getSportColor
 import com.twoplaytech.drbetting.util.getSportFromIndex
 

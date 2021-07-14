@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.ui.login
+package com.twoplaytech.drbetting.admin.ui.login
 
 import android.content.Intent
 import android.os.Bundle

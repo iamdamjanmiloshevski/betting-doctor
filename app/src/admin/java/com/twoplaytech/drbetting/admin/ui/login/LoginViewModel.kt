@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.ui.login
+package com.twoplaytech.drbetting.admin.ui.login
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData

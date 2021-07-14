@@ -68,6 +68,7 @@
                         android:layout_height="60dp"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="5dp"
+                        app:sportIcon="@{bettingType.sport}"
                         android:src="@drawable/soccer_ball"/>
 
                     <androidx.appcompat.widget.AppCompatTextView

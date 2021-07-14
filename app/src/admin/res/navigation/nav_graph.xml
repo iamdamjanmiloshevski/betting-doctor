@@ -30,7 +30,7 @@
 
     <fragment
         android:id="@+id/LoginFragment"
-        android:name="com.twoplaytech.drbetting.ui.login.LoginFragment"
+        android:name="com.twoplaytech.drbetting.admin.ui.login.LoginFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_login">
 
