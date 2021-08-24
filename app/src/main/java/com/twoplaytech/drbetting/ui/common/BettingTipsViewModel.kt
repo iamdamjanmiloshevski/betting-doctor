@@ -26,16 +26,14 @@ package com.twoplaytech.drbetting.ui.common
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.twoplaytech.drbetting.data.BettingTip
-import com.twoplaytech.drbetting.data.Resource
-import com.twoplaytech.drbetting.data.Sport
-import com.twoplaytech.drbetting.repository.BettingTipsRepository
+import com.twoplaytech.drbetting.data.entities.BettingTip
+import com.twoplaytech.drbetting.domain.common.Resource
+import com.twoplaytech.drbetting.data.entities.Sport
+import com.twoplaytech.drbetting.domain.usecases.DeleteBettingTipUseCase
+import com.twoplaytech.drbetting.domain.usecases.GetBettingTipsUseCase
+import com.twoplaytech.drbetting.domain.usecases.InsertBettingTipUseCase
+import com.twoplaytech.drbetting.domain.usecases.UpdateBettingTipUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 /*
@@ -45,32 +43,29 @@ import javax.inject.Inject
 */
 @HiltViewModel
 class BettingTipsViewModel @Inject constructor(
-    private val bettingTipsRepository: BettingTipsRepository
+    private val getBettingTipsUseCase: GetBettingTipsUseCase,
+    private val insertBettingTipUseCase: InsertBettingTipUseCase,
+    private val updateBettingTipUseCase: UpdateBettingTipUseCase,
+    private val deleteBettingTipUseCase: DeleteBettingTipUseCase
 ) :
     ViewModel() {
     private val olderTipsObserver = MutableLiveData<Resource<List<BettingTip>>>()
     private val fieldValidatorObserver = MutableLiveData<Boolean>()
     private val saveObserver = MutableLiveData<Resource<Boolean>>()
     private val deleteObserver = MutableLiveData<Resource<Boolean>>()
-    private val bettingTipsObserver = MutableLiveData<Resource<List<BettingTip>>>()
-
+    private val bettingTipsObserver = MutableLiveData<Resource<Any>>()
 
 
     fun validate(validate: Boolean) {
         fieldValidatorObserver.value = validate
     }
 
-    fun getBettingTips(sport: Sport, upcoming:Boolean) {
-        viewModelScope.launch {
-            bettingTipsRepository.getBettingTipsBySport(sport,upcoming)
-                .catch { exception ->
-                    Timber.e(exception)
-                    bettingTipsObserver.value = Resource.error(exception.message, null)
-                }
-                .collect { items ->
-                    bettingTipsObserver.value = Resource.success(null, items)
-                }
-        }
+    fun getBettingTips(sport: Sport, upcoming: Boolean) {
+        getBettingTipsUseCase.getBettingTipsBySport(sport, upcoming, onSuccess = { bettingTips ->
+            bettingTipsObserver.value = Resource.success(null, bettingTips)
+        }, onError = { throwable ->
+            bettingTipsObserver.value = Resource.error(null, throwable.localizedMessage)
+        })
     }
 
     fun observeValidation() = fieldValidatorObserver

@@ -27,7 +27,7 @@ package com.twoplaytech.drbetting.ui.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.twoplaytech.drbetting.data.BettingTip
+import com.twoplaytech.drbetting.data.entities.BettingTip
 import com.twoplaytech.drbetting.databinding.ItemTipBinding
 import com.twoplaytech.drbetting.ui.common.OnBettingTipClickedListener
 import com.twoplaytech.drbetting.ui.viewholders.TipViewHolder

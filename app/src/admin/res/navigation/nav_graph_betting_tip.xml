@@ -34,7 +34,7 @@
         tools:layout="@layout/fragment_betting_tip">
         <argument
             android:name="betting_tip"
-            app:argType="com.twoplaytech.drbetting.data.BettingTip"
+            app:argType="com.twoplaytech.drbetting.data.entities.BettingTip"
             android:defaultValue="@null"
             app:nullable="true" />
     </fragment>

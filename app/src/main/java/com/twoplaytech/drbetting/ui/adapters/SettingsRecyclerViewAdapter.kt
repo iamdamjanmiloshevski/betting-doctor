@@ -28,8 +28,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.twoplaytech.drbetting.R
-import com.twoplaytech.drbetting.common.ISettingsItem
-import com.twoplaytech.drbetting.data.SettingsItem
+import com.twoplaytech.drbetting.ui.ISettingsItem
+import com.twoplaytech.drbetting.ui.SettingsItem
 import com.twoplaytech.drbetting.databinding.ItemSettingsBinding
 import com.twoplaytech.drbetting.ui.settings.SettingsActivity
 import com.twoplaytech.drbetting.ui.viewholders.SettingsViewHolder

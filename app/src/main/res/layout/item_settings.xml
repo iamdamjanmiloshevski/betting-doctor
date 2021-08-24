@@ -28,7 +28,7 @@
 
         <variable
             name="item"
-            type="com.twoplaytech.drbetting.common.ISettingsItem" />
+            type="com.twoplaytech.drbetting.ui.ISettingsItem" />
     </data>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

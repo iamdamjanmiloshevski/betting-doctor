@@ -30,7 +30,7 @@ import androidx.annotation.MenuRes
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import com.twoplaytech.drbetting.data.Sport
+import com.twoplaytech.drbetting.data.entities.Sport
 
 /*
     Author: Damjan Miloshevski 

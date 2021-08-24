@@ -32,8 +32,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.twoplaytech.drbetting.data.BettingTip
-import com.twoplaytech.drbetting.data.Status
+import com.twoplaytech.drbetting.data.entities.BettingTip
+import com.twoplaytech.drbetting.data.entities.Status
 import com.twoplaytech.drbetting.databinding.FragmentChildBinding
 import com.twoplaytech.drbetting.ui.adapters.BettingTipsRecyclerViewAdapter
 

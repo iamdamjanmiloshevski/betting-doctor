@@ -24,12 +24,12 @@
 
 package com.twoplaytech.drbetting.ui.adapters
 
-import com.twoplaytech.drbetting.data.SettingsItem
+import com.twoplaytech.drbetting.ui.SettingsItem
 
 /*
     Author: Damjan Miloshevski 
     Created on 3/23/21 11:55 AM
 */
 interface OnSettingsItemClickListener {
-    fun onSettingsItemClick(item:SettingsItem)
+    fun onSettingsItemClick(item: SettingsItem)
 }

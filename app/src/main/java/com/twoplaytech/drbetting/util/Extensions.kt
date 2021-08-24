@@ -40,8 +40,8 @@ import androidx.fragment.app.FragmentActivity
 import com.google.firebase.firestore.Query
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.common.FirestoreQueryLiveData
-import com.twoplaytech.drbetting.data.Sport
-import com.twoplaytech.drbetting.data.TypeStatus
+import com.twoplaytech.drbetting.data.entities.Sport
+import com.twoplaytech.drbetting.data.entities.TypeStatus
 import com.twoplaytech.drbetting.databinding.DialogDisclaimerBinding
 import java.text.SimpleDateFormat
 import java.util.*

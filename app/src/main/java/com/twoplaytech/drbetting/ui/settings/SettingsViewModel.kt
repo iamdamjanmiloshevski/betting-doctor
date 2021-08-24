@@ -26,7 +26,7 @@ package com.twoplaytech.drbetting.ui.settings
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.twoplaytech.drbetting.data.Resource
+import com.twoplaytech.drbetting.domain.common.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

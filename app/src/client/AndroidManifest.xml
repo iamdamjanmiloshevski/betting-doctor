@@ -44,14 +44,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.twoplaytech.drbetting.AppInfoActivity"
+            android:name="com.twoplaytech.drbetting.ui.AppInfoActivity"
             android:theme="@style/Theme.DrBetting.NoActionBar" />
         <activity
             android:name="com.twoplaytech.drbetting.ui.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:theme="@style/Theme.DrBetting.NoActionBar" />
         <activity
-            android:name="com.twoplaytech.drbetting.MainActivity"
+            android:name="com.twoplaytech.drbetting.ui.MainActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name"/>
     </application>

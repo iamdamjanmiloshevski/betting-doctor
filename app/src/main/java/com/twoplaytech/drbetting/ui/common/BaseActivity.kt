@@ -33,7 +33,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.twoplaytech.drbetting.data.Sport
+import com.twoplaytech.drbetting.data.entities.Sport
 import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
 import com.twoplaytech.drbetting.util.*
 import dagger.hilt.android.AndroidEntryPoint
