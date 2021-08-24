@@ -61,7 +61,7 @@ class RemoteDataSourceImpl @Inject constructor(private val api: BettingDoctorAPI
     }
 
     override suspend fun insertBettingTip(bettingTip: BettingTip): Flow<BettingTip> {
-        return flow { emit(api.insertBettingTip(bettingTip)) }
+        return flow { emit(api.insertBettingTip(bettingTip)) }.flowOn(coroutineContext)
     }
 
     override suspend fun updateBettingTip(id: String): Flow<BettingTip> {
@@ -73,7 +73,7 @@ class RemoteDataSourceImpl @Inject constructor(private val api: BettingDoctorAPI
     }
 
     override suspend fun register(userInput: UserInput): Flow<Message> {
-        return flow { emit(api.register(userInput)) }.flowOn(Dispatchers.IO)
+        return flow { emit(api.register(userInput)) }.flowOn(coroutineContext)
     }
 
     override suspend fun signIn(userInput: UserInput): Flow<AccessToken> {
