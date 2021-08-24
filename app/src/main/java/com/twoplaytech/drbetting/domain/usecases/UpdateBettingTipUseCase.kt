@@ -33,8 +33,9 @@ import com.twoplaytech.drbetting.data.entities.BettingTip
     © 2Play Tech  2021. All rights reserved
 */
 interface UpdateBettingTipUseCase {
-    fun insertBettingTip(
+    fun updateBettingTip(
         id: String,
+        bettingTip: BettingTip,
         onSuccess: (BettingTip) -> Unit,
         onError: (Throwable) -> Unit
     )

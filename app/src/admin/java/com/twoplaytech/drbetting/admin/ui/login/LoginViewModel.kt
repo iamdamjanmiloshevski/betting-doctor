@@ -27,19 +27,15 @@ package com.twoplaytech.drbetting.admin.ui.login
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.twoplaytech.drbetting.R
-import com.twoplaytech.drbetting.data.AccessToken
-import com.twoplaytech.drbetting.data.Resource
-import com.twoplaytech.drbetting.data.UserInput
+import com.twoplaytech.drbetting.data.entities.AccessToken
+import com.twoplaytech.drbetting.data.entities.UserInput
+import com.twoplaytech.drbetting.domain.common.Resource
+import com.twoplaytech.drbetting.domain.usecases.SignInUseCase
 import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_LOGGED_IN
 import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_USER_CREDENTIALS
 import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
-import com.twoplaytech.drbetting.repository.BettingTipsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import org.json.JSONObject
 import javax.inject.Inject
 
@@ -49,7 +45,7 @@ import javax.inject.Inject
 */
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val bettingTipsRepository: BettingTipsRepository,
+    private val signInUseCase: SignInUseCase,
     private val preferencesManager: SharedPreferencesManager
 ) :
     ViewModel() {
@@ -61,26 +57,12 @@ class LoginViewModel @Inject constructor(
     fun login(context: Context, email: String, password: String) {
         loginObserver.value = Resource.loading(context.getString(R.string.signing_in_msg), null)
         val userInput = UserInput(email = email, password = password)
-        viewModelScope.launch {
-            bettingTipsRepository.signIn(userInput).catch { throwable ->
-                loginObserver.value = Resource.error(throwable.message, null)
-            }.collect { accessToken ->
-                //todo save token in preferences
-                loginObserver.value = Resource.success(null, accessToken)
-            }
-        }
-    }
-
-    fun register(userInput: UserInput) {
-        viewModelScope.launch {
-            bettingTipsRepository.register(userInput)
-                .catch {
-
-                }
-                .collect {
-
-                }
-        }
+        signInUseCase.signIn(userInput,onSuccess = {accessToken ->
+            //todo save token in preferences
+            loginObserver.value = Resource.success(null, accessToken)
+        },onError = {cause->
+            loginObserver.value = Resource.error(cause.message, null)
+        })
     }
 
     fun logout() {
@@ -89,12 +71,6 @@ class LoginViewModel @Inject constructor(
 
     fun enableLogin(enable: Boolean) {
         loginEnabledObserver.value = enable
-    }
-
-    fun checkIfUserIsAlreadySignedIn() {
-//        val user = repository.getUser()
-//        val shouldKeepUserSignedIn = preferencesManager.getBoolean(KEY_LOGGED_IN)
-//        alreadyLoggedIn.value = user != null && shouldKeepUserSignedIn
     }
 
     fun retrieveCredentials() {

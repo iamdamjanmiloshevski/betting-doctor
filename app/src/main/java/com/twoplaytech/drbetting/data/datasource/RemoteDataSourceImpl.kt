@@ -64,8 +64,8 @@ class RemoteDataSourceImpl @Inject constructor(private val api: BettingDoctorAPI
         return flow { emit(api.insertBettingTip(bettingTip)) }.flowOn(coroutineContext)
     }
 
-    override suspend fun updateBettingTip(id: String): Flow<BettingTip> {
-        return flow { emit(api.updateBettingTip(id)) }.flowOn(coroutineContext)
+    override suspend fun updateBettingTip(id: String, bettingTip: BettingTip): Flow<BettingTip> {
+        return flow { emit(api.updateBettingTip(id,bettingTip)) }.flowOn(coroutineContext)
     }
 
     override suspend fun deleteBettingTip(id: String): Flow<Message> {

@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.ui
+package com.twoplaytech.drbetting.ui.settings
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

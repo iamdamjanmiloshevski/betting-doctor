@@ -31,7 +31,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.twoplaytech.drbetting.R
-import com.twoplaytech.drbetting.ui.ISettingsItem
+import com.twoplaytech.drbetting.ui.settings.ISettingsItem
 import com.twoplaytech.drbetting.data.entities.BettingTip
 import com.twoplaytech.drbetting.data.entities.Sport
 import com.twoplaytech.drbetting.data.entities.Team

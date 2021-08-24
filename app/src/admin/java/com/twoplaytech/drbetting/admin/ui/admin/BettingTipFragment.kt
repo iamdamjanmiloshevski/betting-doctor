@@ -30,7 +30,10 @@ import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.common.OnDropdownItemSelectedListener
 import com.twoplaytech.drbetting.admin.util.Constants
 import com.twoplaytech.drbetting.admin.views.ChooserView
-import com.twoplaytech.drbetting.data.*
+import com.twoplaytech.drbetting.data.entities.BettingTip
+import com.twoplaytech.drbetting.data.entities.Sport
+import com.twoplaytech.drbetting.data.entities.Team
+import com.twoplaytech.drbetting.data.entities.TypeStatus
 import com.twoplaytech.drbetting.databinding.FragmentBettingTipBinding
 import com.twoplaytech.drbetting.ui.common.BaseFragment
 import java.util.*
@@ -91,18 +94,6 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
 //                    bettingTip?.let {
 //                        viewModel.saveBettingTip(getTipFromInput(it.id), true)
 //                    } ?: viewModel.saveBettingTip(getTipFromInput())
-                }
-            }
-        })
-        viewModel.observeForSavedTip().observe(viewLifecycleOwner, { resource ->
-            when (resource.status) {
-                Status.SUCCESS -> {
-                    activity?.finish()
-                }
-                Status.ERROR -> {
-                }
-                Status.LOADING -> {
-
                 }
             }
         })

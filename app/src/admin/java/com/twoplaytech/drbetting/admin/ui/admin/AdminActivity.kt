@@ -45,7 +45,9 @@ import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_TIP
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_TYPE
 import com.twoplaytech.drbetting.admin.util.Constants.VIEW_TYPE_EDIT
 import com.twoplaytech.drbetting.data.*
-import com.twoplaytech.drbetting.data.Status.*
+import com.twoplaytech.drbetting.data.entities.BettingTip
+import com.twoplaytech.drbetting.data.entities.Sport
+import com.twoplaytech.drbetting.data.entities.Status
 import com.twoplaytech.drbetting.databinding.ActivityAdminBinding
 import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_VIEW_TYPE
 import com.twoplaytech.drbetting.ui.adapters.BettingTipsRecyclerViewAdapter
@@ -109,21 +111,21 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         adapter.clear()
         viewModel.observeTips().observe(this, { resource ->
             when (resource.status) {
-                SUCCESS -> {
+                Status.SUCCESS -> {
                     val items = resource.data as List<BettingTip>
                     adapter.addData(items)
                 }
-                ERROR -> {
+                Status.ERROR -> {
                     Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
                 }
-                LOADING -> {
+                Status.LOADING -> {
                 }
             }
         })
-        viewModel.observeForSavedTip().observe(this,
+        viewModel.observeForInsertedBettingTip().observe(this,
             { resource ->
                 when (resource.status) {
-                    SUCCESS -> {
+                    Status.SUCCESS -> {
                         changeData(sportSelected.getSportFromIndex(), typeSelected)
 //                    val intent = Intent(activity, AdminActivity::class.java)
 //                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -131,9 +133,9 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
 //                    activity?.startActivity(intent)
 //                    activity?.finishAffinity()
                     }
-                    ERROR -> {
+                    Status.ERROR -> {
                     }
-                    LOADING -> {
+                    Status.LOADING -> {
 
                     }
                 }
@@ -141,12 +143,12 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         viewModel.observeDeletedTip().observe(this,
             { resource ->
                 when (resource.status) {
-                    SUCCESS -> {
+                    Status.SUCCESS -> {
                         changeData(sportSelected.getSportFromIndex(), typeSelected)
                     }
-                    ERROR -> {
+                    Status.ERROR -> {
                     }
-                    LOADING -> {
+                    Status.LOADING -> {
                     }
                 }
             })

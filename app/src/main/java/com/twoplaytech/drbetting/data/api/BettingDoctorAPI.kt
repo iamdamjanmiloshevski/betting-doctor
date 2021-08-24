@@ -47,7 +47,10 @@ interface BettingDoctorAPI {
     suspend fun getOlderBettingTipsBySport(@Path("sport") sport: Sport): List<BettingTip>
 
     @PUT("betting-tips/{id}")
-    suspend fun updateBettingTip(@Path("id") tipId: String): BettingTip
+    suspend fun updateBettingTip(
+        @Path("id") tipId: String,
+        @Body bettingTip: BettingTip
+    ): BettingTip
 
     @POST("betting-tips")
     suspend fun insertBettingTip(@Body bettingTip: BettingTip): BettingTip

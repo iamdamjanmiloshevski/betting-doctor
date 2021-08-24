@@ -36,13 +36,16 @@ import javax.inject.Inject
 */
 class UpdateBettingTipUseCaseImpl @Inject constructor(repository: Repository) : UseCase(repository),
     UpdateBettingTipUseCase {
-    override fun insertBettingTip(
+
+    override fun updateBettingTip(
         id: String,
+        bettingTip: BettingTip,
         onSuccess: (BettingTip) -> Unit,
         onError: (Throwable) -> Unit
     ) {
         repository.updateBettingTip(
             id,
+            bettingTip,
             onSuccess = { bettingTip -> onSuccess.invoke(bettingTip) },
             onError = { onError.invoke(it) })
     }

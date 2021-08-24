@@ -102,11 +102,12 @@ class RepositoryImpl @Inject constructor(private val remoteDataSource: RemoteDat
 
     override fun updateBettingTip(
         id: String,
+        bettingTip: BettingTip,
         onSuccess: (BettingTip) -> Unit,
         onError: (Throwable) -> Unit
     ) {
         launch(coroutineContext) {
-            remoteDataSource.updateBettingTip(id).catch { cause ->
+            remoteDataSource.updateBettingTip(id,bettingTip).catch { cause ->
                 sendErrorMessage(onError, cause)
             }.collect { bettingTip: BettingTip ->
                 onSuccess.invoke(bettingTip)

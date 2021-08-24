@@ -27,8 +27,9 @@ package com.twoplaytech.drbetting.ui.common
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.twoplaytech.drbetting.data.entities.BettingTip
-import com.twoplaytech.drbetting.domain.common.Resource
+import com.twoplaytech.drbetting.data.entities.Message
 import com.twoplaytech.drbetting.data.entities.Sport
+import com.twoplaytech.drbetting.domain.common.Resource
 import com.twoplaytech.drbetting.domain.usecases.DeleteBettingTipUseCase
 import com.twoplaytech.drbetting.domain.usecases.GetBettingTipsUseCase
 import com.twoplaytech.drbetting.domain.usecases.InsertBettingTipUseCase
@@ -49,10 +50,10 @@ class BettingTipsViewModel @Inject constructor(
     private val deleteBettingTipUseCase: DeleteBettingTipUseCase
 ) :
     ViewModel() {
-    private val olderTipsObserver = MutableLiveData<Resource<List<BettingTip>>>()
     private val fieldValidatorObserver = MutableLiveData<Boolean>()
-    private val saveObserver = MutableLiveData<Resource<Boolean>>()
-    private val deleteObserver = MutableLiveData<Resource<Boolean>>()
+    private val insertBettingTipObserver = MutableLiveData<Resource<BettingTip>>()
+    private val deleteBettingTipObserver = MutableLiveData<Resource<Message>>()
+    private val updateBettingTipObserver = MutableLiveData<Resource<BettingTip>>()
     private val bettingTipsObserver = MutableLiveData<Resource<Any>>()
 
 
@@ -68,13 +69,37 @@ class BettingTipsViewModel @Inject constructor(
         })
     }
 
+    fun insertBettingTip(bettingTip: BettingTip) {
+        insertBettingTipUseCase.insertBettingTip(bettingTip, onSuccess = { updatedBettingTip ->
+            insertBettingTipObserver.value = Resource.success(null, updatedBettingTip)
+        }, onError = { cause ->
+            insertBettingTipObserver.value = Resource.error(cause.localizedMessage, null)
+        })
+    }
+
+    fun deleteBettingTip(id:String){
+        deleteBettingTipUseCase.deleteBettingTip(id,onSuccess = {message ->
+            deleteBettingTipObserver.value = Resource.success(message.message,message)
+        },onError = {cause->
+            deleteBettingTipObserver.value = Resource.error(cause.message,null)
+        })
+    }
+
+    fun updateBettingTip(bettingTip: BettingTip){
+        updateBettingTipUseCase.updateBettingTip(bettingTip._id,bettingTip,onSuccess = { bettingTip ->
+            updateBettingTipObserver.value = Resource.success(null,bettingTip)
+        },onError = { cause->
+            updateBettingTipObserver.value = Resource.error(cause.message,null)
+        })
+    }
+
     fun observeValidation() = fieldValidatorObserver
 
-    fun observeForSavedTip() = saveObserver
+    fun observeForInsertedBettingTip() = insertBettingTipObserver
 
-    fun observeDeletedTip() = deleteObserver
+    fun observeDeletedTip() = deleteBettingTipObserver
 
-    fun observeOnOlderTips() = olderTipsObserver
+    fun observeOnUpdatedTip()= updateBettingTipObserver
 
     fun observeTips() = bettingTipsObserver
 }

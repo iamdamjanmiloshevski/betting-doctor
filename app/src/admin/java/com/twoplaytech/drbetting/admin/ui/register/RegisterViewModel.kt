@@ -22,13 +22,33 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.ui
+package com.twoplaytech.drbetting.admin.ui.register
+
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.twoplaytech.drbetting.data.entities.Message
+import com.twoplaytech.drbetting.data.entities.UserInput
+import com.twoplaytech.drbetting.domain.common.Resource
+import com.twoplaytech.drbetting.domain.usecases.RegisterUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 /*
     Author: Damjan Miloshevski 
-    Created on 3/20/21 8:24 PM
+    Created on 24.8.21 12:33
+    Project: Dr.Betting
+    © 2Play Tech  2021. All rights reserved
 */
-interface ISettingsItem {
-    val name: Int
-    val icon: Int
+@HiltViewModel
+class RegisterViewModel @Inject constructor(private val registerUseCase: RegisterUseCase) :
+    ViewModel() {
+    private val registerObserver = MutableLiveData<Resource<Message>>()
+
+    fun register(userInput: UserInput) {
+        registerUseCase.register(userInput, onSuccess = { message ->
+            registerObserver.value = Resource.success(message.message, message)
+        }, onError = { cause ->
+            registerObserver.value = Resource.error(cause.message, null)
+        })
+    }
 }

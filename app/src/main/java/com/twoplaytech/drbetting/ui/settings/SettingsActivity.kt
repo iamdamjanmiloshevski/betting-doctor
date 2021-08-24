@@ -46,7 +46,6 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.twoplaytech.drbetting.ui.AppInfoActivity
 import com.twoplaytech.drbetting.R
-import com.twoplaytech.drbetting.ui.SettingsItem
 import com.twoplaytech.drbetting.data.entities.Status
 import com.twoplaytech.drbetting.databinding.ActivitySettingsBinding
 import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_DARK_MODE

@@ -22,14 +22,13 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.ui.adapters
-
-import com.twoplaytech.drbetting.ui.settings.SettingsItem
+package com.twoplaytech.drbetting.ui.settings
 
 /*
     Author: Damjan Miloshevski 
-    Created on 3/23/21 11:55 AM
+    Created on 3/20/21 8:24 PM
 */
-interface OnSettingsItemClickListener {
-    fun onSettingsItemClick(item: SettingsItem)
+interface ISettingsItem {
+    val name: Int
+    val icon: Int
 }
