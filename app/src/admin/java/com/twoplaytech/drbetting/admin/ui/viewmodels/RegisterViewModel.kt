@@ -22,26 +22,33 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.di
+package com.twoplaytech.drbetting.admin.ui.viewmodels
 
-import com.twoplaytech.drbetting.domain.repository.Repository
-import com.twoplaytech.drbetting.domain.repository.RepositoryImpl
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.twoplaytech.drbetting.data.entities.Message
+import com.twoplaytech.drbetting.data.entities.UserInput
+import com.twoplaytech.drbetting.domain.common.Resource
+import com.twoplaytech.drbetting.domain.usecases.RegisterUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 /*
     Author: Damjan Miloshevski 
-    Created on 24.8.21 10:55
+    Created on 24.8.21 12:33
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-@Module
-@InstallIn(ViewModelComponent::class)
-interface RepositoryModule {
-    @Binds
-    fun bindRepository(
-        repositoryImpl: RepositoryImpl
-    ): Repository
+@HiltViewModel
+class RegisterViewModel @Inject constructor(private val registerUseCase: RegisterUseCase) :
+    ViewModel() {
+    private val registerObserver = MutableLiveData<Resource<Message>>()
+
+    fun register(userInput: UserInput) {
+        registerUseCase.register(userInput, onSuccess = { message ->
+            registerObserver.postValue(Resource.success(message.message, message))
+        }, onError = { cause ->
+            registerObserver.postValue(Resource.error(cause.message, null))
+        })
+    }
 }

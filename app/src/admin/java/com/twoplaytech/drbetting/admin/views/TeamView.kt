@@ -32,9 +32,9 @@ import androidx.annotation.StringRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.common.ICustomView
-import com.twoplaytech.drbetting.common.TextWatcher
-import com.twoplaytech.drbetting.data.Team
+import com.twoplaytech.drbetting.data.entities.Team
 import com.twoplaytech.drbetting.databinding.ItemTeamBinding
+import com.twoplaytech.drbetting.ui.common.TextWatcher
 
 /*
     Author: Damjan Miloshevski 
@@ -97,7 +97,7 @@ class TeamView(context: Context, attributeSet: AttributeSet) :
         }
     }
 
-    fun populate(team:Team?){
+    fun populate(team: Team?){
         team?.let {
             binding.etTeamName.setText(it.name)
             binding.etTeamLogo.setText(it.logo)

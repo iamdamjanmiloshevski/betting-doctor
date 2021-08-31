@@ -22,26 +22,24 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.di
+package com.twoplaytech.drbetting.util
 
-import com.twoplaytech.drbetting.domain.repository.Repository
-import com.twoplaytech.drbetting.domain.repository.RepositoryImpl
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
+import com.google.gson.Gson
 
 /*
     Author: Damjan Miloshevski 
-    Created on 24.8.21 10:55
+    Created on 31.8.21 12:44
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-@Module
-@InstallIn(ViewModelComponent::class)
-interface RepositoryModule {
-    @Binds
-    fun bindRepository(
-        repositoryImpl: RepositoryImpl
-    ): Repository
+object GsonUtil {
+    val gson = Gson()
+
+    fun <G> toJson(model:G):String{
+        return gson.toJson(model)
+    }
+
+    inline fun <reified G> fromJson(json:String):G{
+        return gson.fromJson(json,G::class.java)
+    }
 }

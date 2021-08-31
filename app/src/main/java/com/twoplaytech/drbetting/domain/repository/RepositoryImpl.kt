@@ -26,6 +26,9 @@ package com.twoplaytech.drbetting.domain.repository
 
 import com.twoplaytech.drbetting.data.datasource.RemoteDataSource
 import com.twoplaytech.drbetting.data.entities.*
+import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_ACCESS_TOKEN
+import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
+import com.twoplaytech.drbetting.util.GsonUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
@@ -41,7 +44,10 @@ import kotlin.coroutines.CoroutineContext
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-class RepositoryImpl @Inject constructor(private val remoteDataSource: RemoteDataSource) :
+class RepositoryImpl @Inject constructor(
+    private val sharedPreferencesManager: SharedPreferencesManager,
+    private val remoteDataSource: RemoteDataSource
+) :
     Repository,
     CoroutineScope {
 
@@ -107,7 +113,7 @@ class RepositoryImpl @Inject constructor(private val remoteDataSource: RemoteDat
         onError: (Throwable) -> Unit
     ) {
         launch(coroutineContext) {
-            remoteDataSource.updateBettingTip(id,bettingTip).catch { cause ->
+            remoteDataSource.updateBettingTip(id, bettingTip).catch { cause ->
                 sendErrorMessage(onError, cause)
             }.collect { bettingTip: BettingTip ->
                 onSuccess.invoke(bettingTip)
@@ -151,6 +157,7 @@ class RepositoryImpl @Inject constructor(private val remoteDataSource: RemoteDat
             remoteDataSource.signIn(userInput).catch { throwable ->
                 sendErrorMessage(onError, throwable)
             }.collect { accessToken ->
+                sharedPreferencesManager.saveString(KEY_ACCESS_TOKEN,GsonUtil.toJson(accessToken))
                 onSuccess.invoke(accessToken)
             }
         }

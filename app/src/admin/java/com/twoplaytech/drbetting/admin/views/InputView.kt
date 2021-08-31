@@ -35,8 +35,8 @@ import com.afollestad.materialdialogs.datetime.dateTimePicker
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.common.ICustomView
 import com.twoplaytech.drbetting.admin.util.beautify
-import com.twoplaytech.drbetting.common.TextWatcher
 import com.twoplaytech.drbetting.databinding.ViewInputBinding
+import com.twoplaytech.drbetting.ui.common.TextWatcher
 import java.util.*
 
 /*

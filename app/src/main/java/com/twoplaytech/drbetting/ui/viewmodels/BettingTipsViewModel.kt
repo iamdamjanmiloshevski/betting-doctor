@@ -22,33 +22,42 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.ui.common
+package com.twoplaytech.drbetting.ui.viewmodels
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import androidx.annotation.MenuRes
-import androidx.annotation.StringRes
-import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.twoplaytech.drbetting.data.entities.Sport
-import com.twoplaytech.drbetting.ui.viewmodels.BettingTipsViewModel
+import com.twoplaytech.drbetting.domain.common.Resource
+import com.twoplaytech.drbetting.domain.usecases.GetBettingTipsUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 /*
     Author: Damjan Miloshevski 
-    Created on 3/10/21 11:17 AM
-*/
-interface IBaseView {
-    fun initBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    )
+    Created on 3/10/21 12:52 PM
 
-    fun initPager(screens: List<Fragment>) {}
-    val viewModel: BettingTipsViewModel
-    fun initUI() {}
-    fun setUpDataAdapter() {}
-    fun changeTheme(@StringRes titleStringRes: Int, sport: Sport) {}
-    fun setupToolbar(@StringRes titleRes: Int, sport: Sport) {}
-    fun setupMenu(toolbar: Toolbar,@MenuRes menuRes:Int){}
-    fun observeData(){}
+*/
+@HiltViewModel
+class BettingTipsViewModel @Inject constructor(
+    private val getBettingTipsUseCase: GetBettingTipsUseCase
+) :
+    ViewModel() {
+    private val fieldValidatorObserver = MutableLiveData<Boolean>()
+    private val bettingTipsObserver = MutableLiveData<Resource<Any>>()
+
+    fun validate(validate: Boolean) {
+        fieldValidatorObserver.value = validate
+    }
+
+    fun getBettingTips(sport: Sport, upcoming: Boolean) {
+        getBettingTipsUseCase.getBettingTipsBySport(sport, upcoming, onSuccess = { bettingTips ->
+            bettingTipsObserver.postValue(Resource.success(null, bettingTips))
+        }, onError = { throwable ->
+            bettingTipsObserver.postValue(Resource.error(null, throwable.localizedMessage))
+        })
+    }
+
+    fun observeValidation() = fieldValidatorObserver
+
+    fun observeTips() = bettingTipsObserver
 }

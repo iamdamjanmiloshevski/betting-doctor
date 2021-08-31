@@ -25,7 +25,7 @@
 package com.twoplaytech.drbetting.di
 
 import com.twoplaytech.drbetting.BuildConfig
-import com.twoplaytech.drbetting.network.ApiManager
+
 import com.twoplaytech.drbetting.data.api.BettingDoctorAPI
 import com.twoplaytech.drbetting.data.api.TokenAuthenticator
 import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
@@ -47,11 +47,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-
-    @Singleton
-    @Provides
-    fun provideApiManager(preferencesManager: SharedPreferencesManager) =
-        ApiManager.getInstance(preferencesManager)
 
     @Singleton
     @Provides

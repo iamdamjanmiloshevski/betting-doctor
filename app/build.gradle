@@ -17,15 +17,21 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode generateVersionCode(versionCodeNum)
         versionName generateVersionName()
-        buildConfigField("String", "BASE_URL", '"https://betting-doctor.herokuapp.com/api/v1/"')
+
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
+
+        debug{
+            buildConfigField("String", "BASE_URL", '"http://'+rootProject.ext.localhost_ip+'/api/v1/"')
+        }
+
         release {
             minifyEnabled true
             shrinkResources true
+            buildConfigField("String", "BASE_URL", '"https://betting-doctor.herokuapp.com/api/v1/"')
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

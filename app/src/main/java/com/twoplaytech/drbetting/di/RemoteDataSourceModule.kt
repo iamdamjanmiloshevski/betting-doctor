@@ -41,5 +41,7 @@ import dagger.hilt.android.components.ViewModelComponent
 @InstallIn(ViewModelComponent::class)
 interface RemoteDataSourceModule {
     @Binds
-    fun bindRemoteDataSource(remoteDataSourceImpl: RemoteDataSourceImpl): RemoteDataSource
+    fun bindRemoteDataSource(
+        remoteDataSourceImpl: RemoteDataSourceImpl
+    ): RemoteDataSource
 }

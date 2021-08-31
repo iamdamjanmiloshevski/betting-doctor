@@ -8,18 +8,19 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/app_logo_admin_round"
         android:supportsRtl="true"
+        android:networkSecurityConfig="@xml/network_config"
         android:theme="@style/Theme.DrBetting">
         <activity
             android:name="com.twoplaytech.drbetting.admin.ui.admin.BettingTipActivity"
             android:label="@string/title_activity_betting_tip"
-            android:theme="@style/Theme.DrBetting.NoActionBar"></activity>
+            android:theme="@style/Theme.DrBetting.NoActionBar" />
         <activity
             android:name="com.twoplaytech.drbetting.admin.ui.admin.AdminActivity"
             android:label="@string/title_activity_admin"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.DrBetting.NoActionBar" />
         <activity
-            android:name="com.twoplaytech.drbetting.admin.ui.login.LoginActivity"
+            android:name="com.twoplaytech.drbetting.admin.ui.auth.LoginActivity"
             android:label="@string/title_activity_login"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.DrBetting.NoActionBar" />

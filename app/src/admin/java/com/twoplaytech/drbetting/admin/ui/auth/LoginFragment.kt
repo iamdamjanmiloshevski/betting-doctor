@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.admin.ui.login
+package com.twoplaytech.drbetting.admin.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
@@ -33,13 +33,14 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.snackbar.Snackbar
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.ui.admin.AdminActivity
+import com.twoplaytech.drbetting.admin.ui.viewmodels.LoginViewModel
 import com.twoplaytech.drbetting.admin.util.dispatchCredentialsDialog
 import com.twoplaytech.drbetting.admin.util.isValidEmail
 import com.twoplaytech.drbetting.admin.util.isValidPasswordFormat
-import com.twoplaytech.drbetting.common.TextWatcher
-import com.twoplaytech.drbetting.data.Status
+import com.twoplaytech.drbetting.data.entities.Status
 import com.twoplaytech.drbetting.databinding.FragmentLoginBinding
 import com.twoplaytech.drbetting.ui.common.BaseFragment
+import com.twoplaytech.drbetting.ui.common.TextWatcher
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -131,8 +132,8 @@ class LoginFragment : BaseFragment() {
                 Status.SUCCESS -> {
                     if (resource.data != null) {
                         val credentials = resource.data
-                        email = credentials.first
-                        pwd = credentials.second
+                        email = credentials.email
+                        pwd = credentials.password
                         credentialsSaved = true
                     } else {
                         email = loginBinding.etEmail.text.toString()
@@ -202,7 +203,6 @@ class LoginFragment : BaseFragment() {
         }
         loginBinding.loadingView.show(false)
         loginViewModel.enableLogin(false)
-        loginViewModel.checkIfUserIsAlreadySignedIn()
         loginViewModel.retrieveCredentials()
     }
 

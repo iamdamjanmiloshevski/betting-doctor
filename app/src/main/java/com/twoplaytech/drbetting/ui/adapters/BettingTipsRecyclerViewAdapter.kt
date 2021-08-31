@@ -68,12 +68,8 @@ class BettingTipsRecyclerViewAdapter(private val tips: MutableList<BettingTip>) 
         this.tips.addAll(tips)
         notifyDataSetChanged()
     }
+
     fun setOnBettingTipClickedListener(listener: OnBettingTipClickedListener){
         this.listener = listener
     }
-    fun clear(){
-        this.tips.clear()
-        notifyDataSetChanged()
-    }
-
 }

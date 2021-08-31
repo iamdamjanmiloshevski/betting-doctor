@@ -38,7 +38,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.twoplaytech.drbetting.R
-import com.twoplaytech.drbetting.admin.ui.login.LoginViewModel
+import com.twoplaytech.drbetting.admin.ui.viewmodels.AdminViewModel
+import com.twoplaytech.drbetting.admin.ui.viewmodels.LoginViewModel
 import com.twoplaytech.drbetting.admin.util.Constants
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_ARGS
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_TIP
@@ -52,8 +53,8 @@ import com.twoplaytech.drbetting.databinding.ActivityAdminBinding
 import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_VIEW_TYPE
 import com.twoplaytech.drbetting.ui.adapters.BettingTipsRecyclerViewAdapter
 import com.twoplaytech.drbetting.ui.common.BaseActivity
-import com.twoplaytech.drbetting.ui.common.BettingTipsViewModel
 import com.twoplaytech.drbetting.ui.common.OnBettingTipClickedListener
+import com.twoplaytech.drbetting.ui.viewmodels.BettingTipsViewModel
 import com.twoplaytech.drbetting.util.getSportColor
 import com.twoplaytech.drbetting.util.getSportFromIndex
 
@@ -63,6 +64,7 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
     private var typeSelected = 1
     private var sportSelected = 0
     private val viewModel: BettingTipsViewModel by viewModels()
+    private val adminViewModel:AdminViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
     private val bettingTips = mutableListOf<BettingTip>()
     private val adapter: BettingTipsRecyclerViewAdapter =
@@ -108,7 +110,6 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
     }
 
     override fun observeData() {
-        adapter.clear()
         viewModel.observeTips().observe(this, { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
@@ -122,16 +123,16 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                 }
             }
         })
-        viewModel.observeForInsertedBettingTip().observe(this,
+        adminViewModel.observeForInsertedBettingTip().observe(this,
             { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
                         changeData(sportSelected.getSportFromIndex(), typeSelected)
-//                    val intent = Intent(activity, AdminActivity::class.java)
+//                    val intent = Intent(this, AdminActivity::class.java)
 //                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
 //                    intent.putExtra(KEY_SPORT, sportChosenIdx)
-//                    activity?.startActivity(intent)
-//                    activity?.finishAffinity()
+//                    startActivity(intent)
+//                    finishAffinity()
                     }
                     Status.ERROR -> {
                     }
@@ -140,7 +141,7 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                     }
                 }
             })
-        viewModel.observeDeletedTip().observe(this,
+        adminViewModel.observeDeletedTip().observe(this,
             { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
@@ -215,7 +216,6 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
     }
 
     private fun changeData(sport: Sport, typeSelected: Int) {
-        adapter.clear()
         when (typeSelected) {
             0 -> requestOlderData(sport)
             1 -> requestTodayData(sport)
@@ -251,7 +251,7 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
             title(null, "Delete tip?")
             message(null, "Are you sure that you want to delete this tip?")
             positiveButton(android.R.string.ok, null) {
-                //viewModel.deleteBettingTip(tip)
+                adminViewModel.deleteBettingTip(tip._id)
             }
             negativeButton(android.R.string.cancel, null) {
                 dismiss()

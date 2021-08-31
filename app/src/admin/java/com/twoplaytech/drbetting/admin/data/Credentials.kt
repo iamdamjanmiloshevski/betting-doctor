@@ -22,33 +22,12 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.admin.ui.register
-
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.twoplaytech.drbetting.data.entities.Message
-import com.twoplaytech.drbetting.data.entities.UserInput
-import com.twoplaytech.drbetting.domain.common.Resource
-import com.twoplaytech.drbetting.domain.usecases.RegisterUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
+package com.twoplaytech.drbetting.admin.data
 
 /*
     Author: Damjan Miloshevski 
-    Created on 24.8.21 12:33
+    Created on 31.8.21 12:51
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-@HiltViewModel
-class RegisterViewModel @Inject constructor(private val registerUseCase: RegisterUseCase) :
-    ViewModel() {
-    private val registerObserver = MutableLiveData<Resource<Message>>()
-
-    fun register(userInput: UserInput) {
-        registerUseCase.register(userInput, onSuccess = { message ->
-            registerObserver.value = Resource.success(message.message, message)
-        }, onError = { cause ->
-            registerObserver.value = Resource.error(cause.message, null)
-        })
-    }
-}
+data class Credentials(val email:String,val password:String)

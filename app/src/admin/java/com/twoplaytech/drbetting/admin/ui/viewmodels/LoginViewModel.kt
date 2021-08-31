@@ -22,12 +22,13 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.admin.ui.login
+package com.twoplaytech.drbetting.admin.ui.viewmodels
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.twoplaytech.drbetting.R
+import com.twoplaytech.drbetting.admin.data.Credentials
 import com.twoplaytech.drbetting.data.entities.AccessToken
 import com.twoplaytech.drbetting.data.entities.UserInput
 import com.twoplaytech.drbetting.domain.common.Resource
@@ -35,8 +36,8 @@ import com.twoplaytech.drbetting.domain.usecases.SignInUseCase
 import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_LOGGED_IN
 import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_USER_CREDENTIALS
 import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
+import com.twoplaytech.drbetting.util.GsonUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
-import org.json.JSONObject
 import javax.inject.Inject
 
 /*
@@ -52,16 +53,15 @@ class LoginViewModel @Inject constructor(
     private val loginObserver: MutableLiveData<Resource<AccessToken>> = MutableLiveData()
     private val loginEnabledObserver = MutableLiveData<Boolean>()
     private val alreadyLoggedIn = MutableLiveData<Boolean>()
-    private val credentialsObserver = MutableLiveData<Resource<Pair<String, String>>>()
+    private val credentialsObserver = MutableLiveData<Resource<Credentials>>()
 
     fun login(context: Context, email: String, password: String) {
         loginObserver.value = Resource.loading(context.getString(R.string.signing_in_msg), null)
         val userInput = UserInput(email = email, password = password)
         signInUseCase.signIn(userInput,onSuccess = {accessToken ->
-            //todo save token in preferences
-            loginObserver.value = Resource.success(null, accessToken)
+            loginObserver.postValue(Resource.success(null, accessToken))
         },onError = {cause->
-            loginObserver.value = Resource.error(cause.message, null)
+            loginObserver.postValue( Resource.error(cause.message, null))
         })
     }
 
@@ -74,11 +74,11 @@ class LoginViewModel @Inject constructor(
     }
 
     fun retrieveCredentials() {
-        val json = preferencesManager.getString(KEY_USER_CREDENTIALS)
-        if (json.isNullOrEmpty()) {
+        val credentialsJson = preferencesManager.getString(KEY_USER_CREDENTIALS)
+        if (credentialsJson.isNullOrEmpty()) {
             credentialsObserver.value = Resource.error(null, null)
         } else {
-            credentialsObserver.value = Resource.success(null, json.deserializeCredentials())
+            credentialsObserver.value = Resource.success(null, GsonUtil.fromJson(credentialsJson))
         }
     }
 
@@ -93,24 +93,9 @@ class LoginViewModel @Inject constructor(
     }
 
     fun saveUserCredentials(email: String, password: String) {
-        val jsonObject = JSONObject()
-        jsonObject.put(KEY_EMAIL, email)
-        jsonObject.put(KEY_PASSWORD, password)
         preferencesManager.saveString(
             KEY_USER_CREDENTIALS,
-            jsonObject.toString()
+            GsonUtil.toJson(Credentials(email,password))
         )
-    }
-
-    private fun String.deserializeCredentials(): Pair<String, String> {
-        val jsonObject = JSONObject(this)
-        val email = jsonObject.getString(KEY_EMAIL)
-        val password = jsonObject.getString(KEY_PASSWORD)
-        return Pair(email, password)
-    }
-
-    companion object {
-        private const val KEY_EMAIL = "email"
-        private const val KEY_PASSWORD = "password"
     }
 }

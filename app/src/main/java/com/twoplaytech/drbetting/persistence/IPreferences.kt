@@ -38,6 +38,7 @@ interface IPreferences {
         val KEY_LOGGED_IN = "KEY_LOGGED_IN"
         val KEY_USER_CREDENTIALS = "KEY_USER_CREDENTIALS"
         val KEY_VIEW_TYPE = "KEY_VIEW_TYPE"
+        val KEY_ACCESS_TOKEN = "KEY_ACCESS_TOKEN"
     }
     val keyGenParameterSpec: KeyGenParameterSpec
     val masterKeyAlias: String

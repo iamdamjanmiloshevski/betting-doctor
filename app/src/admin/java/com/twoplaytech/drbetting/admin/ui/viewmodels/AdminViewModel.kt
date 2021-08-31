@@ -22,16 +22,14 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.ui.common
+package com.twoplaytech.drbetting.admin.ui.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.twoplaytech.drbetting.data.entities.BettingTip
 import com.twoplaytech.drbetting.data.entities.Message
-import com.twoplaytech.drbetting.data.entities.Sport
 import com.twoplaytech.drbetting.domain.common.Resource
 import com.twoplaytech.drbetting.domain.usecases.DeleteBettingTipUseCase
-import com.twoplaytech.drbetting.domain.usecases.GetBettingTipsUseCase
 import com.twoplaytech.drbetting.domain.usecases.InsertBettingTipUseCase
 import com.twoplaytech.drbetting.domain.usecases.UpdateBettingTipUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,67 +37,46 @@ import javax.inject.Inject
 
 /*
     Author: Damjan Miloshevski 
-    Created on 3/10/21 12:52 PM
-
+    Created on 31.8.21 11:28
+    Project: Dr.Betting
+    © 2Play Tech  2021. All rights reserved
 */
 @HiltViewModel
-class BettingTipsViewModel @Inject constructor(
-    private val getBettingTipsUseCase: GetBettingTipsUseCase,
+class AdminViewModel @Inject constructor(
     private val insertBettingTipUseCase: InsertBettingTipUseCase,
     private val updateBettingTipUseCase: UpdateBettingTipUseCase,
     private val deleteBettingTipUseCase: DeleteBettingTipUseCase
-) :
-    ViewModel() {
-    private val fieldValidatorObserver = MutableLiveData<Boolean>()
+) : ViewModel() {
     private val insertBettingTipObserver = MutableLiveData<Resource<BettingTip>>()
     private val deleteBettingTipObserver = MutableLiveData<Resource<Message>>()
     private val updateBettingTipObserver = MutableLiveData<Resource<BettingTip>>()
-    private val bettingTipsObserver = MutableLiveData<Resource<Any>>()
-
-
-    fun validate(validate: Boolean) {
-        fieldValidatorObserver.value = validate
-    }
-
-    fun getBettingTips(sport: Sport, upcoming: Boolean) {
-        getBettingTipsUseCase.getBettingTipsBySport(sport, upcoming, onSuccess = { bettingTips ->
-            bettingTipsObserver.value = Resource.success(null, bettingTips)
-        }, onError = { throwable ->
-            bettingTipsObserver.value = Resource.error(null, throwable.localizedMessage)
-        })
-    }
 
     fun insertBettingTip(bettingTip: BettingTip) {
         insertBettingTipUseCase.insertBettingTip(bettingTip, onSuccess = { updatedBettingTip ->
-            insertBettingTipObserver.value = Resource.success(null, updatedBettingTip)
+            insertBettingTipObserver.postValue(Resource.success(null, updatedBettingTip))
         }, onError = { cause ->
-            insertBettingTipObserver.value = Resource.error(cause.localizedMessage, null)
+            insertBettingTipObserver.postValue(Resource.error(cause.localizedMessage, null))
         })
     }
 
     fun deleteBettingTip(id:String){
         deleteBettingTipUseCase.deleteBettingTip(id,onSuccess = {message ->
-            deleteBettingTipObserver.value = Resource.success(message.message,message)
+            deleteBettingTipObserver.postValue( Resource.success(message.message,message))
         },onError = {cause->
-            deleteBettingTipObserver.value = Resource.error(cause.message,null)
+            deleteBettingTipObserver.postValue(Resource.error(cause.message,null))
         })
     }
 
     fun updateBettingTip(bettingTip: BettingTip){
         updateBettingTipUseCase.updateBettingTip(bettingTip._id,bettingTip,onSuccess = { bettingTip ->
-            updateBettingTipObserver.value = Resource.success(null,bettingTip)
+            updateBettingTipObserver.postValue(Resource.success(null,bettingTip))
         },onError = { cause->
-            updateBettingTipObserver.value = Resource.error(cause.message,null)
+            updateBettingTipObserver.postValue(Resource.error(cause.message,null))
         })
     }
-
-    fun observeValidation() = fieldValidatorObserver
-
     fun observeForInsertedBettingTip() = insertBettingTipObserver
 
     fun observeDeletedTip() = deleteBettingTipObserver
 
     fun observeOnUpdatedTip()= updateBettingTipObserver
-
-    fun observeTips() = bettingTipsObserver
 }

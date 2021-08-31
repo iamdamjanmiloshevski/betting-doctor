@@ -24,8 +24,9 @@
 
 package com.twoplaytech.drbetting.admin.common
 
-import com.twoplaytech.drbetting.data.Sport
-import com.twoplaytech.drbetting.data.TypeStatus
+import com.twoplaytech.drbetting.data.entities.Sport
+import com.twoplaytech.drbetting.data.entities.TypeStatus
+
 
 /*
     Author: Damjan Miloshevski 

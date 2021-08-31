@@ -39,7 +39,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import com.google.firebase.firestore.Query
 import com.twoplaytech.drbetting.R
-import com.twoplaytech.drbetting.common.FirestoreQueryLiveData
 import com.twoplaytech.drbetting.data.entities.Sport
 import com.twoplaytech.drbetting.data.entities.TypeStatus
 import com.twoplaytech.drbetting.databinding.DialogDisclaimerBinding
@@ -63,9 +62,6 @@ fun String.checkImageExtension(): Boolean {
             this.endsWith(".gif", true)
 }
 
-fun Query.asFirestoreQueryLiveData(): FirestoreQueryLiveData {
-    return FirestoreQueryLiveData(this)
-}
 
 fun older(): Date {
     val calendar = Calendar.getInstance();

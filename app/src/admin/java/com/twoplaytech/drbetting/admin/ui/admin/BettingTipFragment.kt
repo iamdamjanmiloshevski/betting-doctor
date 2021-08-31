@@ -26,8 +26,10 @@ package com.twoplaytech.drbetting.admin.ui.admin
 
 import android.os.Bundle
 import android.view.*
+import androidx.fragment.app.viewModels
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.common.OnDropdownItemSelectedListener
+import com.twoplaytech.drbetting.admin.ui.viewmodels.AdminViewModel
 import com.twoplaytech.drbetting.admin.util.Constants
 import com.twoplaytech.drbetting.admin.views.ChooserView
 import com.twoplaytech.drbetting.data.entities.BettingTip
@@ -41,6 +43,7 @@ import java.util.*
 class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
 
     private lateinit var _binding: FragmentBettingTipBinding
+    private val adminViewModel:AdminViewModel by viewModels()
     private var bettingTip: BettingTip? = null
     private var cancel = false
     private var sportChosen = Sport.Football
@@ -91,9 +94,9 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
 
                 }
                 false -> {
-//                    bettingTip?.let {
-//                        viewModel.saveBettingTip(getTipFromInput(it.id), true)
-//                    } ?: viewModel.saveBettingTip(getTipFromInput())
+                    bettingTip?.let {
+                        adminViewModel.updateBettingTip(getTipFromInput(it._id))
+                    } ?: adminViewModel.insertBettingTip(getTipFromInput())
                 }
             }
         })

@@ -26,7 +26,7 @@ package com.twoplaytech.drbetting.admin
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.twoplaytech.drbetting.admin.ui.login.LoginActivity
+import com.twoplaytech.drbetting.admin.ui.auth.LoginActivity
 import com.twoplaytech.drbetting.util.startActivityWithClearTask
 import dagger.hilt.android.AndroidEntryPoint
 

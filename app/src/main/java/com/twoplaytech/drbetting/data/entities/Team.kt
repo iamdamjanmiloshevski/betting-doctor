@@ -25,7 +25,6 @@
 package com.twoplaytech.drbetting.data.entities
 
 import android.os.Parcelable
-import com.twoplaytech.drbetting.common.Mapify
 import com.twoplaytech.drbetting.util.Constants.TEAM_LOGO
 import com.twoplaytech.drbetting.util.Constants.TEAM_NAME
 import com.twoplaytech.drbetting.util.checkImageExtension
@@ -37,7 +36,7 @@ import kotlinx.android.parcel.Parcelize
 
 */
 @Parcelize
-data class Team(var name: String = "", var logo: String = "") : Parcelable,Mapify {
+data class Team(var name: String = "", var logo: String = "") : Parcelable {
     constructor(data: Map<*, *>) : this() {
         name = if (data.containsKey(TEAM_NAME)
             && data[TEAM_NAME] != null) {
@@ -56,10 +55,5 @@ data class Team(var name: String = "", var logo: String = "") : Parcelable,Mapif
             ""
         }
     }
-    override fun mapify():Map<String,Any>{
-        return mapOf(
-            "name" to this.name,
-            "logo" to this.logo
-        )
-    }
+
 }

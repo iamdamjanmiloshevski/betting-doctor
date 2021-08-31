@@ -26,6 +26,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.twoplaytech.drbetting">
 
-    <application></application>
+    <application
+        android:networkSecurityConfig="@xml/network_config" />
 
 </manifest>

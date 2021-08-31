@@ -36,6 +36,7 @@ import com.twoplaytech.drbetting.data.entities.BettingTip
 import com.twoplaytech.drbetting.data.entities.Status
 import com.twoplaytech.drbetting.databinding.FragmentChildBinding
 import com.twoplaytech.drbetting.ui.adapters.BettingTipsRecyclerViewAdapter
+import com.twoplaytech.drbetting.ui.viewmodels.BettingTipsViewModel
 
 /*
     Author: Damjan Miloshevski 
@@ -51,6 +52,7 @@ abstract class BaseChildFragment : Fragment(), IBaseView {
     override fun initBinding(inflater: LayoutInflater, container: ViewGroup?) {
         binding = FragmentChildBinding.inflate(inflater, container, false)
     }
+
     override fun setUpDataAdapter() {
         binding.rvBettingTips.adapter = adapter
         binding.rvBettingTips.layoutManager =
