@@ -278,7 +278,7 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                     title(R.string.logout_title)
                     message(R.string.log_out_msg)
                     positiveButton(android.R.string.ok, null) {
-                        loginViewModel.logout()
+                        //loginViewModel.logout()
                     }
                     negativeButton(android.R.string.cancel, null) {
                         dismiss()

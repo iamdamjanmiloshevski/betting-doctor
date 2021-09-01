@@ -28,16 +28,13 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.twoplaytech.drbetting.R
-import com.twoplaytech.drbetting.admin.data.Credentials
 import com.twoplaytech.drbetting.data.entities.AccessToken
+import com.twoplaytech.drbetting.data.entities.Credentials
 import com.twoplaytech.drbetting.data.entities.UserInput
 import com.twoplaytech.drbetting.domain.common.Resource
 import com.twoplaytech.drbetting.domain.usecases.SignInUseCase
-import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_LOGGED_IN
-import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_USER_CREDENTIALS
-import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
-import com.twoplaytech.drbetting.util.GsonUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
+import timber.log.Timber
 import javax.inject.Inject
 
 /*
@@ -46,13 +43,10 @@ import javax.inject.Inject
 */
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val signInUseCase: SignInUseCase,
-    private val preferencesManager: SharedPreferencesManager
-) :
+    private val signInUseCase: SignInUseCase) :
     ViewModel() {
     private val loginObserver: MutableLiveData<Resource<AccessToken>> = MutableLiveData()
     private val loginEnabledObserver = MutableLiveData<Boolean>()
-    private val alreadyLoggedIn = MutableLiveData<Boolean>()
     private val credentialsObserver = MutableLiveData<Resource<Credentials>>()
 
     fun login(context: Context, email: String, password: String) {
@@ -65,37 +59,48 @@ class LoginViewModel @Inject constructor(
         })
     }
 
-    fun logout() {
-
-    }
 
     fun enableLogin(enable: Boolean) {
         loginEnabledObserver.value = enable
     }
 
     fun retrieveCredentials() {
-        val credentialsJson = preferencesManager.getString(KEY_USER_CREDENTIALS)
-        if (credentialsJson.isNullOrEmpty()) {
-            credentialsObserver.value = Resource.error(null, null)
-        } else {
-            credentialsObserver.value = Resource.success(null, GsonUtil.fromJson(credentialsJson))
+        signInUseCase.retrieveUserCredentials(onSuccess = {
+            credentialsObserver.value = Resource.success(null, it)
+        },onError = {
+            credentialsObserver.value = Resource.error(it.message, null)
+        })
+    }
+
+    fun isLoggedIn(context: Context){
+        signInUseCase.isAlreadyLoggedIn {isLoggedIn->
+            Timber.e("isLoggedIn $isLoggedIn")
+           if(isLoggedIn){
+               loginObserver.value = Resource.loading(context.getString(R.string.signing_in_msg), null)
+              signInUseCase.retrieveUserCredentials(onSuccess = {
+                  signInUseCase.saveLogin(true)
+                  signInUseCase.signIn(UserInput(it.email,it.password),onSuccess = {accessToken->
+                      loginObserver.postValue(Resource.success(null, accessToken))
+                  },onError = {cause->
+                      Timber.e(cause)
+                      loginObserver.postValue( Resource.error(cause.localizedMessage, null))
+                  })
+              },onError = {
+                  Timber.e(it)
+              })
+           }
         }
     }
 
     fun observeLoginEnabled() = loginEnabledObserver
     fun observeLogin() = loginObserver
-    fun observeAlreadyLoggedIn() = alreadyLoggedIn
     fun observeForCredentials() = credentialsObserver
 
-
     fun saveLogin(shouldStayLoggedIn: Boolean) {
-        preferencesManager.saveBoolean(KEY_LOGGED_IN, shouldStayLoggedIn)
+       signInUseCase.saveLogin(shouldStayLoggedIn)
     }
 
     fun saveUserCredentials(email: String, password: String) {
-        preferencesManager.saveString(
-            KEY_USER_CREDENTIALS,
-            GsonUtil.toJson(Credentials(email,password))
-        )
+        signInUseCase.saveUserCredentials(email,password)
     }
 }

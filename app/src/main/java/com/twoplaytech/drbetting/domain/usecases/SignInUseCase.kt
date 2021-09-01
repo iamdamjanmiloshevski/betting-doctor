@@ -25,6 +25,7 @@
 package com.twoplaytech.drbetting.domain.usecases
 
 import com.twoplaytech.drbetting.data.entities.AccessToken
+import com.twoplaytech.drbetting.data.entities.Credentials
 import com.twoplaytech.drbetting.data.entities.UserInput
 
 /*
@@ -39,4 +40,9 @@ interface SignInUseCase {
         onSuccess: (AccessToken) -> Unit,
         onError: (Throwable) -> Unit
     )
+
+    fun isAlreadyLoggedIn(callback: (Boolean) -> Unit)
+    fun saveLogin(shouldStayLoggedIn: Boolean)
+    fun saveUserCredentials(email: String, password: String)
+    fun retrieveUserCredentials(onSuccess: (Credentials) -> Unit, onError: (Throwable) -> Unit)
 }

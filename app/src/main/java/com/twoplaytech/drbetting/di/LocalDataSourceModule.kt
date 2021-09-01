@@ -22,12 +22,26 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.admin.data
+package com.twoplaytech.drbetting.di
+
+import com.twoplaytech.drbetting.data.datasource.LocalDataSource
+import com.twoplaytech.drbetting.data.datasource.LocalDataSourceImpl
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ViewModelComponent
 
 /*
     Author: Damjan Miloshevski 
-    Created on 31.8.21 12:51
+    Created on 1.9.21 11:09
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-data class Credentials(val email:String,val password:String)
+@Module
+@InstallIn(ViewModelComponent::class)
+interface LocalDataSourceModule {
+    @Binds
+    fun bindLocalDataSource(
+        localDataSourceImpl: LocalDataSourceImpl
+    ): LocalDataSource
+}

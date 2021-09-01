@@ -52,8 +52,5 @@ interface UseCasesModule {
     fun bindUpdateBettingTipsUseCase(updateBettingTipUseCaseImpl: UpdateBettingTipUseCaseImpl): UpdateBettingTipUseCase
 
     @Binds
-    fun bindRegisterUserUseCase(registerUseCaseImpl: RegisterUseCaseImpl): RegisterUseCase
-
-    @Binds
     fun bindSignInUserUserCase(signInUseCaseImpl: SignInUseCaseImpl): SignInUseCase
 }

@@ -69,7 +69,7 @@ class SharedPreferencesManager(context: Context) : IPreferences {
     }
 
     override fun getBoolean(key: String): Boolean {
-        return sharedPreferences.getBoolean(key, true)
+        return sharedPreferences.getBoolean(key, false)
     }
 
     override fun getInteger(key: String): Int {

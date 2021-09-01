@@ -74,7 +74,7 @@ class LoginFragment : BaseFragment() {
                     loginBinding.lytPassword.error = getString(R.string.pwd_blank_msg)
                     loginViewModel.enableLogin(false)
                 }
-                else -> loginViewModel.login(requireContext(),email, pwd)
+                else -> loginViewModel.login(requireContext(), email, pwd)
             }
         }
         loginBinding.etEmail.addTextChangedListener(TextWatcher { emailInput ->
@@ -117,16 +117,12 @@ class LoginFragment : BaseFragment() {
                 Status.LOADING -> {
                     val msg = resource.message
                     msg?.let {
-                        displayLoader(true,it)
+                        displayLoader(true, it)
                     }
                 }
             }
         })
-        loginViewModel.observeAlreadyLoggedIn().observe(viewLifecycleOwner, { loggedIn ->
-            if (loggedIn) {
-                enter()
-            }
-        })
+
         loginViewModel.observeForCredentials().observe(viewLifecycleOwner, { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
@@ -146,7 +142,8 @@ class LoginFragment : BaseFragment() {
                     email = loginBinding.etEmail.text.toString()
                     pwd = loginBinding.etPassword.text.toString()
                 }
-                Status.LOADING -> {}
+                Status.LOADING -> {
+                }
             }
         })
         loginViewModel.observeLoginEnabled().observe(viewLifecycleOwner, { isEnabled ->
@@ -154,16 +151,17 @@ class LoginFragment : BaseFragment() {
         })
     }
 
-    private fun displayLoader(shouldDisplay:Boolean,loadingMessage: String = "") {
-        when(shouldDisplay){
+    private fun displayLoader(shouldDisplay: Boolean, loadingMessage: String = "") {
+        when (shouldDisplay) {
             true -> {
                 loginBinding.loadingView.show(true)
                 loginBinding.loadingView.setText(loadingMessage)
                 loginBinding.loadingView.setBackground(backgroundId)
                 loginBinding.btLogin.visibility = View.GONE
-            } else -> {
-            loginBinding.loadingView.show(false)
-            loginBinding.btLogin.visibility = View.VISIBLE
+            }
+            else -> {
+                loginBinding.loadingView.show(false)
+                loginBinding.btLogin.visibility = View.VISIBLE
             }
         }
 
@@ -204,6 +202,7 @@ class LoginFragment : BaseFragment() {
         loginBinding.loadingView.show(false)
         loginViewModel.enableLogin(false)
         loginViewModel.retrieveCredentials()
+        loginViewModel.isLoggedIn(requireContext())
     }
 
     override fun initBinding(inflater: LayoutInflater, container: ViewGroup?) {

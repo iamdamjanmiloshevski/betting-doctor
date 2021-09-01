@@ -25,6 +25,7 @@
 package com.twoplaytech.drbetting.domain.usecases
 
 import com.twoplaytech.drbetting.data.entities.AccessToken
+import com.twoplaytech.drbetting.data.entities.Credentials
 import com.twoplaytech.drbetting.data.entities.UserInput
 import com.twoplaytech.drbetting.domain.repository.Repository
 import javax.inject.Inject
@@ -35,7 +36,9 @@ import javax.inject.Inject
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-class SignInUseCaseImpl @Inject constructor(repository: Repository) : UseCase(repository), SignInUseCase {
+class SignInUseCaseImpl @Inject constructor(
+    repository: Repository
+) : UseCase(repository), SignInUseCase {
     override fun signIn(
         userInput: UserInput,
         onSuccess: (AccessToken) -> Unit,
@@ -45,5 +48,30 @@ class SignInUseCaseImpl @Inject constructor(repository: Repository) : UseCase(re
             userInput,
             onSuccess = { onSuccess.invoke(it) },
             onError = { onError.invoke(it) })
+    }
+
+
+    override fun isAlreadyLoggedIn(callback: (Boolean) -> Unit) {
+        repository.isAlreadyLoggedIn {
+            callback.invoke(it)
+        }
+    }
+    override fun saveLogin(shouldStayLoggedIn: Boolean) {
+        repository.saveLogin(shouldStayLoggedIn)
+    }
+
+    override fun saveUserCredentials(email: String, password: String) {
+        repository.saveUserCredentials(email,password)
+    }
+
+    override fun retrieveUserCredentials(
+        onSuccess: (Credentials) -> Unit,
+        onError: (Throwable) -> Unit
+    ) {
+        repository.retrieveUserCredentials(onSuccess = {
+            onSuccess.invoke(it)
+        },onError = {
+            onError.invoke(it)
+        })
     }
 }

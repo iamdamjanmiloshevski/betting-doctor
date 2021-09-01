@@ -22,21 +22,23 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.domain.usecases
+package com.twoplaytech.drbetting.data.mappers
 
-import com.twoplaytech.drbetting.data.entities.Message
-import com.twoplaytech.drbetting.data.entities.UserInput
+import com.twoplaytech.drbetting.data.entities.Credentials
+import com.twoplaytech.drbetting.data.entities.CredentialsDataModel
+import com.twoplaytech.drbetting.util.GsonUtil
 
 /*
     Author: Damjan Miloshevski 
-    Created on 23.8.21 16:00
+    Created on 1.9.21 10:52
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-interface RegisterUseCase {
-    fun register(
-        userInput: UserInput,
-        onSuccess: (Message) -> Unit,
-        onError: (Throwable) -> Unit
-    )
+object CredentialsMapper {
+    fun toCredentials(credentials: CredentialsDataModel): Credentials =
+        Credentials(credentials.email, credentials.password)
+
+    fun toCredentialsJson(credentials: Credentials) = GsonUtil.toJson(credentials)
+    fun fromCredentialsJson(credentialsJson: String) =
+        GsonUtil.fromJson<CredentialsDataModel>(credentialsJson)
 }

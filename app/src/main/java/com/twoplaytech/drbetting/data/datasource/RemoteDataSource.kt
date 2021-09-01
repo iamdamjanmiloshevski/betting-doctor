@@ -50,6 +50,5 @@ interface RemoteDataSource {
 
     suspend fun deleteBettingTip(id:String):Flow<Message>
 
-    suspend fun register(userInput: UserInput): Flow<Message>
     suspend fun signIn(userInput: UserInput): Flow<AccessToken>
 }

@@ -22,33 +22,17 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.admin.ui.viewmodels
-
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.twoplaytech.drbetting.data.entities.Message
-import com.twoplaytech.drbetting.data.entities.UserInput
-import com.twoplaytech.drbetting.domain.common.Resource
-import com.twoplaytech.drbetting.domain.usecases.RegisterUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
+package com.twoplaytech.drbetting.data.datasource
 
 /*
     Author: Damjan Miloshevski 
-    Created on 24.8.21 12:33
+    Created on 1.9.21 10:35
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-@HiltViewModel
-class RegisterViewModel @Inject constructor(private val registerUseCase: RegisterUseCase) :
-    ViewModel() {
-    private val registerObserver = MutableLiveData<Resource<Message>>()
-
-    fun register(userInput: UserInput) {
-        registerUseCase.register(userInput, onSuccess = { message ->
-            registerObserver.postValue(Resource.success(message.message, message))
-        }, onError = { cause ->
-            registerObserver.postValue(Resource.error(cause.message, null))
-        })
-    }
+interface LocalDataSource {
+    fun saveBoolean(key:String,value:Boolean)
+    fun saveString(key:String,value:String)
+    fun getBoolean(key:String,callback: (Boolean) -> Unit)
+    fun getString(key: String,onSuccess: (String) -> Unit,onError:(Throwable)->Unit)
 }

@@ -22,36 +22,12 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.domain.repository
-
-import com.twoplaytech.drbetting.data.entities.*
+package com.twoplaytech.drbetting.data.entities
 
 /*
     Author: Damjan Miloshevski 
-    Created on 7.7.21 12:18
+    Created on 1.9.21 10:56
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-interface Repository {
-    fun getBettingTips(onSuccess: (List<BettingTip>) -> Unit, onError: (Throwable) -> Unit)
-    fun getBettingTipsBySport(
-        sport: Sport,
-        upcoming: Boolean = false,
-        onSuccess: (List<BettingTip>) -> Unit,
-        onError: (Throwable) -> Unit
-    )
-    fun getBettingTipById(id:String, onSuccess: (BettingTip) -> Unit, onError: (Throwable) -> Unit)
-    fun insertBettingTip(bettingTip: BettingTip, onSuccess:(BettingTip)->Unit, onError: (Throwable) -> Unit)
-    fun updateBettingTip(id:String, bettingTip: BettingTip,onSuccess:(BettingTip)->Unit, onError: (Throwable) -> Unit)
-    fun deleteBettingTip(id:String, onSuccess: (Message) -> Unit, onError: (Throwable) -> Unit)
-
-    fun signIn(
-        userInput: UserInput,
-        onSuccess: (AccessToken) -> Unit,
-        onError: (Throwable) -> Unit
-    )
-    fun saveLogin(shouldStayLoggedIn: Boolean)
-    fun saveUserCredentials(email: String, password: String)
-    fun retrieveUserCredentials(onSuccess: (Credentials) -> Unit, onError: (Throwable) -> Unit)
-    fun isAlreadyLoggedIn(callback: (Boolean) -> Unit)
-}
+data class Credentials(val email:String,val password:String)

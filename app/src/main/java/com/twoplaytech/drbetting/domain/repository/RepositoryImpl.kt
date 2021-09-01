@@ -24,11 +24,14 @@
 
 package com.twoplaytech.drbetting.domain.repository
 
+import com.twoplaytech.drbetting.data.datasource.LocalDataSource
 import com.twoplaytech.drbetting.data.datasource.RemoteDataSource
 import com.twoplaytech.drbetting.data.entities.*
+import com.twoplaytech.drbetting.data.mappers.AccessTokenMapper
+import com.twoplaytech.drbetting.data.mappers.CredentialsMapper
 import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_ACCESS_TOKEN
-import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
-import com.twoplaytech.drbetting.util.GsonUtil
+import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_LOGGED_IN
+import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_USER_CREDENTIALS
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
@@ -45,7 +48,7 @@ import kotlin.coroutines.CoroutineContext
     © 2Play Tech  2021. All rights reserved
 */
 class RepositoryImpl @Inject constructor(
-    private val sharedPreferencesManager: SharedPreferencesManager,
+    private val localDataSource: LocalDataSource,
     private val remoteDataSource: RemoteDataSource
 ) :
     Repository,
@@ -133,21 +136,6 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-
-    override fun register(
-        userInput: UserInput,
-        onSuccess: (Message) -> Unit,
-        onError: (Throwable) -> Unit
-    ) {
-        launch(coroutineContext) {
-            remoteDataSource.register(userInput).catch { throwable ->
-                sendErrorMessage(onError, throwable)
-            }.collect { message ->
-                onSuccess.invoke(message)
-            }
-        }
-    }
-
     override fun signIn(
         userInput: UserInput,
         onSuccess: (AccessToken) -> Unit,
@@ -157,10 +145,41 @@ class RepositoryImpl @Inject constructor(
             remoteDataSource.signIn(userInput).catch { throwable ->
                 sendErrorMessage(onError, throwable)
             }.collect { accessToken ->
-                sharedPreferencesManager.saveString(KEY_ACCESS_TOKEN,GsonUtil.toJson(accessToken))
+                localDataSource.saveString(
+                    KEY_ACCESS_TOKEN,
+                    AccessTokenMapper.toJson(accessToken)
+                )
                 onSuccess.invoke(accessToken)
             }
         }
+    }
+
+    override fun saveLogin(shouldStayLoggedIn: Boolean) {
+        localDataSource.saveBoolean(KEY_LOGGED_IN, shouldStayLoggedIn)
+    }
+
+    override fun saveUserCredentials(email: String, password: String) {
+        localDataSource.saveString(
+            KEY_USER_CREDENTIALS, CredentialsMapper.toCredentialsJson(
+                Credentials(email, password)
+            )
+        )
+    }
+
+    override fun retrieveUserCredentials(
+        onSuccess: (Credentials) -> Unit,
+        onError: (Throwable) -> Unit
+    ) {
+        localDataSource.getString(KEY_USER_CREDENTIALS,onSuccess = {
+            val credentialsDataModel = CredentialsMapper.fromCredentialsJson(it)
+            onSuccess.invoke(CredentialsMapper.toCredentials(credentialsDataModel))
+        },onError ={
+            onError.invoke(it)
+        })
+    }
+
+    override fun isAlreadyLoggedIn(callback: (Boolean) -> Unit) {
+        localDataSource.getBoolean(KEY_LOGGED_IN,callback = { callback.invoke(it) })
     }
 
     override val coroutineContext: CoroutineContext

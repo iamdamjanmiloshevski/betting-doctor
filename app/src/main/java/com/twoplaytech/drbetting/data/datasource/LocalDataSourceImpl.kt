@@ -22,29 +22,35 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.domain.usecases
+package com.twoplaytech.drbetting.data.datasource
 
-import com.twoplaytech.drbetting.data.entities.Message
-import com.twoplaytech.drbetting.data.entities.UserInput
-import com.twoplaytech.drbetting.domain.repository.Repository
+import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
 import javax.inject.Inject
 
 /*
     Author: Damjan Miloshevski 
-    Created on 23.8.21 16:01
+    Created on 1.9.21 10:35
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-class RegisterUseCaseImpl @Inject constructor(repository: Repository) : UseCase(repository),
-    RegisterUseCase {
-    override fun register(
-        userInput: UserInput,
-        onSuccess: (Message) -> Unit,
-        onError: (Throwable) -> Unit
-    ) {
-        repository.register(
-            userInput,
-            onSuccess = { onSuccess.invoke(it) },
-            onError = { onError.invoke(it) })
+class LocalDataSourceImpl @Inject constructor(private val preferences: SharedPreferencesManager) :
+    LocalDataSource {
+    override fun saveBoolean(key: String, value: Boolean) {
+        preferences.saveBoolean(key, value)
+    }
+
+    override fun saveString(key: String, value: String) {
+        preferences.saveString(key, value)
+    }
+
+    override fun getBoolean(key: String, callback: (Boolean) -> Unit) {
+        callback.invoke(preferences.getBoolean(key))
+    }
+
+    override fun getString(key: String, onSuccess: (String) -> Unit, onError: (Throwable) -> Unit) {
+        val response = preferences.getString(key)
+        if (response.isNullOrBlank()) onError.invoke(Throwable("null value")) else onSuccess.invoke(
+            response
+        )
     }
 }
