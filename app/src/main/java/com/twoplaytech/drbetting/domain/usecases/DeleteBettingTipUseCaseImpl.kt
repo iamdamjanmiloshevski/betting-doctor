@@ -39,7 +39,7 @@ class DeleteBettingTipUseCaseImpl @Inject constructor(repository: Repository) : 
     override fun deleteBettingTip(
         id: String,
         onSuccess: (Message) -> Unit,
-        onError: (Throwable) -> Unit
+        onError: (Message) -> Unit
     ) {
         repository.deleteBettingTip(
             id,

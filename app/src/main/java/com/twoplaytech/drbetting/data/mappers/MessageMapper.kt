@@ -22,36 +22,17 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.domain.repository
+package com.twoplaytech.drbetting.data.mappers
 
-import com.twoplaytech.drbetting.data.entities.*
+import com.twoplaytech.drbetting.data.entities.Message
+import com.twoplaytech.drbetting.util.GsonUtil
 
 /*
     Author: Damjan Miloshevski 
-    Created on 7.7.21 12:18
+    Created on 1.9.21 14:27
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-interface Repository {
-    fun getBettingTips(onSuccess: (List<BettingTip>) -> Unit, onError: (Message) -> Unit)
-    fun getBettingTipsBySport(
-        sport: Sport,
-        upcoming: Boolean = false,
-        onSuccess: (List<BettingTip>) -> Unit,
-        onError: (Message) -> Unit
-    )
-    fun getBettingTipById(id:String, onSuccess: (BettingTip) -> Unit, onError: (Message) -> Unit)
-    fun insertBettingTip(bettingTip: BettingTip, onSuccess:(BettingTip)->Unit, onError: (Message) -> Unit)
-    fun updateBettingTip(id:String, bettingTip: BettingTip,onSuccess:(BettingTip)->Unit, onError: (Message) -> Unit)
-    fun deleteBettingTip(id:String, onSuccess: (Message) -> Unit, onError: (Message) -> Unit)
-
-    fun signIn(
-        userInput: UserInput,
-        onSuccess: (AccessToken) -> Unit,
-        onError: (Message) -> Unit
-    )
-    fun saveLogin(shouldStayLoggedIn: Boolean)
-    fun saveUserCredentials(email: String, password: String)
-    fun retrieveUserCredentials(onSuccess: (Credentials) -> Unit, onError: (Throwable) -> Unit)
-    fun isAlreadyLoggedIn(callback: (Boolean) -> Unit)
+object MessageMapper {
+    fun fromJson(json:String) = GsonUtil.fromJson<Message>(json)
 }

@@ -24,6 +24,7 @@
 
 package com.twoplaytech.drbetting.data.api
 
+import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_ACCESS_TOKEN
 import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
 import okhttp3.Authenticator
 import okhttp3.Request
@@ -40,7 +41,7 @@ import javax.inject.Inject
 class TokenAuthenticator @Inject constructor(private val sharedPreferencesManager: SharedPreferencesManager) :
     Authenticator {
     override fun authenticate(route: Route?, response: Response): Request {
-        val token = sharedPreferencesManager.getString("auth_token")
+        val token = sharedPreferencesManager.getString(KEY_ACCESS_TOKEN)
         return response.request
             .newBuilder()
             .addHeader("Authorization", "Bearer ".plus(token)).build()

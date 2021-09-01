@@ -25,6 +25,7 @@
 package com.twoplaytech.drbetting.domain.usecases
 
 import com.twoplaytech.drbetting.data.entities.BettingTip
+import com.twoplaytech.drbetting.data.entities.Message
 import com.twoplaytech.drbetting.data.entities.Sport
 import com.twoplaytech.drbetting.domain.repository.Repository
 import javax.inject.Inject
@@ -37,10 +38,7 @@ import javax.inject.Inject
 */
 class GetBettingTipsUseCaseImpl @Inject constructor(repository: Repository) : UseCase(repository),
     GetBettingTipsUseCase {
-    override fun getBettingTips(
-        onSuccess: (List<BettingTip>) -> Unit,
-        onError: (Throwable) -> Unit
-    ) {
+    override fun getBettingTips(onSuccess: (List<BettingTip>) -> Unit, onError: (Message) -> Unit) {
         repository.getBettingTips(
             onSuccess = { onSuccess.invoke(it) },
             onError = { onError.invoke(it) })
@@ -50,7 +48,7 @@ class GetBettingTipsUseCaseImpl @Inject constructor(repository: Repository) : Us
         sport: Sport,
         upcoming: Boolean,
         onSuccess: (List<BettingTip>) -> Unit,
-        onError: (Throwable) -> Unit
+        onError: (Message) -> Unit
     ) {
         repository.getBettingTipsBySport(sport, upcoming,
             onSuccess = { onSuccess.invoke(it) },
@@ -60,7 +58,7 @@ class GetBettingTipsUseCaseImpl @Inject constructor(repository: Repository) : Us
     override fun getBettingTipById(
         id: String,
         onSuccess: (BettingTip) -> Unit,
-        onError: (Throwable) -> Unit
+        onError: (Message) -> Unit
     ) {
         repository.getBettingTipById(id, onSuccess = {
             onSuccess.invoke(it)

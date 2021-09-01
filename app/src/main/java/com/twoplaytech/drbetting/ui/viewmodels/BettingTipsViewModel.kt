@@ -52,8 +52,8 @@ class BettingTipsViewModel @Inject constructor(
     fun getBettingTips(sport: Sport, upcoming: Boolean) {
         getBettingTipsUseCase.getBettingTipsBySport(sport, upcoming, onSuccess = { bettingTips ->
             bettingTipsObserver.postValue(Resource.success(null, bettingTips))
-        }, onError = { throwable ->
-            bettingTipsObserver.postValue(Resource.error(null, throwable.localizedMessage))
+        }, onError = { message ->
+            bettingTipsObserver.postValue(Resource.error(message.message,null ))
         })
     }
 

@@ -29,6 +29,7 @@ import com.twoplaytech.drbetting.data.datasource.RemoteDataSource
 import com.twoplaytech.drbetting.data.entities.*
 import com.twoplaytech.drbetting.data.mappers.AccessTokenMapper
 import com.twoplaytech.drbetting.data.mappers.CredentialsMapper
+import com.twoplaytech.drbetting.data.mappers.MessageMapper
 import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_ACCESS_TOKEN
 import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_LOGGED_IN
 import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_USER_CREDENTIALS
@@ -54,10 +55,7 @@ class RepositoryImpl @Inject constructor(
     Repository,
     CoroutineScope {
 
-    override fun getBettingTips(
-        onSuccess: (List<BettingTip>) -> Unit,
-        onError: (Throwable) -> Unit
-    ) {
+    override fun getBettingTips(onSuccess: (List<BettingTip>) -> Unit, onError: (Message) -> Unit) {
         launch(coroutineContext) {
             remoteDataSource.getBettingTips().catch { throwable ->
                 Timber.e(throwable)
@@ -72,7 +70,7 @@ class RepositoryImpl @Inject constructor(
         sport: Sport,
         upcoming: Boolean,
         onSuccess: (List<BettingTip>) -> Unit,
-        onError: (Throwable) -> Unit
+        onError: (Message) -> Unit
     ) {
         launch(coroutineContext) {
             remoteDataSource.getBettingTipsBySport(sport, upcoming).catch { throwable ->
@@ -86,7 +84,7 @@ class RepositoryImpl @Inject constructor(
     override fun getBettingTipById(
         id: String,
         onSuccess: (BettingTip) -> Unit,
-        onError: (Throwable) -> Unit
+        onError: (Message) -> Unit
     ) {
         launch(coroutineContext) {
             remoteDataSource.getBettingTipById(id).catch { throwable ->
@@ -100,7 +98,7 @@ class RepositoryImpl @Inject constructor(
     override fun insertBettingTip(
         bettingTip: BettingTip,
         onSuccess: (BettingTip) -> Unit,
-        onError: (Throwable) -> Unit
+        onError: (Message) -> Unit
     ) {
         launch(coroutineContext) {
             remoteDataSource.insertBettingTip(bettingTip).catch { throwable ->
@@ -113,7 +111,7 @@ class RepositoryImpl @Inject constructor(
         id: String,
         bettingTip: BettingTip,
         onSuccess: (BettingTip) -> Unit,
-        onError: (Throwable) -> Unit
+        onError: (Message) -> Unit
     ) {
         launch(coroutineContext) {
             remoteDataSource.updateBettingTip(id, bettingTip).catch { cause ->
@@ -127,11 +125,14 @@ class RepositoryImpl @Inject constructor(
     override fun deleteBettingTip(
         id: String,
         onSuccess: (Message) -> Unit,
-        onError: (Throwable) -> Unit
+        onError: (Message) -> Unit
     ) {
         launch(coroutineContext) {
             remoteDataSource.deleteBettingTip(id)
-                .catch { cause -> sendErrorMessage(onError, cause) }
+                .catch { cause ->
+
+                    sendErrorMessage(onError, cause)
+                }
                 .collect { message: Message -> onSuccess.invoke(message) }
         }
     }
@@ -139,7 +140,7 @@ class RepositoryImpl @Inject constructor(
     override fun signIn(
         userInput: UserInput,
         onSuccess: (AccessToken) -> Unit,
-        onError: (Throwable) -> Unit
+        onError: (Message) -> Unit
     ) {
         launch(coroutineContext) {
             remoteDataSource.signIn(userInput).catch { throwable ->
@@ -170,26 +171,34 @@ class RepositoryImpl @Inject constructor(
         onSuccess: (Credentials) -> Unit,
         onError: (Throwable) -> Unit
     ) {
-        localDataSource.getString(KEY_USER_CREDENTIALS,onSuccess = {
+        localDataSource.getString(KEY_USER_CREDENTIALS, onSuccess = {
             val credentialsDataModel = CredentialsMapper.fromCredentialsJson(it)
             onSuccess.invoke(CredentialsMapper.toCredentials(credentialsDataModel))
-        },onError ={
+        }, onError = {
             onError.invoke(it)
         })
     }
 
     override fun isAlreadyLoggedIn(callback: (Boolean) -> Unit) {
-        localDataSource.getBoolean(KEY_LOGGED_IN,callback = { callback.invoke(it) })
+        localDataSource.getBoolean(KEY_LOGGED_IN, callback = { callback.invoke(it) })
     }
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO
 
     private fun sendErrorMessage(
-        onError: (Throwable) -> Unit,
+        onError: (Message) -> Unit,
         throwable: Throwable
     ) {
-        onError.invoke(throwable)
+        if (throwable is retrofit2.HttpException) {
+            val response = throwable.response()
+            response?.let { serverResponse ->
+                serverResponse.errorBody()?.let { errorBody ->
+                    val errorMessage = MessageMapper.fromJson(errorBody.string())
+                    onError.invoke(errorMessage)
+                } ?: onError.invoke(Message("Something went wrong", 0))
+            } ?: onError.invoke(Message("Something went wrong", 0))
+        }
     }
 
     private fun sendBettingTips(

@@ -54,24 +54,24 @@ class AdminViewModel @Inject constructor(
     fun insertBettingTip(bettingTip: BettingTip) {
         insertBettingTipUseCase.insertBettingTip(bettingTip, onSuccess = { updatedBettingTip ->
             insertBettingTipObserver.postValue(Resource.success(null, updatedBettingTip))
-        }, onError = { cause ->
-            insertBettingTipObserver.postValue(Resource.error(cause.localizedMessage, null))
+        }, onError = { message ->
+            insertBettingTipObserver.postValue(Resource.error(message.message, null))
         })
     }
 
     fun deleteBettingTip(id:String){
         deleteBettingTipUseCase.deleteBettingTip(id,onSuccess = {message ->
             deleteBettingTipObserver.postValue( Resource.success(message.message,message))
-        },onError = {cause->
-            deleteBettingTipObserver.postValue(Resource.error(cause.message,null))
+        },onError = {message->
+            deleteBettingTipObserver.postValue(Resource.error(message.message,null))
         })
     }
 
     fun updateBettingTip(bettingTip: BettingTip){
-        updateBettingTipUseCase.updateBettingTip(bettingTip._id,bettingTip,onSuccess = { bettingTip ->
-            updateBettingTipObserver.postValue(Resource.success(null,bettingTip))
-        },onError = { cause->
-            updateBettingTipObserver.postValue(Resource.error(cause.message,null))
+        updateBettingTipUseCase.updateBettingTip(bettingTip._id,bettingTip,onSuccess = {
+            updateBettingTipObserver.postValue(Resource.success(null,it))
+        },onError = { message->
+            updateBettingTipObserver.postValue(Resource.error(message.message,null))
         })
     }
     fun observeForInsertedBettingTip() = insertBettingTipObserver

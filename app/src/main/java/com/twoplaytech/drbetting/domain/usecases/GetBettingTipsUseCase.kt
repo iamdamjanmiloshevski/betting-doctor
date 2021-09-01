@@ -25,6 +25,7 @@
 package com.twoplaytech.drbetting.domain.usecases
 
 import com.twoplaytech.drbetting.data.entities.BettingTip
+import com.twoplaytech.drbetting.data.entities.Message
 import com.twoplaytech.drbetting.data.entities.Sport
 
 /*
@@ -34,12 +35,12 @@ import com.twoplaytech.drbetting.data.entities.Sport
     © 2Play Tech  2021. All rights reserved
 */
 interface GetBettingTipsUseCase {
-    fun getBettingTips(onSuccess: (List<BettingTip>) -> Unit, onError: (Throwable) -> Unit)
+    fun getBettingTips(onSuccess: (List<BettingTip>) -> Unit, onError: (Message) -> Unit)
     fun getBettingTipsBySport(
         sport: Sport,
         upcoming: Boolean = false,
         onSuccess: (List<BettingTip>) -> Unit,
-        onError: (Throwable) -> Unit
+        onError: (Message) -> Unit
     )
-    fun getBettingTipById(id:String, onSuccess: (BettingTip) -> Unit, onError: (Throwable) -> Unit)
+    fun getBettingTipById(id:String, onSuccess: (BettingTip) -> Unit, onError: (Message) -> Unit)
 }

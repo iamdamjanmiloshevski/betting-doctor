@@ -26,6 +26,7 @@ package com.twoplaytech.drbetting.domain.usecases
 
 import com.twoplaytech.drbetting.data.entities.AccessToken
 import com.twoplaytech.drbetting.data.entities.Credentials
+import com.twoplaytech.drbetting.data.entities.Message
 import com.twoplaytech.drbetting.data.entities.UserInput
 
 /*
@@ -38,7 +39,7 @@ interface SignInUseCase {
     fun signIn(
         userInput: UserInput,
         onSuccess: (AccessToken) -> Unit,
-        onError: (Throwable) -> Unit
+        onError: (Message) -> Unit
     )
 
     fun isAlreadyLoggedIn(callback: (Boolean) -> Unit)

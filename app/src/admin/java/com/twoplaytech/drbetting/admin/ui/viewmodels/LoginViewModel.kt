@@ -54,8 +54,8 @@ class LoginViewModel @Inject constructor(
         val userInput = UserInput(email = email, password = password)
         signInUseCase.signIn(userInput,onSuccess = {accessToken ->
             loginObserver.postValue(Resource.success(null, accessToken))
-        },onError = {cause->
-            loginObserver.postValue( Resource.error(cause.message, null))
+        },onError = {message->
+            loginObserver.postValue( Resource.error(message.message, null))
         })
     }
 
@@ -81,9 +81,8 @@ class LoginViewModel @Inject constructor(
                   signInUseCase.saveLogin(true)
                   signInUseCase.signIn(UserInput(it.email,it.password),onSuccess = {accessToken->
                       loginObserver.postValue(Resource.success(null, accessToken))
-                  },onError = {cause->
-                      Timber.e(cause)
-                      loginObserver.postValue( Resource.error(cause.localizedMessage, null))
+                  },onError = {message->
+                      loginObserver.postValue( Resource.error(message.message, null))
                   })
               },onError = {
                   Timber.e(it)

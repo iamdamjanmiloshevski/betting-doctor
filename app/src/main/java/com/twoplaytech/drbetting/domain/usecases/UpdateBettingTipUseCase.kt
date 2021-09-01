@@ -25,6 +25,7 @@
 package com.twoplaytech.drbetting.domain.usecases
 
 import com.twoplaytech.drbetting.data.entities.BettingTip
+import com.twoplaytech.drbetting.data.entities.Message
 
 /*
     Author: Damjan Miloshevski 
@@ -37,6 +38,6 @@ interface UpdateBettingTipUseCase {
         id: String,
         bettingTip: BettingTip,
         onSuccess: (BettingTip) -> Unit,
-        onError: (Throwable) -> Unit
+        onError: (Message) -> Unit
     )
 }

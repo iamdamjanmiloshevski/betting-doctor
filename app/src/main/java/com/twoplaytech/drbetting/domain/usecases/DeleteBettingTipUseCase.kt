@@ -36,6 +36,6 @@ interface DeleteBettingTipUseCase {
     fun deleteBettingTip(
         id: String,
         onSuccess: (Message) -> Unit,
-        onError: (Throwable) -> Unit
+        onError: (Message) -> Unit
     )
 }

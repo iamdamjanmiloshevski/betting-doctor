@@ -25,6 +25,7 @@
 package com.twoplaytech.drbetting.domain.usecases
 
 import com.twoplaytech.drbetting.data.entities.BettingTip
+import com.twoplaytech.drbetting.data.entities.Message
 import com.twoplaytech.drbetting.domain.repository.Repository
 import javax.inject.Inject
 
@@ -39,7 +40,7 @@ class InsertBettingTipUseCaseImpl @Inject constructor(repository: Repository) : 
     override fun insertBettingTip(
         bettingTip: BettingTip,
         onSuccess: (BettingTip) -> Unit,
-        onError: (Throwable) -> Unit
+        onError: (Message) -> Unit
     ) {
         repository.insertBettingTip(
             bettingTip,
