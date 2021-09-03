@@ -46,7 +46,7 @@ interface RemoteDataSource {
 
     suspend fun insertBettingTip(bettingTip: BettingTip):Flow<BettingTip>
 
-    suspend fun updateBettingTip(id: String,bettingTip: BettingTip):Flow<BettingTip>
+    suspend fun updateBettingTip(bettingTip: BettingTip):Flow<BettingTip>
 
     suspend fun deleteBettingTip(id:String):Flow<Message>
 

@@ -43,6 +43,6 @@ data class BettingTip(
     var bettingType: String,
     var status: TypeStatus,
     var result: String,
-    var _id: String,
+    var _id: String?= null,
     var sport: Sport
 ):Parcelable

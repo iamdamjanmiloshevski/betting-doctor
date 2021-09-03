@@ -26,16 +26,13 @@ package com.twoplaytech.drbetting.admin.ui.admin
 
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.common.OnDropdownItemSelectedListener
 import com.twoplaytech.drbetting.admin.ui.viewmodels.AdminViewModel
 import com.twoplaytech.drbetting.admin.util.Constants
 import com.twoplaytech.drbetting.admin.views.ChooserView
-import com.twoplaytech.drbetting.data.entities.BettingTip
-import com.twoplaytech.drbetting.data.entities.Sport
-import com.twoplaytech.drbetting.data.entities.Team
-import com.twoplaytech.drbetting.data.entities.TypeStatus
+import com.twoplaytech.drbetting.data.entities.*
 import com.twoplaytech.drbetting.databinding.FragmentBettingTipBinding
 import com.twoplaytech.drbetting.ui.common.BaseFragment
 import java.util.*
@@ -43,12 +40,13 @@ import java.util.*
 class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
 
     private lateinit var _binding: FragmentBettingTipBinding
-    private val adminViewModel:AdminViewModel by viewModels()
+    private val adminViewModel: AdminViewModel by activityViewModels()
     private var bettingTip: BettingTip? = null
     private var cancel = false
     private var sportChosen = Sport.Football
     private var statusChosen = TypeStatus.UNKNOWN
     private var sportChosenIdx = 0
+    private lateinit var menu: Menu
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -88,10 +86,9 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
     }
 
     override fun observeData() {
-        viewModel.observeValidation().observe(viewLifecycleOwner, { hasErrors ->
+        adminViewModel.observeValidation().observe(viewLifecycleOwner, { hasErrors ->
             when (hasErrors) {
                 true -> {
-
                 }
                 false -> {
                     bettingTip?.let {
@@ -99,6 +96,14 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
                     } ?: adminViewModel.insertBettingTip(getTipFromInput())
                 }
             }
+        })
+        adminViewModel.observeForInsertedBettingTip().observe(viewLifecycleOwner, { resource ->
+            val saveIcon = menu.findItem(R.id.action_save)
+             saveIcon.isVisible = resource.status != Status.LOADING
+        })
+        adminViewModel.observeOnUpdatedTip().observe(viewLifecycleOwner,{ resource ->
+            val saveIcon = menu.findItem(R.id.action_save)
+            saveIcon.isVisible = resource.status != Status.LOADING
         })
     }
 
@@ -114,7 +119,7 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
         val teamHome = Team(teamHomeName, teamHomeLogo)
         val teamAway = Team(teamAwayName, teamAwayLogo)
         val bettingType = BettingTip(
-            _id = id!!,
+            _id = id,
             leagueName = league,
             teamHome = teamHome,
             teamAway = teamAway,
@@ -130,12 +135,13 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_betting_tip, menu)
+        this.menu = menu
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_save -> {
-                viewModel.validate(validateFields())
+                adminViewModel.validate(validateFields())
                 true
             }
             else -> super.onOptionsItemSelected(item)

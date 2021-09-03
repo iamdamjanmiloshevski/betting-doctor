@@ -26,6 +26,7 @@ package com.twoplaytech.drbetting.admin.ui.admin
 
 import android.os.Bundle
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -37,8 +38,10 @@ import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_TIP
 import com.twoplaytech.drbetting.admin.util.Constants.VIEW_TYPE_NEW
 import com.twoplaytech.drbetting.data.entities.BettingTip
 import com.twoplaytech.drbetting.data.entities.Sport
+import com.twoplaytech.drbetting.data.entities.Status
 import com.twoplaytech.drbetting.databinding.ActivityBettingTipBinding
 import com.twoplaytech.drbetting.ui.common.BaseActivity
+import com.twoplaytech.drbetting.util.getSportResource
 
 class BettingTipActivity : BaseActivity() {
 
@@ -56,6 +59,11 @@ class BettingTipActivity : BaseActivity() {
         initUI()
     }
 
+    override fun onResume() {
+        super.onResume()
+        observeData()
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
@@ -63,6 +71,7 @@ class BettingTipActivity : BaseActivity() {
 
     override fun initUI() {
         setSupportActionBar(binding.toolbar)
+        binding.loadingView.isVisible = false
         navController = findNavController(R.id.nav_host_fragment_content_betting_tip)
         navController.setGraph(
             R.navigation.nav_graph_betting_tip, bundleOf(
@@ -74,12 +83,44 @@ class BettingTipActivity : BaseActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
     }
 
+    override fun observeData() {
+        super.observeData()
+        adminViewModel.observeForInsertedBettingTip().observe(this,
+            { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        finish()
+                    }
+                    Status.ERROR -> {
+                    }
+                    Status.LOADING -> {
+                        binding.loadingView.setText("Saving please wait")
+                        binding.loadingView.isVisible = true
+                    }
+                }
+            })
+        adminViewModel.observeOnUpdatedTip().observe(this,{resource ->
+            when (resource.status) {
+                Status.SUCCESS -> {
+                    finish()
+                }
+                Status.ERROR -> {
+                }
+                Status.LOADING -> {
+                    binding.loadingView.setText("Saving please wait")
+                    binding.loadingView.isVisible = true
+                }
+            }
+        })
+    }
+
     override fun initBinding() {
         binding = ActivityBettingTipBinding.inflate(layoutInflater)
     }
 
     fun changeThemePerSport(sport: Sport?) {
         changeTheme(sport = sport, toolbar = binding.toolbar)
+        binding.loadingView.setBackground(sport?.getSportResource()!!)
     }
 
     private fun Bundle?.extractArguments() {

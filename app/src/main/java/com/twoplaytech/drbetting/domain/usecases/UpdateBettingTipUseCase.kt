@@ -35,7 +35,6 @@ import com.twoplaytech.drbetting.data.entities.Message
 */
 interface UpdateBettingTipUseCase {
     fun updateBettingTip(
-        id: String,
         bettingTip: BettingTip,
         onSuccess: (BettingTip) -> Unit,
         onError: (Message) -> Unit

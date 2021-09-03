@@ -38,8 +38,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.twoplaytech.drbetting.R
-import com.twoplaytech.drbetting.admin.ui.viewmodels.AdminViewModel
-import com.twoplaytech.drbetting.admin.ui.viewmodels.LoginViewModel
 import com.twoplaytech.drbetting.admin.util.Constants
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_ARGS
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_TIP
@@ -64,8 +62,7 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
     private var typeSelected = 1
     private var sportSelected = 0
     private val viewModel: BettingTipsViewModel by viewModels()
-    private val adminViewModel:AdminViewModel by viewModels()
-    private val loginViewModel: LoginViewModel by viewModels()
+
     private val bettingTips = mutableListOf<BettingTip>()
     private val adapter: BettingTipsRecyclerViewAdapter =
         BettingTipsRecyclerViewAdapter(bettingTips)
@@ -76,7 +73,6 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         setContentView(binding.root)
         getExtras(intent)
         initUI()
-        observeData()
     }
 
     override fun initUI() {
@@ -96,6 +92,7 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         })
         binding.ivMore.setOnClickListener(this)
         initSpinners()
+        observeData()
     }
 
     private fun initSpinners() {
@@ -123,24 +120,6 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                 }
             }
         })
-        adminViewModel.observeForInsertedBettingTip().observe(this,
-            { resource ->
-                when (resource.status) {
-                    Status.SUCCESS -> {
-                        changeData(sportSelected.getSportFromIndex(), typeSelected)
-//                    val intent = Intent(this, AdminActivity::class.java)
-//                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-//                    intent.putExtra(KEY_SPORT, sportChosenIdx)
-//                    startActivity(intent)
-//                    finishAffinity()
-                    }
-                    Status.ERROR -> {
-                    }
-                    Status.LOADING -> {
-
-                    }
-                }
-            })
         adminViewModel.observeDeletedTip().observe(this,
             { resource ->
                 when (resource.status) {
@@ -226,7 +205,7 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
 
     }
 
-    fun requestTodayData(sport: Sport) {
+     fun requestTodayData(sport: Sport) {
         binding.noDataView.setVisible(false)
         binding.progressBar.visibility = View.VISIBLE
         binding.rvBettingTips.visibility = View.GONE
@@ -242,7 +221,7 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
     }
 
     override fun onTipClick(tip: BettingTip) {
-         this.navigateToTips(VIEW_TYPE_EDIT, tip)
+        this.navigateToTips(VIEW_TYPE_EDIT, tip)
     }
 
     override fun onTipLongClick(tip: BettingTip) {
@@ -251,7 +230,7 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
             title(null, "Delete tip?")
             message(null, "Are you sure that you want to delete this tip?")
             positiveButton(android.R.string.ok, null) {
-                adminViewModel.deleteBettingTip(tip._id)
+                adminViewModel.deleteBettingTip(tip._id!!)
             }
             negativeButton(android.R.string.cancel, null) {
                 dismiss()
@@ -300,6 +279,14 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        when(typeSelected){
+            0 -> requestOlderData(sportSelected.getSportFromIndex())
+            1 -> requestTodayData(sportSelected.getSportFromIndex())
+        }
+    }
+
     private fun showMenu(anchor: View?) {
         val popup = PopupMenu(this, anchor)
         popup.menuInflater.inflate(R.menu.menu_admin, popup.menu)
@@ -318,4 +305,5 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
     companion object {
         const val KEY_SPORT = "KEY_SPORT"
     }
+
 }

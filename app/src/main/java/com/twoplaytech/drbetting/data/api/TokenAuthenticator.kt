@@ -24,6 +24,7 @@
 
 package com.twoplaytech.drbetting.data.api
 
+import com.twoplaytech.drbetting.data.mappers.AccessTokenMapper
 import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_ACCESS_TOKEN
 import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
 import okhttp3.Authenticator
@@ -38,12 +39,13 @@ import javax.inject.Inject
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-class TokenAuthenticator @Inject constructor(private val sharedPreferencesManager: SharedPreferencesManager) :
+class TokenAuthenticator @Inject constructor(private val preferences: SharedPreferencesManager) :
     Authenticator {
     override fun authenticate(route: Route?, response: Response): Request {
-        val token = sharedPreferencesManager.getString(KEY_ACCESS_TOKEN)
+        val tokenJson = preferences.getString(KEY_ACCESS_TOKEN) as String
+        val accessToken = AccessTokenMapper.fromJson(tokenJson)
         return response.request
             .newBuilder()
-            .addHeader("Authorization", "Bearer ".plus(token)).build()
+            .addHeader("Authorization", "Bearer ".plus(accessToken.token)).build()
     }
 }

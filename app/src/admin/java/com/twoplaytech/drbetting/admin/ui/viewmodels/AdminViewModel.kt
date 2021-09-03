@@ -50,8 +50,12 @@ class AdminViewModel @Inject constructor(
     private val insertBettingTipObserver = MutableLiveData<Resource<BettingTip>>()
     private val deleteBettingTipObserver = MutableLiveData<Resource<Message>>()
     private val updateBettingTipObserver = MutableLiveData<Resource<BettingTip>>()
-
+    private val fieldValidatorObserver = MutableLiveData<Boolean>()
+    fun validate(validate: Boolean) {
+        fieldValidatorObserver.value = validate
+    }
     fun insertBettingTip(bettingTip: BettingTip) {
+        insertBettingTipObserver.postValue(Resource.loading(null,null))
         insertBettingTipUseCase.insertBettingTip(bettingTip, onSuccess = { updatedBettingTip ->
             insertBettingTipObserver.postValue(Resource.success(null, updatedBettingTip))
         }, onError = { message ->
@@ -68,12 +72,16 @@ class AdminViewModel @Inject constructor(
     }
 
     fun updateBettingTip(bettingTip: BettingTip){
-        updateBettingTipUseCase.updateBettingTip(bettingTip._id,bettingTip,onSuccess = {
+        updateBettingTipObserver.postValue(Resource.loading(null,null))
+        updateBettingTipUseCase.updateBettingTip(bettingTip,onSuccess = {
             updateBettingTipObserver.postValue(Resource.success(null,it))
         },onError = { message->
             updateBettingTipObserver.postValue(Resource.error(message.message,null))
         })
     }
+
+    fun observeValidation() = fieldValidatorObserver
+
     fun observeForInsertedBettingTip() = insertBettingTipObserver
 
     fun observeDeletedTip() = deleteBettingTipObserver

@@ -42,7 +42,7 @@ interface Repository {
     )
     fun getBettingTipById(id:String, onSuccess: (BettingTip) -> Unit, onError: (Message) -> Unit)
     fun insertBettingTip(bettingTip: BettingTip, onSuccess:(BettingTip)->Unit, onError: (Message) -> Unit)
-    fun updateBettingTip(id:String, bettingTip: BettingTip,onSuccess:(BettingTip)->Unit, onError: (Message) -> Unit)
+    fun updateBettingTip(bettingTip: BettingTip,onSuccess:(BettingTip)->Unit, onError: (Message) -> Unit)
     fun deleteBettingTip(id:String, onSuccess: (Message) -> Unit, onError: (Message) -> Unit)
 
     fun signIn(

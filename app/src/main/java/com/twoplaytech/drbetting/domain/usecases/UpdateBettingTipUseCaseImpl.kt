@@ -39,15 +39,13 @@ class UpdateBettingTipUseCaseImpl @Inject constructor(repository: Repository) : 
     UpdateBettingTipUseCase {
 
     override fun updateBettingTip(
-        id: String,
         bettingTip: BettingTip,
         onSuccess: (BettingTip) -> Unit,
         onError: (Message) -> Unit
     ) {
         repository.updateBettingTip(
-            id,
             bettingTip,
-            onSuccess = { bettingTip -> onSuccess.invoke(bettingTip) },
+            onSuccess = { updatedBettingTip -> onSuccess.invoke(updatedBettingTip) },
             onError = { onError.invoke(it) })
     }
 }

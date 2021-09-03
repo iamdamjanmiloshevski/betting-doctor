@@ -42,12 +42,10 @@ class BettingTipsViewModel @Inject constructor(
     private val getBettingTipsUseCase: GetBettingTipsUseCase
 ) :
     ViewModel() {
-    private val fieldValidatorObserver = MutableLiveData<Boolean>()
+
     private val bettingTipsObserver = MutableLiveData<Resource<Any>>()
 
-    fun validate(validate: Boolean) {
-        fieldValidatorObserver.value = validate
-    }
+
 
     fun getBettingTips(sport: Sport, upcoming: Boolean) {
         getBettingTipsUseCase.getBettingTipsBySport(sport, upcoming, onSuccess = { bettingTips ->
@@ -57,7 +55,7 @@ class BettingTipsViewModel @Inject constructor(
         })
     }
 
-    fun observeValidation() = fieldValidatorObserver
+
 
     fun observeTips() = bettingTipsObserver
 }

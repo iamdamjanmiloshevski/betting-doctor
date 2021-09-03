@@ -108,13 +108,12 @@ class RepositoryImpl @Inject constructor(
     }
 
     override fun updateBettingTip(
-        id: String,
         bettingTip: BettingTip,
         onSuccess: (BettingTip) -> Unit,
         onError: (Message) -> Unit
     ) {
         launch(coroutineContext) {
-            remoteDataSource.updateBettingTip(id, bettingTip).catch { cause ->
+            remoteDataSource.updateBettingTip(bettingTip).catch { cause ->
                 sendErrorMessage(onError, cause)
             }.collect { bettingTip: BettingTip ->
                 onSuccess.invoke(bettingTip)
@@ -193,10 +192,14 @@ class RepositoryImpl @Inject constructor(
         if (throwable is retrofit2.HttpException) {
             val response = throwable.response()
             response?.let { serverResponse ->
-                serverResponse.errorBody()?.let { errorBody ->
-                    val errorMessage = MessageMapper.fromJson(errorBody.string())
-                    onError.invoke(errorMessage)
-                } ?: onError.invoke(Message("Something went wrong", 0))
+               try{
+                   serverResponse.errorBody()?.let { errorBody ->
+                       val errorMessage = MessageMapper.fromJson(errorBody.string())
+                       onError.invoke(errorMessage)
+                   } ?: onError.invoke(Message("Something went wrong", 0))
+               }catch (e:Exception){
+                   onError.invoke(Message("Something went wrong", 0))
+               }
             } ?: onError.invoke(Message("Something went wrong", 0))
         }
     }
