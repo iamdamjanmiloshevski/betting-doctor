@@ -38,6 +38,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.twoplaytech.drbetting.R
+import com.twoplaytech.drbetting.admin.ui.auth.LoginActivity
+import com.twoplaytech.drbetting.admin.ui.viewmodels.LoginViewModel
 import com.twoplaytech.drbetting.admin.util.Constants
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_ARGS
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_TIP
@@ -62,6 +64,7 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
     private var typeSelected = 1
     private var sportSelected = 0
     private val viewModel: BettingTipsViewModel by viewModels()
+    private val loginViewModel:LoginViewModel by viewModels()
 
     private val bettingTips = mutableListOf<BettingTip>()
     private val adapter: BettingTipsRecyclerViewAdapter =
@@ -230,7 +233,7 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
             title(null, "Delete tip?")
             message(null, "Are you sure that you want to delete this tip?")
             positiveButton(android.R.string.ok, null) {
-                adminViewModel.deleteBettingTip(tip._id!!)
+              tip._id?.let { id->  adminViewModel.deleteBettingTip(id) }
             }
             negativeButton(android.R.string.cancel, null) {
                 dismiss()
@@ -257,7 +260,9 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                     title(R.string.logout_title)
                     message(R.string.log_out_msg)
                     positiveButton(android.R.string.ok, null) {
-                        //loginViewModel.logout()
+                        loginViewModel.logout()
+                        startActivity(Intent(this@AdminActivity,LoginActivity::class.java))
+                        finishAffinity()
                     }
                     negativeButton(android.R.string.cancel, null) {
                         dismiss()

@@ -34,7 +34,6 @@ import com.twoplaytech.drbetting.data.entities.UserInput
 import com.twoplaytech.drbetting.domain.common.Resource
 import com.twoplaytech.drbetting.domain.usecases.SignInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import timber.log.Timber
 import javax.inject.Inject
 
 /*
@@ -46,6 +45,7 @@ class LoginViewModel @Inject constructor(
     private val signInUseCase: SignInUseCase) :
     ViewModel() {
     private val loginObserver: MutableLiveData<Resource<AccessToken>> = MutableLiveData()
+    private val keepUserLoggedInObserver = MutableLiveData<Boolean>()
     private val loginEnabledObserver = MutableLiveData<Boolean>()
     private val credentialsObserver = MutableLiveData<Resource<Credentials>>()
 
@@ -59,6 +59,15 @@ class LoginViewModel @Inject constructor(
         })
     }
 
+    fun logout(){
+        signInUseCase.saveLogin(false)
+    }
+
+    fun isLoggedIn(){
+        signInUseCase.isAlreadyLoggedIn {
+            keepUserLoggedInObserver.value = it
+        }
+    }
 
     fun enableLogin(enable: Boolean) {
         loginEnabledObserver.value = enable
@@ -72,28 +81,11 @@ class LoginViewModel @Inject constructor(
         })
     }
 
-    fun isLoggedIn(context: Context){
-        signInUseCase.isAlreadyLoggedIn {isLoggedIn->
-            Timber.e("isLoggedIn $isLoggedIn")
-           if(isLoggedIn){
-               loginObserver.value = Resource.loading(context.getString(R.string.signing_in_msg), null)
-              signInUseCase.retrieveUserCredentials(onSuccess = {
-                  signInUseCase.saveLogin(true)
-                  signInUseCase.signIn(UserInput(it.email,it.password),onSuccess = {accessToken->
-                      loginObserver.postValue(Resource.success(null, accessToken))
-                  },onError = {message->
-                      loginObserver.postValue( Resource.error(message.message, null))
-                  })
-              },onError = {
-                  Timber.e(it)
-              })
-           }
-        }
-    }
-
     fun observeLoginEnabled() = loginEnabledObserver
     fun observeLogin() = loginObserver
     fun observeForCredentials() = credentialsObserver
+    fun observeShouldStayLoggedIn() = keepUserLoggedInObserver
+
 
     fun saveLogin(shouldStayLoggedIn: Boolean) {
        signInUseCase.saveLogin(shouldStayLoggedIn)

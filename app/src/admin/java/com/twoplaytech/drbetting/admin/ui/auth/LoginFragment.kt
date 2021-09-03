@@ -122,7 +122,6 @@ class LoginFragment : BaseFragment() {
                 }
             }
         })
-
         loginViewModel.observeForCredentials().observe(viewLifecycleOwner, { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
@@ -148,6 +147,9 @@ class LoginFragment : BaseFragment() {
         })
         loginViewModel.observeLoginEnabled().observe(viewLifecycleOwner, { isEnabled ->
             loginBinding.btLogin.isEnabled = isEnabled
+        })
+        loginViewModel.observeShouldStayLoggedIn().observe(viewLifecycleOwner,{
+            if(it) enter()
         })
     }
 
@@ -202,7 +204,7 @@ class LoginFragment : BaseFragment() {
         loginBinding.loadingView.show(false)
         loginViewModel.enableLogin(false)
         loginViewModel.retrieveCredentials()
-        loginViewModel.isLoggedIn(requireContext())
+        loginViewModel.isLoggedIn()
     }
 
     override fun initBinding(inflater: LayoutInflater, container: ViewGroup?) {
