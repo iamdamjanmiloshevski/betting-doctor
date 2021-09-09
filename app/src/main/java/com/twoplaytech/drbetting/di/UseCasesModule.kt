@@ -53,4 +53,7 @@ interface UseCasesModule {
 
     @Binds
     fun bindSignInUserUserCase(signInUseCaseImpl: SignInUseCaseImpl): SignInUseCase
+
+    @Binds
+    fun bindAppLaunchUseCase(appLaunchUseCaseImpl: AppLaunchUseCaseImpl):AppLaunchUseCase
 }

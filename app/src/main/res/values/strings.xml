@@ -56,6 +56,8 @@
     <string name="result_hint">Ex. (1-0) for unknown you can type /</string>
     <string name="logout_title">Log out?</string>
     <string name="log_out_msg">Are you sure that you want to log out?</string>
+    <string name="session">Session</string>
+    <string name="session_expired">Your session has expired.\n\nPlease log in to proceed</string>
     <string-array name="dark_mode_options">
         <item>On</item>
         <item>Off</item>

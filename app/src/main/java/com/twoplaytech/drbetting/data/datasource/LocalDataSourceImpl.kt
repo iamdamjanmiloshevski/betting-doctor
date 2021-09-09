@@ -43,6 +43,10 @@ class LocalDataSourceImpl @Inject constructor(private val preferences: SharedPre
         preferences.saveString(key, value)
     }
 
+    override fun saveInt(key: String, value: Int) {
+        preferences.saveInteger(key,value)
+    }
+
     override fun getBoolean(key: String, callback: (Boolean) -> Unit) {
         callback.invoke(preferences.getBoolean(key))
     }
@@ -52,5 +56,9 @@ class LocalDataSourceImpl @Inject constructor(private val preferences: SharedPre
         if (response.isNullOrBlank()) onError.invoke(Throwable("null value")) else onSuccess.invoke(
             response
         )
+    }
+
+    override fun getInt(key: String, callback: (Int) -> Unit) {
+       callback.invoke( preferences.getInteger(key))
     }
 }

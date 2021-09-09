@@ -32,7 +32,7 @@ import android.security.keystore.KeyGenParameterSpec
 */
 interface IPreferences {
     companion object{
-        val KEY_IS_FIRST_APP_LAUNCH: String = "KEY_IS_FIRST_APP_LAUNCH"
+        val KEY_APP_LAUNCHES: String = "KEY_APP_LAUNCHES"
         val KEY_DARK_MODE = "KEY_DARK_MODE"
         val KEY_LOCALE = "KEY_LOCALE"
         val KEY_LOGGED_IN = "KEY_LOGGED_IN"

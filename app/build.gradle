@@ -116,6 +116,8 @@ dependencies {
     //region Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    implementation 'androidx.hilt:hilt-work:1.0.0'
+    kapt 'androidx.hilt:hilt-compiler:1.0.0'
     //endregion
 
     //region Firebase
@@ -162,6 +164,14 @@ dependencies {
 
     //region Timber logger
     implementation "com.jakewharton.timber:timber:$timberLoggerVersion"
+    //endregion
+
+    //region WorkManager
+    implementation "androidx.work:work-runtime-ktx:$work_version"
+    //endregion
+
+    //region JWTDecode Android
+    implementation "com.auth0.android:jwtdecode:$jwtDecode_version"
     //endregion
 
     testImplementation 'junit:junit:4.+'

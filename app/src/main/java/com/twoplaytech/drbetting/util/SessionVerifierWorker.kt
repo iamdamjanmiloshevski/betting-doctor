@@ -22,26 +22,42 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.di
+package com.twoplaytech.drbetting.util
 
-import com.twoplaytech.drbetting.data.datasource.RemoteDataSource
-import com.twoplaytech.drbetting.data.datasource.RemoteDataSourceImpl
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import android.content.Context
+import androidx.hilt.work.HiltWorker
+import androidx.work.CoroutineWorker
+import androidx.work.WorkerParameters
+import com.auth0.android.jwt.JWT
+import com.twoplaytech.drbetting.domain.repository.Repository
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import timber.log.Timber
+import java.util.*
 
 /*
     Author: Damjan Miloshevski 
-    Created on 24.8.21 10:57
+    Created on 3.9.21 15:51
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-@Module
-@InstallIn(SingletonComponent::class)
-interface RemoteDataSourceModule {
-    @Binds
-    fun bindRemoteDataSource(
-        remoteDataSourceImpl: RemoteDataSourceImpl
-    ): RemoteDataSource
+@HiltWorker
+class SessionVerifierWorker @AssistedInject constructor(
+    @Assisted context: Context,
+    @Assisted workerParameters: WorkerParameters,
+    private val repository: Repository
+) : CoroutineWorker(context, workerParameters) {
+    override suspend fun doWork(): Result {
+        var result = Result.failure()
+        repository.getAccessToken(onSuccess = { accessToken ->
+            val token = JWT(accessToken.refreshToken)
+            result = token.expiresAt?.let { expiresAt ->
+                if (expiresAt.before(Date(System.currentTimeMillis()))) Result.failure() else Result.success()
+            } ?: Result.failure()
+        }, onError = {
+            Timber.e(it.message)
+            result = Result.failure()
+        })
+        return result
+    }
 }

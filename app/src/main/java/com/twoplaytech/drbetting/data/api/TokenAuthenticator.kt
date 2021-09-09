@@ -24,13 +24,12 @@
 
 package com.twoplaytech.drbetting.data.api
 
-import com.twoplaytech.drbetting.data.mappers.AccessTokenMapper
-import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_ACCESS_TOKEN
-import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
+import com.twoplaytech.drbetting.domain.repository.Repository
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
+import timber.log.Timber
 import javax.inject.Inject
 
 /*
@@ -39,13 +38,32 @@ import javax.inject.Inject
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-class TokenAuthenticator @Inject constructor(private val preferences: SharedPreferencesManager) :
+class TokenAuthenticator @Inject constructor() :
     Authenticator {
+    @Inject lateinit var repository: Repository
+    var request: Request? = null
     override fun authenticate(route: Route?, response: Response): Request {
-        val tokenJson = preferences.getString(KEY_ACCESS_TOKEN) as String
-        val accessToken = AccessTokenMapper.fromJson(tokenJson)
-        return response.request
-            .newBuilder()
-            .addHeader("Authorization", "Bearer ".plus(accessToken.token)).build()
+        if (response.code == 401) {
+            repository.getAccessToken(onSuccess = { it ->
+                repository.refreshToken(it.refreshToken, onSuccess = { accessToken ->
+                    request = response.request
+                        .newBuilder()
+                        .addHeader("Authorization", "Bearer ".plus(accessToken.token)).build()
+                }, onError = { error ->
+                    Timber.e(error.message)
+                })
+            }, onError = { error ->
+                Timber.e(error.message)
+            })
+        } else {
+            repository.getAccessToken(onSuccess = { accessToken ->
+                request = response.request
+                    .newBuilder()
+                    .addHeader("Authorization", "Bearer ".plus(accessToken.token)).build()
+            }, onError = {
+                Timber.e(it.message)
+            })
+        }
+        return request as Request
     }
 }

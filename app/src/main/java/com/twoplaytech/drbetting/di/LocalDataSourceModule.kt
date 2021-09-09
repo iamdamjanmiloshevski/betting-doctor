@@ -29,7 +29,7 @@ import com.twoplaytech.drbetting.data.datasource.LocalDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.components.SingletonComponent
 
 /*
     Author: Damjan Miloshevski 
@@ -38,7 +38,7 @@ import dagger.hilt.android.components.ViewModelComponent
     © 2Play Tech  2021. All rights reserved
 */
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(SingletonComponent::class)
 interface LocalDataSourceModule {
     @Binds
     fun bindLocalDataSource(

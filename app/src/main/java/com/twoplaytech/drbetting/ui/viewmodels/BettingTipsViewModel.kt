@@ -28,6 +28,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.twoplaytech.drbetting.data.entities.Sport
 import com.twoplaytech.drbetting.domain.common.Resource
+import com.twoplaytech.drbetting.domain.usecases.AppLaunchUseCase
 import com.twoplaytech.drbetting.domain.usecases.GetBettingTipsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -39,13 +40,12 @@ import javax.inject.Inject
 */
 @HiltViewModel
 class BettingTipsViewModel @Inject constructor(
-    private val getBettingTipsUseCase: GetBettingTipsUseCase
+    private val getBettingTipsUseCase: GetBettingTipsUseCase,
+    private val appLaunchUseCase: AppLaunchUseCase
 ) :
     ViewModel() {
-
     private val bettingTipsObserver = MutableLiveData<Resource<Any>>()
-
-
+    private val appLaunchObserver = MutableLiveData<Int>()
 
     fun getBettingTips(sport: Sport, upcoming: Boolean) {
         getBettingTipsUseCase.getBettingTipsBySport(sport, upcoming, onSuccess = { bettingTips ->
@@ -55,7 +55,15 @@ class BettingTipsViewModel @Inject constructor(
         })
     }
 
+    fun getAppLaunchCount(){
+        appLaunchUseCase.getAppLaunchesCount {
+            appLaunchObserver.value = it
+        }
+    }
+    fun incrementAppLaunch(){
+        appLaunchUseCase.incrementAppLaunch()
+    }
 
-
+    fun observeAppLaunch() = appLaunchObserver
     fun observeTips() = bettingTipsObserver
 }

@@ -33,6 +33,8 @@ package com.twoplaytech.drbetting.data.datasource
 interface LocalDataSource {
     fun saveBoolean(key:String,value:Boolean)
     fun saveString(key:String,value:String)
+    fun saveInt(key:String,value:Int)
     fun getBoolean(key:String,callback: (Boolean) -> Unit)
     fun getString(key: String,onSuccess: (String) -> Unit,onError:(Throwable)->Unit)
+    fun getInt(key: String,callback: (Int) -> Unit)
 }

@@ -37,6 +37,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.twoplaytech.drbetting.admin.ui.viewmodels.AdminViewModel
 import com.twoplaytech.drbetting.data.entities.Sport
 import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
+import com.twoplaytech.drbetting.ui.viewmodels.BettingTipsViewModel
 import com.twoplaytech.drbetting.util.*
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -54,6 +55,7 @@ abstract class BaseActivity : AppCompatActivity(), IBaseActivityView {
     lateinit var appContextWrapper: AppContextWrapper
 
     protected val adminViewModel: AdminViewModel by viewModels()
+    protected val bettingTipsViewModel:BettingTipsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

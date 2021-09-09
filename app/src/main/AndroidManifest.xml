@@ -24,9 +24,19 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.twoplaytech.drbetting">
 
     <application
-        android:networkSecurityConfig="@xml/network_config" />
+        android:networkSecurityConfig="@xml/network_config" android:name=".App"
+        >
+
+        <!-- If you want to disable android.startup completely. -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            tools:node="remove">
+        </provider>
+    </application>
 
 </manifest>

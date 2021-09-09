@@ -32,7 +32,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.data.entities.Sport
-import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_IS_FIRST_APP_LAUNCH
 import com.twoplaytech.drbetting.ui.common.BaseActivity
 import com.twoplaytech.drbetting.util.showDisclaimer
 import dagger.hilt.android.AndroidEntryPoint
@@ -68,14 +67,16 @@ class MainActivity : BaseActivity() {
                 R.id.navigation_volleyball -> changeTheme(navView, Sport.Volleyball)
             }
         }
+        bettingTipsViewModel.getAppLaunchCount()
     }
 
     private fun showDisclaimer(context: Context) {
-        val isAppFirstLaunch = preferencesManager.getBoolean(KEY_IS_FIRST_APP_LAUNCH)
-        if (isAppFirstLaunch) {
-            context.showDisclaimer()
-            preferencesManager.saveBoolean(KEY_IS_FIRST_APP_LAUNCH, false)
-        }
+        bettingTipsViewModel.observeAppLaunch().observe(this, { appLaunchCount->
+            if (appLaunchCount == 0) {
+                context.showDisclaimer()
+                bettingTipsViewModel.incrementAppLaunch()
+            }
+        })
     }
 
 }

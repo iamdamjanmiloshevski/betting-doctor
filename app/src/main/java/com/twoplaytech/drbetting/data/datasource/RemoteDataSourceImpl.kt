@@ -76,6 +76,10 @@ class RemoteDataSourceImpl @Inject constructor(private val api: BettingDoctorAPI
         return flow { emit(api.signIn(userInput)) }.flowOn(coroutineContext)
     }
 
+    override suspend fun refreshToken(refreshToken: String): Flow<AccessToken> {
+        return flow{emit(api.refreshToken(refreshToken))}.flowOn(coroutineContext)
+    }
+
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main
 

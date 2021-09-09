@@ -25,10 +25,8 @@
 package com.twoplaytech.drbetting.di
 
 import com.twoplaytech.drbetting.BuildConfig
-
 import com.twoplaytech.drbetting.data.api.BettingDoctorAPI
 import com.twoplaytech.drbetting.data.api.TokenAuthenticator
-import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -50,21 +48,13 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient) = Retrofit.Builder()
-        .baseUrl(BuildConfig.BASE_URL)
-        .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    @Singleton
-    @Provides
-    fun provideOkHttpClient(sharedPreferences:SharedPreferencesManager):OkHttpClient {
+    fun provideOkHttpClient():OkHttpClient {
         val client = OkHttpClient.Builder()
         client.connectTimeout(30, TimeUnit.SECONDS)
             .callTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
-        client.authenticator(TokenAuthenticator(sharedPreferences))
+        client.authenticator(TokenAuthenticator())
         client.addInterceptor(
             if (BuildConfig.DEBUG) HttpLoggingInterceptor().setLevel(
                 HttpLoggingInterceptor.Level.BODY
@@ -72,6 +62,16 @@ object NetworkModule {
         )
         return client.build()
     }
+
+    @Singleton
+    @Provides
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+        .baseUrl(BuildConfig.BASE_URL)
+        .client(okHttpClient)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+
     @Provides
     fun provideApi(retrofit: Retrofit): BettingDoctorAPI =
         retrofit.create(BettingDoctorAPI::class.java)

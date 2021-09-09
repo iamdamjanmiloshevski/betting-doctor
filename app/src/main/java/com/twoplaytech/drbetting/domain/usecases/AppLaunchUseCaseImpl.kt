@@ -22,26 +22,26 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.di
+package com.twoplaytech.drbetting.domain.usecases
 
-import com.twoplaytech.drbetting.data.datasource.RemoteDataSource
-import com.twoplaytech.drbetting.data.datasource.RemoteDataSourceImpl
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import com.twoplaytech.drbetting.domain.repository.Repository
+import javax.inject.Inject
 
 /*
     Author: Damjan Miloshevski 
-    Created on 24.8.21 10:57
+    Created on 6.9.21 13:19
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-@Module
-@InstallIn(SingletonComponent::class)
-interface RemoteDataSourceModule {
-    @Binds
-    fun bindRemoteDataSource(
-        remoteDataSourceImpl: RemoteDataSourceImpl
-    ): RemoteDataSource
+class AppLaunchUseCaseImpl@Inject constructor(repository: Repository) : UseCase(repository),AppLaunchUseCase {
+
+    override fun getAppLaunchesCount(callback: (Int) -> Unit) {
+        repository.getAppLaunchesCount {
+            callback.invoke(it)
+        }
+    }
+
+    override fun incrementAppLaunch() {
+       repository.incrementAppLaunch()
+    }
 }

@@ -31,6 +31,7 @@ import com.twoplaytech.drbetting.data.mappers.AccessTokenMapper
 import com.twoplaytech.drbetting.data.mappers.CredentialsMapper
 import com.twoplaytech.drbetting.data.mappers.MessageMapper
 import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_ACCESS_TOKEN
+import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_APP_LAUNCHES
 import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_LOGGED_IN
 import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_USER_CREDENTIALS
 import kotlinx.coroutines.CoroutineScope
@@ -166,6 +167,12 @@ class RepositoryImpl @Inject constructor(
         )
     }
 
+    override fun incrementAppLaunch() {
+        localDataSource.getInt(KEY_APP_LAUNCHES, callback = {
+            localDataSource.saveInt(KEY_APP_LAUNCHES, it.plus(1))
+        })
+    }
+
     override fun retrieveUserCredentials(
         onSuccess: (Credentials) -> Unit,
         onError: (Throwable) -> Unit
@@ -182,6 +189,38 @@ class RepositoryImpl @Inject constructor(
         localDataSource.getBoolean(KEY_LOGGED_IN, callback = { callback.invoke(it) })
     }
 
+    override fun getAppLaunchesCount(callback: (Int) -> Unit) {
+        localDataSource.getInt(KEY_APP_LAUNCHES, callback = {
+            callback.invoke(it)
+        })
+    }
+
+    override fun getAccessToken(onSuccess: (AccessToken) -> Unit, onError: (Message) -> Unit) {
+        localDataSource.getString(KEY_ACCESS_TOKEN, onSuccess = {
+            onSuccess.invoke(AccessTokenMapper.fromJson(it))
+        }, onError = {
+            sendErrorMessage(onError, it)
+        })
+    }
+
+    override fun refreshToken(
+        refreshToken: String,
+        onSuccess: (AccessToken) -> Unit,
+        onError: (Message) -> Unit
+    ) {
+        launch {
+            remoteDataSource.refreshToken(refreshToken).catch { cause ->
+                sendErrorMessage(onError, cause)
+            }.collect { accessToken ->
+                localDataSource.saveString(
+                    KEY_ACCESS_TOKEN,
+                    AccessTokenMapper.toJson(accessToken)
+                )
+                onSuccess.invoke(accessToken)
+            }
+        }
+    }
+
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO
 
@@ -192,14 +231,14 @@ class RepositoryImpl @Inject constructor(
         if (throwable is retrofit2.HttpException) {
             val response = throwable.response()
             response?.let { serverResponse ->
-               try{
-                   serverResponse.errorBody()?.let { errorBody ->
-                       val errorMessage = MessageMapper.fromJson(errorBody.string())
-                       onError.invoke(errorMessage)
-                   } ?: onError.invoke(Message("Something went wrong", 0))
-               }catch (e:Exception){
-                   onError.invoke(Message("Something went wrong", 0))
-               }
+                try {
+                    serverResponse.errorBody()?.let { errorBody ->
+                        val errorMessage = MessageMapper.fromJson(errorBody.string())
+                        onError.invoke(errorMessage)
+                    } ?: onError.invoke(Message("Something went wrong", 0))
+                } catch (e: Exception) {
+                    onError.invoke(Message("Something went wrong", 0))
+                }
             } ?: onError.invoke(Message("Something went wrong", 0))
         }
     }

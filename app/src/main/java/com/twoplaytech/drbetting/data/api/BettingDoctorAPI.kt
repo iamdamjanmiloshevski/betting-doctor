@@ -57,10 +57,9 @@ interface BettingDoctorAPI {
     @DELETE("betting-tips/{id}")
     suspend fun deleteBettingTip(@Path("id") tipId: String): Message
 
-    @POST("users/register")
-    suspend fun register(@Body userInput: UserInput): Message
-
     @POST("users/signin")
     suspend fun signIn(@Body userInput: UserInput): AccessToken
 
+    @GET("users/refreshToken/{refreshToken}")
+    suspend fun refreshToken(@Path("refreshToken") refreshToken:String):AccessToken
 }

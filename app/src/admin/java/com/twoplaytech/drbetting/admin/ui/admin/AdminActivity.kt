@@ -36,6 +36,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.ui.auth.LoginActivity
@@ -55,6 +58,7 @@ import com.twoplaytech.drbetting.ui.adapters.BettingTipsRecyclerViewAdapter
 import com.twoplaytech.drbetting.ui.common.BaseActivity
 import com.twoplaytech.drbetting.ui.common.OnBettingTipClickedListener
 import com.twoplaytech.drbetting.ui.viewmodels.BettingTipsViewModel
+import com.twoplaytech.drbetting.util.SessionVerifierWorker
 import com.twoplaytech.drbetting.util.getSportColor
 import com.twoplaytech.drbetting.util.getSportFromIndex
 
@@ -64,7 +68,7 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
     private var typeSelected = 1
     private var sportSelected = 0
     private val viewModel: BettingTipsViewModel by viewModels()
-    private val loginViewModel:LoginViewModel by viewModels()
+    private val loginViewModel: LoginViewModel by viewModels()
 
     private val bettingTips = mutableListOf<BettingTip>()
     private val adapter: BettingTipsRecyclerViewAdapter =
@@ -95,7 +99,37 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         })
         binding.ivMore.setOnClickListener(this)
         initSpinners()
-        observeData()
+    }
+
+    private fun checkSession() {
+        bettingTipsViewModel.observeAppLaunch().observe(this,{appLaunchesCount ->
+            if (appLaunchesCount>0) {
+                val sessionVerifierWorkRequest =
+                    OneTimeWorkRequestBuilder<SessionVerifierWorker>().build()
+                WorkManager.getInstance(this).enqueue(sessionVerifierWorkRequest)
+                WorkManager.getInstance(this).getWorkInfoByIdLiveData(sessionVerifierWorkRequest.id)
+                    .observe(this,
+                        { workInfo ->
+                            if(workInfo.state ==  WorkInfo.State.FAILED){
+                                MaterialDialog(this).show {
+                                    title(null, getString(R.string.session))
+                                    message(R.string.session_expired)
+                                    cancelable(false)
+                                    positiveButton(android.R.string.ok,null) {
+                                        dismiss()
+                                        logout()
+                                    }
+                                }
+                            }else if(workInfo.state == WorkInfo.State.SUCCEEDED){
+                                observeData()
+                            }
+                        }
+                    )
+            } else {
+                bettingTipsViewModel.incrementAppLaunch()
+                observeData()
+            }
+        })
     }
 
     private fun initSpinners() {
@@ -208,7 +242,7 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
 
     }
 
-     fun requestTodayData(sport: Sport) {
+    fun requestTodayData(sport: Sport) {
         binding.noDataView.setVisible(false)
         binding.progressBar.visibility = View.VISIBLE
         binding.rvBettingTips.visibility = View.GONE
@@ -233,7 +267,7 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
             title(null, "Delete tip?")
             message(null, "Are you sure that you want to delete this tip?")
             positiveButton(android.R.string.ok, null) {
-              tip._id?.let { id->  adminViewModel.deleteBettingTip(id) }
+                tip._id?.let { id -> adminViewModel.deleteBettingTip(id) }
             }
             negativeButton(android.R.string.cancel, null) {
                 dismiss()
@@ -260,9 +294,7 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
                     title(R.string.logout_title)
                     message(R.string.log_out_msg)
                     positiveButton(android.R.string.ok, null) {
-                        loginViewModel.logout()
-                        startActivity(Intent(this@AdminActivity,LoginActivity::class.java))
-                        finishAffinity()
+                        logout()
                     }
                     negativeButton(android.R.string.cancel, null) {
                         dismiss()
@@ -277,6 +309,12 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
         }
     }
 
+    private fun logout() {
+        loginViewModel.logout()
+        startActivity(Intent(this@AdminActivity, LoginActivity::class.java))
+        finishAffinity()
+    }
+
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.iv_more -> showMenu(binding.ivMore)
@@ -286,7 +324,9 @@ class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
 
     override fun onResume() {
         super.onResume()
-        when(typeSelected){
+        bettingTipsViewModel.getAppLaunchCount()
+        checkSession()
+        when (typeSelected) {
             0 -> requestOlderData(sportSelected.getSportFromIndex())
             1 -> requestTodayData(sportSelected.getSportFromIndex())
         }
