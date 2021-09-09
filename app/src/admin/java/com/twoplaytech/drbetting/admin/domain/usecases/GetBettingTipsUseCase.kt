@@ -22,33 +22,25 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.ui.basketball
+package com.twoplaytech.drbetting.admin.domain.usecases
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import com.twoplaytech.drbetting.R
-import com.twoplaytech.drbetting.admin.ui.common.BaseFragment
+import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.Message
 import com.twoplaytech.drbetting.data.models.Sport
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
-class BasketballFragment : BaseFragment() {
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        initBinding(inflater, container)
-        changeTheme(R.string.heading_basketball, Sport.Basketball)
-        initPager(
-            listOf(
-                BasketballOlderFragment.getInstance(),
-                BasketballUpcomingFragment.getInstance()
-            )
-        )
-        return binding.root
-    }
+/*
+    Author: Damjan Miloshevski 
+    Created on 23.8.21 15:55
+    Project: Dr.Betting
+    © 2Play Tech  2021. All rights reserved
+*/
+interface GetBettingTipsUseCase {
+    fun getBettingTips(onSuccess: (List<BettingTip>) -> Unit, onError: (Message) -> Unit)
+    fun getBettingTipsBySport(
+        sport: Sport,
+        upcoming: Boolean = false,
+        onSuccess: (List<BettingTip>) -> Unit,
+        onError: (Message) -> Unit
+    )
+    fun getBettingTipById(id:String, onSuccess: (BettingTip) -> Unit, onError: (Message) -> Unit)
 }

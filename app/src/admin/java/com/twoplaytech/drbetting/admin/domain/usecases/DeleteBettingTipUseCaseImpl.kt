@@ -26,8 +26,6 @@ package com.twoplaytech.drbetting.admin.domain.usecases
 
 import com.twoplaytech.drbetting.admin.domain.repository.Repository
 import com.twoplaytech.drbetting.data.models.Message
-import com.twoplaytech.drbetting.domain.repository.Repository
-import com.twoplaytech.drbetting.domain.usecases.UseCase
 import javax.inject.Inject
 
 /*

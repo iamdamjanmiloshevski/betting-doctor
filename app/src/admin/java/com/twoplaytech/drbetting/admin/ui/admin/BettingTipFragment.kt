@@ -29,12 +29,12 @@ import android.view.*
 import androidx.fragment.app.activityViewModels
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.common.OnDropdownItemSelectedListener
+import com.twoplaytech.drbetting.admin.ui.common.BaseFragment
 import com.twoplaytech.drbetting.admin.ui.viewmodels.AdminViewModel
 import com.twoplaytech.drbetting.admin.util.Constants
 import com.twoplaytech.drbetting.admin.views.ChooserView
 import com.twoplaytech.drbetting.data.models.*
 import com.twoplaytech.drbetting.databinding.FragmentBettingTipBinding
-import com.twoplaytech.drbetting.ui.common.BaseFragment
 import java.util.*
 
 class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {

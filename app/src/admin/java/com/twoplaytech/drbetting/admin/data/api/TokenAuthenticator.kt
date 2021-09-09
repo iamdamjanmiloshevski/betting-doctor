@@ -24,7 +24,8 @@
 
 package com.twoplaytech.drbetting.admin.data.api
 
-import com.twoplaytech.drbetting.domain.repository.Repository
+
+import com.twoplaytech.drbetting.admin.domain.repository.Repository
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response

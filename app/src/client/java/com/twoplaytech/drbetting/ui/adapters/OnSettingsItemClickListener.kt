@@ -22,26 +22,15 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.di
+package com.twoplaytech.drbetting.ui.adapters
 
-import com.twoplaytech.drbetting.data.datasource.RemoteDataSource
-import com.twoplaytech.drbetting.data.datasource.RemoteDataSourceImpl
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import com.twoplaytech.drbetting.ui.settingSettingsItem
+import com.twoplaytech.drbetting.ui.settings.SettingsItem
 
 /*
     Author: Damjan Miloshevski 
-    Created on 24.8.21 10:57
-    Project: Dr.Betting
-    © 2Play Tech  2021. All rights reserved
+    Created on 3/23/21 11:55 AM
 */
-@Module
-@InstallIn(SingletonComponent::class)
-interface RemoteDataSourceModule {
-    @Binds
-    fun bindRemoteDataSource(
-        remoteDataSourceImpl: RemoteDataSourceImpl
-    ): RemoteDataSource
+interface OnSettingsItemClickListener {
+    fun onSettingsItemClick(item: SettingsItem)
 }

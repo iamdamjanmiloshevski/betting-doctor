@@ -22,10 +22,13 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.admin.data
+package com.twoplaytech.drbetting.admin.data.api
 
 import com.twoplaytech.drbetting.admin.data.models.AccessToken
-import com.twoplaytech.drbetting.data.models.*
+import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.Message
+import com.twoplaytech.drbetting.data.models.Sport
+import com.twoplaytech.drbetting.data.models.UserInput
 import retrofit2.http.*
 
 /*

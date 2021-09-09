@@ -25,8 +25,8 @@
 package com.twoplaytech.drbetting.admin.di
 
 import com.twoplaytech.drbetting.BuildConfig
+import com.twoplaytech.drbetting.admin.data.api.BettingDoctorAPI
 import com.twoplaytech.drbetting.admin.data.api.TokenAuthenticator
-import com.twoplaytech.drbetting.data.api.BettingDoctorAPI
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,39 +44,37 @@ import javax.inject.Singleton
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-class NetworkModule {
-    @Module
-    @InstallIn(SingletonComponent::class)
-    object NetworkModule {
 
-        @Singleton
-        @Provides
-        fun provideOkHttpClient(): OkHttpClient {
-            val client = OkHttpClient.Builder()
-            client.connectTimeout(30, TimeUnit.SECONDS)
-                .callTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .writeTimeout(30, TimeUnit.SECONDS)
-            client.authenticator(TokenAuthenticator())
-            client.addInterceptor(
-                if (BuildConfig.DEBUG) HttpLoggingInterceptor().setLevel(
-                    HttpLoggingInterceptor.Level.BODY
-                ) else HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE)
-            )
-            return client.build()
-        }
-
-        @Singleton
-        @Provides
-        fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_URL)
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-
-        @Provides
-        fun provideApi(retrofit: Retrofit): BettingDoctorAPI =
-            retrofit.create(BettingDoctorAPI::class.java)
+@Module
+@InstallIn(SingletonComponent::class)
+object NetworkModule {
+    @Singleton
+    @Provides
+    fun provideOkHttpClient(): OkHttpClient {
+        val client = OkHttpClient.Builder()
+        client.connectTimeout(30, TimeUnit.SECONDS)
+            .callTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+        client.authenticator(TokenAuthenticator())
+        client.addInterceptor(
+            if (BuildConfig.DEBUG) HttpLoggingInterceptor().setLevel(
+                HttpLoggingInterceptor.Level.BODY
+            ) else HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE)
+        )
+        return client.build()
     }
+
+    @Singleton
+    @Provides
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+        .baseUrl(BuildConfig.BASE_URL)
+        .client(okHttpClient)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+
+    @Provides
+    fun provideApi(retrofit: Retrofit): BettingDoctorAPI =
+        retrofit.create(BettingDoctorAPI::class.java)
 }

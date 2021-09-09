@@ -24,54 +24,45 @@
 
 package com.twoplaytech.drbetting.admin.domain.usecases
 
-import com.twoplaytech.drbetting.admin.data.models.AccessToken
-import com.twoplaytech.drbetting.admin.data.models.Credentials
 import com.twoplaytech.drbetting.admin.domain.repository.Repository
+import com.twoplaytech.drbetting.data.models.BettingTip
 import com.twoplaytech.drbetting.data.models.Message
-import com.twoplaytech.drbetting.data.models.UserInput
+import com.twoplaytech.drbetting.data.models.Sport
 import javax.inject.Inject
 
 /*
     Author: Damjan Miloshevski 
-    Created on 23.8.21 16:04
+    Created on 23.8.21 15:56
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-class SignInUseCaseImpl @Inject constructor(
-    repository: Repository
-) : UseCase(repository), SignInUseCase {
-    override fun signIn(
-        userInput: UserInput,
-        onSuccess: (AccessToken) -> Unit,
-        onError: (Message) -> Unit
-    ) {
-        repository.signIn(
-            userInput,
+class GetBettingTipsUseCaseImpl @Inject constructor(repository: Repository) : UseCase(repository),
+    GetBettingTipsUseCase {
+    override fun getBettingTips(onSuccess: (List<BettingTip>) -> Unit, onError: (Message) -> Unit) {
+        repository.getBettingTips(
             onSuccess = { onSuccess.invoke(it) },
             onError = { onError.invoke(it) })
     }
 
-
-    override fun isAlreadyLoggedIn(callback: (Boolean) -> Unit) {
-        repository.isAlreadyLoggedIn {
-            callback.invoke(it)
-        }
-    }
-    override fun saveLogin(shouldStayLoggedIn: Boolean) {
-        repository.saveLogin(shouldStayLoggedIn)
-    }
-
-    override fun saveUserCredentials(email: String, password: String) {
-        repository.saveUserCredentials(email,password)
-    }
-
-    override fun retrieveUserCredentials(
-        onSuccess: (Credentials) -> Unit,
-        onError: (Throwable) -> Unit
+    override fun getBettingTipsBySport(
+        sport: Sport,
+        upcoming: Boolean,
+        onSuccess: (List<BettingTip>) -> Unit,
+        onError: (Message) -> Unit
     ) {
-        repository.retrieveUserCredentials(onSuccess = {
+        repository.getBettingTipsBySport(sport, upcoming,
+            onSuccess = { onSuccess.invoke(it) },
+            onError = { onError.invoke(it) })
+    }
+
+    override fun getBettingTipById(
+        id: String,
+        onSuccess: (BettingTip) -> Unit,
+        onError: (Message) -> Unit
+    ) {
+        repository.getBettingTipById(id, onSuccess = {
             onSuccess.invoke(it)
-        },onError = {
+        }, onError = {
             onError.invoke(it)
         })
     }

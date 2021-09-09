@@ -22,14 +22,25 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.ui.adapters
-
-import com.twoplaytech.drbetting.ui.settings.SettingsItem
+package com.twoplaytech.drbetting.admin.domain.usecases
+import com.twoplaytech.drbetting.admin.domain.repository.Repository
+import javax.inject.Inject
 
 /*
     Author: Damjan Miloshevski 
-    Created on 3/23/21 11:55 AM
+    Created on 6.9.21 13:19
+    Project: Dr.Betting
+    © 2Play Tech  2021. All rights reserved
 */
-interface OnSettingsItemClickListener {
-    fun onSettingsItemClick(item: SettingsItem)
+class AppLaunchUseCaseImpl@Inject constructor(repository: Repository) : UseCase(repository),AppLaunchUseCase {
+
+    override fun getAppLaunchesCount(callback: (Int) -> Unit) {
+        repository.getAppLaunchesCount {
+           callback.invoke(it)
+        }
+    }
+
+    override fun incrementAppLaunch() {
+       repository.incrementAppLaunch()
+    }
 }
