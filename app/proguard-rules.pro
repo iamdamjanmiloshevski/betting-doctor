@@ -20,10 +20,10 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep class com.twoplaytech.drbetting.data.entities.BettingTip
--keep class com.twoplaytech.drbetting.data.entities.Team
--keep class com.twoplaytech.drbetting.data.entities.Sport
--keep class com.twoplaytech.drbetting.data.entities.Status
--keep class com.twoplaytech.drbetting.data.entities.BettingTip
+-keep class com.twoplaytech.drbetting.data.models.BettingTip
+-keep class com.twoplaytech.drbetting.data.models.Team
+-keep class com.twoplaytech.drbetting.data.models.Sport
+-keep class com.twoplaytech.drbetting.data.models.Status
+-keep class com.twoplaytech.drbetting.data.models.BettingTip
 -keep class com.twoplaytech.drbetting.domain.common.Resource
 -keep class com.twoplaytech.drbetting.domain.common.Result

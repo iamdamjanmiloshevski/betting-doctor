@@ -22,38 +22,20 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.data.entities
+package com.twoplaytech.drbetting.admin.domain.usecases
 
-import android.os.Parcelable
-import com.twoplaytech.drbetting.util.Constants.TEAM_LOGO
-import com.twoplaytech.drbetting.util.Constants.TEAM_NAME
-import com.twoplaytech.drbetting.util.checkImageExtension
-import kotlinx.android.parcel.Parcelize
+import com.twoplaytech.drbetting.data.models.Message
 
 /*
     Author: Damjan Miloshevski 
-    Created on 3/10/21 12:26 PM
-
+    Created on 24.8.21 10:36
+    Project: Dr.Betting
+    © 2Play Tech  2021. All rights reserved
 */
-@Parcelize
-data class Team(var name: String = "", var logo: String = "") : Parcelable {
-    constructor(data: Map<*, *>) : this() {
-        name = if (data.containsKey(TEAM_NAME)
-            && data[TEAM_NAME] != null) {
-            data[TEAM_NAME] as String
-        } else {
-            ""
-        }
-        logo = if (data.containsKey(TEAM_LOGO)
-            && data[TEAM_LOGO] != null) {
-            if (!(data[TEAM_LOGO] as String).checkImageExtension()) {
-                ""
-            } else {
-                data[TEAM_LOGO] as String
-            }
-        } else {
-            ""
-        }
-    }
-
+interface DeleteBettingTipUseCase {
+    fun deleteBettingTip(
+        id: String,
+        onSuccess: (Message) -> Unit,
+        onError: (Message) -> Unit
+    )
 }

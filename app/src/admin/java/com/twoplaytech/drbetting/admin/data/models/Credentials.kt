@@ -22,18 +22,12 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.data.mappers
-
-import com.twoplaytech.drbetting.data.entities.AccessToken
-import com.twoplaytech.drbetting.util.GsonUtil
+package com.twoplaytech.drbetting.admin.data.models
 
 /*
     Author: Damjan Miloshevski 
-    Created on 1.9.21 13:11
+    Created on 1.9.21 10:56
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-object AccessTokenMapper {
-    fun toJson(accessToken: AccessToken) = GsonUtil.toJson(accessToken)
-    fun fromJson(json:String) = GsonUtil.fromJson<AccessToken>(json)
-}
+data class Credentials(val email:String,val password:String)

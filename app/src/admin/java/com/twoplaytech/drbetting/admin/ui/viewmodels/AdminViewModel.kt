@@ -26,12 +26,12 @@ package com.twoplaytech.drbetting.admin.ui.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.twoplaytech.drbetting.data.entities.BettingTip
-import com.twoplaytech.drbetting.data.entities.Message
+import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.Message
 import com.twoplaytech.drbetting.domain.common.Resource
-import com.twoplaytech.drbetting.domain.usecases.DeleteBettingTipUseCase
-import com.twoplaytech.drbetting.domain.usecases.InsertBettingTipUseCase
-import com.twoplaytech.drbetting.domain.usecases.UpdateBettingTipUseCase
+import com.twoplaytech.drbetting.admin.domain.usecases.DeleteBettingTipUseCase
+import com.twoplaytech.drbetting.admin.domain.usecases.InsertBettingTipUseCase
+import com.twoplaytech.drbetting.admin.domain.usecases.UpdateBettingTipUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

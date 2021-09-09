@@ -22,25 +22,45 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.domain.usecases
+package com.twoplaytech.drbetting.admin.data
 
-import com.twoplaytech.drbetting.data.models.BettingTip
-import com.twoplaytech.drbetting.data.models.Message
-import com.twoplaytech.drbetting.data.models.Sport
+import com.twoplaytech.drbetting.admin.data.models.AccessToken
+import com.twoplaytech.drbetting.data.models.*
+import retrofit2.http.*
 
 /*
     Author: Damjan Miloshevski 
-    Created on 23.8.21 15:55
+    Created on 9.9.21 14:32
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-interface GetBettingTipsUseCase {
-    fun getBettingTips(onSuccess: (List<BettingTip>) -> Unit, onError: (Message) -> Unit)
-    fun getBettingTipsBySport(
-        sport: Sport,
-        upcoming: Boolean = false,
-        onSuccess: (List<BettingTip>) -> Unit,
-        onError: (Message) -> Unit
-    )
-    fun getBettingTipById(id:String, onSuccess: (BettingTip) -> Unit, onError: (Message) -> Unit)
+interface BettingDoctorAPI {
+    @GET("betting-tips")
+    suspend fun getBettingTips(): List<BettingTip>
+
+    @GET("betting-tips/{id}")
+    suspend fun getBettingTipById(@Path("id") tipId: String): BettingTip
+
+    @GET("betting-tips/{sport}/upcoming")
+    suspend fun getUpcomingBettingTipsBySport(@Path("sport") sport: Sport): List<BettingTip>
+
+    @GET("betting-tips/{sport}/older")
+    suspend fun getOlderBettingTipsBySport(@Path("sport") sport: Sport): List<BettingTip>
+
+    @PUT("betting-tips")
+    suspend fun updateBettingTip(
+        @Body bettingTip: BettingTip
+    ): BettingTip
+
+    @POST("betting-tips")
+    suspend fun insertBettingTip(@Body bettingTip: BettingTip): BettingTip
+
+    @DELETE("betting-tips/{id}")
+    suspend fun deleteBettingTip(@Path("id") tipId: String): Message
+
+    @POST("users/signin")
+    suspend fun signIn(@Body userInput: UserInput): AccessToken
+
+    @GET("users/refreshToken/{refreshToken}")
+    suspend fun refreshToken(@Path("refreshToken") refreshToken:String): AccessToken
 }

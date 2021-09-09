@@ -28,11 +28,11 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.twoplaytech.drbetting.R
-import com.twoplaytech.drbetting.data.entities.AccessToken
-import com.twoplaytech.drbetting.data.entities.Credentials
-import com.twoplaytech.drbetting.data.entities.UserInput
+import com.twoplaytech.drbetting.admin.data.models.AccessToken
+import com.twoplaytech.drbetting.admin.data.models.Credentials
+import com.twoplaytech.drbetting.data.models.UserInput
 import com.twoplaytech.drbetting.domain.common.Resource
-import com.twoplaytech.drbetting.domain.usecases.SignInUseCase
+import com.twoplaytech.drbetting.admin.domain.usecases.SignInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -42,7 +42,8 @@ import javax.inject.Inject
 */
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val signInUseCase: SignInUseCase) :
+    private val signInUseCase: SignInUseCase
+) :
     ViewModel() {
     private val loginObserver: MutableLiveData<Resource<AccessToken>> = MutableLiveData()
     private val keepUserLoggedInObserver = MutableLiveData<Boolean>()

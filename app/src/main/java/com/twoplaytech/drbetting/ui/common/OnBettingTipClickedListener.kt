@@ -24,7 +24,7 @@
 
 package com.twoplaytech.drbetting.ui.common
 
-import com.twoplaytech.drbetting.data.entities.BettingTip
+import com.twoplaytech.drbetting.data.models.BettingTip
 
 /*
     Author: Damjan Miloshevski 

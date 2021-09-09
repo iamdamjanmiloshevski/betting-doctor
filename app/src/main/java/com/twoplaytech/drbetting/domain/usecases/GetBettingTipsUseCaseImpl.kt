@@ -24,9 +24,9 @@
 
 package com.twoplaytech.drbetting.domain.usecases
 
-import com.twoplaytech.drbetting.data.entities.BettingTip
-import com.twoplaytech.drbetting.data.entities.Message
-import com.twoplaytech.drbetting.data.entities.Sport
+import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.Message
+import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.domain.repository.Repository
 import javax.inject.Inject
 

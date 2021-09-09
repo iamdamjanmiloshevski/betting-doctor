@@ -31,7 +31,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.twoplaytech.drbetting.R
-import com.twoplaytech.drbetting.data.entities.Sport
+import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.ui.common.BaseActivity
 import com.twoplaytech.drbetting.util.showDisclaimer
 import dagger.hilt.android.AndroidEntryPoint

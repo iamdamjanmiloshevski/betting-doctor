@@ -22,21 +22,23 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.domain.usecases
+package com.twoplaytech.drbetting.admin.data.mappers
 
-import com.twoplaytech.drbetting.data.entities.BettingTip
-import com.twoplaytech.drbetting.data.entities.Message
+import com.twoplaytech.drbetting.admin.data.models.Credentials
+import com.twoplaytech.drbetting.admin.data.models.CredentialsDataModel
+import com.twoplaytech.drbetting.util.GsonUtil
 
 /*
     Author: Damjan Miloshevski 
-    Created on 24.8.21 10:11
+    Created on 1.9.21 10:52
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-interface InsertBettingTipUseCase {
-    fun insertBettingTip(
-        bettingTip: BettingTip,
-        onSuccess: (BettingTip) -> Unit,
-        onError: (Message) -> Unit
-    )
+object CredentialsMapper {
+    fun toCredentials(credentials: CredentialsDataModel): Credentials =
+        Credentials(credentials.email, credentials.password)
+
+    fun toCredentialsJson(credentials: Credentials) = GsonUtil.toJson(credentials)
+    fun fromCredentialsJson(credentialsJson: String) =
+        GsonUtil.fromJson<CredentialsDataModel>(credentialsJson)
 }

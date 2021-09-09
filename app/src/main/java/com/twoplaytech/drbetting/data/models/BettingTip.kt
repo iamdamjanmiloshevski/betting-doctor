@@ -22,29 +22,27 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.domain.usecases
+package com.twoplaytech.drbetting.data.models
 
-import com.twoplaytech.drbetting.data.entities.Message
-import com.twoplaytech.drbetting.domain.repository.Repository
-import javax.inject.Inject
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+import java.util.*
 
 /*
     Author: Damjan Miloshevski 
-    Created on 24.8.21 10:37
+    Created on 7.7.21 12:27
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-class DeleteBettingTipUseCaseImpl @Inject constructor(repository: Repository) : UseCase(repository),
-    DeleteBettingTipUseCase {
-    override fun deleteBettingTip(
-        id: String,
-        onSuccess: (Message) -> Unit,
-        onError: (Message) -> Unit
-    ) {
-        repository.deleteBettingTip(
-            id,
-            onSuccess = { onSuccess.invoke(it) },
-            onError = { onError.invoke(it) })
-    }
-
-}
+@Parcelize
+data class BettingTip(
+    var leagueName: String,
+    var teamHome: Team?,
+    var teamAway: Team?,
+    var gameTime: Date,
+    var bettingType: String,
+    var status: TypeStatus,
+    var result: String,
+    var _id: String?= null,
+    var sport: Sport
+):Parcelable

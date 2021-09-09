@@ -22,21 +22,30 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.domain.usecases
+package com.twoplaytech.drbetting.admin.domain.usecases
 
-import com.twoplaytech.drbetting.data.entities.BettingTip
-import com.twoplaytech.drbetting.data.entities.Message
+import com.twoplaytech.drbetting.data.models.Message
+import com.twoplaytech.drbetting.domain.repository.Repository
+import com.twoplaytech.drbetting.domain.usecases.UseCase
+import javax.inject.Inject
 
 /*
     Author: Damjan Miloshevski 
-    Created on 24.8.21 10:27
+    Created on 24.8.21 10:37
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-interface UpdateBettingTipUseCase {
-    fun updateBettingTip(
-        bettingTip: BettingTip,
-        onSuccess: (BettingTip) -> Unit,
+class DeleteBettingTipUseCaseImpl @Inject constructor(repository: Repository) : UseCase(repository),
+    DeleteBettingTipUseCase {
+    override fun deleteBettingTip(
+        id: String,
+        onSuccess: (Message) -> Unit,
         onError: (Message) -> Unit
-    )
+    ) {
+        repository.deleteBettingTip(
+            id,
+            onSuccess = { onSuccess.invoke(it) },
+            onError = { onError.invoke(it) })
+    }
+
 }

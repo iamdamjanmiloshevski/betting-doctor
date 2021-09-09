@@ -22,12 +22,24 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.data.entities
+package com.twoplaytech.drbetting.data.models
+
+import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
 /*
     Author: Damjan Miloshevski 
-    Created on 25/06/2021
-    Project: betting-doctor
-    © 2Play Technologies  2021. All rights reserved
+    Created on 7.7.21 14:58
+    Project: Dr.Betting
+    © 2Play Tech  2021. All rights reserved
 */
-data class Message(val message: String, val code: Int)
+@Parcelize
+enum class TypeStatus : Parcelable {
+    @SerializedName("UNKNOWN")
+    UNKNOWN,
+    @SerializedName("WON")
+    WON,
+    @SerializedName("LOST")
+    LOST
+}

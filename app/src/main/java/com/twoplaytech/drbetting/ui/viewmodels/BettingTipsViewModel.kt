@@ -26,7 +26,7 @@ package com.twoplaytech.drbetting.ui.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.twoplaytech.drbetting.data.entities.Sport
+import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.domain.common.Resource
 import com.twoplaytech.drbetting.domain.usecases.AppLaunchUseCase
 import com.twoplaytech.drbetting.domain.usecases.GetBettingTipsUseCase

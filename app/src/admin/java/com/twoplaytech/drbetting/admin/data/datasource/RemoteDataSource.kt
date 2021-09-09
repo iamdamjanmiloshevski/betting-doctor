@@ -22,19 +22,35 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.data.entities
+package com.twoplaytech.drbetting.admin.data.datasource
+
+import com.twoplaytech.drbetting.admin.data.models.AccessToken
+import com.twoplaytech.drbetting.data.models.*
+import kotlinx.coroutines.flow.Flow
 
 /*
     Author: Damjan Miloshevski 
-    Created on 13.7.21 13:49
+    Created on 23.8.21 15:23
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-data class User(
-    val _id: String,
-    var name: String,
-    var surname: String="",
-    var avatarUrl: String?="",
-    var email: String="",
-    var role: UserRole = UserRole.CUSTOMER
-)
+interface RemoteDataSource {
+    suspend fun getBettingTips(): Flow<List<BettingTip>>
+    suspend fun getBettingTipsBySport(
+        sport: Sport,
+        upcoming: Boolean = false
+    ): Flow<List<BettingTip>>
+
+    suspend fun getBettingTipById(
+        id: String
+    ): Flow<BettingTip>
+
+    suspend fun insertBettingTip(bettingTip: BettingTip):Flow<BettingTip>
+
+    suspend fun updateBettingTip(bettingTip: BettingTip):Flow<BettingTip>
+
+    suspend fun deleteBettingTip(id:String):Flow<Message>
+
+    suspend  fun signIn(userInput: UserInput): Flow<AccessToken>
+    suspend fun refreshToken(refreshToken:String):Flow<AccessToken>
+}

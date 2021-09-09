@@ -22,23 +22,19 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.data.mappers
-
-import com.twoplaytech.drbetting.data.entities.Credentials
-import com.twoplaytech.drbetting.data.entities.CredentialsDataModel
-import com.twoplaytech.drbetting.util.GsonUtil
+package com.twoplaytech.drbetting.data.models
 
 /*
     Author: Damjan Miloshevski 
-    Created on 1.9.21 10:52
+    Created on 13.7.21 13:49
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-object CredentialsMapper {
-    fun toCredentials(credentials: CredentialsDataModel): Credentials =
-        Credentials(credentials.email, credentials.password)
-
-    fun toCredentialsJson(credentials: Credentials) = GsonUtil.toJson(credentials)
-    fun fromCredentialsJson(credentialsJson: String) =
-        GsonUtil.fromJson<CredentialsDataModel>(credentialsJson)
-}
+data class User(
+    val _id: String,
+    var name: String,
+    var surname: String="",
+    var avatarUrl: String?="",
+    var email: String="",
+    var role: UserRole = UserRole.ADMIN
+)

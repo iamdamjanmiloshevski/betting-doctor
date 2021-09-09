@@ -22,27 +22,18 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.data.entities
+package com.twoplaytech.drbetting.admin.data.mappers
 
-import android.os.Parcelable
-import com.google.gson.annotations.SerializedName
-import kotlinx.android.parcel.Parcelize
+import com.twoplaytech.drbetting.admin.data.models.AccessToken
+import com.twoplaytech.drbetting.util.GsonUtil
+
 /*
-    Author: Damjan Miloshevski
-    Created on 7.7.21 14:06
+    Author: Damjan Miloshevski 
+    Created on 1.9.21 13:11
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-@Parcelize
-enum class Sport:Parcelable {
-    @SerializedName("Football")
-    Football,
-    @SerializedName("Basketball")
-    Basketball,
-    @SerializedName("Tennis")
-    Tennis,
-    @SerializedName("Handball")
-    Handball,
-    @SerializedName("Volleyball")
-    Volleyball
+object AccessTokenMapper {
+    fun toJson(accessToken: AccessToken) = GsonUtil.toJson(accessToken)
+    fun fromJson(json:String) = GsonUtil.fromJson<AccessToken>(json)
 }

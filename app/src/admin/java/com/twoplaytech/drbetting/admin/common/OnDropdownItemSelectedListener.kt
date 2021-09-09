@@ -24,8 +24,8 @@
 
 package com.twoplaytech.drbetting.admin.common
 
-import com.twoplaytech.drbetting.data.entities.Sport
-import com.twoplaytech.drbetting.data.entities.TypeStatus
+import com.twoplaytech.drbetting.data.models.Sport
+import com.twoplaytech.drbetting.data.models.TypeStatus
 
 
 /*

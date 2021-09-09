@@ -32,10 +32,10 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.ui.settings.ISettingsItem
-import com.twoplaytech.drbetting.data.entities.BettingTip
-import com.twoplaytech.drbetting.data.entities.Sport
-import com.twoplaytech.drbetting.data.entities.Team
-import com.twoplaytech.drbetting.data.entities.TypeStatus
+import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.Sport
+import com.twoplaytech.drbetting.data.models.Team
+import com.twoplaytech.drbetting.data.models.TypeStatus
 import com.twoplaytech.drbetting.glide.GlideApp
 import com.twoplaytech.drbetting.glide.SvgSoftwareLayerSetter
 import com.twoplaytech.drbetting.util.getSportPlaceHolder

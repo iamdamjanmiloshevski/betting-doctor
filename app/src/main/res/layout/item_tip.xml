@@ -31,7 +31,7 @@
 
         <variable
             name="bettingType"
-            type="com.twoplaytech.drbetting.data.entities.BettingTip" />
+            type="com.twoplaytech.drbetting.data.models.BettingTip" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

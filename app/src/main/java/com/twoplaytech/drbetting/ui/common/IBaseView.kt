@@ -30,7 +30,7 @@ import androidx.annotation.MenuRes
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import com.twoplaytech.drbetting.data.entities.Sport
+import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.ui.viewmodels.BettingTipsViewModel
 
 /*

@@ -29,7 +29,7 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.twoplaytech.drbetting.data.entities.Sport
+import com.twoplaytech.drbetting.data.models.Sport
 
 interface IBaseActivityView {
     fun initUI(){}

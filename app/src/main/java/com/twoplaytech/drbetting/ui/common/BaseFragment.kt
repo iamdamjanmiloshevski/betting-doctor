@@ -40,7 +40,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import com.twoplaytech.drbetting.R
-import com.twoplaytech.drbetting.data.entities.Sport
+import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.databinding.FragmentBaseBinding
 import com.twoplaytech.drbetting.ui.adapters.ChildFragmentViewPager2PagerAdapter
 import com.twoplaytech.drbetting.ui.settings.SettingsActivity

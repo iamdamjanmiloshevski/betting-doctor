@@ -22,27 +22,12 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.data.entities
-
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
-import java.util.*
+package com.twoplaytech.drbetting.data.models
 
 /*
     Author: Damjan Miloshevski 
-    Created on 7.7.21 12:27
-    Project: Dr.Betting
-    © 2Play Tech  2021. All rights reserved
+    Created on 25/06/2021
+    Project: betting-doctor
+    © 2Play Technologies  2021. All rights reserved
 */
-@Parcelize
-data class BettingTip(
-    var leagueName: String,
-    var teamHome: Team?,
-    var teamAway: Team?,
-    var gameTime: Date,
-    var bettingType: String,
-    var status: TypeStatus,
-    var result: String,
-    var _id: String?= null,
-    var sport: Sport
-):Parcelable
+data class Message(val message: String, val code: Int)

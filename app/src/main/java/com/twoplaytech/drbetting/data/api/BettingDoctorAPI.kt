@@ -24,7 +24,11 @@
 
 package com.twoplaytech.drbetting.data.api
 
-import com.twoplaytech.drbetting.data.entities.*
+import com.twoplaytech.drbetting.admin.data.models.AccessToken
+import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.Message
+import com.twoplaytech.drbetting.data.models.Sport
+import com.twoplaytech.drbetting.data.models.UserInput
 import retrofit2.http.*
 
 /*
@@ -61,5 +65,5 @@ interface BettingDoctorAPI {
     suspend fun signIn(@Body userInput: UserInput): AccessToken
 
     @GET("users/refreshToken/{refreshToken}")
-    suspend fun refreshToken(@Path("refreshToken") refreshToken:String):AccessToken
+    suspend fun refreshToken(@Path("refreshToken") refreshToken:String): AccessToken
 }

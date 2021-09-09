@@ -24,7 +24,10 @@
 
 package com.twoplaytech.drbetting.di
 
-import com.twoplaytech.drbetting.domain.usecases.*
+import com.twoplaytech.drbetting.domain.usecases.AppLaunchUseCase
+import com.twoplaytech.drbetting.domain.usecases.AppLaunchUseCaseImpl
+import com.twoplaytech.drbetting.domain.usecases.GetBettingTipsUseCase
+import com.twoplaytech.drbetting.domain.usecases.GetBettingTipsUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -41,18 +44,6 @@ import dagger.hilt.android.components.ViewModelComponent
 interface UseCasesModule {
     @Binds
     fun bindGetBettingTipsUseCase(getBettingTipsUseCaseImpl: GetBettingTipsUseCaseImpl): GetBettingTipsUseCase
-
-    @Binds
-    fun bindInsertBettingTipUseCase(insertBettingTipUseCaseImpl: InsertBettingTipUseCaseImpl): InsertBettingTipUseCase
-
-    @Binds
-    fun bindDeleteBettingUseCase(deleteBettingTipUseCaseImpl: DeleteBettingTipUseCaseImpl): DeleteBettingTipUseCase
-
-    @Binds
-    fun bindUpdateBettingTipsUseCase(updateBettingTipUseCaseImpl: UpdateBettingTipUseCaseImpl): UpdateBettingTipUseCase
-
-    @Binds
-    fun bindSignInUserUserCase(signInUseCaseImpl: SignInUseCaseImpl): SignInUseCase
 
     @Binds
     fun bindAppLaunchUseCase(appLaunchUseCaseImpl: AppLaunchUseCaseImpl):AppLaunchUseCase

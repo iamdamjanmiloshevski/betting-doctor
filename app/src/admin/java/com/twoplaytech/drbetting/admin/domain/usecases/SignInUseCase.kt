@@ -22,29 +22,28 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.domain.usecases
+package com.twoplaytech.drbetting.admin.domain.usecases
 
-import com.twoplaytech.drbetting.data.entities.BettingTip
-import com.twoplaytech.drbetting.data.entities.Message
-import com.twoplaytech.drbetting.domain.repository.Repository
-import javax.inject.Inject
+import com.twoplaytech.drbetting.admin.data.models.AccessToken
+import com.twoplaytech.drbetting.admin.data.models.Credentials
+import com.twoplaytech.drbetting.data.models.Message
+import com.twoplaytech.drbetting.data.models.UserInput
 
 /*
     Author: Damjan Miloshevski 
-    Created on 24.8.21 10:15
+    Created on 23.8.21 16:00
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-class InsertBettingTipUseCaseImpl @Inject constructor(repository: Repository) : UseCase(repository),
-    InsertBettingTipUseCase {
-    override fun insertBettingTip(
-        bettingTip: BettingTip,
-        onSuccess: (BettingTip) -> Unit,
+interface SignInUseCase {
+    fun signIn(
+        userInput: UserInput,
+        onSuccess: (AccessToken) -> Unit,
         onError: (Message) -> Unit
-    ) {
-        repository.insertBettingTip(
-            bettingTip,
-            onSuccess = { onSuccess.invoke(bettingTip) },
-            onError = { onError.invoke(it) })
-    }
+    )
+
+    fun isAlreadyLoggedIn(callback: (Boolean) -> Unit)
+    fun saveLogin(shouldStayLoggedIn: Boolean)
+    fun saveUserCredentials(email: String, password: String)
+    fun retrieveUserCredentials(onSuccess: (Credentials) -> Unit, onError: (Throwable) -> Unit)
 }

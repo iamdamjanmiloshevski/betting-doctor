@@ -37,10 +37,9 @@ import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
-import com.google.firebase.firestore.Query
 import com.twoplaytech.drbetting.R
-import com.twoplaytech.drbetting.data.entities.Sport
-import com.twoplaytech.drbetting.data.entities.TypeStatus
+import com.twoplaytech.drbetting.data.models.Sport
+import com.twoplaytech.drbetting.data.models.TypeStatus
 import com.twoplaytech.drbetting.databinding.DialogDisclaimerBinding
 import java.text.SimpleDateFormat
 import java.util.*

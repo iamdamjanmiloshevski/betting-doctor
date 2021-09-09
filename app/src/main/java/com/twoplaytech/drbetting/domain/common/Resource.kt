@@ -24,7 +24,7 @@
 
 package com.twoplaytech.drbetting.domain.common
 
-import com.twoplaytech.drbetting.data.entities.Status
+import com.twoplaytech.drbetting.data.models.Status
 
 class Resource<T> private constructor(val status: Status, val data: T?, val message: String?) {
     companion object {

@@ -22,24 +22,21 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.data.entities
+package com.twoplaytech.drbetting.admin.domain.usecases
 
-import android.os.Parcelable
-import com.google.gson.annotations.SerializedName
-import kotlinx.android.parcel.Parcelize
+import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.Message
 
 /*
     Author: Damjan Miloshevski 
-    Created on 7.7.21 14:58
+    Created on 24.8.21 10:11
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-@Parcelize
-enum class TypeStatus : Parcelable {
-    @SerializedName("UNKNOWN")
-    UNKNOWN,
-    @SerializedName("WON")
-    WON,
-    @SerializedName("LOST")
-    LOST
+interface InsertBettingTipUseCase {
+    fun insertBettingTip(
+        bettingTip: BettingTip,
+        onSuccess: (BettingTip) -> Unit,
+        onError: (Message) -> Unit
+    )
 }

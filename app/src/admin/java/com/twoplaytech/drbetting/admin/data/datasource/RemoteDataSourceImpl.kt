@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.data.datasource
+package com.twoplaytech.drbetting.admin.data.datasource
 
 import com.twoplaytech.drbetting.admin.data.models.AccessToken
 import com.twoplaytech.drbetting.data.api.BettingDoctorAPI

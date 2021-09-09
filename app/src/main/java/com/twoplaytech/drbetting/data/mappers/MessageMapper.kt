@@ -24,7 +24,7 @@
 
 package com.twoplaytech.drbetting.data.mappers
 
-import com.twoplaytech.drbetting.data.entities.Message
+import com.twoplaytech.drbetting.data.models.Message
 import com.twoplaytech.drbetting.util.GsonUtil
 
 /*

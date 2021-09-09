@@ -22,20 +22,27 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.domain.usecases
+package com.twoplaytech.drbetting.data.models
 
-import com.twoplaytech.drbetting.data.entities.Message
-
+import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 /*
-    Author: Damjan Miloshevski 
-    Created on 24.8.21 10:36
+    Author: Damjan Miloshevski
+    Created on 7.7.21 14:06
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-interface DeleteBettingTipUseCase {
-    fun deleteBettingTip(
-        id: String,
-        onSuccess: (Message) -> Unit,
-        onError: (Message) -> Unit
-    )
+@Parcelize
+enum class Sport:Parcelable {
+    @SerializedName("Football")
+    Football,
+    @SerializedName("Basketball")
+    Basketball,
+    @SerializedName("Tennis")
+    Tennis,
+    @SerializedName("Handball")
+    Handball,
+    @SerializedName("Volleyball")
+    Volleyball
 }

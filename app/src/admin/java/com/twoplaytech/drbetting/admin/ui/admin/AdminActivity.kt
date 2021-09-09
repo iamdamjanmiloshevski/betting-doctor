@@ -41,6 +41,7 @@ import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.twoplaytech.drbetting.R
+import com.twoplaytech.drbetting.admin.common.BaseAdminActivity
 import com.twoplaytech.drbetting.admin.ui.auth.LoginActivity
 import com.twoplaytech.drbetting.admin.ui.viewmodels.LoginViewModel
 import com.twoplaytech.drbetting.admin.util.Constants
@@ -49,20 +50,19 @@ import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_TIP
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_TYPE
 import com.twoplaytech.drbetting.admin.util.Constants.VIEW_TYPE_EDIT
 import com.twoplaytech.drbetting.data.*
-import com.twoplaytech.drbetting.data.entities.BettingTip
-import com.twoplaytech.drbetting.data.entities.Sport
-import com.twoplaytech.drbetting.data.entities.Status
+import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.Sport
+import com.twoplaytech.drbetting.data.models.Status
 import com.twoplaytech.drbetting.databinding.ActivityAdminBinding
 import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_VIEW_TYPE
 import com.twoplaytech.drbetting.ui.adapters.BettingTipsRecyclerViewAdapter
-import com.twoplaytech.drbetting.ui.common.BaseActivity
 import com.twoplaytech.drbetting.ui.common.OnBettingTipClickedListener
 import com.twoplaytech.drbetting.ui.viewmodels.BettingTipsViewModel
 import com.twoplaytech.drbetting.util.SessionVerifierWorker
 import com.twoplaytech.drbetting.util.getSportColor
 import com.twoplaytech.drbetting.util.getSportFromIndex
 
-class AdminActivity : BaseActivity(), AdapterView.OnItemSelectedListener,
+class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
     OnBettingTipClickedListener, PopupMenu.OnMenuItemClickListener, View.OnClickListener {
     private lateinit var binding: ActivityAdminBinding
     private var typeSelected = 1

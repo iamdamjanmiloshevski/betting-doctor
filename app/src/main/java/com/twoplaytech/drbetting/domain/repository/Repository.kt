@@ -24,7 +24,9 @@
 
 package com.twoplaytech.drbetting.domain.repository
 
-import com.twoplaytech.drbetting.data.entities.*
+import com.twoplaytech.drbetting.admin.data.models.AccessToken
+import com.twoplaytech.drbetting.admin.data.models.Credentials
+import com.twoplaytech.drbetting.data.models.*
 
 /*
     Author: Damjan Miloshevski 
@@ -58,5 +60,5 @@ interface Repository {
     fun getAppLaunchesCount(callback: (Int) -> Unit)
     fun getAccessToken(onSuccess: (AccessToken) -> Unit,
                        onError: (Message) -> Unit)
-    fun refreshToken(refreshToken:String,onSuccess: (AccessToken) -> Unit,onError: (Message) -> Unit)
+    fun refreshToken(refreshToken:String, onSuccess: (AccessToken) -> Unit, onError: (Message) -> Unit)
 }

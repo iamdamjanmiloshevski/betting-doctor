@@ -22,16 +22,19 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.domain.repository
+package com.twoplaytech.drbetting.admin.domain.repository
 
+import com.twoplaytech.drbetting.admin.data.mappers.AccessTokenMapper
+import com.twoplaytech.drbetting.admin.data.mappers.CredentialsMapper
 import com.twoplaytech.drbetting.admin.data.models.AccessToken
 import com.twoplaytech.drbetting.admin.data.models.Credentials
 import com.twoplaytech.drbetting.data.datasource.LocalDataSource
 import com.twoplaytech.drbetting.data.datasource.RemoteDataSource
-import com.twoplaytech.drbetting.data.models.*
-import com.twoplaytech.drbetting.admin.data.mappers.AccessTokenMapper
-import com.twoplaytech.drbetting.admin.data.mappers.CredentialsMapper
 import com.twoplaytech.drbetting.data.mappers.MessageMapper
+import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.Message
+import com.twoplaytech.drbetting.data.models.Sport
+import com.twoplaytech.drbetting.data.models.UserInput
 import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_ACCESS_TOKEN
 import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_APP_LAUNCHES
 import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_LOGGED_IN

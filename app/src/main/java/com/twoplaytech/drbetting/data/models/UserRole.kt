@@ -22,12 +22,17 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.data.entities
-
+package com.twoplaytech.drbetting.data.models
+import com.google.gson.annotations.SerializedName
 /*
     Author: Damjan Miloshevski 
-    Created on 1.9.21 10:56
+    Created on 13.7.21 13:49
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-data class Credentials(val email:String,val password:String)
+enum class UserRole {
+    @SerializedName("ADMIN")
+    ADMIN,
+    @SerializedName("CUSTOMER")
+    CUSTOMER
+}

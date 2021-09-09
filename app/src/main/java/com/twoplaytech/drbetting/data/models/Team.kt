@@ -22,38 +22,38 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.ui.handball
+package com.twoplaytech.drbetting.data.models
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import com.twoplaytech.drbetting.R
-import com.twoplaytech.drbetting.data.models.Sport
-import com.twoplaytech.drbetting.ui.common.BaseFragment
-import dagger.hilt.android.AndroidEntryPoint
+import android.os.Parcelable
+import com.twoplaytech.drbetting.util.Constants.TEAM_LOGO
+import com.twoplaytech.drbetting.util.Constants.TEAM_NAME
+import com.twoplaytech.drbetting.util.checkImageExtension
+import kotlinx.android.parcel.Parcelize
 
 /*
     Author: Damjan Miloshevski 
-    Created on 3/10/21 12:01 PM
+    Created on 3/10/21 12:26 PM
 
 */
-@AndroidEntryPoint
-class HandballFragment : BaseFragment() {
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        initBinding(inflater, container)
-        changeTheme(R.string.heading_handball, Sport.Handball)
-        initPager(
-            listOf(
-                HandballOlderFragment.getInstance(),
-                HandballUpcomingFragment.getInstance()
-            )
-        )
-        return binding.root
+@Parcelize
+data class Team(var name: String = "", var logo: String = "") : Parcelable {
+    constructor(data: Map<*, *>) : this() {
+        name = if (data.containsKey(TEAM_NAME)
+            && data[TEAM_NAME] != null) {
+            data[TEAM_NAME] as String
+        } else {
+            ""
+        }
+        logo = if (data.containsKey(TEAM_LOGO)
+            && data[TEAM_LOGO] != null) {
+            if (!(data[TEAM_LOGO] as String).checkImageExtension()) {
+                ""
+            } else {
+                data[TEAM_LOGO] as String
+            }
+        } else {
+            ""
+        }
     }
+
 }

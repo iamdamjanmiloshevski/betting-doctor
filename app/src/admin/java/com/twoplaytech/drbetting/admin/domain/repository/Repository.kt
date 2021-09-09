@@ -22,28 +22,46 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.domain.usecases
+package com.twoplaytech.drbetting.admin.domain.repository
 
-import com.twoplaytech.drbetting.data.entities.AccessToken
-import com.twoplaytech.drbetting.data.entities.Credentials
-import com.twoplaytech.drbetting.data.entities.Message
-import com.twoplaytech.drbetting.data.entities.UserInput
+import com.twoplaytech.drbetting.admin.data.models.AccessToken
+import com.twoplaytech.drbetting.admin.data.models.Credentials
+import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.Message
+import com.twoplaytech.drbetting.data.models.Sport
+import com.twoplaytech.drbetting.data.models.UserInput
 
 /*
     Author: Damjan Miloshevski 
-    Created on 23.8.21 16:00
+    Created on 7.7.21 12:18
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-interface SignInUseCase {
+interface Repository {
+    fun getBettingTips(onSuccess: (List<BettingTip>) -> Unit, onError: (Message) -> Unit)
+    fun getBettingTipsBySport(
+        sport: Sport,
+        upcoming: Boolean = false,
+        onSuccess: (List<BettingTip>) -> Unit,
+        onError: (Message) -> Unit
+    )
+    fun getBettingTipById(id:String, onSuccess: (BettingTip) -> Unit, onError: (Message) -> Unit)
+    fun insertBettingTip(bettingTip: BettingTip, onSuccess:(BettingTip)->Unit, onError: (Message) -> Unit)
+    fun updateBettingTip(bettingTip: BettingTip,onSuccess:(BettingTip)->Unit, onError: (Message) -> Unit)
+    fun deleteBettingTip(id:String, onSuccess: (Message) -> Unit, onError: (Message) -> Unit)
+
     fun signIn(
         userInput: UserInput,
         onSuccess: (AccessToken) -> Unit,
         onError: (Message) -> Unit
     )
-
-    fun isAlreadyLoggedIn(callback: (Boolean) -> Unit)
     fun saveLogin(shouldStayLoggedIn: Boolean)
     fun saveUserCredentials(email: String, password: String)
+    fun incrementAppLaunch()
     fun retrieveUserCredentials(onSuccess: (Credentials) -> Unit, onError: (Throwable) -> Unit)
+    fun isAlreadyLoggedIn(callback: (Boolean) -> Unit)
+    fun getAppLaunchesCount(callback: (Int) -> Unit)
+    fun getAccessToken(onSuccess: (AccessToken) -> Unit,
+                       onError: (Message) -> Unit)
+    fun refreshToken(refreshToken:String, onSuccess: (AccessToken) -> Unit, onError: (Message) -> Unit)
 }

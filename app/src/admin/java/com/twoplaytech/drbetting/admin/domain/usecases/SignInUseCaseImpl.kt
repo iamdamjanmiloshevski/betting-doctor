@@ -22,30 +22,58 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.domain.usecases
+package com.twoplaytech.drbetting.admin.domain.usecases
 
-import com.twoplaytech.drbetting.data.entities.BettingTip
-import com.twoplaytech.drbetting.data.entities.Message
+import com.twoplaytech.drbetting.admin.data.models.AccessToken
+import com.twoplaytech.drbetting.admin.data.models.Credentials
+import com.twoplaytech.drbetting.data.models.Message
+import com.twoplaytech.drbetting.data.models.UserInput
 import com.twoplaytech.drbetting.domain.repository.Repository
+import com.twoplaytech.drbetting.domain.usecases.UseCase
 import javax.inject.Inject
 
 /*
     Author: Damjan Miloshevski 
-    Created on 24.8.21 10:28
+    Created on 23.8.21 16:04
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-class UpdateBettingTipUseCaseImpl @Inject constructor(repository: Repository) : UseCase(repository),
-    UpdateBettingTipUseCase {
-
-    override fun updateBettingTip(
-        bettingTip: BettingTip,
-        onSuccess: (BettingTip) -> Unit,
+class SignInUseCaseImpl @Inject constructor(
+    repository: Repository
+) : UseCase(repository), SignInUseCase {
+    override fun signIn(
+        userInput: UserInput,
+        onSuccess: (AccessToken) -> Unit,
         onError: (Message) -> Unit
     ) {
-        repository.updateBettingTip(
-            bettingTip,
-            onSuccess = { updatedBettingTip -> onSuccess.invoke(updatedBettingTip) },
+        repository.signIn(
+            userInput,
+            onSuccess = { onSuccess.invoke(it) },
             onError = { onError.invoke(it) })
+    }
+
+
+    override fun isAlreadyLoggedIn(callback: (Boolean) -> Unit) {
+        repository.isAlreadyLoggedIn {
+            callback.invoke(it)
+        }
+    }
+    override fun saveLogin(shouldStayLoggedIn: Boolean) {
+        repository.saveLogin(shouldStayLoggedIn)
+    }
+
+    override fun saveUserCredentials(email: String, password: String) {
+        repository.saveUserCredentials(email,password)
+    }
+
+    override fun retrieveUserCredentials(
+        onSuccess: (Credentials) -> Unit,
+        onError: (Throwable) -> Unit
+    ) {
+        repository.retrieveUserCredentials(onSuccess = {
+            onSuccess.invoke(it)
+        },onError = {
+            onError.invoke(it)
+        })
     }
 }

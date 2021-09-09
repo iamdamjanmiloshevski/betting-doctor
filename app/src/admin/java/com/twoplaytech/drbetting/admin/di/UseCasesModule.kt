@@ -22,17 +22,33 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.data.entities
-import com.google.gson.annotations.SerializedName
+package com.twoplaytech.drbetting.admin.di
+
+import com.twoplaytech.drbetting.admin.domain.usecases.*
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ViewModelComponent
+
 /*
     Author: Damjan Miloshevski 
-    Created on 13.7.21 13:49
+    Created on 9.9.21 14:41
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-enum class UserRole {
-    @SerializedName("ADMIN")
-    ADMIN,
-    @SerializedName("CUSTOMER")
-    CUSTOMER
+@Module
+@InstallIn(ViewModelComponent::class)
+interface UseCasesModule {
+    @Binds
+    fun bindInsertBettingTipUseCase(insertBettingTipUseCaseImpl: InsertBettingTipUseCaseImpl): InsertBettingTipUseCase
+
+    @Binds
+    fun bindDeleteBettingUseCase(deleteBettingTipUseCaseImpl: DeleteBettingTipUseCaseImpl): DeleteBettingTipUseCase
+
+    @Binds
+    fun bindUpdateBettingTipsUseCase(updateBettingTipUseCaseImpl: UpdateBettingTipUseCaseImpl): UpdateBettingTipUseCase
+
+    @Binds
+    fun bindSignInUserUserCase(signInUseCaseImpl: SignInUseCaseImpl): SignInUseCase
+
 }
