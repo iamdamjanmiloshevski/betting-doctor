@@ -24,7 +24,6 @@
 
 package com.twoplaytech.drbetting.ui.adapters
 
-import com.twoplaytech.drbetting.ui.settingSettingsItem
 import com.twoplaytech.drbetting.ui.settings.SettingsItem
 
 /*
