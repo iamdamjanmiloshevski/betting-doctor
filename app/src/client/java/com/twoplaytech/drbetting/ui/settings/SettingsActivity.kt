@@ -52,6 +52,7 @@ import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_DARK_MOD
 import com.twoplaytech.drbetting.ui.adapters.OnSettingsItemClickListener
 import com.twoplaytech.drbetting.ui.adapters.SettingsRecyclerViewAdapter
 import com.twoplaytech.drbetting.ui.common.BaseActivity
+import com.twoplaytech.drbetting.ui.viewmodels.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

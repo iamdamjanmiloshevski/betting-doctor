@@ -24,18 +24,13 @@
 
 package com.twoplaytech.drbetting.domain.repository
 
-import com.twoplaytech.drbetting.admin.data.models.AccessToken
-import com.twoplaytech.drbetting.admin.data.models.Credentials
 import com.twoplaytech.drbetting.data.datasource.LocalDataSource
 import com.twoplaytech.drbetting.data.datasource.RemoteDataSource
-import com.twoplaytech.drbetting.data.models.*
-import com.twoplaytech.drbetting.admin.data.mappers.AccessTokenMapper
-import com.twoplaytech.drbetting.admin.data.mappers.CredentialsMapper
 import com.twoplaytech.drbetting.data.mappers.MessageMapper
-import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_ACCESS_TOKEN
+import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.Message
+import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_APP_LAUNCHES
-import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_LOGGED_IN
-import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_USER_CREDENTIALS
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
@@ -98,76 +93,6 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override fun insertBettingTip(
-        bettingTip: BettingTip,
-        onSuccess: (BettingTip) -> Unit,
-        onError: (Message) -> Unit
-    ) {
-        launch(coroutineContext) {
-            remoteDataSource.insertBettingTip(bettingTip).catch { throwable ->
-                sendErrorMessage(onError, throwable)
-            }.collect { bettingTip -> onSuccess.invoke(bettingTip) }
-        }
-    }
-
-    override fun updateBettingTip(
-        bettingTip: BettingTip,
-        onSuccess: (BettingTip) -> Unit,
-        onError: (Message) -> Unit
-    ) {
-        launch(coroutineContext) {
-            remoteDataSource.updateBettingTip(bettingTip).catch { cause ->
-                sendErrorMessage(onError, cause)
-            }.collect { bettingTip: BettingTip ->
-                onSuccess.invoke(bettingTip)
-            }
-        }
-    }
-
-    override fun deleteBettingTip(
-        id: String,
-        onSuccess: (Message) -> Unit,
-        onError: (Message) -> Unit
-    ) {
-        launch(coroutineContext) {
-            remoteDataSource.deleteBettingTip(id)
-                .catch { cause ->
-
-                    sendErrorMessage(onError, cause)
-                }
-                .collect { message: Message -> onSuccess.invoke(message) }
-        }
-    }
-
-    override fun signIn(
-        userInput: UserInput,
-        onSuccess: (AccessToken) -> Unit,
-        onError: (Message) -> Unit
-    ) {
-        launch(coroutineContext) {
-            remoteDataSource.signIn(userInput).catch { throwable ->
-                sendErrorMessage(onError, throwable)
-            }.collect { accessToken ->
-                localDataSource.saveString(
-                    KEY_ACCESS_TOKEN,
-                    AccessTokenMapper.toJson(accessToken)
-                )
-                onSuccess.invoke(accessToken)
-            }
-        }
-    }
-
-    override fun saveLogin(shouldStayLoggedIn: Boolean) {
-        localDataSource.saveBoolean(KEY_LOGGED_IN, shouldStayLoggedIn)
-    }
-
-    override fun saveUserCredentials(email: String, password: String) {
-        localDataSource.saveString(
-            KEY_USER_CREDENTIALS, CredentialsMapper.toCredentialsJson(
-                Credentials(email, password)
-            )
-        )
-    }
 
     override fun incrementAppLaunch() {
         localDataSource.getInt(KEY_APP_LAUNCHES, callback = {
@@ -175,52 +100,11 @@ class RepositoryImpl @Inject constructor(
         })
     }
 
-    override fun retrieveUserCredentials(
-        onSuccess: (Credentials) -> Unit,
-        onError: (Throwable) -> Unit
-    ) {
-        localDataSource.getString(KEY_USER_CREDENTIALS, onSuccess = {
-            val credentialsDataModel = CredentialsMapper.fromCredentialsJson(it)
-            onSuccess.invoke(CredentialsMapper.toCredentials(credentialsDataModel))
-        }, onError = {
-            onError.invoke(it)
-        })
-    }
-
-    override fun isAlreadyLoggedIn(callback: (Boolean) -> Unit) {
-        localDataSource.getBoolean(KEY_LOGGED_IN, callback = { callback.invoke(it) })
-    }
 
     override fun getAppLaunchesCount(callback: (Int) -> Unit) {
         localDataSource.getInt(KEY_APP_LAUNCHES, callback = {
             callback.invoke(it)
         })
-    }
-
-    override fun getAccessToken(onSuccess: (AccessToken) -> Unit, onError: (Message) -> Unit) {
-        localDataSource.getString(KEY_ACCESS_TOKEN, onSuccess = {
-            onSuccess.invoke(AccessTokenMapper.fromJson(it))
-        }, onError = {
-            sendErrorMessage(onError, it)
-        })
-    }
-
-    override fun refreshToken(
-        refreshToken: String,
-        onSuccess: (AccessToken) -> Unit,
-        onError: (Message) -> Unit
-    ) {
-        launch {
-            remoteDataSource.refreshToken(refreshToken).catch { cause ->
-                sendErrorMessage(onError, cause)
-            }.collect { accessToken ->
-                localDataSource.saveString(
-                    KEY_ACCESS_TOKEN,
-                    AccessTokenMapper.toJson(accessToken)
-                )
-                onSuccess.invoke(accessToken)
-            }
-        }
     }
 
     override val coroutineContext: CoroutineContext

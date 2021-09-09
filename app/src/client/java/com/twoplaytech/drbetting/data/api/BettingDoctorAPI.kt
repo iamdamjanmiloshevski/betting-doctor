@@ -22,35 +22,29 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.data.datasource
+package com.twoplaytech.drbetting.data.api
 
-import com.twoplaytech.drbetting.admin.data.models.AccessToken
-import com.twoplaytech.drbetting.data.models.*
-import kotlinx.coroutines.flow.Flow
+import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.Sport
+import retrofit2.http.GET
+import retrofit2.http.Path
 
 /*
     Author: Damjan Miloshevski 
-    Created on 23.8.21 15:23
+    Created on 7.7.21 11:47
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-interface RemoteDataSource {
-    suspend fun getBettingTips(): Flow<List<BettingTip>>
-    suspend fun getBettingTipsBySport(
-        sport: Sport,
-        upcoming: Boolean = false
-    ): Flow<List<BettingTip>>
+interface BettingDoctorAPI {
+    @GET("betting-tips")
+    suspend fun getBettingTips(): List<BettingTip>
 
-    suspend fun getBettingTipById(
-        id: String
-    ): Flow<BettingTip>
+    @GET("betting-tips/{id}")
+    suspend fun getBettingTipById(@Path("id") tipId: String): BettingTip
 
-    suspend fun insertBettingTip(bettingTip: BettingTip):Flow<BettingTip>
+    @GET("betting-tips/{sport}/upcoming")
+    suspend fun getUpcomingBettingTipsBySport(@Path("sport") sport: Sport): List<BettingTip>
 
-    suspend fun updateBettingTip(bettingTip: BettingTip):Flow<BettingTip>
-
-    suspend fun deleteBettingTip(id:String):Flow<Message>
-
-    suspend  fun signIn(userInput: UserInput): Flow<AccessToken>
-    suspend fun refreshToken(refreshToken:String):Flow<AccessToken>
+    @GET("betting-tips/{sport}/older")
+    suspend fun getOlderBettingTipsBySport(@Path("sport") sport: Sport): List<BettingTip>
 }

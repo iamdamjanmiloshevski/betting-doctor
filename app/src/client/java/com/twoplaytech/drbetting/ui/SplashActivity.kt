@@ -22,26 +22,15 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.domain.usecases
+package com.twoplaytech.drbetting.ui
 
-import com.twoplaytech.drbetting.domain.repository.Repository
-import javax.inject.Inject
+import android.content.Intent
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 
-/*
-    Author: Damjan Miloshevski 
-    Created on 6.9.21 13:19
-    Project: Dr.Betting
-    © 2Play Tech  2021. All rights reserved
-*/
-class AppLaunchUseCaseImpl@Inject constructor(repository: Repository) : UseCase(repository),AppLaunchUseCase {
-
-    override fun getAppLaunchesCount(callback: (Int) -> Unit) {
-        repository.getAppLaunchesCount {
-            callback.invoke(it)
-        }
-    }
-
-    override fun incrementAppLaunch() {
-       repository.incrementAppLaunch()
+class SplashActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        startActivity(Intent(this, MainActivity::class.java))
     }
 }

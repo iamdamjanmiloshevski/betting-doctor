@@ -25,6 +25,10 @@
 package com.twoplaytech.drbetting.admin.di
 
 import com.twoplaytech.drbetting.admin.domain.usecases.*
+import com.twoplaytech.drbetting.domain.usecases.AppLaunchUseCase
+import com.twoplaytech.drbetting.domain.usecases.AppLaunchUseCaseImpl
+import com.twoplaytech.drbetting.domain.usecases.GetBettingTipsUseCase
+import com.twoplaytech.drbetting.domain.usecases.GetBettingTipsUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -51,4 +55,9 @@ interface UseCasesModule {
     @Binds
     fun bindSignInUserUserCase(signInUseCaseImpl: SignInUseCaseImpl): SignInUseCase
 
+    @Binds
+    fun bindGetBettingTipsUseCase(getBettingTipsUseCaseImpl: GetBettingTipsUseCaseImpl):GetBettingTipsUseCase
+
+    @Binds
+    fun bindAppLaunchUseCase(appLaunchUseCaseImpl: AppLaunchUseCaseImpl): AppLaunchUseCase
 }

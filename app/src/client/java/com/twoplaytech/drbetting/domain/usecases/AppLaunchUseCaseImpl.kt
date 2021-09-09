@@ -22,33 +22,25 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting
-
-import android.app.Application
-import androidx.hilt.work.HiltWorkerFactory
-import androidx.work.Configuration
-import dagger.hilt.android.HiltAndroidApp
-import timber.log.Timber
+package com.twoplaytech.drbetting.domain.usecases
+import com.twoplaytech.drbetting.domain.repository.Repository
 import javax.inject.Inject
 
 /*
     Author: Damjan Miloshevski 
-    Created on 3/9/21 2:35 PM
-
+    Created on 6.9.21 13:19
+    Project: Dr.Betting
+    © 2Play Tech  2021. All rights reserved
 */
-@HiltAndroidApp
-class App : Application(),Configuration.Provider {
-    @Inject
-    lateinit var workerFactory: HiltWorkerFactory
+class AppLaunchUseCaseImpl@Inject constructor(repository: Repository) : UseCase(repository),AppLaunchUseCase {
 
-    override fun onCreate() {
-        super.onCreate()
-        Timber.plant(Timber.DebugTree())
+    override fun getAppLaunchesCount(callback: (Int) -> Unit) {
+        repository.getAppLaunchesCount {
+           callback.invoke(it)
+        }
     }
 
-
-    override fun getWorkManagerConfiguration() =
-        Configuration.Builder()
-            .setWorkerFactory(workerFactory)
-            .build()
+    override fun incrementAppLaunch() {
+       repository.incrementAppLaunch()
+    }
 }

@@ -24,9 +24,9 @@
 
 package com.twoplaytech.drbetting.data.datasource
 
-import com.twoplaytech.drbetting.admin.data.models.AccessToken
 import com.twoplaytech.drbetting.data.api.BettingDoctorAPI
-import com.twoplaytech.drbetting.data.models.*
+import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.Sport
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -59,26 +59,6 @@ class RemoteDataSourceImpl @Inject constructor(private val api: BettingDoctorAPI
 
     override suspend fun getBettingTipById(id: String): Flow<BettingTip> {
         return flow { emit(api.getBettingTipById(id)) }.flowOn(coroutineContext)
-    }
-
-    override suspend fun insertBettingTip(bettingTip: BettingTip): Flow<BettingTip> {
-        return flow { emit(api.insertBettingTip(bettingTip)) }.flowOn(coroutineContext)
-    }
-
-    override suspend fun updateBettingTip(bettingTip: BettingTip): Flow<BettingTip> {
-        return flow { emit(api.updateBettingTip(bettingTip)) }.flowOn(coroutineContext)
-    }
-
-    override suspend fun deleteBettingTip(id: String): Flow<Message> {
-        return flow { emit(api.deleteBettingTip(id)) }.flowOn(coroutineContext)
-    }
-
-    override suspend fun signIn(userInput: UserInput): Flow<AccessToken> {
-        return flow { emit(api.signIn(userInput)) }.flowOn(coroutineContext)
-    }
-
-    override suspend fun refreshToken(refreshToken: String): Flow<AccessToken> {
-        return flow{emit(api.refreshToken(refreshToken))}.flowOn(coroutineContext)
     }
 
     override val coroutineContext: CoroutineContext

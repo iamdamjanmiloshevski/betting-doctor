@@ -22,31 +22,24 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.admin.domain.usecases
+package com.twoplaytech.drbetting.di
 
-import com.twoplaytech.drbetting.admin.domain.repository.Repository
-import com.twoplaytech.drbetting.data.models.Message
 import com.twoplaytech.drbetting.domain.repository.Repository
-import com.twoplaytech.drbetting.domain.usecases.UseCase
-import javax.inject.Inject
+import com.twoplaytech.drbetting.domain.repository.RepositoryImpl
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 
 /*
     Author: Damjan Miloshevski 
-    Created on 24.8.21 10:37
+    Created on 9.9.21 15:24
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-class DeleteBettingTipUseCaseImpl @Inject constructor(repository: Repository) : UseCase(repository),
-    DeleteBettingTipUseCase {
-    override fun deleteBettingTip(
-        id: String,
-        onSuccess: (Message) -> Unit,
-        onError: (Message) -> Unit
-    ) {
-        repository.deleteBettingTip(
-            id,
-            onSuccess = { onSuccess.invoke(it) },
-            onError = { onError.invoke(it) })
-    }
-
+@Module
+@InstallIn(SingletonComponent::class)
+interface RepositoryModule {
+    @Binds
+    fun bindRepository(repositoryImpl: RepositoryImpl): Repository
 }

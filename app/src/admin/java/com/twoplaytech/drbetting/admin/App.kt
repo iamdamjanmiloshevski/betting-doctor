@@ -22,16 +22,30 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting
+package com.twoplaytech.drbetting.admin
 
-import android.content.Intent
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.twoplaytech.drbetting.ui.MainActivity
+import android.app.Application
+import androidx.hilt.work.HiltWorkerFactory
+import androidx.work.Configuration
+import dagger.hilt.android.HiltAndroidApp
+import timber.log.Timber
+import javax.inject.Inject
 
-class SplashActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        startActivity(Intent(this, MainActivity::class.java))
+/*
+    Author: Damjan Miloshevski 
+    Created on 3/9/21 2:35 PM
+
+*/
+@HiltAndroidApp
+class App : Application(), Configuration.Provider {
+    @Inject lateinit var workerFactory: HiltWorkerFactory
+    override fun onCreate() {
+        super.onCreate()
+        Timber.plant(Timber.DebugTree())
     }
+
+    override fun getWorkManagerConfiguration() =
+        Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
 }

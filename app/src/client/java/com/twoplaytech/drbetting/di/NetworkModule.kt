@@ -25,7 +25,6 @@
 package com.twoplaytech.drbetting.di
 
 import com.twoplaytech.drbetting.BuildConfig
-import com.twoplaytech.drbetting.admin.data.api.TokenAuthenticator
 import com.twoplaytech.drbetting.data.api.BettingDoctorAPI
 import dagger.Module
 import dagger.Provides
@@ -40,7 +39,9 @@ import javax.inject.Singleton
 
 /*
     Author: Damjan Miloshevski 
-    Created on 3/10/21 1:08 PM
+    Created on 9.9.21 14:52
+    Project: Dr.Betting
+    © 2Play Tech  2021. All rights reserved
 */
 @Module
 @InstallIn(SingletonComponent::class)
@@ -54,7 +55,6 @@ object NetworkModule {
             .callTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
-        client.authenticator(TokenAuthenticator())
         client.addInterceptor(
             if (BuildConfig.DEBUG) HttpLoggingInterceptor().setLevel(
                 HttpLoggingInterceptor.Level.BODY

@@ -22,14 +22,14 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.util
+package com.twoplaytech.drbetting.admin.util
 
 import android.content.Context
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.auth0.android.jwt.JWT
-import com.twoplaytech.drbetting.domain.repository.Repository
+import com.twoplaytech.drbetting.admin.domain.repository.Repository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import timber.log.Timber

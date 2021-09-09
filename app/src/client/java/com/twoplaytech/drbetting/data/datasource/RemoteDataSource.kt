@@ -22,26 +22,26 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.di
+package com.twoplaytech.drbetting.data.datasource
 
-import com.twoplaytech.drbetting.domain.repository.Repository
-import com.twoplaytech.drbetting.domain.repository.RepositoryImpl
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.Sport
+import kotlinx.coroutines.flow.Flow
 
 /*
     Author: Damjan Miloshevski 
-    Created on 24.8.21 10:55
+    Created on 23.8.21 15:23
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-@Module
-@InstallIn(SingletonComponent::class)
-interface RepositoryModule {
-    @Binds
-    fun bindRepository(
-        repositoryImpl: RepositoryImpl
-    ): Repository
+interface RemoteDataSource {
+    suspend fun getBettingTips(): Flow<List<BettingTip>>
+    suspend fun getBettingTipsBySport(
+        sport: Sport,
+        upcoming: Boolean = false
+    ): Flow<List<BettingTip>>
+
+    suspend fun getBettingTipById(
+        id: String
+    ): Flow<BettingTip>
 }
