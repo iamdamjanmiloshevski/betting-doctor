@@ -26,11 +26,12 @@ package com.twoplaytech.drbetting.admin.data.api
 
 
 import com.twoplaytech.drbetting.admin.domain.repository.Repository
+import dagger.Lazy
+import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
-import timber.log.Timber
 import javax.inject.Inject
 
 /*
@@ -39,32 +40,25 @@ import javax.inject.Inject
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-class TokenAuthenticator @Inject constructor() :
+class TokenAuthenticator @Inject constructor(private val repository: Lazy<Repository>) :
     Authenticator {
-    @Inject lateinit var repository: Repository
-    var request: Request? = null
     override fun authenticate(route: Route?, response: Response): Request {
-        if (response.code == 401) {
-            repository.getAccessToken(onSuccess = { it ->
-                repository.refreshToken(it.refreshToken, onSuccess = { accessToken ->
-                    request = response.request
-                        .newBuilder()
-                        .addHeader("Authorization", "Bearer ".plus(accessToken.token)).build()
-                }, onError = { error ->
-                    Timber.e(error.message)
-                })
-            }, onError = { error ->
-                Timber.e(error.message)
-            })
+        return if (response.code == 401) {
+            runBlocking {
+                val refreshToken = repository.get().getRefreshTokenAsync()
+                repository.get().saveToken(refreshToken)
+                response.request
+                    .newBuilder()
+                    .addHeader("Authorization", "Bearer ".plus(refreshToken.token)).build()
+            }
         } else {
-            repository.getAccessToken(onSuccess = { accessToken ->
-                request = response.request
+            runBlocking {
+                val accessToken = repository.get().getAccessTokenAsync()
+                response.request
                     .newBuilder()
                     .addHeader("Authorization", "Bearer ".plus(accessToken.token)).build()
-            }, onError = {
-                Timber.e(it.message)
-            })
+            }
+
         }
-        return request as Request
     }
 }

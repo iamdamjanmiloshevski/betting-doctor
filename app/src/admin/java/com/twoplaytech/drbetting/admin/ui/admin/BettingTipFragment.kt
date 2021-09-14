@@ -72,8 +72,8 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
         bettingTip?.let {
             with(_binding) {
                 this.tvLeague.setText(bettingTip.leagueName)
-                this.tvHome.populate(bettingTip.teamHome)
-                this.tvAway.populate(bettingTip.teamAway)
+                this.tvHome.setText(bettingTip.teamHome?.name ?: "undefined")
+                this.tvAway.setText(bettingTip.teamAway?.name ?: "undefined")
                 this.tvBettingTip.setText(bettingTip.bettingType)
                 this.tvResult.setText(bettingTip.result)
                 bettingTip.gameTime?.let { date ->
@@ -99,9 +99,9 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
         })
         adminViewModel.observeForInsertedBettingTip().observe(viewLifecycleOwner, { resource ->
             val saveIcon = menu.findItem(R.id.action_save)
-             saveIcon.isVisible = resource.status != Status.LOADING
+            saveIcon.isVisible = resource.status != Status.LOADING
         })
-        adminViewModel.observeOnUpdatedTip().observe(viewLifecycleOwner,{ resource ->
+        adminViewModel.observeOnUpdatedTip().observe(viewLifecycleOwner, { resource ->
             val saveIcon = menu.findItem(R.id.action_save)
             saveIcon.isVisible = resource.status != Status.LOADING
         })
@@ -112,13 +112,13 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
         val bettingTip = _binding.tvBettingTip.getInput<String?>() as String
         val gameTime = _binding.tvGameTime.getInput<Date?>()
         val result = _binding.tvResult.getInput<String?>() as String
-        val teamHomeName = _binding.tvHome.getTeamName()
-        val teamAwayName = _binding.tvAway.getTeamName()
-        val teamHomeLogo = _binding.tvHome.getTeamLogoUrl() ?: ""
-        val teamAwayLogo = _binding.tvAway.getTeamLogoUrl() ?: ""
-        val teamHome = Team(teamHomeName, teamHomeLogo)
-        val teamAway = Team(teamAwayName, teamAwayLogo)
-        val bettingType = BettingTip(
+        val teamHomeName = _binding.tvHome.getInput<String>()
+        val teamAwayName = _binding.tvAway.getInput<String>()
+        val teamHome =
+            Team(teamHomeName ?: throw NullPointerException("Team name must not be null"))
+        val teamAway =
+            Team(teamAwayName ?: throw NullPointerException("Team name must not be null"))
+        return BettingTip(
             _id = id,
             leagueName = league,
             teamHome = teamHome,
@@ -129,8 +129,6 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
             result = result,
             sport = sportChosen
         )
-
-        return bettingType
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -152,9 +150,9 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
         val league = _binding.tvLeague.getInput<String>()
         val bettingTip = _binding.tvBettingTip.getInput<String?>()
         val gameTime = _binding.tvGameTime.getInput<Date?>()
-        val teamHome = _binding.tvHome.getTeamName()
-        val teamAway = _binding.tvAway.getTeamName()
-        val result = _binding.tvResult.getInput<String?>() as String
+        val teamHome = _binding.tvHome.getInput<String?>()
+        val teamAway = _binding.tvAway.getInput<String?>()
+        val result = _binding.tvResult.getInput<String?>()
         cancel = if (teamHome.isNullOrEmpty()) {
             _binding.tvHome.setError(R.string.team_home_error)
             true

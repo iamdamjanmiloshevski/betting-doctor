@@ -74,4 +74,8 @@
     <string name="title_status">Unknown</string>
     <string name="action_logout">Logout</string>
     <string name="action_settings">Settings</string>
+    <string name="team_home">Home Team</string>
+    <string name="team_away">Away Team</string>
+    <string name="team_home_hint">ex. Manchester United</string>
+    <string name="team_away_hint">ex. Chelsea</string>
 </resources>

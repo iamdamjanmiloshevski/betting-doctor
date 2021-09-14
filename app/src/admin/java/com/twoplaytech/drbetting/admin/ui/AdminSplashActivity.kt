@@ -22,18 +22,18 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.admin
+package com.twoplaytech.drbetting.admin.ui
 
+import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.twoplaytech.drbetting.admin.ui.auth.LoginActivity
-import com.twoplaytech.drbetting.ui.common.BaseActivity
-import com.twoplaytech.drbetting.util.startActivityWithClearTask
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SplashActivity : BaseActivity() {
+class AdminSplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.startActivityWithClearTask(LoginActivity::class.java)
+        startActivity(Intent(this, LoginActivity::class.java))
     }
 }

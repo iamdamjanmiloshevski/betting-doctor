@@ -39,11 +39,9 @@ import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_ACCESS_T
 import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_APP_LAUNCHES
 import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_LOGGED_IN
 import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_USER_CREDENTIALS
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
@@ -151,10 +149,7 @@ class RepositoryImpl @Inject constructor(
             remoteDataSource.signIn(userInput).catch { throwable ->
                 sendErrorMessage(onError, throwable)
             }.collect { accessToken ->
-                localDataSource.saveString(
-                    KEY_ACCESS_TOKEN,
-                    AccessTokenMapper.toJson(accessToken)
-                )
+                saveToken(accessToken)
                 onSuccess.invoke(accessToken)
             }
         }
@@ -169,6 +164,13 @@ class RepositoryImpl @Inject constructor(
             KEY_USER_CREDENTIALS, CredentialsMapper.toCredentialsJson(
                 Credentials(email, password)
             )
+        )
+    }
+
+    override fun saveToken(accessToken: AccessToken) {
+        localDataSource.saveString(
+            KEY_ACCESS_TOKEN,
+            AccessTokenMapper.toJson(accessToken)
         )
     }
 
@@ -217,14 +219,26 @@ class RepositoryImpl @Inject constructor(
             remoteDataSource.refreshToken(refreshToken).catch { cause ->
                 sendErrorMessage(onError, cause)
             }.collect { accessToken ->
-                localDataSource.saveString(
-                    KEY_ACCESS_TOKEN,
-                    AccessTokenMapper.toJson(accessToken)
-                )
+                saveToken(accessToken)
                 onSuccess.invoke(accessToken)
             }
         }
     }
+
+    override suspend fun getAccessTokenAsync(): AccessToken {
+        val accessTokenJsonDeferred =
+            coroutineScope { async { localDataSource.getString(KEY_ACCESS_TOKEN) } }
+        val accessTokenJson = accessTokenJsonDeferred.await()
+        return AccessTokenMapper.fromJson(
+            accessTokenJson ?: throw Exception("Unable to parse AccessToken JSON")
+        )
+    }
+
+    override suspend fun getRefreshTokenAsync(): AccessToken {
+        val accessToken = getAccessTokenAsync()
+        return remoteDataSource.refreshTokenAsync(accessToken.refreshToken).await()
+    }
+
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO

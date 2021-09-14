@@ -64,6 +64,6 @@ interface BettingDoctorAPI {
     @POST("users/signin")
     suspend fun signIn(@Body userInput: UserInput): AccessToken
 
-    @GET("users/refreshToken/{refreshToken}")
+    @GET("users/tokens/{refreshToken}")
     suspend fun refreshToken(@Path("refreshToken") refreshToken:String): AccessToken
 }

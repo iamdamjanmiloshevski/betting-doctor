@@ -47,38 +47,28 @@
             app:type="input"
             android:id="@+id/tv_league"/>
 
-        <TextView
+        <com.twoplaytech.drbetting.admin.views.InputView
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintStart_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_league"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Team Home"
-            android:id="@+id/tv_team_home"/>
-        <com.twoplaytech.drbetting.admin.views.TeamView
+             app:layout_constraintTop_toBottomOf="@id/tv_league"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_home"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintStart_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_team_home"/>
-        <TextView
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            app:inputTitle="@string/team_home"
+            app:hint="@string/team_home_hint"
+            app:type="input"
+            android:id="@+id/tv_home"/>
+        <com.twoplaytech.drbetting.admin.views.InputView
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintStart_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_home"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Team Away"
-            android:id="@+id/tv_team_away"/>
-        <com.twoplaytech.drbetting.admin.views.TeamView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_away"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintStart_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_team_away"/>
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            app:inputTitle="@string/team_away"
+            app:hint="@string/team_away_hint"
+            app:type="input"
+            android:id="@+id/tv_away"/>
         <com.twoplaytech.drbetting.admin.views.InputView
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintStart_toEndOf="parent"

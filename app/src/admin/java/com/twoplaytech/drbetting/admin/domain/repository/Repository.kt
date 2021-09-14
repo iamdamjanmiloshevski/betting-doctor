@@ -57,6 +57,7 @@ interface Repository {
     )
     fun saveLogin(shouldStayLoggedIn: Boolean)
     fun saveUserCredentials(email: String, password: String)
+    fun saveToken(accessToken: AccessToken)
     fun incrementAppLaunch()
     fun retrieveUserCredentials(onSuccess: (Credentials) -> Unit, onError: (Throwable) -> Unit)
     fun isAlreadyLoggedIn(callback: (Boolean) -> Unit)
@@ -64,4 +65,6 @@ interface Repository {
     fun getAccessToken(onSuccess: (AccessToken) -> Unit,
                        onError: (Message) -> Unit)
     fun refreshToken(refreshToken:String, onSuccess: (AccessToken) -> Unit, onError: (Message) -> Unit)
+     suspend fun getAccessTokenAsync():AccessToken
+     suspend fun getRefreshTokenAsync():AccessToken
 }

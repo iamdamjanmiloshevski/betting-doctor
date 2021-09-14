@@ -36,5 +36,6 @@ interface LocalDataSource {
     fun saveInt(key:String,value:Int)
     fun getBoolean(key:String,callback: (Boolean) -> Unit)
     fun getString(key: String,onSuccess: (String) -> Unit,onError:(Throwable)->Unit)
+    fun getString(key:String):String?
     fun getInt(key: String,callback: (Int) -> Unit)
 }

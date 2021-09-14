@@ -27,6 +27,8 @@ package com.twoplaytech.drbetting.admin.di
 import com.twoplaytech.drbetting.BuildConfig
 import com.twoplaytech.drbetting.admin.data.api.BettingDoctorAPI
 import com.twoplaytech.drbetting.admin.data.api.TokenAuthenticator
+import com.twoplaytech.drbetting.admin.domain.repository.Repository
+import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -50,13 +52,13 @@ import javax.inject.Singleton
 object NetworkModule {
     @Singleton
     @Provides
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(repository: Lazy<Repository>): OkHttpClient {
         val client = OkHttpClient.Builder()
         client.connectTimeout(30, TimeUnit.SECONDS)
             .callTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
-        client.authenticator(TokenAuthenticator())
+        client.authenticator(TokenAuthenticator(repository))
         client.addInterceptor(
             if (BuildConfig.DEBUG) HttpLoggingInterceptor().setLevel(
                 HttpLoggingInterceptor.Level.BODY

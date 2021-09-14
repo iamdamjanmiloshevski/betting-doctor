@@ -30,8 +30,7 @@ import com.twoplaytech.drbetting.data.models.BettingTip
 import com.twoplaytech.drbetting.data.models.Message
 import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.data.models.UserInput
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -82,6 +81,10 @@ class RemoteDataSourceImpl @Inject constructor(private val api: BettingDoctorAPI
 
     override suspend fun refreshToken(refreshToken: String): Flow<AccessToken> {
         return flow{emit(api.refreshToken(refreshToken))}.flowOn(coroutineContext)
+    }
+
+    override suspend fun refreshTokenAsync(refreshToken: String): Deferred<AccessToken> {
+        return coroutineScope { async { api.refreshToken(refreshToken) } }
     }
 
     override val coroutineContext: CoroutineContext

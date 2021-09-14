@@ -58,6 +58,10 @@ class LocalDataSourceImpl @Inject constructor(private val preferences: SharedPre
         )
     }
 
+    override fun getString(key: String): String? {
+        return preferences.getString(key)
+    }
+
     override fun getInt(key: String, callback: (Int) -> Unit) {
        callback.invoke( preferences.getInteger(key))
     }
