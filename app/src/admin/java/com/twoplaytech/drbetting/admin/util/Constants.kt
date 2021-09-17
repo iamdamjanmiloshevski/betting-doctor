@@ -36,4 +36,9 @@ object Constants {
     const val KEY_TYPE = "type"
     const val KEY_BETTING_TIP = "betting_tip"
     const val KEY_BETTING_ARGS = "KEY_BETTING_ARGS"
+    const val KEY_ACCESS_TOKEN = "KEY_ACCESS_TOKEN"
+    const val KEY_APP_LAUNCHES = "KEY_APP_LAUNCHES"
+    const val KEY_LOGGED_IN = "KEY_LOGGED_IN"
+    const val KEY_USER_CREDENTIALS = "KEY_USER_CREDENTIALS"
+    const val KEY_VIEW_TYPE = "KEY_VIEW_TYPE"
 }

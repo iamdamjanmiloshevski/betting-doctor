@@ -37,7 +37,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
 import com.twoplaytech.drbetting.ui.viewmodels.BettingTipsViewModel
-import com.twoplaytech.drbetting.util.*
+import com.twoplaytech.drbetting.util.getRandomBackground
+import com.twoplaytech.drbetting.util.getSportColor
+import com.twoplaytech.drbetting.util.getSportDrawable
+import com.twoplaytech.drbetting.util.getSportResource
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -49,9 +52,6 @@ import javax.inject.Inject
 abstract class BaseActivity : AppCompatActivity(), IBaseActivityView {
     @Inject
     lateinit var preferencesManager: SharedPreferencesManager
-
-    @Inject
-    lateinit var appContextWrapper: AppContextWrapper
 
     protected val bettingTipsViewModel:BettingTipsViewModel by viewModels()
 

@@ -30,7 +30,7 @@ import androidx.lifecycle.ViewModel
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.data.models.AccessToken
 import com.twoplaytech.drbetting.admin.data.models.Credentials
-import com.twoplaytech.drbetting.data.models.UserInput
+import com.twoplaytech.drbetting.admin.data.models.UserInput
 import com.twoplaytech.drbetting.domain.common.Resource
 import com.twoplaytech.drbetting.admin.domain.usecases.SignInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

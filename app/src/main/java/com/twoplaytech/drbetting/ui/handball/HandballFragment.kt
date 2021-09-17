@@ -29,8 +29,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.twoplaytech.drbetting.R
+import com.twoplaytech.drbetting.admin.ui.common.BaseFragment
 import com.twoplaytech.drbetting.data.models.Sport
-import com.twoplaytech.drbetting.ui.common.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 /*

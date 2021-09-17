@@ -48,17 +48,17 @@ import com.twoplaytech.drbetting.admin.util.Constants
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_ARGS
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_TIP
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_TYPE
+import com.twoplaytech.drbetting.admin.util.Constants.KEY_VIEW_TYPE
 import com.twoplaytech.drbetting.admin.util.Constants.VIEW_TYPE_EDIT
+import com.twoplaytech.drbetting.admin.util.SessionVerifierWorker
 import com.twoplaytech.drbetting.data.*
 import com.twoplaytech.drbetting.data.models.BettingTip
 import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.data.models.Status
 import com.twoplaytech.drbetting.databinding.ActivityAdminBinding
-import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_VIEW_TYPE
 import com.twoplaytech.drbetting.ui.adapters.BettingTipsRecyclerViewAdapter
 import com.twoplaytech.drbetting.ui.common.OnBettingTipClickedListener
 import com.twoplaytech.drbetting.ui.viewmodels.BettingTipsViewModel
-import com.twoplaytech.drbetting.admin.util.SessionVerifierWorker
 import com.twoplaytech.drbetting.util.getSportColor
 import com.twoplaytech.drbetting.util.getSportFromIndex
 

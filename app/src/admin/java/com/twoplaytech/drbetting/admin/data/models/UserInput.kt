@@ -22,17 +22,20 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.data.models
-import com.google.gson.annotations.SerializedName
+package com.twoplaytech.drbetting.admin.data.models
+
 /*
     Author: Damjan Miloshevski 
-    Created on 13.7.21 13:49
-    Project: Dr.Betting
-    © 2Play Tech  2021. All rights reserved
+    Created on 20/06/2021
+    Project: betting-doctor
+    © 2Play Technologies  2021. All rights reserved
 */
-enum class UserRole {
-    @SerializedName("ADMIN")
-    ADMIN,
-    @SerializedName("CUSTOMER")
-    CUSTOMER
-}
+data class UserInput(
+    val email: String,
+    val password: String,
+    var name: String = "",
+    var surname: String = "",
+    var avatarUrl: String? = null,
+    var newPassword:String? = null,
+    var role: UserRole = UserRole.ADMIN
+)

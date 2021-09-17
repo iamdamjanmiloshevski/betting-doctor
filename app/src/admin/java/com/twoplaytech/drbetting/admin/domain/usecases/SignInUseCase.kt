@@ -27,7 +27,7 @@ package com.twoplaytech.drbetting.admin.domain.usecases
 import com.twoplaytech.drbetting.admin.data.models.AccessToken
 import com.twoplaytech.drbetting.admin.data.models.Credentials
 import com.twoplaytech.drbetting.data.models.Message
-import com.twoplaytech.drbetting.data.models.UserInput
+import com.twoplaytech.drbetting.admin.data.models.UserInput
 
 /*
     Author: Damjan Miloshevski 

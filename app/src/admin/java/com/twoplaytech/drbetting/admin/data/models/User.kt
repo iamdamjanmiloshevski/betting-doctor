@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.data.models
+package com.twoplaytech.drbetting.admin.data.models
 
 /*
     Author: Damjan Miloshevski 
