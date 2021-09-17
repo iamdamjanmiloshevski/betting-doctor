@@ -236,7 +236,7 @@ class RepositoryImpl @Inject constructor(
 
     override suspend fun getRefreshTokenAsync(): AccessToken {
         val accessToken = getAccessTokenAsync()
-        return remoteDataSource.refreshTokenAsync(accessToken.refreshToken).await()
+        return remoteDataSource.refreshTokenAsync(accessToken.refreshToken)
     }
 
 

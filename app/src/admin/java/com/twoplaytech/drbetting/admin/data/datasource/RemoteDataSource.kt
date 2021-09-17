@@ -29,7 +29,6 @@ import com.twoplaytech.drbetting.data.models.BettingTip
 import com.twoplaytech.drbetting.data.models.Message
 import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.data.models.UserInput
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
 
 /*
@@ -57,5 +56,5 @@ interface RemoteDataSource {
 
     suspend fun signIn(userInput: UserInput): Flow<AccessToken>
     suspend fun refreshToken(refreshToken: String): Flow<AccessToken>
-    suspend fun refreshTokenAsync(refreshToken: String): Deferred<AccessToken>
+    suspend fun refreshTokenAsync(refreshToken: String): AccessToken
 }

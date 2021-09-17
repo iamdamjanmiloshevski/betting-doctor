@@ -45,16 +45,28 @@ interface Repository {
         onSuccess: (List<BettingTip>) -> Unit,
         onError: (Message) -> Unit
     )
-    fun getBettingTipById(id:String, onSuccess: (BettingTip) -> Unit, onError: (Message) -> Unit)
-    fun insertBettingTip(bettingTip: BettingTip, onSuccess:(BettingTip)->Unit, onError: (Message) -> Unit)
-    fun updateBettingTip(bettingTip: BettingTip,onSuccess:(BettingTip)->Unit, onError: (Message) -> Unit)
-    fun deleteBettingTip(id:String, onSuccess: (Message) -> Unit, onError: (Message) -> Unit)
+
+    fun getBettingTipById(id: String, onSuccess: (BettingTip) -> Unit, onError: (Message) -> Unit)
+    fun insertBettingTip(
+        bettingTip: BettingTip,
+        onSuccess: (BettingTip) -> Unit,
+        onError: (Message) -> Unit
+    )
+
+    fun updateBettingTip(
+        bettingTip: BettingTip,
+        onSuccess: (BettingTip) -> Unit,
+        onError: (Message) -> Unit
+    )
+
+    fun deleteBettingTip(id: String, onSuccess: (Message) -> Unit, onError: (Message) -> Unit)
 
     fun signIn(
         userInput: UserInput,
         onSuccess: (AccessToken) -> Unit,
         onError: (Message) -> Unit
     )
+
     fun saveLogin(shouldStayLoggedIn: Boolean)
     fun saveUserCredentials(email: String, password: String)
     fun saveToken(accessToken: AccessToken)
@@ -62,9 +74,17 @@ interface Repository {
     fun retrieveUserCredentials(onSuccess: (Credentials) -> Unit, onError: (Throwable) -> Unit)
     fun isAlreadyLoggedIn(callback: (Boolean) -> Unit)
     fun getAppLaunchesCount(callback: (Int) -> Unit)
-    fun getAccessToken(onSuccess: (AccessToken) -> Unit,
-                       onError: (Message) -> Unit)
-    fun refreshToken(refreshToken:String, onSuccess: (AccessToken) -> Unit, onError: (Message) -> Unit)
-     suspend fun getAccessTokenAsync():AccessToken
-     suspend fun getRefreshTokenAsync():AccessToken
+    fun getAccessToken(
+        onSuccess: (AccessToken) -> Unit,
+        onError: (Message) -> Unit
+    )
+
+    fun refreshToken(
+        refreshToken: String,
+        onSuccess: (AccessToken) -> Unit,
+        onError: (Message) -> Unit
+    )
+
+    suspend fun getAccessTokenAsync(): AccessToken
+    suspend fun getRefreshTokenAsync(): AccessToken
 }
