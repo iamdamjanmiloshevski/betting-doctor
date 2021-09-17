@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c)  2021 Damjan Miloshevski
+ * Copyright (c) 2021 2Play Technologies Ltd.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,27 +22,16 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.di
+package com.twoplaytech.drbetting.data.models
 
-import android.content.Context
-import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
 
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import java.util.*
 
 /*
     Author: Damjan Miloshevski 
-    Created on 3/29/21 12:11 PM
+    Created on 15/09/2021
+    Project: betting-doctor
 */
-@Module
-@InstallIn(SingletonComponent::class)
-object AppModule {
-    @Singleton
-    @Provides
-    fun provideSharedPreferencesManager(@ApplicationContext context: Context) =
-        SharedPreferencesManager(context)
-}
+data class FeedbackMessage(
+    val _id: String, val name: String, val email: String, val message: String, val createdAt: Date
+)

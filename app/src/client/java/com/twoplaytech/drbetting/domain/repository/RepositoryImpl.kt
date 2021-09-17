@@ -28,9 +28,11 @@ import com.twoplaytech.drbetting.data.datasource.LocalDataSource
 import com.twoplaytech.drbetting.data.datasource.RemoteDataSource
 import com.twoplaytech.drbetting.data.mappers.MessageMapper
 import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.FeedbackMessage
 import com.twoplaytech.drbetting.data.models.Message
 import com.twoplaytech.drbetting.data.models.Sport
-import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_APP_LAUNCHES
+import com.twoplaytech.drbetting.ui.util.Constants.KEY_APP_LAUNCHES
+import com.twoplaytech.drbetting.ui.util.Constants.KEY_NEW_TIPS_NOTIFICATIONS
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
@@ -106,6 +108,29 @@ class RepositoryImpl @Inject constructor(
             callback.invoke(it)
         })
     }
+
+    override fun receiveNotifications(topic: String) {
+        when (topic) {
+            "new-tips" -> {
+                localDataSource.saveBoolean(KEY_NEW_TIPS_NOTIFICATIONS, true)
+            }
+        }
+    }
+
+    override fun sendFeedback(
+        feedbackMessage: FeedbackMessage,
+        onSuccess: (FeedbackMessage) -> Unit,
+        onError: (Message) -> Unit
+    ) {
+        launch(coroutineContext) {
+            remoteDataSource.sendFeedback(feedbackMessage).catch { cause ->
+                sendErrorMessage(onError, cause)
+            }.collect { feedbackMessage ->
+                onSuccess.invoke(feedbackMessage)
+            }
+        }
+    }
+
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO

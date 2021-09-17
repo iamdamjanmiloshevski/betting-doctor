@@ -22,27 +22,17 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.di
-
-import android.content.Context
-import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
-
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+package com.twoplaytech.drbetting.ui.util
 
 /*
     Author: Damjan Miloshevski 
-    Created on 3/29/21 12:11 PM
+    Created on 17.9.21 15:34
+    Project: Dr.Betting
+    © 2Play Tech  2021. All rights reserved
 */
-@Module
-@InstallIn(SingletonComponent::class)
-object AppModule {
-    @Singleton
-    @Provides
-    fun provideSharedPreferencesManager(@ApplicationContext context: Context) =
-        SharedPreferencesManager(context)
+object Constants {
+    val KEY_APP_LAUNCHES: String = "KEY_APP_LAUNCHES"
+    val KEY_DARK_MODE = "KEY_DARK_MODE"
+    val KEY_LOCALE = "KEY_LOCALE"
+    val KEY_NEW_TIPS_NOTIFICATIONS = "KEY_NEW_TIPS_NOTIFICATIONS"
 }

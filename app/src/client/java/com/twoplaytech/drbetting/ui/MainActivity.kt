@@ -33,6 +33,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.ui.common.BaseActivity
+import com.twoplaytech.drbetting.ui.util.NotificationsManager
 import com.twoplaytech.drbetting.util.showDisclaimer
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -44,6 +45,7 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         showDisclaimer(this)
+        NotificationsManager.subscribeToTopic("new-tips")
         navView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each

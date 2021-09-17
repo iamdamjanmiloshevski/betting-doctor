@@ -44,14 +44,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
-import com.twoplaytech.drbetting.ui.AppInfoActivity
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.data.models.Status
 import com.twoplaytech.drbetting.databinding.ActivitySettingsBinding
-import com.twoplaytech.drbetting.persistence.IPreferences.Companion.KEY_DARK_MODE
+import com.twoplaytech.drbetting.ui.AppInfoActivity
 import com.twoplaytech.drbetting.ui.adapters.OnSettingsItemClickListener
 import com.twoplaytech.drbetting.ui.adapters.SettingsRecyclerViewAdapter
 import com.twoplaytech.drbetting.ui.common.BaseActivity
+import com.twoplaytech.drbetting.ui.util.Constants.KEY_DARK_MODE
 import com.twoplaytech.drbetting.ui.viewmodels.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -155,9 +155,15 @@ class SettingsActivity : BaseActivity(), OnSettingsItemClickListener {
                             1 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                             2 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
                         }
-                        preferencesManager.saveInteger(KEY_DARK_MODE,index)
+                        preferencesManager.saveInteger(KEY_DARK_MODE, index)
                     }
                 }
+            }
+            is SettingsItem.Feedback -> {
+
+            }
+            is SettingsItem.Notifications -> {
+                return
             }
             else -> return
         }

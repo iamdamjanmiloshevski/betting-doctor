@@ -58,6 +58,8 @@
     <string name="log_out_msg">Are you sure that you want to log out?</string>
     <string name="session">Session</string>
     <string name="session_expired">Your session has expired.\n\nPlease log in to proceed</string>
+    <string name="feedback">Leave feedback</string>
+    <string name="push_notifications">Push notifications</string>
     <string-array name="dark_mode_options">
         <item>On</item>
         <item>Off</item>

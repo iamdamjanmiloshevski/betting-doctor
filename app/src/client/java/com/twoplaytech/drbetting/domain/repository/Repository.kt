@@ -25,6 +25,7 @@
 package com.twoplaytech.drbetting.domain.repository
 
 import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.FeedbackMessage
 import com.twoplaytech.drbetting.data.models.Message
 import com.twoplaytech.drbetting.data.models.Sport
 
@@ -42,7 +43,14 @@ interface Repository {
         onSuccess: (List<BettingTip>) -> Unit,
         onError: (Message) -> Unit
     )
-    fun getBettingTipById(id:String, onSuccess: (BettingTip) -> Unit, onError: (Message) -> Unit)
+
+    fun getBettingTipById(id: String, onSuccess: (BettingTip) -> Unit, onError: (Message) -> Unit)
     fun incrementAppLaunch()
     fun getAppLaunchesCount(callback: (Int) -> Unit)
+    fun receiveNotifications(topic: String)
+    fun sendFeedback(
+        feedbackMessage: FeedbackMessage,
+        onSuccess: (FeedbackMessage) -> Unit,
+        onError: (Message) -> Unit
+    )
 }

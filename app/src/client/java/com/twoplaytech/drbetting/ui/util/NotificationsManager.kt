@@ -22,27 +22,26 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.di
-
-import android.content.Context
-import com.twoplaytech.drbetting.persistence.SharedPreferencesManager
-
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+package com.twoplaytech.drbetting.ui.util
+import com.google.firebase.messaging.FirebaseMessaging
+import timber.log.Timber
 
 /*
     Author: Damjan Miloshevski 
-    Created on 3/29/21 12:11 PM
+    Created on 17.9.21 14:55
+    Project: Dr.Betting
+    © 2Play Tech  2021. All rights reserved
 */
-@Module
-@InstallIn(SingletonComponent::class)
-object AppModule {
-    @Singleton
-    @Provides
-    fun provideSharedPreferencesManager(@ApplicationContext context: Context) =
-        SharedPreferencesManager(context)
+object NotificationsManager {
+
+    fun subscribeToTopic(topic:String){
+        FirebaseMessaging.getInstance().subscribeToTopic(topic).addOnSuccessListener {
+            Timber.e("Successfully subscribed to notifications topic $topic")
+        }
+    }
+    fun unsubscribeFromTopic(topic: String){
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(topic).addOnSuccessListener {
+            Timber.e("Successfully unsubscribed to notifications topic $topic")
+        }
+    }
 }

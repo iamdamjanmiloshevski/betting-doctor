@@ -25,6 +25,7 @@
 package com.twoplaytech.drbetting.data.datasource
 
 import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.FeedbackMessage
 import com.twoplaytech.drbetting.data.models.Sport
 import kotlinx.coroutines.flow.Flow
 
@@ -44,4 +45,6 @@ interface RemoteDataSource {
     suspend fun getBettingTipById(
         id: String
     ): Flow<BettingTip>
+
+    suspend fun sendFeedback(feedbackMessage: FeedbackMessage):Flow<FeedbackMessage>
 }

@@ -31,15 +31,6 @@ import android.security.keystore.KeyGenParameterSpec
     Created on 3/29/21 12:03 PM
 */
 interface IPreferences {
-    companion object{
-        val KEY_APP_LAUNCHES: String = "KEY_APP_LAUNCHES"
-        val KEY_DARK_MODE = "KEY_DARK_MODE"
-        val KEY_LOCALE = "KEY_LOCALE"
-        val KEY_LOGGED_IN = "KEY_LOGGED_IN"
-        val KEY_USER_CREDENTIALS = "KEY_USER_CREDENTIALS"
-        val KEY_VIEW_TYPE = "KEY_VIEW_TYPE"
-        val KEY_ACCESS_TOKEN = "KEY_ACCESS_TOKEN"
-    }
     val keyGenParameterSpec: KeyGenParameterSpec
     val masterKeyAlias: String
     fun saveString(key: String, value: String)

@@ -25,8 +25,11 @@
 package com.twoplaytech.drbetting.data.api
 
 import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.FeedbackMessage
 import com.twoplaytech.drbetting.data.models.Sport
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 /*
@@ -47,4 +50,7 @@ interface BettingDoctorAPI {
 
     @GET("betting-tips/{sport}/older")
     suspend fun getOlderBettingTipsBySport(@Path("sport") sport: Sport): List<BettingTip>
+
+    @POST("users/feedback")
+    suspend fun sendFeedback(@Body feedbackMessage: FeedbackMessage): FeedbackMessage
 }

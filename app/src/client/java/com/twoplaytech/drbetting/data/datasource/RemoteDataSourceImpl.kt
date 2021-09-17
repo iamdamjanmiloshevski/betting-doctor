@@ -26,6 +26,7 @@ package com.twoplaytech.drbetting.data.datasource
 
 import com.twoplaytech.drbetting.data.api.BettingDoctorAPI
 import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.FeedbackMessage
 import com.twoplaytech.drbetting.data.models.Sport
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -59,6 +60,10 @@ class RemoteDataSourceImpl @Inject constructor(private val api: BettingDoctorAPI
 
     override suspend fun getBettingTipById(id: String): Flow<BettingTip> {
         return flow { emit(api.getBettingTipById(id)) }.flowOn(coroutineContext)
+    }
+
+    override suspend fun sendFeedback(feedbackMessage: FeedbackMessage): Flow<FeedbackMessage> {
+        return flow { emit(api.sendFeedback(feedbackMessage)) }.flowOn(coroutineContext)
     }
 
     override val coroutineContext: CoroutineContext
