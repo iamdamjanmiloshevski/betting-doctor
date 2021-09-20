@@ -22,41 +22,27 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.admin.di
+package com.twoplaytech.drbetting.admin.domain.usecases
 
-import com.twoplaytech.drbetting.admin.domain.usecases.*
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
+import com.twoplaytech.drbetting.admin.domain.repository.Repository
+import com.twoplaytech.drbetting.data.models.Message
+import javax.inject.Inject
 
 /*
     Author: Damjan Miloshevski 
-    Created on 9.9.21 14:41
+    Created on 20.9.21 11:08
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-@Module
-@InstallIn(ViewModelComponent::class)
-interface UseCasesModule {
-    @Binds
-    fun bindInsertBettingTipUseCase(insertBettingTipUseCaseImpl: InsertBettingTipUseCaseImpl): InsertBettingTipUseCase
-
-    @Binds
-    fun bindDeleteBettingUseCase(deleteBettingTipUseCaseImpl: DeleteBettingTipUseCaseImpl): DeleteBettingTipUseCase
-
-    @Binds
-    fun bindUpdateBettingTipsUseCase(updateBettingTipUseCaseImpl: UpdateBettingTipUseCaseImpl): UpdateBettingTipUseCase
-
-    @Binds
-    fun bindSignInUserUserCase(signInUseCaseImpl: SignInUseCaseImpl): SignInUseCase
-
-    @Binds
-    fun bindGetBettingTipsUseCase(getBettingTipsUseCaseImpl: GetBettingTipsUseCaseImpl):GetBettingTipsUseCase
-
-    @Binds
-    fun bindAppLaunchUseCase(appLaunchUseCaseImpl: AppLaunchUseCaseImpl): AppLaunchUseCase
-
-    @Binds
-    fun sendNotificationUseCase(sendNotificationUseCaseImpl: SendNotificationUseCaseImpl):SendNotificationUseCase
+class SendNotificationUseCaseImpl @Inject constructor(repository: Repository) : UseCase(repository),
+    SendNotificationUseCase {
+    override fun sendNotification(
+        topic: String,
+        onSuccess: () -> Unit,
+        onError: (Message) -> Unit
+    ) {
+        repository.sendNotification(topic, onSuccess = {
+            onSuccess.invoke()
+        }, onError = { onError.invoke(it) })
+    }
 }

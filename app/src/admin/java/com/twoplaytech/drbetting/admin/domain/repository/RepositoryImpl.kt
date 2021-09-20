@@ -239,6 +239,20 @@ class RepositoryImpl @Inject constructor(
         return remoteDataSource.refreshTokenAsync(accessToken.refreshToken)
     }
 
+    override fun sendNotification(
+        topic: String,
+        onSuccess: () -> Unit,
+        onError: (Message) -> Unit
+    ) {
+       launch(coroutineContext){
+           remoteDataSource.sendNotification(topic).catch { cause ->
+               sendErrorMessage(onError,cause)
+           }.collect {
+               onSuccess.invoke()
+           }
+       }
+    }
+
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO

@@ -169,6 +169,9 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
                     }
                 }
             })
+        adminViewModel.observeNotifications().observe(this,{
+            Toast.makeText(this,it,Toast.LENGTH_SHORT).show()
+        })
     }
 
     override fun initBinding() {
@@ -295,6 +298,20 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
                     message(R.string.log_out_msg)
                     positiveButton(android.R.string.ok, null) {
                         logout()
+                    }
+                    negativeButton(android.R.string.cancel, null) {
+                        dismiss()
+                    }
+                }
+                true
+            }
+            R.id.action_notifications -> {
+                MaterialDialog(this).show {
+                    cancelable(false)
+                    title(null,"Send notification")
+                    message(null,"Are you sure that you want to notify all the clients?")
+                    positiveButton(android.R.string.ok, null) {
+                        adminViewModel.sendNotification()
                     }
                     negativeButton(android.R.string.cancel, null) {
                         dismiss()

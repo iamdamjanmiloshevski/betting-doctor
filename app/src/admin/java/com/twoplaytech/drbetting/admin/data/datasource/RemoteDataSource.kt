@@ -25,10 +25,10 @@
 package com.twoplaytech.drbetting.admin.data.datasource
 
 import com.twoplaytech.drbetting.admin.data.models.AccessToken
+import com.twoplaytech.drbetting.admin.data.models.UserInput
 import com.twoplaytech.drbetting.data.models.BettingTip
 import com.twoplaytech.drbetting.data.models.Message
 import com.twoplaytech.drbetting.data.models.Sport
-import com.twoplaytech.drbetting.admin.data.models.UserInput
 import kotlinx.coroutines.flow.Flow
 
 /*
@@ -57,4 +57,5 @@ interface RemoteDataSource {
     suspend fun signIn(userInput: UserInput): Flow<AccessToken>
     suspend fun refreshToken(refreshToken: String): Flow<AccessToken>
     suspend fun refreshTokenAsync(refreshToken: String): AccessToken
+    suspend fun sendNotification(topic:String):Flow<Unit>
 }

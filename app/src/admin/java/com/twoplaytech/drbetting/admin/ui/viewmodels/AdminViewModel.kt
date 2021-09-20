@@ -26,12 +26,13 @@ package com.twoplaytech.drbetting.admin.ui.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.twoplaytech.drbetting.admin.domain.usecases.DeleteBettingTipUseCase
+import com.twoplaytech.drbetting.admin.domain.usecases.InsertBettingTipUseCase
+import com.twoplaytech.drbetting.admin.domain.usecases.SendNotificationUseCase
+import com.twoplaytech.drbetting.admin.domain.usecases.UpdateBettingTipUseCase
 import com.twoplaytech.drbetting.data.models.BettingTip
 import com.twoplaytech.drbetting.data.models.Message
 import com.twoplaytech.drbetting.domain.common.Resource
-import com.twoplaytech.drbetting.admin.domain.usecases.DeleteBettingTipUseCase
-import com.twoplaytech.drbetting.admin.domain.usecases.InsertBettingTipUseCase
-import com.twoplaytech.drbetting.admin.domain.usecases.UpdateBettingTipUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -45,17 +46,20 @@ import javax.inject.Inject
 class AdminViewModel @Inject constructor(
     private val insertBettingTipUseCase: InsertBettingTipUseCase,
     private val updateBettingTipUseCase: UpdateBettingTipUseCase,
-    private val deleteBettingTipUseCase: DeleteBettingTipUseCase
+    private val deleteBettingTipUseCase: DeleteBettingTipUseCase,
+    private val sendNotificationUseCase: SendNotificationUseCase
 ) : ViewModel() {
     private val insertBettingTipObserver = MutableLiveData<Resource<BettingTip>>()
     private val deleteBettingTipObserver = MutableLiveData<Resource<Message>>()
     private val updateBettingTipObserver = MutableLiveData<Resource<BettingTip>>()
     private val fieldValidatorObserver = MutableLiveData<Boolean>()
+    private val notificationsObserver = MutableLiveData<String>()
     fun validate(validate: Boolean) {
         fieldValidatorObserver.value = validate
     }
+
     fun insertBettingTip(bettingTip: BettingTip) {
-        insertBettingTipObserver.postValue(Resource.loading(null,null))
+        insertBettingTipObserver.postValue(Resource.loading(null, null))
         insertBettingTipUseCase.insertBettingTip(bettingTip, onSuccess = { updatedBettingTip ->
             insertBettingTipObserver.postValue(Resource.success(null, updatedBettingTip))
         }, onError = { message ->
@@ -63,20 +67,28 @@ class AdminViewModel @Inject constructor(
         })
     }
 
-    fun deleteBettingTip(id:String){
-        deleteBettingTipUseCase.deleteBettingTip(id,onSuccess = {message ->
-            deleteBettingTipObserver.postValue( Resource.success(message.message,message))
-        },onError = {message->
-            deleteBettingTipObserver.postValue(Resource.error(message.message,null))
+    fun deleteBettingTip(id: String) {
+        deleteBettingTipUseCase.deleteBettingTip(id, onSuccess = { message ->
+            deleteBettingTipObserver.postValue(Resource.success(message.message, message))
+        }, onError = { message ->
+            deleteBettingTipObserver.postValue(Resource.error(message.message, null))
         })
     }
 
-    fun updateBettingTip(bettingTip: BettingTip){
-        updateBettingTipObserver.postValue(Resource.loading(null,null))
-        updateBettingTipUseCase.updateBettingTip(bettingTip,onSuccess = {
-            updateBettingTipObserver.postValue(Resource.success(null,it))
-        },onError = { message->
-            updateBettingTipObserver.postValue(Resource.error(message.message,null))
+    fun updateBettingTip(bettingTip: BettingTip) {
+        updateBettingTipObserver.postValue(Resource.loading(null, null))
+        updateBettingTipUseCase.updateBettingTip(bettingTip, onSuccess = {
+            updateBettingTipObserver.postValue(Resource.success(null, it))
+        }, onError = { message ->
+            updateBettingTipObserver.postValue(Resource.error(message.message, null))
+        })
+    }
+
+    fun sendNotification(topic: String = "new-tips") {
+        sendNotificationUseCase.sendNotification(topic, onSuccess = {
+            notificationsObserver.postValue("Notification sent successfully")
+        }, onError = {
+            notificationsObserver.postValue("Something went wrong while trying to send notification")
         })
     }
 
@@ -86,5 +98,7 @@ class AdminViewModel @Inject constructor(
 
     fun observeDeletedTip() = deleteBettingTipObserver
 
-    fun observeOnUpdatedTip()= updateBettingTipObserver
+    fun observeOnUpdatedTip() = updateBettingTipObserver
+
+    fun observeNotifications() = notificationsObserver
 }

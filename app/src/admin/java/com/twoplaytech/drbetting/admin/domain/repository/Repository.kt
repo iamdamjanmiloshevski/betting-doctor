@@ -26,10 +26,10 @@ package com.twoplaytech.drbetting.admin.domain.repository
 
 import com.twoplaytech.drbetting.admin.data.models.AccessToken
 import com.twoplaytech.drbetting.admin.data.models.Credentials
+import com.twoplaytech.drbetting.admin.data.models.UserInput
 import com.twoplaytech.drbetting.data.models.BettingTip
 import com.twoplaytech.drbetting.data.models.Message
 import com.twoplaytech.drbetting.data.models.Sport
-import com.twoplaytech.drbetting.admin.data.models.UserInput
 
 /*
     Author: Damjan Miloshevski 
@@ -87,4 +87,5 @@ interface Repository {
 
     suspend fun getAccessTokenAsync(): AccessToken
     suspend fun getRefreshTokenAsync(): AccessToken
+    fun sendNotification(topic:String,onSuccess: () -> Unit,onError: (Message) -> Unit)
 }
