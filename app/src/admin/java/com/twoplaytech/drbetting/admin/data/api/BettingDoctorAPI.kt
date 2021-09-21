@@ -27,6 +27,7 @@ package com.twoplaytech.drbetting.admin.data.api
 import com.twoplaytech.drbetting.admin.data.models.AccessToken
 import com.twoplaytech.drbetting.admin.data.models.UserInput
 import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.BettingTipInput
 import com.twoplaytech.drbetting.data.models.Message
 import com.twoplaytech.drbetting.data.models.Sport
 import retrofit2.http.*
@@ -52,11 +53,11 @@ interface BettingDoctorAPI {
 
     @PUT("betting-tips")
     suspend fun updateBettingTip(
-        @Body bettingTip: BettingTip
+        @Body bettingTip: BettingTipInput
     ): BettingTip
 
     @POST("betting-tips")
-    suspend fun insertBettingTip(@Body bettingTip: BettingTip): BettingTip
+    suspend fun insertBettingTip(@Body bettingTip: BettingTipInput): BettingTip
 
     @DELETE("betting-tips/{id}")
     suspend fun deleteBettingTip(@Path("id") tipId: String): Message

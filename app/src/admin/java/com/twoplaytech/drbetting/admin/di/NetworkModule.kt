@@ -24,6 +24,7 @@
 
 package com.twoplaytech.drbetting.admin.di
 
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.twoplaytech.drbetting.BuildConfig
 import com.twoplaytech.drbetting.admin.data.api.BettingDoctorAPI
 import com.twoplaytech.drbetting.admin.data.api.TokenAuthenticator
@@ -59,6 +60,7 @@ object NetworkModule {
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
         client.authenticator(TokenAuthenticator(repository))
+        client.addInterceptor(StethoInterceptor())
         client.addInterceptor(
             if (BuildConfig.DEBUG) HttpLoggingInterceptor().setLevel(
                 HttpLoggingInterceptor.Level.BODY

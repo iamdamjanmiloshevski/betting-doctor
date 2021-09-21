@@ -33,9 +33,6 @@
         <variable
             name="bettingType"
             type="com.twoplaytech.drbetting.data.models.BettingTip" />
-        <variable
-          name="context"
-          type="Context" />
     </data>
 
     <LinearLayout
@@ -82,7 +79,7 @@
                       android:layout_centerInParent="true"
                       android:layout_marginTop="5dp"
                       android:gravity="center"
-                      android:text="@{ExtensionsKt.toDate(bettingType.gameTime)}"
+                      android:text="@{ExtensionsKt.beautifyGameDate(bettingType.gameTime)}"
                       android:textColor="@color/black"
                       android:textSize="18sp" />
 

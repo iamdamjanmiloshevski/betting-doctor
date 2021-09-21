@@ -37,6 +37,7 @@ import com.twoplaytech.drbetting.admin.common.ICustomView
 import com.twoplaytech.drbetting.admin.util.beautify
 import com.twoplaytech.drbetting.databinding.ViewInputBinding
 import com.twoplaytech.drbetting.ui.common.TextWatcher
+import com.twoplaytech.drbetting.util.toDate
 import java.util.*
 
 /*
@@ -123,9 +124,9 @@ class InputView(context: Context, attrs: AttributeSet) :
         requestLayout()
     }
 
-    fun setDate(date: Date) {
-        binding.etField.setText(date.beautify())
-        gameTime = date
+    fun setDate(date: String) {
+        binding.etField.setText(date)
+        gameTime = date.toDate()
         invalidate()
         requestLayout()
     }

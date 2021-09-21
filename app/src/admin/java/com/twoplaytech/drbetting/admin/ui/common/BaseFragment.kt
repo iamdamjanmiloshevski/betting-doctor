@@ -32,11 +32,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.tabs.TabLayoutMediator
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.databinding.FragmentBaseBinding
-import com.twoplaytech.drbetting.ui.adapters.ChildFragmentViewPager2PagerAdapter
 import com.twoplaytech.drbetting.ui.common.IBaseView
 import com.twoplaytech.drbetting.ui.viewmodels.BettingTipsViewModel
 import com.twoplaytech.drbetting.util.getSportResource
@@ -47,7 +45,6 @@ import com.twoplaytech.drbetting.util.getSportResource
 */
 abstract class BaseFragment : Fragment(), IBaseView {
     protected lateinit var binding: FragmentBaseBinding
-    private lateinit var pagerAdapter: ChildFragmentViewPager2PagerAdapter
     override val viewModel: BettingTipsViewModel by activityViewModels()
 
     override fun initBinding(inflater: LayoutInflater, container: ViewGroup?) {
@@ -57,17 +54,6 @@ abstract class BaseFragment : Fragment(), IBaseView {
     override fun changeTheme(@StringRes titleStringRes: Int, sport: Sport) {
         binding.tabs.setBackgroundResource(sport.getSportResource())
         setupToolbar(titleStringRes, sport)
-    }
-
-    override fun initPager(screens: List<Fragment>) {
-        pagerAdapter = ChildFragmentViewPager2PagerAdapter(this, screens)
-        binding.vpTabs.adapter = pagerAdapter
-        TabLayoutMediator(binding.tabs, binding.vpTabs) { tab, position ->
-            when (position) {
-                0 -> tab.text = getString(R.string.older_tab)
-                1 -> tab.text = getString(R.string.upcoming_tab)
-            }
-        }.attach()
     }
 
     override fun setupToolbar(titleRes: Int, sport: Sport) {

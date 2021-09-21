@@ -26,6 +26,7 @@ package com.twoplaytech.drbetting.admin.ui.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.twoplaytech.drbetting.admin.data.mappers.BettingTipMapper
 import com.twoplaytech.drbetting.admin.domain.usecases.DeleteBettingTipUseCase
 import com.twoplaytech.drbetting.admin.domain.usecases.InsertBettingTipUseCase
 import com.twoplaytech.drbetting.admin.domain.usecases.SendNotificationUseCase
@@ -60,7 +61,7 @@ class AdminViewModel @Inject constructor(
 
     fun insertBettingTip(bettingTip: BettingTip) {
         insertBettingTipObserver.postValue(Resource.loading(null, null))
-        insertBettingTipUseCase.insertBettingTip(bettingTip, onSuccess = { updatedBettingTip ->
+        insertBettingTipUseCase.insertBettingTip(BettingTipMapper.toBettingTipInput(bettingTip), onSuccess = { updatedBettingTip ->
             insertBettingTipObserver.postValue(Resource.success(null, updatedBettingTip))
         }, onError = { message ->
             insertBettingTipObserver.postValue(Resource.error(message.message, null))
@@ -77,7 +78,7 @@ class AdminViewModel @Inject constructor(
 
     fun updateBettingTip(bettingTip: BettingTip) {
         updateBettingTipObserver.postValue(Resource.loading(null, null))
-        updateBettingTipUseCase.updateBettingTip(bettingTip, onSuccess = {
+        updateBettingTipUseCase.updateBettingTip(BettingTipMapper.toBettingTipInput(bettingTip), onSuccess = {
             updateBettingTipObserver.postValue(Resource.success(null, it))
         }, onError = { message ->
             updateBettingTipObserver.postValue(Resource.error(message.message, null))

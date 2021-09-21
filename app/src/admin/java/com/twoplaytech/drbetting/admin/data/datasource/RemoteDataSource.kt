@@ -27,6 +27,7 @@ package com.twoplaytech.drbetting.admin.data.datasource
 import com.twoplaytech.drbetting.admin.data.models.AccessToken
 import com.twoplaytech.drbetting.admin.data.models.UserInput
 import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.BettingTipInput
 import com.twoplaytech.drbetting.data.models.Message
 import com.twoplaytech.drbetting.data.models.Sport
 import kotlinx.coroutines.flow.Flow
@@ -48,9 +49,9 @@ interface RemoteDataSource {
         id: String
     ): Flow<BettingTip>
 
-    suspend fun insertBettingTip(bettingTip: BettingTip): Flow<BettingTip>
+    suspend fun insertBettingTip(bettingTip: BettingTipInput): Flow<BettingTip>
 
-    suspend fun updateBettingTip(bettingTip: BettingTip): Flow<BettingTip>
+    suspend fun updateBettingTip(bettingTip: BettingTipInput): Flow<BettingTip>
 
     suspend fun deleteBettingTip(id: String): Flow<Message>
 

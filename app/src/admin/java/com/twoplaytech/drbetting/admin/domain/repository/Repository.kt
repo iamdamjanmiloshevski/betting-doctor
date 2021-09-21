@@ -28,6 +28,7 @@ import com.twoplaytech.drbetting.admin.data.models.AccessToken
 import com.twoplaytech.drbetting.admin.data.models.Credentials
 import com.twoplaytech.drbetting.admin.data.models.UserInput
 import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.BettingTipInput
 import com.twoplaytech.drbetting.data.models.Message
 import com.twoplaytech.drbetting.data.models.Sport
 
@@ -48,13 +49,13 @@ interface Repository {
 
     fun getBettingTipById(id: String, onSuccess: (BettingTip) -> Unit, onError: (Message) -> Unit)
     fun insertBettingTip(
-        bettingTip: BettingTip,
+        bettingTip: BettingTipInput,
         onSuccess: (BettingTip) -> Unit,
         onError: (Message) -> Unit
     )
 
     fun updateBettingTip(
-        bettingTip: BettingTip,
+        bettingTip: BettingTipInput,
         onSuccess: (BettingTip) -> Unit,
         onError: (Message) -> Unit
     )

@@ -109,15 +109,16 @@ abstract class BaseFragment : Fragment(), IBaseView, Toolbar.OnMenuItemClickList
             else -> false
         }
     }
+    private fun Activity.openAdmin() {
+        val packageName = "com.twoplaytech.drbetting.admin"
+        var intent = this.packageManager.getLaunchIntentForPackage(packageName)
+        if (intent == null) {
+            intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse("market://details?id=$packageName")
+        }
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        this.startActivity(intent)
+    }
+
 }
 
- private fun Activity.openAdmin() {
-    val packageName = "com.twoplaytech.drbetting.admin"
-    var intent = this.packageManager.getLaunchIntentForPackage(packageName)
-    if (intent == null) {
-        intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse("market://details?id=$packageName")
-    }
-    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    this.startActivity(intent)
-}

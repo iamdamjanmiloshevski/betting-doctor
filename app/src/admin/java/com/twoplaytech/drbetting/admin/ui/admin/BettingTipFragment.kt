@@ -35,6 +35,7 @@ import com.twoplaytech.drbetting.admin.util.Constants
 import com.twoplaytech.drbetting.admin.views.ChooserView
 import com.twoplaytech.drbetting.data.models.*
 import com.twoplaytech.drbetting.databinding.FragmentBettingTipBinding
+import com.twoplaytech.drbetting.util.toStringDate
 import java.util.*
 
 class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
@@ -85,7 +86,7 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
         } ?: statusChosen.select(_binding.cvStatus)
     }
 
-    override fun observeData() {
+     override fun observeData() {
         adminViewModel.observeValidation().observe(viewLifecycleOwner, { hasErrors ->
             when (hasErrors) {
                 true -> {
@@ -123,7 +124,7 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
             leagueName = league,
             teamHome = teamHome,
             teamAway = teamAway,
-            gameTime = gameTime!!,
+            gameTime = gameTime!!.toStringDate(),
             bettingType = bettingTip,
             status = statusChosen,
             result = result,

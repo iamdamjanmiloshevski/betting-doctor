@@ -28,6 +28,7 @@ import com.twoplaytech.drbetting.admin.data.api.BettingDoctorAPI
 import com.twoplaytech.drbetting.admin.data.models.AccessToken
 import com.twoplaytech.drbetting.admin.data.models.UserInput
 import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.BettingTipInput
 import com.twoplaytech.drbetting.data.models.Message
 import com.twoplaytech.drbetting.data.models.Sport
 import kotlinx.coroutines.CoroutineScope
@@ -64,11 +65,11 @@ class RemoteDataSourceImpl @Inject constructor(private val api: BettingDoctorAPI
         return flow { emit(api.getBettingTipById(id)) }.flowOn(coroutineContext)
     }
 
-    override suspend fun insertBettingTip(bettingTip: BettingTip): Flow<BettingTip> {
+    override suspend fun insertBettingTip(bettingTip: BettingTipInput): Flow<BettingTip> {
         return flow { emit(api.insertBettingTip(bettingTip)) }.flowOn(coroutineContext)
     }
 
-    override suspend fun updateBettingTip(bettingTip: BettingTip): Flow<BettingTip> {
+    override suspend fun updateBettingTip(bettingTip: BettingTipInput): Flow<BettingTip> {
         return flow { emit(api.updateBettingTip(bettingTip)) }.flowOn(coroutineContext)
     }
 

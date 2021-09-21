@@ -27,6 +27,8 @@ package com.twoplaytech.drbetting.admin
 import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
+import com.facebook.stetho.Stetho
+import com.jakewharton.threetenabp.AndroidThreeTen
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import javax.inject.Inject
@@ -42,6 +44,8 @@ class App : Application(), Configuration.Provider {
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
+        Stetho.initializeWithDefaults(this)
+        AndroidThreeTen.init(this)
     }
 
     override fun getWorkManagerConfiguration() =

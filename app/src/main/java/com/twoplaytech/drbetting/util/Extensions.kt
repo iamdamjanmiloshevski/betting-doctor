@@ -155,13 +155,13 @@ fun today(): Date {
     return calendar.time
 }
 
-fun String.toDate(): String {
+fun String.beautifyGameDate(): String {
     val zonedDateTime = this.toZonedDate()
     val dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
     return zonedDateTime.format(dateFormatter)
 }
 
-fun String.toTime(context: Context): String {
+fun String.beautifyGameTime(context: Context): String {
     val zonedDateTime = this.toZonedDate()
     val is24hrFormat = DateFormat.is24HourFormat(context)
     val pattern = if (!is24hrFormat) "h:mm a z" else "H:mm z"
@@ -171,12 +171,20 @@ fun String.toTime(context: Context): String {
 
 fun String.toZonedDate(): ZonedDateTime {
     // Sep 21, 2021, 7:30:00 PM
-    val simpleDateFormat = SimpleDateFormat("MMM dd, yyyy, hh:mm:ss a", Locale.getDefault())
-    val date = simpleDateFormat.parse(this)
-    return ZonedDateTime.ofInstant(Instant.ofEpochMilli(date.time), ZoneId.of("UTC")).withZoneSameInstant(
-        ZoneId.systemDefault())
+    this.toDate()?.let {
+        return ZonedDateTime.ofInstant(Instant.ofEpochMilli(it.time), ZoneId.of("UTC")).withZoneSameInstant(
+            ZoneId.systemDefault())
+    } ?: throw NullPointerException("Date must not be null!")
 }
 
+fun String.toDate():Date{
+    val simpleDateFormat = SimpleDateFormat("MMM dd, yyyy, hh:mm:ss a", Locale.getDefault())
+    return simpleDateFormat.parse(this)
+}
+fun Date.toStringDate():String{
+    val simpleDateFormat = SimpleDateFormat("MMM dd, yyyy, hh:mm:ss a", Locale.getDefault())
+    return simpleDateFormat.format(this)
+}
 fun Context.getRandomBackground(): Pair<Drawable?, Int> {
     val random = Random()
     val indexes = IntArray(5)

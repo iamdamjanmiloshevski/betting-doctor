@@ -25,6 +25,7 @@
 package com.twoplaytech.drbetting.admin.domain.usecases
 
 import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.BettingTipInput
 import com.twoplaytech.drbetting.data.models.Message
 
 /*
@@ -35,7 +36,7 @@ import com.twoplaytech.drbetting.data.models.Message
 */
 interface InsertBettingTipUseCase {
     fun insertBettingTip(
-        bettingTip: BettingTip,
+        bettingTip: BettingTipInput,
         onSuccess: (BettingTip) -> Unit,
         onError: (Message) -> Unit
     )

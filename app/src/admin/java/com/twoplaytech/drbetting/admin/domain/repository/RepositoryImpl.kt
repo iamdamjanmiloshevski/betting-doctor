@@ -37,6 +37,7 @@ import com.twoplaytech.drbetting.admin.util.Constants.KEY_USER_CREDENTIALS
 import com.twoplaytech.drbetting.data.datasource.LocalDataSource
 import com.twoplaytech.drbetting.data.mappers.MessageMapper
 import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.BettingTipInput
 import com.twoplaytech.drbetting.data.models.Message
 import com.twoplaytech.drbetting.data.models.Sport
 import kotlinx.coroutines.*
@@ -100,7 +101,7 @@ class RepositoryImpl @Inject constructor(
     }
 
     override fun insertBettingTip(
-        bettingTip: BettingTip,
+        bettingTip: BettingTipInput,
         onSuccess: (BettingTip) -> Unit,
         onError: (Message) -> Unit
     ) {
@@ -112,7 +113,7 @@ class RepositoryImpl @Inject constructor(
     }
 
     override fun updateBettingTip(
-        bettingTip: BettingTip,
+        bettingTip: BettingTipInput,
         onSuccess: (BettingTip) -> Unit,
         onError: (Message) -> Unit
     ) {
