@@ -25,6 +25,8 @@
 package com.twoplaytech.drbetting
 
 import android.app.Application
+import com.facebook.stetho.Stetho
+import com.jakewharton.threetenabp.AndroidThreeTen
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
@@ -38,5 +40,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
+        Stetho.initializeWithDefaults(this)
+        AndroidThreeTen.init(this)
     }
 }

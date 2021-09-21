@@ -33,27 +33,27 @@
     android:id="@+id/navigation_football"
     android:name="com.twoplaytech.drbetting.ui.football.FootballFragment"
     android:label="Football"
-      tools:layout="@layout/fragment_base" />
+    tools:layout="@layout/fragment_base" />
 
   <fragment
     android:id="@+id/navigation_basketball"
     android:name="com.twoplaytech.drbetting.ui.basketball.BasketballFragment"
     android:label="Basketball"
-      tools:layout="@layout/fragment_base" />
+    tools:layout="@layout/fragment_base" />
 
   <fragment
     android:id="@+id/navigation_tennis"
     android:name="com.twoplaytech.drbetting.ui.tennis.TennisFragment"
     android:label="Tennis"
-      tools:layout="@layout/fragment_base"/>
+    tools:layout="@layout/fragment_base"/>
   <fragment
-      android:id="@+id/navigation_handball"
-      android:name="com.twoplaytech.drbetting.ui.handball.HandballFragment"
-      android:label="Handball"
-      tools:layout="@layout/fragment_base" />
+    android:id="@+id/navigation_handball"
+    android:name="com.twoplaytech.drbetting.ui.handball.HandballFragment"
+    android:label="Handball"
+    tools:layout="@layout/fragment_base" />
   <fragment
-      android:id="@+id/navigation_volleyball"
-      android:name="com.twoplaytech.drbetting.ui.volleyball.VolleyballFragment"
-      android:label="Volleyball"
-      tools:layout="@layout/fragment_base" />
+    android:id="@+id/navigation_volleyball"
+    android:name="com.twoplaytech.drbetting.ui.volleyball.VolleyballFragment"
+    android:label="Volleyball"
+    tools:layout="@layout/fragment_base" />
 </navigation>

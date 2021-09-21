@@ -37,6 +37,7 @@ import com.twoplaytech.drbetting.data.models.Status
 import com.twoplaytech.drbetting.databinding.FragmentChildBinding
 import com.twoplaytech.drbetting.ui.adapters.BettingTipsRecyclerViewAdapter
 import com.twoplaytech.drbetting.ui.viewmodels.BettingTipsViewModel
+import timber.log.Timber
 
 /*
     Author: Damjan Miloshevski 

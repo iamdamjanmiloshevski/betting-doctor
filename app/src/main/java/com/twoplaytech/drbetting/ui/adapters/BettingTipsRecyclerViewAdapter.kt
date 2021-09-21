@@ -50,6 +50,7 @@ class BettingTipsRecyclerViewAdapter(private val tips: MutableList<BettingTip>) 
     override fun onBindViewHolder(holder: TipViewHolder, position: Int) {
         val bettingTip = tips[position]
         holder.binding.bettingType = bettingTip
+        holder.bind(bettingTip)
         holder.binding.root.setOnClickListener {
             listener?.onTipClick(bettingTip)
         }

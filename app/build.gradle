@@ -1,181 +1,195 @@
 plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
-    id 'kotlin-kapt'
-    id 'kotlin-android-extensions'
-    id 'dagger.hilt.android.plugin'
-    id 'com.google.gms.google-services'
-    id 'com.google.firebase.crashlytics'
+  id 'com.android.application'
+  id 'kotlin-android'
+  id 'kotlin-kapt'
+  id 'kotlin-android-extensions'
+  id 'dagger.hilt.android.plugin'
+  id 'com.google.gms.google-services'
+  id 'com.google.firebase.crashlytics'
 }
 
 android {
-    compileSdkVersion rootProject.ext.targetSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+  compileSdkVersion rootProject.ext.targetSdkVersion
+  buildToolsVersion rootProject.ext.buildToolsVersion
 
-    defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode generateVersionCode(versionCodeNum)
-        versionName generateVersionName()
+  defaultConfig {
+    minSdkVersion rootProject.ext.minSdkVersion
+    targetSdkVersion rootProject.ext.targetSdkVersion
+    versionCode generateVersionCode(versionCodeNum)
+    versionName generateVersionName()
 
-        multiDexEnabled true
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    multiDexEnabled true
+    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+  }
+
+  buildTypes {
+
+    debug {
+      buildConfigField("String", "BASE_URL", '"http://' + rootProject.ext.localhost_ip + '/api/v1/"')
     }
 
-    buildTypes {
+    release {
+      minifyEnabled true
+      shrinkResources true
+      buildConfigField("String", "BASE_URL", '"https://betting-doctor.herokuapp.com/api/v1/"')
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+    }
+  }
+  lintOptions {
+    checkReleaseBuilds false
+  }
 
-        debug{
-            buildConfigField("String", "BASE_URL", '"http://'+rootProject.ext.localhost_ip+'/api/v1/"')
-        }
+  flavorDimensions "default"
 
-        release {
-            minifyEnabled true
-            shrinkResources true
-            buildConfigField("String", "BASE_URL", '"https://betting-doctor.herokuapp.com/api/v1/"')
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-    lintOptions {
-        checkReleaseBuilds false
+  productFlavors {
+    client {
+      dimension "default"
+      applicationId "com.twoplaytech.drbetting"
+      manifestPlaceholders = [appLabel: "Doctor Betting"]
+      resValue "string", "app_name", "Doctor Betting"
     }
 
-    flavorDimensions "default"
-
-    productFlavors {
-        client {
-            dimension "default"
-            applicationId "com.twoplaytech.drbetting"
-            manifestPlaceholders = [appLabel: "Doctor Betting"]
-            resValue "string", "app_name", "Doctor Betting"
-        }
-
-        admin {
-            dimension "default"
-            manifestPlaceholders = [appLabel: "Doctor Betting Admin"]
-            applicationId "com.twoplaytech.drbetting.admin"
-            resValue "string", "app_name", "Doctor Betting Admin"
-        }
+    admin {
+      dimension "default"
+      manifestPlaceholders = [appLabel: "Doctor Betting Admin"]
+      applicationId "com.twoplaytech.drbetting.admin"
+      resValue "string", "app_name", "Doctor Betting Admin"
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-    buildFeatures {
-        dataBinding true
-        viewBinding true
-    }
+  }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+  kotlinOptions {
+    jvmTarget = '1.8'
+  }
+  buildFeatures {
+    dataBinding true
+    viewBinding true
+  }
 }
 
 private Integer generateVersionCode(Integer versionCode) {
-    if (versionCode != rootProject.ext.versionCodeNum) return rootProject.ext.versionCode++
-    else return versionCode
+  if (versionCode != rootProject.ext.versionCodeNum) return rootProject.ext.versionCode++
+  else return versionCode
 }
 
 private String generateVersionName() {
-    String versionName
-    versionName = "${rootProject.ext.majorVersion}.${rootProject.ext.minorVersion}.${rootProject.ext.patchVersion}"
-    if (rootProject.ext.versionClassifier == null) {
-        if (rootProject.ext.isSnapshot) {
-            ext.versionClassifier = "SNAPSHOT"
-        }
-        if (rootProject.ext.isAlpha) {
-            if (rootProject.ext.alphaOrBetaVersion < 10) {
-                rootProject.ext.versionClassifier = "alpha0${rootProject.ext.alphaOrBetaVersion}"
-            } else rootProject.ext.versionClassifier = "alpha${rootProject.ext.alphaOrBetaVersion}"
-        }
-        if (rootProject.ext.isBeta) {
-            if (rootProject.ext.alphaOrBetaVersion < 10) {
-                rootProject.ext.versionClassifier = "beta${rootProject.ext.alphaOrBetaVersion}"
-            } else rootProject.ext.versionClassifier = "beta${rootProject.ext.alphaOrBetaVersion}"
-        }
+  String versionName
+  versionName = "${rootProject.ext.majorVersion}.${rootProject.ext.minorVersion}.${rootProject.ext.patchVersion}"
+  if (rootProject.ext.versionClassifier == null) {
+    if (rootProject.ext.isSnapshot) {
+      ext.versionClassifier = "SNAPSHOT"
     }
-    if (rootProject.ext.versionClassifier != null) {
-        versionName += "-" + rootProject.ext.versionClassifier
+    if (rootProject.ext.isAlpha) {
+      if (rootProject.ext.alphaOrBetaVersion < 10) {
+        rootProject.ext.versionClassifier = "alpha0${rootProject.ext.alphaOrBetaVersion}"
+      } else rootProject.ext.versionClassifier = "alpha${rootProject.ext.alphaOrBetaVersion}"
     }
-    return versionName
+    if (rootProject.ext.isBeta) {
+      if (rootProject.ext.alphaOrBetaVersion < 10) {
+        rootProject.ext.versionClassifier = "beta${rootProject.ext.alphaOrBetaVersion}"
+      } else rootProject.ext.versionClassifier = "beta${rootProject.ext.alphaOrBetaVersion}"
+    }
+  }
+  if (rootProject.ext.versionClassifier != null) {
+    versionName += "-" + rootProject.ext.versionClassifier
+  }
+  return versionName
 }
 
 dependencies {
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.3.2'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.3.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.4'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.4'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.3'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.3'
+  implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  implementation 'androidx.core:core-ktx:1.3.2'
+  implementation 'androidx.appcompat:appcompat:1.2.0'
+  implementation 'com.google.android.material:material:1.3.0'
+  implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+  implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
+  implementation 'androidx.navigation:navigation-fragment-ktx:2.3.4'
+  implementation 'androidx.navigation:navigation-ui-ktx:2.3.4'
+  implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.0'
+  implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0'
+  implementation 'androidx.navigation:navigation-fragment-ktx:2.3.3'
+  implementation 'androidx.navigation:navigation-ui-ktx:2.3.3'
 
-    //region Hilt
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-compiler:$hilt_version"
-    implementation 'androidx.hilt:hilt-work:1.0.0'
-    kapt 'androidx.hilt:hilt-compiler:1.0.0'
-    //endregion
+  //region Hilt
+  implementation "com.google.dagger:hilt-android:$hilt_version"
+  kapt "com.google.dagger:hilt-compiler:$hilt_version"
+  implementation 'androidx.hilt:hilt-work:1.0.0'
+  kapt 'androidx.hilt:hilt-compiler:1.0.0'
+  //endregion
 
-    //region Firebase
-    implementation platform("com.google.firebase:firebase-bom:$firebaseBomVersion")
-    implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx'
-    implementation 'com.google.firebase:firebase-firestore-ktx'
-    implementation 'com.google.firebase:firebase-auth-ktx'
-    implementation 'com.google.firebase:firebase-messaging'
-    //endregion
+  //region Firebase
+  implementation platform("com.google.firebase:firebase-bom:$firebaseBomVersion")
+  implementation 'com.google.firebase:firebase-analytics-ktx'
+  implementation 'com.google.firebase:firebase-crashlytics-ktx'
+  implementation 'com.google.firebase:firebase-firestore-ktx'
+  implementation 'com.google.firebase:firebase-auth-ktx'
+  implementation 'com.google.firebase:firebase-messaging'
+  //endregion
 
-    //region Glide
-    implementation "com.github.bumptech.glide:glide:$glideVersion"
-    implementation "com.github.bumptech.glide:annotations:$glideVersion"
-    kapt "com.github.bumptech.glide:compiler:$glideVersion"
-    //endregion
+  //region Glide
+  implementation "com.github.bumptech.glide:glide:$glideVersion"
+  implementation "com.github.bumptech.glide:annotations:$glideVersion"
+  kapt "com.github.bumptech.glide:compiler:$glideVersion"
+  //endregion
 
-    //region Caverock SVG
-    implementation "com.caverock:$caverockVersion"
-    //endregion
+  //region Caverock SVG
+  implementation "com.caverock:$caverockVersion"
+  //endregion
 
-    //region AndroidX Security
-    implementation "androidx.security:security-crypto:$xCryptoVersion"
-    //endregion
+  //region AndroidX Security
+  implementation "androidx.security:security-crypto:$xCryptoVersion"
+  //endregion
 
-    //region Material Dialogs
-    implementation "com.afollestad.material-dialogs:core:$materialDialogsVersion"
-    implementation "com.afollestad.material-dialogs:datetime:$materialDialogsVersion"
-    //endregion
+  //region Material Dialogs
+  implementation "com.afollestad.material-dialogs:core:$materialDialogsVersion"
+  implementation "com.afollestad.material-dialogs:datetime:$materialDialogsVersion"
+  //endregion
 
-    //region Retrofit
-    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
-    //endregion
+  //region Retrofit
+  implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+  implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+  //endregion
 
-    //region Gson
-    implementation "com.google.code.gson:gson:$gsonVersion"
-    //endregion
+  //region Gson
+  implementation "com.google.code.gson:gson:$gsonVersion"
+  //endregion
 
-    //region OkHttp
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:$okHttpVersion"))
-    implementation("com.squareup.okhttp3:okhttp")
-    implementation("com.squareup.okhttp3:logging-interceptor")
-    //endregion
+  //region OkHttp
+  implementation(platform("com.squareup.okhttp3:okhttp-bom:$okHttpVersion"))
+  implementation("com.squareup.okhttp3:okhttp")
+  implementation("com.squareup.okhttp3:logging-interceptor")
+  //endregion
 
-    //region Timber logger
-    implementation "com.jakewharton.timber:timber:$timberLoggerVersion"
-    //endregion
+  //region Timber logger
+  implementation "com.jakewharton.timber:timber:$timberLoggerVersion"
+  //endregion
 
-    //region WorkManager
-    implementation "androidx.work:work-runtime-ktx:$work_version"
-    //endregion
+  //region WorkManager
+  implementation "androidx.work:work-runtime-ktx:$work_version"
+  //endregion
 
-    //region JWTDecode Android
-    implementation "com.auth0.android:jwtdecode:$jwtDecode_version"
-    //endregion
+  //region JWTDecode Android
+  implementation "com.auth0.android:jwtdecode:$jwtDecode_version"
+  //endregion
 
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+  //region ThreeTen Android backport
+  implementation "com.jakewharton.threetenabp:threetenabp:$threeTenAndroidBackportVersion"
+  //endregion
+
+  //region Facebook Stetho
+  implementation "com.facebook.stetho:stetho:$stethoVersion"
+  implementation "com.facebook.stetho:stetho-okhttp3:$stethoVersion"
+  //endregion
+
+  //region LeakCanary
+  // debugImplementation because LeakCanary should only run in debug builds.
+  debugImplementation "com.squareup.leakcanary:$leakCanaryVersion"
+  //endregion
+
+  testImplementation 'junit:junit:4.+'
+  androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+  androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }

@@ -24,8 +24,10 @@
 
 package com.twoplaytech.drbetting.di
 
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.twoplaytech.drbetting.BuildConfig
 import com.twoplaytech.drbetting.data.api.BettingDoctorAPI
+import com.twoplaytech.drbetting.util.GsonUtil
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -55,6 +57,7 @@ object NetworkModule {
             .callTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
+        client.addInterceptor(StethoInterceptor())
         client.addInterceptor(
             if (BuildConfig.DEBUG) HttpLoggingInterceptor().setLevel(
                 HttpLoggingInterceptor.Level.BODY
@@ -68,7 +71,7 @@ object NetworkModule {
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         .baseUrl(BuildConfig.BASE_URL)
         .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create(GsonUtil.gson))
         .build()
 
 

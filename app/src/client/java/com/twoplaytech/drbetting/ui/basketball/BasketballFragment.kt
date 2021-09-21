@@ -22,24 +22,19 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.ui.volleyball
+package com.twoplaytech.drbetting.ui.basketball
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.twoplaytech.drbetting.R
-import com.twoplaytech.drbetting.admin.ui.common.BaseFragment
 import com.twoplaytech.drbetting.data.models.Sport
+import com.twoplaytech.drbetting.ui.common.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
-/*
-    Author: Damjan Miloshevski 
-    Created on 3/10/21 12:01 PM
-
-*/
 @AndroidEntryPoint
-class VolleyballFragment : BaseFragment() {
+class BasketballFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,11 +42,11 @@ class VolleyballFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         initBinding(inflater, container)
-        changeTheme(R.string.heading_volleyball, Sport.Volleyball)
+        changeTheme(R.string.heading_basketball, Sport.Basketball)
         initPager(
             listOf(
-                VolleyballOlderFragment.getInstance(),
-                VolleyballUpcomingFragment.getInstance()
+                BasketballOlderFragment.getInstance(),
+                BasketballUpcomingFragment.getInstance()
             )
         )
         return binding.root

@@ -58,7 +58,6 @@ class RepositoryImpl @Inject constructor(
     override fun getBettingTips(onSuccess: (List<BettingTip>) -> Unit, onError: (Message) -> Unit) {
         launch(coroutineContext) {
             remoteDataSource.getBettingTips().catch { throwable ->
-                Timber.e(throwable)
                 sendErrorMessage(onError, throwable)
             }.collect { bettingTips ->
                 sendBettingTips(onSuccess, bettingTips)
@@ -74,6 +73,7 @@ class RepositoryImpl @Inject constructor(
     ) {
         launch(coroutineContext) {
             remoteDataSource.getBettingTipsBySport(sport, upcoming).catch { throwable ->
+                Timber.e(throwable)
                 sendErrorMessage(onError, throwable)
             }.collect { bettingTips ->
                 sendBettingTips(onSuccess, bettingTips)
@@ -139,6 +139,7 @@ class RepositoryImpl @Inject constructor(
         onError: (Message) -> Unit,
         throwable: Throwable
     ) {
+        Timber.e(throwable)
         if (throwable is retrofit2.HttpException) {
             val response = throwable.response()
             response?.let { serverResponse ->

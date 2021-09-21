@@ -25,11 +25,19 @@
 package com.twoplaytech.drbetting.ui.viewholders
 
 import androidx.recyclerview.widget.RecyclerView
+import com.twoplaytech.drbetting.data.models.BettingTip
 import com.twoplaytech.drbetting.databinding.ItemTipBinding
+import com.twoplaytech.drbetting.util.toTime
 
 /*
     Author: Damjan Miloshevski 
     Created on 3/10/21 1:20 PM
 
 */
-class TipViewHolder(val binding:ItemTipBinding):RecyclerView.ViewHolder(binding.root)
+class TipViewHolder(val binding:ItemTipBinding):RecyclerView.ViewHolder(binding.root){
+    fun bind(bettingTip: BettingTip){
+        with(bettingTip){
+            binding.tvTime.text = this.gameTime.toTime(binding.root.context)
+        }
+    }
+}

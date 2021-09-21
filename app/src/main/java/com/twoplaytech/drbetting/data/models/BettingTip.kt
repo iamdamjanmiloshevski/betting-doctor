@@ -26,6 +26,7 @@ package com.twoplaytech.drbetting.data.models
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
+import java.text.SimpleDateFormat
 import java.util.*
 
 /*
@@ -39,7 +40,7 @@ data class BettingTip(
     var leagueName: String,
     var teamHome: Team?,
     var teamAway: Team?,
-    var gameTime: Date,
+    var gameTime: String,
     var bettingType: String,
     var status: TypeStatus,
     var result: String,

@@ -33,6 +33,7 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.graphics.drawable.Drawable
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -41,6 +42,10 @@ import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.data.models.TypeStatus
 import com.twoplaytech.drbetting.databinding.DialogDisclaimerBinding
+import org.threeten.bp.Instant
+import org.threeten.bp.ZoneId
+import org.threeten.bp.ZonedDateTime
+import org.threeten.bp.format.DateTimeFormatter
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -150,6 +155,28 @@ fun today(): Date {
     return calendar.time
 }
 
+fun String.toDate(): String {
+    val zonedDateTime = this.toZonedDate()
+    val dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+    return zonedDateTime.format(dateFormatter)
+}
+
+fun String.toTime(context: Context): String {
+    val zonedDateTime = this.toZonedDate()
+    val is24hrFormat = DateFormat.is24HourFormat(context)
+    val pattern = if (!is24hrFormat) "h:mm a z" else "H:mm z"
+    val dateFormatter = DateTimeFormatter.ofPattern(pattern)
+    return zonedDateTime.format(dateFormatter)
+}
+
+fun String.toZonedDate(): ZonedDateTime {
+    // Sep 21, 2021, 7:30:00 PM
+    val simpleDateFormat = SimpleDateFormat("MMM dd, yyyy, hh:mm:ss a", Locale.getDefault())
+    val date = simpleDateFormat.parse(this)
+    return ZonedDateTime.ofInstant(Instant.ofEpochMilli(date.time), ZoneId.of("UTC")).withZoneSameInstant(
+        ZoneId.systemDefault())
+}
+
 fun Context.getRandomBackground(): Pair<Drawable?, Int> {
     val random = Random()
     val indexes = IntArray(5)
@@ -171,6 +198,7 @@ fun Context.getRandomBackground(): Pair<Drawable?, Int> {
 
     return Pair(sports[idx], colors[idx])
 }
+
 fun getRandomBackground(): Pair<Int, Int> {
     val random = Random()
     val indexes = IntArray(5)
@@ -191,6 +219,7 @@ fun getRandomBackground(): Pair<Int, Int> {
     )
     return Pair(sports[idx], colors[idx])
 }
+
 fun Context.showDisclaimer() {
     val dialog = AlertDialog.Builder(this)
     dialog.setCancelable(false)

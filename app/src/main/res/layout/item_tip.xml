@@ -23,20 +23,23 @@
   ~ SOFTWARE.
   -->
 
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <import type="com.twoplaytech.drbetting.util.ExtensionsKt" />
-
+        <import type="android.content.Context"/>
         <variable
             name="bettingType"
             type="com.twoplaytech.drbetting.data.models.BettingTip" />
+        <variable
+          name="context"
+          type="Context" />
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
+    <LinearLayout
+      android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:id="@+id/betting_tip_view"
@@ -72,17 +75,16 @@
                         android:src="@drawable/soccer_ball"/>
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tv_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/iv_sport_icon"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginTop="5dp"
-                        android:gravity="center"
-                        android:textColor="@color/black"
-                        android:text="@{ExtensionsKt.convertDateToStringFormat(bettingType.gameTime)}"
-                        android:textSize="18sp" />
+                      android:id="@+id/tv_date"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_below="@id/iv_sport_icon"
+                      android:layout_centerInParent="true"
+                      android:layout_marginTop="5dp"
+                      android:gravity="center"
+                      android:text="@{ExtensionsKt.toDate(bettingType.gameTime)}"
+                      android:textColor="@color/black"
+                      android:textSize="18sp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tv_time"
@@ -94,7 +96,6 @@
                         android:layout_marginBottom="10dp"
                         android:gravity="center"
                         android:textColor="@color/black"
-                        android:text="@{ExtensionsKt.getTime(bettingType.gameTime)}"
                         android:textSize="18sp" />
                 </RelativeLayout>
 
