@@ -48,6 +48,7 @@ import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.data.models.Status
 import com.twoplaytech.drbetting.databinding.ActivitySettingsBinding
 import com.twoplaytech.drbetting.ui.AppInfoActivity
+import com.twoplaytech.drbetting.ui.FeedbackActivity
 import com.twoplaytech.drbetting.ui.adapters.OnSettingsItemClickListener
 import com.twoplaytech.drbetting.ui.adapters.SettingsRecyclerViewAdapter
 import com.twoplaytech.drbetting.ui.common.BaseActivity
@@ -160,7 +161,7 @@ class SettingsActivity : BaseActivity(), OnSettingsItemClickListener {
                 }
             }
             is SettingsItem.Feedback -> {
-
+                startActivity(Intent(this,FeedbackActivity::class.java))
             }
             is SettingsItem.Notifications -> {
                 return

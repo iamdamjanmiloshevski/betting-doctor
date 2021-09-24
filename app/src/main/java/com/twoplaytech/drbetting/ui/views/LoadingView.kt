@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.admin.views
+package com.twoplaytech.drbetting.ui.views
 
 import android.content.Context
 import android.util.AttributeSet
@@ -30,8 +30,8 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.twoplaytech.drbetting.admin.common.ICustomView
 import com.twoplaytech.drbetting.databinding.ViewLoadingBinding
+import com.twoplaytech.drbetting.ui.common.ICustomView
 
 /*
     Author: Damjan Miloshevski 
@@ -39,7 +39,8 @@ import com.twoplaytech.drbetting.databinding.ViewLoadingBinding
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-class LoadingView(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs),ICustomView {
+class LoadingView(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs),
+    ICustomView {
     private lateinit var binding: ViewLoadingBinding
 
     init {

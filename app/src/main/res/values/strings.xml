@@ -61,6 +61,10 @@
     <string name="feedback">Leave feedback</string>
     <string name="push_notifications">Push notifications</string>
     <string name="send_notification">Send notification</string>
+  <string name="blank_name_err">Name must not be blank</string>
+    <string name="blank_email_err">Email must not be blank!</string>
+    <string name="blank_msg_err">Please provide a message</string>
+    <string name="invalid_email_err">Please provide a valid email!</string>
     <string-array name="dark_mode_options">
         <item>On</item>
         <item>Off</item>

@@ -36,9 +36,6 @@ import java.util.*
     Author: Damjan Miloshevski 
     Created on 4/16/21 12:55 PM
 */
-fun String.isValidEmail(): Boolean {
-    return android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
-}
 
 fun CharSequence?.isValidPasswordFormat(): Boolean {
     return if (this.isNullOrEmpty()) false

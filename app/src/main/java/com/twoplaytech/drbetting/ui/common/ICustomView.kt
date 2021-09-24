@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.admin.common
+package com.twoplaytech.drbetting.ui.common
 
 import android.util.AttributeSet
 import android.view.LayoutInflater

@@ -33,7 +33,7 @@ import android.widget.ArrayAdapter
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.afollestad.materialdialogs.utils.MDUtil.getStringArray
 import com.twoplaytech.drbetting.R
-import com.twoplaytech.drbetting.admin.common.ICustomView
+import com.twoplaytech.drbetting.ui.common.ICustomView
 import com.twoplaytech.drbetting.admin.common.OnDropdownItemSelectedListener
 import com.twoplaytech.drbetting.admin.ui.admin.StatusAdapter
 import com.twoplaytech.drbetting.data.models.Sport

@@ -66,6 +66,9 @@ fun String.checkImageExtension(): Boolean {
             this.endsWith(".gif", true)
 }
 
+fun String.isValidEmail(): Boolean {
+    return android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
+}
 
 fun older(): Date {
     val calendar = Calendar.getInstance();

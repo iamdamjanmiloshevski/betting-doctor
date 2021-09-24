@@ -79,7 +79,14 @@ abstract class BaseActivity : AppCompatActivity(), IBaseActivityView {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = ContextCompat.getColor(this, sport.getSportColor())
             toolbar.background = sport.getSportDrawable(this)
-        } else if (sport != null) {
+        } else if(toolbar!=null && view != null){
+            val backgrounds = this.getRandomBackground()
+            toolbar.background = backgrounds.first
+            view.background = backgrounds.first
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = ContextCompat.getColor(this, backgrounds.second)
+        }
+        else if (sport != null) {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = ContextCompat.getColor(this, sport.getSportColor())
         } else if (toolbar != null) {
