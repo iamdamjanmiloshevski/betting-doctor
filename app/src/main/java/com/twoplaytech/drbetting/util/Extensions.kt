@@ -46,6 +46,7 @@ import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -180,9 +181,15 @@ fun String.toZonedDate(): ZonedDateTime {
     } ?: throw NullPointerException("Date must not be null!")
 }
 
-fun String.toDate():Date{
-    val simpleDateFormat = SimpleDateFormat("MMM dd, yyyy, hh:mm:ss a", Locale.getDefault())
-    return simpleDateFormat.parse(this)
+fun String.toDate():Date?{
+    var date:Date? = null
+    val simpleDateFormat = SimpleDateFormat("MMM d, yyyy hh:mm:ss a", Locale.getDefault())
+    try{
+        date = simpleDateFormat.parse(this)
+    }catch (e:Exception){
+        Timber.e(e)
+    }
+    return date
 }
 fun Date.toStringDate():String{
     val simpleDateFormat = SimpleDateFormat("MMM dd, yyyy, hh:mm:ss a", Locale.getDefault())
@@ -263,10 +270,8 @@ fun Context.getVersionName(): String? {
     }
 }
 
-fun Context.isDarkThemeOn(): Boolean {
-    return resources.configuration.uiMode and
-            Configuration.UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_YES
-}
+fun Context.isDarkThemeOn(): Boolean = resources.configuration.uiMode and
+        Configuration.UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_YES
 
 fun FragmentActivity.restartApp() {
     val i = this.packageManager

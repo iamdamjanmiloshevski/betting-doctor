@@ -24,6 +24,7 @@
 
 package com.twoplaytech.drbetting.ui.util
 import com.google.firebase.messaging.FirebaseMessaging
+import com.twoplaytech.drbetting.ui.util.Constants.NOTIFICATIONS_TOPIC
 import timber.log.Timber
 
 /*
@@ -34,14 +35,20 @@ import timber.log.Timber
 */
 object NotificationsManager {
 
-    fun subscribeToTopic(topic:String){
+   private fun subscribeToTopic(topic:String = NOTIFICATIONS_TOPIC){
         FirebaseMessaging.getInstance().subscribeToTopic(topic).addOnSuccessListener {
             Timber.e("Successfully subscribed to notifications topic $topic")
         }
     }
-    fun unsubscribeFromTopic(topic: String){
+   private fun unsubscribeFromTopic(topic: String = NOTIFICATIONS_TOPIC){
         FirebaseMessaging.getInstance().unsubscribeFromTopic(topic).addOnSuccessListener {
             Timber.e("Successfully unsubscribed to notifications topic $topic")
+        }
+    }
+    fun toggleNotifications(toggle:Boolean){
+        when(toggle){
+            true -> subscribeToTopic()
+            false -> unsubscribeFromTopic()
         }
     }
 }

@@ -27,8 +27,8 @@ package com.twoplaytech.drbetting.ui
 import android.content.Context
 import android.os.Bundle
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import androidx.preference.PreferenceManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.data.models.Sport
@@ -45,20 +45,14 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         showDisclaimer(this)
-        NotificationsManager.subscribeToTopic("new-tips")
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val areNotificationsEnabled =
+            sharedPrefs.getBoolean(getString(R.string.notifications_preferences_key), true)
+        NotificationsManager.toggleNotifications(areNotificationsEnabled)
         navView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_football,
-                R.id.navigation_basketball,
-                R.id.navigation_tennis,
-                R.id.navigation_handball,
-                R.id.navigation_volleyball
-            )
-        )
         navView?.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
@@ -73,7 +67,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun showDisclaimer(context: Context) {
-        bettingTipsViewModel.observeAppLaunch().observe(this, { appLaunchCount->
+        bettingTipsViewModel.observeAppLaunch().observe(this, { appLaunchCount ->
             if (appLaunchCount == 0) {
                 context.showDisclaimer()
                 bettingTipsViewModel.incrementAppLaunch()

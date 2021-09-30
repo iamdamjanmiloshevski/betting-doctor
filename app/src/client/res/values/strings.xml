@@ -8,4 +8,17 @@
 
   <string name="hello_first_fragment">Hello first fragment</string>
   <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+  <string name="title_activity_notifications">NotificationsActivity</string>
+
+
+  <!-- Notification Preferences -->
+  <string name="attachment_title">Receive push notification when new tips are available</string>
+  <string name="attachment_summary_on">Push notifications are enabled</string>
+  <string name="attachment_summary_off">Push notifications have been disabled</string>
+  <string name="title_activity_user_preferences">User Preferences</string>
+  <string name="notifications_title">Receive push notifications</string>
+  <string name="notification_summary">The administrator will occasionally send push notifications to inform you that new tips are available</string>
+  <string name="notifications_preferences_key">notifications</string>
+
+
 </resources>

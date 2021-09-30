@@ -11,6 +11,14 @@
     android:supportsRtl="true"
     android:theme="@style/Theme.DrBetting">
     <activity
+      android:name=".ui.UserPreferencesActivity"
+      android:exported="true"
+      android:label="@string/title_activity_user_preferences" />
+    <activity
+      android:name=".ui.NotificationsActivity"
+      android:exported="true"
+      android:label="@string/title_activity_notifications" />
+    <activity
       android:name=".ui.FeedbackActivity"
       android:exported="true"
       android:label="@string/title_activity_feedback"

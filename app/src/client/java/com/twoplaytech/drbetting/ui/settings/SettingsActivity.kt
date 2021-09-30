@@ -39,6 +39,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -49,12 +50,14 @@ import com.twoplaytech.drbetting.data.models.Status
 import com.twoplaytech.drbetting.databinding.ActivitySettingsBinding
 import com.twoplaytech.drbetting.ui.AppInfoActivity
 import com.twoplaytech.drbetting.ui.FeedbackActivity
+import com.twoplaytech.drbetting.ui.UserPreferencesActivity
 import com.twoplaytech.drbetting.ui.adapters.OnSettingsItemClickListener
 import com.twoplaytech.drbetting.ui.adapters.SettingsRecyclerViewAdapter
 import com.twoplaytech.drbetting.ui.common.BaseActivity
 import com.twoplaytech.drbetting.ui.util.Constants.KEY_DARK_MODE
 import com.twoplaytech.drbetting.ui.viewmodels.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class SettingsActivity : BaseActivity(), OnSettingsItemClickListener {
@@ -74,6 +77,7 @@ class SettingsActivity : BaseActivity(), OnSettingsItemClickListener {
         initUI()
         setContentView(binding.root)
         observeData()
+
     }
 
     override fun initUI() {
@@ -97,6 +101,9 @@ class SettingsActivity : BaseActivity(), OnSettingsItemClickListener {
                 )
             )
         }
+        val preferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val notifications = preferences.getBoolean("notifications",true)
+        Timber.e("Notifications $notifications")
     }
 
     override fun observeData() {
@@ -164,7 +171,7 @@ class SettingsActivity : BaseActivity(), OnSettingsItemClickListener {
                 startActivity(Intent(this,FeedbackActivity::class.java))
             }
             is SettingsItem.Notifications -> {
-                return
+                startActivity(Intent(this,UserPreferencesActivity::class.java))
             }
             else -> return
         }

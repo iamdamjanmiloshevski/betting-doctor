@@ -35,4 +35,5 @@ object Constants {
     val KEY_DARK_MODE = "KEY_DARK_MODE"
     val KEY_LOCALE = "KEY_LOCALE"
     val KEY_NEW_TIPS_NOTIFICATIONS = "KEY_NEW_TIPS_NOTIFICATIONS"
+    val NOTIFICATIONS_TOPIC = "new-tips"
 }
