@@ -33,12 +33,13 @@ import android.widget.ArrayAdapter
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.afollestad.materialdialogs.utils.MDUtil.getStringArray
 import com.twoplaytech.drbetting.R
-import com.twoplaytech.drbetting.ui.common.ICustomView
 import com.twoplaytech.drbetting.admin.common.OnDropdownItemSelectedListener
 import com.twoplaytech.drbetting.admin.ui.admin.StatusAdapter
 import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.data.models.TypeStatus
 import com.twoplaytech.drbetting.databinding.ViewChooserBinding
+import com.twoplaytech.drbetting.ui.common.CustomViewArgumentsExtractor
+import com.twoplaytech.drbetting.ui.common.ICustomView
 
 /*
     Author: Damjan Miloshevski 
@@ -47,8 +48,7 @@ import com.twoplaytech.drbetting.databinding.ViewChooserBinding
     © 2Play Tech  2021. All rights reserved
 */
 class ChooserView(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs),
-    ICustomView,
-    AdapterView.OnItemSelectedListener {
+    ICustomView, CustomViewArgumentsExtractor, AdapterView.OnItemSelectedListener {
     private lateinit var binding: ViewChooserBinding
     private var title = 0
     private var items = 0
@@ -66,7 +66,7 @@ class ChooserView(context: Context, attrs: AttributeSet) : ConstraintLayout(cont
             R.layout.item_spinner
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.spItems.adapter = StatusAdapter(context,0,context.getStringArray(items),type)
+            binding.spItems.adapter = StatusAdapter(context, 0, context.getStringArray(items), type)
         }
         binding.spItems.onItemSelectedListener = this
     }
@@ -110,7 +110,7 @@ class ChooserView(context: Context, attrs: AttributeSet) : ConstraintLayout(cont
             try {
                 title = getResourceId(R.styleable.ChooserView_chooserTitle, R.string.app_name)
                 items = getResourceId(R.styleable.ChooserView_items, R.array.sports)
-                type = getInteger(R.styleable.ChooserView_chooserType,0)
+                type = getInteger(R.styleable.ChooserView_chooserType, 0)
             } finally {
                 recycle()
             }
@@ -124,7 +124,8 @@ class ChooserView(context: Context, attrs: AttributeSet) : ConstraintLayout(cont
     fun setOnDropDownItemSelectedListener(listener: OnDropdownItemSelectedListener) {
         this.listener = listener
     }
-    fun setSelection(idx:Int){
+
+    fun setSelection(idx: Int) {
         binding.spItems.setSelection(idx)
         invalidate()
         requestLayout()

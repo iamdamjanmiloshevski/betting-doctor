@@ -33,9 +33,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.datetime.dateTimePicker
 import com.twoplaytech.drbetting.R
-import com.twoplaytech.drbetting.ui.common.ICustomView
 import com.twoplaytech.drbetting.admin.util.beautify
 import com.twoplaytech.drbetting.databinding.ViewInputBinding
+import com.twoplaytech.drbetting.ui.common.CustomViewArgumentsExtractor
+import com.twoplaytech.drbetting.ui.common.ICustomView
 import com.twoplaytech.drbetting.ui.common.TextWatcher
 import com.twoplaytech.drbetting.util.toDate
 import java.util.*
@@ -47,7 +48,7 @@ import java.util.*
     © 2Play Tech  2021. All rights reserved
 */
 class InputView(context: Context, attrs: AttributeSet) :
-    ConstraintLayout(context, attrs), ICustomView {
+    ConstraintLayout(context, attrs), ICustomView,CustomViewArgumentsExtractor {
     private lateinit var binding: ViewInputBinding
     private var hint = 0
     private var title = 0

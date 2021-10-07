@@ -12,7 +12,7 @@ data class BettingTipInput(
     var leagueName: String,
     var teamHome: Team?,
     var teamAway: Team?,
-    var gameTime: Date,
+    var gameTime: Date?,
     var bettingType: String,
     var status: String,
     var result: String,

@@ -16,7 +16,8 @@
       app:layout_constraintTop_toTopOf="parent"
       android:contentDescription="team logo"
       app:sport="@{sport}"
-      app:team="@{team}" />
+      app:team="@{team}"
+   />
 
     <TextView
       android:id="@+id/teamName"
