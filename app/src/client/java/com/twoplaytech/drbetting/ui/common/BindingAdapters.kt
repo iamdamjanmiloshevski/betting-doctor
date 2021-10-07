@@ -31,13 +31,13 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.twoplaytech.drbetting.R
-import com.twoplaytech.drbetting.ui.settings.ISettingsItem
 import com.twoplaytech.drbetting.data.models.BettingTip
 import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.data.models.Team
 import com.twoplaytech.drbetting.data.models.TypeStatus
 import com.twoplaytech.drbetting.glide.GlideApp
 import com.twoplaytech.drbetting.glide.SvgSoftwareLayerSetter
+import com.twoplaytech.drbetting.ui.settings.ISettingsItem
 import com.twoplaytech.drbetting.util.getSportPlaceHolder
 
 /*
@@ -61,8 +61,7 @@ fun setResult(view: AppCompatImageView, status: TypeStatus) {
 }
 
 @BindingAdapter("team", "sport")
-fun loadTeamLogo(view: AppCompatImageView, team: Team, sport: Sport) {
-
+fun loadTeamLogo(view: ImageView, team: Team, sport: Sport) {
     if (team.logo.endsWith(".svg")) {
         val requestBuilder = GlideApp.with(view.context)
             .`as`(PictureDrawable::class.java)

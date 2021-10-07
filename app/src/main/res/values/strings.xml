@@ -74,4 +74,6 @@
         <item>Macedonian - Македонски (Северна Македонија) </item>
         <item>English (United States of America)</item>
     </string-array>
+    <string name="betting_tip">Betting</string>
+    <string name="status">Status</string>
 </resources>

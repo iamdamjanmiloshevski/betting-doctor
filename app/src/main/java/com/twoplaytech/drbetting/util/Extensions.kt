@@ -40,6 +40,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.data.models.Sport
+import com.twoplaytech.drbetting.data.models.Status
 import com.twoplaytech.drbetting.data.models.TypeStatus
 import com.twoplaytech.drbetting.databinding.DialogDisclaimerBinding
 import org.threeten.bp.Instant
@@ -287,6 +288,14 @@ fun <T : Activity> Activity.startActivityWithClearTask(destination: Class<T>) {
     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
     this.startActivity(intent)
     this.finishAffinity()
+}
+
+fun TypeStatus.getStatusResource():Int{
+  return  when(this){
+        TypeStatus.UNKNOWN -> R.drawable.tip_unknown
+        TypeStatus.WON -> R.drawable.tip_won
+        TypeStatus.LOST -> R.drawable.tip_lost
+    }
 }
 
 fun String.toStatus(): TypeStatus {

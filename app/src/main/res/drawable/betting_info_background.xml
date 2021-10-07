@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ MIT License
   ~
@@ -22,21 +23,14 @@
   ~ SOFTWARE.
   -->
 
-<resources>
-
-    <!-- Declare custom theme attributes that allow changing which styles are
-         used for button bars depending on the API level.
-         ?android:attr/buttonBarStyle is new as of API 11 so this is
-         necessary to support previous API levels. -->
-    <declare-styleable name="ButtonBarContainerTheme">
-        <attr name="metaButtonBarStyle" format="reference" />
-        <attr name="metaButtonBarButtonStyle" format="reference" />
-    </declare-styleable>
-    <declare-styleable name="BettingInfoView">
-        <attr name="infoTitle" format="reference"/>
-        <attr name="infoType" format="enum">
-            <enum name="betting" value="0"/>
-            <enum name="status" value="1"/>
-        </attr>
-    </declare-styleable>
-</resources>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+  <solid
+    android:color="#C8D2D7"/>
+  <corners
+    android:radius="20dp" />
+  <padding
+    android:left="2.5dp"
+    android:top="2.5dp"
+    android:right="2.5dp"
+    android:bottom="2.5dp" />
+</shape>

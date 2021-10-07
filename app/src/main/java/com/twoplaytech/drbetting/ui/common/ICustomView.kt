@@ -24,7 +24,6 @@
 
 package com.twoplaytech.drbetting.ui.common
 
-import android.util.AttributeSet
 import android.view.LayoutInflater
 
 /*
@@ -35,5 +34,4 @@ import android.view.LayoutInflater
 */
 interface ICustomView {
     fun initBinding(inflater: LayoutInflater)
-    fun extractAttributes(attrs: AttributeSet){}
 }

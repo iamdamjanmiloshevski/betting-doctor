@@ -45,10 +45,7 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         showDisclaimer(this)
-        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
-        val areNotificationsEnabled =
-            sharedPrefs.getBoolean(getString(R.string.notifications_preferences_key), true)
-        NotificationsManager.toggleNotifications(areNotificationsEnabled)
+        toggleNotifications()
         navView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
@@ -64,6 +61,13 @@ class MainActivity : BaseActivity() {
             }
         }
         bettingTipsViewModel.getAppLaunchCount()
+    }
+
+    private fun toggleNotifications() {
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val areNotificationsEnabled =
+            sharedPrefs.getBoolean(getString(R.string.notifications_preferences_key), true)
+        NotificationsManager.toggleNotifications(areNotificationsEnabled)
     }
 
     private fun showDisclaimer(context: Context) {

@@ -34,10 +34,14 @@ import com.twoplaytech.drbetting.util.beautifyGameTime
     Created on 3/10/21 1:20 PM
 
 */
-class TipViewHolder(val binding:ItemTipBinding):RecyclerView.ViewHolder(binding.root){
-    fun bind(bettingTip: BettingTip){
-        with(bettingTip){
-            binding.tvTime.text = this.gameTime.beautifyGameTime(binding.root.context)
+class TipViewHolder(val binding: ItemTipBinding) : RecyclerView.ViewHolder(binding.root) {
+    fun bind(bettingTip: BettingTip) {
+        with(bettingTip) {
+            binding.teamHome.setTeamData(this.teamHome!!, this.sport)
+            binding.teamAway.setTeamData(this.teamAway!!, this.sport)
+            binding.bettingInfo.setData(text = this.bettingType)
+            binding.status.setData(status = this.status)
+            binding.gameTime.text = this.gameTime.beautifyGameTime(binding.root.context)
         }
     }
 }

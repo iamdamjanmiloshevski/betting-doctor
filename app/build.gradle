@@ -25,7 +25,8 @@ android {
   buildTypes {
 
     debug {
-      buildConfigField("String", "BASE_URL", '"http://' + rootProject.ext.localhost_ip + '/api/v1/"')
+      buildConfigField("String", "BASE_URL", '"https://betting-doctor.herokuapp.com/api/v1/"')
+    //  buildConfigField("String", "BASE_URL", '"http://' + rootProject.ext.localhost_ip + '/api/v1/"')
     }
 
     release {
@@ -112,10 +113,12 @@ dependencies {
   implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0'
   implementation 'androidx.navigation:navigation-fragment-ktx:2.3.3'
   implementation 'androidx.navigation:navigation-ui-ktx:2.3.3'
+  implementation "androidx.datastore:datastore:1.0.0"
+  implementation 'androidx.preference:preference:1.1.1'
 
   //region Hilt
   implementation "com.google.dagger:hilt-android:$hilt_version"
-  implementation 'androidx.preference:preference:1.1.1'
+
   kapt "com.google.dagger:hilt-compiler:$hilt_version"
   implementation 'androidx.hilt:hilt-work:1.0.0'
   kapt 'androidx.hilt:hilt-compiler:1.0.0'
