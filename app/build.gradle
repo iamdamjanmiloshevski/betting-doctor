@@ -21,6 +21,33 @@ android {
     multiDexEnabled true
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
   }
+  Properties clientProperties = new Properties()
+  clientProperties.load(project.rootProject.file("client.properties").newDataInputStream())
+  def clientKeyAlias = clientProperties['key.alias']
+  def clientPassword = clientProperties['key.pwd']
+  def clientKeyLocation = clientProperties['key.location']
+
+  Properties adminProperties = new Properties()
+  adminProperties.load(project.rootProject.file("admin.properties").newDataInputStream())
+  def adminKeyAlias = adminProperties['key.alias']
+  def adminPassword = adminProperties['key.pwd']
+  def adminKeyLocation = adminProperties['key.location']
+
+  signingConfigs {
+    client {
+      keyAlias clientKeyAlias
+      keyPassword clientPassword
+      storeFile file(clientKeyLocation)
+      storePassword clientPassword
+    }
+    admin {
+      keyAlias adminKeyAlias
+      keyPassword adminPassword
+      storeFile file(adminKeyLocation)
+      storePassword adminPassword
+    }
+  }
+
 
   buildTypes {
     debug {
@@ -43,6 +70,7 @@ android {
   productFlavors {
     client {
       dimension "default"
+      signingConfig signingConfigs.client
       applicationId "com.twoplaytech.drbetting"
       manifestPlaceholders = [appLabel: "Doctor Betting"]
       resValue "string", "app_name", "Doctor Betting"
@@ -50,6 +78,7 @@ android {
 
     admin {
       dimension "default"
+      signingConfig signingConfigs.admin
       manifestPlaceholders = [appLabel: "Doctor Betting Admin"]
       applicationId "com.twoplaytech.drbetting.admin"
       resValue "string", "app_name", "Doctor Betting Admin"
@@ -67,9 +96,8 @@ android {
     viewBinding true
   }
 }
-
 private Integer generateVersionCode(Integer versionCode) {
-  if (versionCode != rootProject.ext.versionCodeNum) return rootProject.ext.versionCode++
+  if (versionCode != rootProject.ext.versionCodeNum) return rootProject.ext.versionCodeNum++
   else return versionCode
 }
 
