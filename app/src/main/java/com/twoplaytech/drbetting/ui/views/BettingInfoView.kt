@@ -49,7 +49,7 @@ class BettingInfoView(context: Context, attrs: AttributeSet) : ConstraintLayout(
     }
 
     override fun extractAttributes(attrs: AttributeSet) {
-        attrs?.let {
+        attrs.let {
             val styledAttributes =
                 context.obtainStyledAttributes(it, R.styleable.BettingInfoView)
             titleRes = styledAttributes.getResourceId(R.styleable.BettingInfoView_infoTitle,0)

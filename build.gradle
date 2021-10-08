@@ -31,10 +31,10 @@ ext{
   targetSdkVersion = 30
   minSdkVersion = 23
   buildToolsVersion = "30.0.3"
-  majorVersion = 2//MAJOR version when you make incompatible API changes
+  majorVersion = 3//MAJOR version when you make incompatible API changes
   minorVersion = 0 //MINOR version when you add functionality in a backwards compatible manner
   patchVersion = 0 //PATCH version when you make backwards compatible bug fixes
-  versionCodeNum = 2
+  versionCodeNum = 4
   versionClassifier = null
   isSnapshot = false
   isAlpha = false

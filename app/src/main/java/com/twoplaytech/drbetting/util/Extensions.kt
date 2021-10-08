@@ -175,27 +175,40 @@ fun String.beautifyGameTime(context: Context): String {
 }
 
 fun String.toZonedDate(): ZonedDateTime {
-    // Sep 21, 2021, 7:30:00 PM
+    // Sep 21, 2021 7:30:00 PM
     this.toDate()?.let {
-        return ZonedDateTime.ofInstant(Instant.ofEpochMilli(it.time), ZoneId.of("UTC")).withZoneSameInstant(
-            ZoneId.systemDefault())
+        return ZonedDateTime.ofInstant(Instant.ofEpochMilli(it.time), ZoneId.of("UTC"))
+            .withZoneSameInstant(
+                ZoneId.systemDefault()
+            )
     } ?: throw NullPointerException("Date must not be null!")
 }
 
-fun String.toDate():Date?{
-    var date:Date? = null
+fun String.beautifyDate(context: Context): String {
+    val is24hrFormat = DateFormat.is24HourFormat(context)
+    val zonedDate = this.toZonedDate()
+    val dateFormatter =
+        if (is24hrFormat) DateTimeFormatter.ofPattern("MMM dd, yyyy H:mm z")
+        else DateTimeFormatter.ofPattern("MMM dd, yyyy h:mm a z")
+    return zonedDate.format(dateFormatter)
+}
+
+fun String.toDate(): Date? {
+    var date: Date? = null
     val simpleDateFormat = SimpleDateFormat("MMM d, yyyy hh:mm:ss a", Locale.getDefault())
-    try{
+    try {
         date = simpleDateFormat.parse(this)
-    }catch (e:Exception){
+    } catch (e: Exception) {
         Timber.e(e)
     }
     return date
 }
-fun Date.toStringDate():String{
+
+fun Date.toStringDate(): String {
     val simpleDateFormat = SimpleDateFormat("MMM dd, yyyy hh:mm:ss a", Locale.getDefault())
     return simpleDateFormat.format(this)
 }
+
 fun Context.getRandomBackground(): Pair<Drawable?, Int> {
     val random = Random()
     val indexes = IntArray(5)
@@ -290,8 +303,8 @@ fun <T : Activity> Activity.startActivityWithClearTask(destination: Class<T>) {
     this.finishAffinity()
 }
 
-fun TypeStatus.getStatusResource():Int{
-  return  when(this){
+fun TypeStatus.getStatusResource(): Int {
+    return when (this) {
         TypeStatus.UNKNOWN -> R.drawable.tip_unknown
         TypeStatus.WON -> R.drawable.tip_won
         TypeStatus.LOST -> R.drawable.tip_lost

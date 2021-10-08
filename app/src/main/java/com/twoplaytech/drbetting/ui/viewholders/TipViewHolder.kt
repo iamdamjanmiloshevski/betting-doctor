@@ -27,7 +27,7 @@ package com.twoplaytech.drbetting.ui.viewholders
 import androidx.recyclerview.widget.RecyclerView
 import com.twoplaytech.drbetting.data.models.BettingTip
 import com.twoplaytech.drbetting.databinding.ItemTipBinding
-import com.twoplaytech.drbetting.util.beautifyGameTime
+import com.twoplaytech.drbetting.util.beautifyDate
 
 /*
     Author: Damjan Miloshevski 
@@ -41,7 +41,7 @@ class TipViewHolder(val binding: ItemTipBinding) : RecyclerView.ViewHolder(bindi
             binding.teamAway.setTeamData(this.teamAway!!, this.sport)
             binding.bettingInfo.setData(text = this.bettingType)
             binding.status.setData(status = this.status)
-            binding.gameTime.text = this.gameTime.beautifyGameTime(binding.root.context)
+            binding.gameTime.text = this.gameTime.beautifyDate(binding.root.context)
         }
     }
 }
