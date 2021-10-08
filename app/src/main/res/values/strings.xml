@@ -76,4 +76,5 @@
     </string-array>
     <string name="betting_tip">Betting</string>
     <string name="status">Status</string>
+    <string name="team_logo_desc">team logo</string>
 </resources>

@@ -14,19 +14,19 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
-      android:contentDescription="team logo"
+      android:contentDescription="@string/team_logo_desc"
       app:sport="@{sport}"
       app:team="@{team}"
    />
 
     <TextView
       android:id="@+id/teamName"
-      android:layout_width="100dp"
+      android:layout_width="@dimen/dimen_100dp"
       android:layout_height="wrap_content"
       android:layout_marginTop="@dimen/dimen_10dp"
       android:gravity="center"
       android:text="@{team.name}"
-      android:textSize="16sp"
+      android:textSize="@dimen/dimen_16sp"
       android:textStyle="bold"
       android:fontFamily="@font/aldrich"
       app:layout_constraintStart_toStartOf="parent"

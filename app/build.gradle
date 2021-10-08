@@ -23,10 +23,8 @@ android {
   }
 
   buildTypes {
-
     debug {
-      buildConfigField("String", "BASE_URL", '"https://betting-doctor.herokuapp.com/api/v1/"')
-    //  buildConfigField("String", "BASE_URL", '"http://' + rootProject.ext.localhost_ip + '/api/v1/"')
+      buildConfigField("String", "BASE_URL", '"http://' + rootProject.ext.localhost_ip + '/api/v1/"')
     }
 
     release {

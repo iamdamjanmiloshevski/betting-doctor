@@ -193,7 +193,7 @@ fun String.toDate():Date?{
     return date
 }
 fun Date.toStringDate():String{
-    val simpleDateFormat = SimpleDateFormat("MMM dd, yyyy, hh:mm:ss a", Locale.getDefault())
+    val simpleDateFormat = SimpleDateFormat("MMM dd, yyyy hh:mm:ss a", Locale.getDefault())
     return simpleDateFormat.format(this)
 }
 fun Context.getRandomBackground(): Pair<Drawable?, Int> {
