@@ -53,24 +53,22 @@ android {
     debug {
       buildConfigField("String", "BASE_URL", '"http://' + rootProject.ext.localhost_ip + '/api/v1/"')
     }
-
     release {
-      minifyEnabled true
-      shrinkResources true
+      minifyEnabled false //TODO figure out why network calls don't work in release builds (ProGuard probably)
+      shrinkResources false
       buildConfigField("String", "BASE_URL", '"https://betting-doctor.herokuapp.com/api/v1/"')
       proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
     }
-  }
-  lintOptions {
-    checkReleaseBuilds false
   }
 
   flavorDimensions "default"
 
   productFlavors {
+    def clientConfig = signingConfigs.client
+    def adminConfig = signingConfigs.admin
     client {
       dimension "default"
-      signingConfig signingConfigs.client
+      signingConfig clientConfig
       applicationId "com.twoplaytech.drbetting"
       manifestPlaceholders = [appLabel: "Doctor Betting"]
       resValue "string", "app_name", "Doctor Betting"
@@ -78,7 +76,7 @@ android {
 
     admin {
       dimension "default"
-      signingConfig signingConfigs.admin
+      signingConfig adminConfig
       manifestPlaceholders = [appLabel: "Doctor Betting Admin"]
       applicationId "com.twoplaytech.drbetting.admin"
       resValue "string", "app_name", "Doctor Betting Admin"

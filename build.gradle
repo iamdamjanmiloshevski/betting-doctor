@@ -33,8 +33,8 @@ ext{
   buildToolsVersion = "30.0.3"
   majorVersion = 3//MAJOR version when you make incompatible API changes
   minorVersion = 0 //MINOR version when you add functionality in a backwards compatible manner
-  patchVersion = 0 //PATCH version when you make backwards compatible bug fixes
-  versionCodeNum = 4
+  patchVersion = 1 //PATCH version when you make backwards compatible bug fixes
+  versionCodeNum = 7
   versionClassifier = null
   isSnapshot = false
   isAlpha = false
