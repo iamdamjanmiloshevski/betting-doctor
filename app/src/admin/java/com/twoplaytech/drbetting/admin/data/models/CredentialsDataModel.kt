@@ -24,10 +24,13 @@
 
 package com.twoplaytech.drbetting.admin.data.models
 
+import androidx.annotation.Keep
+
 /*
     Author: Damjan Miloshevski 
     Created on 1.9.21 10:56
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
+@Keep
 data class CredentialsDataModel(val email:String,val password:String)

@@ -1,6 +1,6 @@
 package com.twoplaytech.drbetting.data.models
 
-import java.util.*
+import androidx.annotation.Keep
 
 /*
     Author: Damjan Miloshevski 
@@ -8,11 +8,12 @@ import java.util.*
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
+@Keep
 data class BettingTipInput(
     var leagueName: String,
     var teamHome: Team?,
     var teamAway: Team?,
-    var gameTime: Date?,
+    var gameTime: String?,
     var bettingType: String,
     var status: String,
     var result: String,

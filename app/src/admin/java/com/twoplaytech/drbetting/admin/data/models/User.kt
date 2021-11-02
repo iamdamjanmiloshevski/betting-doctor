@@ -24,12 +24,15 @@
 
 package com.twoplaytech.drbetting.admin.data.models
 
+import androidx.annotation.Keep
+
 /*
     Author: Damjan Miloshevski 
     Created on 13.7.21 13:49
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
+@Keep
 data class User(
     val _id: String,
     var name: String,

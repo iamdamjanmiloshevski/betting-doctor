@@ -24,12 +24,15 @@
 
 package com.twoplaytech.drbetting.admin.data.models
 
+import androidx.annotation.Keep
+
 /*
     Author: Damjan Miloshevski 
     Created on 20/06/2021
     Project: betting-doctor
     © 2Play Technologies  2021. All rights reserved
 */
+@Keep
 data class UserInput(
     val email: String,
     val password: String,

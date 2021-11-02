@@ -25,9 +25,8 @@
 package com.twoplaytech.drbetting.data.models
 
 import android.os.Parcelable
+import androidx.annotation.Keep
 import kotlinx.android.parcel.Parcelize
-import java.text.SimpleDateFormat
-import java.util.*
 
 /*
     Author: Damjan Miloshevski 
@@ -35,6 +34,7 @@ import java.util.*
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
+@Keep
 @Parcelize
 data class BettingTip(
     var leagueName: String,

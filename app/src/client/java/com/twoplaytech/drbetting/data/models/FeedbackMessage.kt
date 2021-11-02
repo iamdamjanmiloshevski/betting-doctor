@@ -24,12 +24,15 @@
 
 package com.twoplaytech.drbetting.data.models
 
+import androidx.annotation.Keep
+
 
 /*
     Author: Damjan Miloshevski 
     Created on 15/09/2021
     Project: betting-doctor
 */
+@Keep
 data class FeedbackMessage(
     val _id: String? = null, val name: String, val email: String, val message: String, val createdAt: String? = null
 )

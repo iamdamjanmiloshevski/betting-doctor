@@ -32,4 +32,22 @@
 -keep class com.twoplaytech.drbetting.admin.data.models.Credentials
 -keep class com.twoplaytech.drbetting.admin.data.mappers.CredentialsMapper
 -keep class com.twoplaytech.drbetting.admin.data.models.CredentialsDataModel
+-keep class com.twoplaytech.drbetting.admin.data.models.User
+-keep class com.twoplaytech.drbetting.admin.data.models.UserInput
+-keep class com.twoplaytech.drbetting.admin.data.models.AccessToken
+-keep class com.twoplaytech.drbetting.admin.data.mappers.AccessTokenMapper
+-keep class com.twoplaytech.drbetting.admin.data.models.UserRole
+-keep class com.twoplaytech.drbetting.data.models.Message
+-keep class com.twoplaytech.drbetting.data.mappers.MessageMapper
 -keep class retrofit2.**
+-keepclassmembers,allowobfuscation class * {
+  @com.google.gson.annotations.SerializedName <fields>;
+}
+-dontnote okhttp3.**, okio.**, retrofit2.**
+-dontwarn retrofit2.**
+-keep class retrofit2.** { *; }
+-keep class com.test.apppackagename.retrofit.dto** {
+    *;
+}
+-keep class com.twoplaytech.drbetting.data.*
+-keep class com.twoplaytech.drbetting.admin.data.*

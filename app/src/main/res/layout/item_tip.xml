@@ -48,7 +48,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginBottom="1.5dp"
-      android:background="@color/white"
+      android:background="#e5e5e5"
       app:cardCornerRadius="20dp"
       app:cardMaxElevation="25dp"
       android:elevation="@dimen/dimen_10dp"
@@ -59,7 +59,7 @@
       <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/dimen_10dp">
+        android:background="#e5e5e5">
 
         <TextView
           android:id="@+id/league"

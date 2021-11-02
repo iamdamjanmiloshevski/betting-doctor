@@ -24,6 +24,7 @@
 
 package com.twoplaytech.drbetting.admin.data.mappers
 
+import androidx.annotation.Keep
 import com.twoplaytech.drbetting.admin.data.models.Credentials
 import com.twoplaytech.drbetting.admin.data.models.CredentialsDataModel
 import com.twoplaytech.drbetting.util.GsonUtil
@@ -34,6 +35,7 @@ import com.twoplaytech.drbetting.util.GsonUtil
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
+@Keep
 object CredentialsMapper {
     fun toCredentials(credentials: CredentialsDataModel): Credentials =
         Credentials(credentials.email, credentials.password)

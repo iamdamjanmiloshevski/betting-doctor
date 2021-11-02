@@ -23,6 +23,7 @@
  */
 
 package com.twoplaytech.drbetting.admin.data.models
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 /*
     Author: Damjan Miloshevski 
@@ -30,6 +31,7 @@ import com.google.gson.annotations.SerializedName
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
+@Keep
 enum class UserRole {
     @SerializedName("ADMIN")
     ADMIN,

@@ -26,12 +26,14 @@ package com.twoplaytech.drbetting.admin.data.api
 
 
 import com.twoplaytech.drbetting.admin.domain.repository.Repository
+import com.twoplaytech.drbetting.admin.util.hasExpired
 import dagger.Lazy
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
+import timber.log.Timber
 import javax.inject.Inject
 
 /*
@@ -43,22 +45,22 @@ import javax.inject.Inject
 class TokenAuthenticator @Inject constructor(private val repository: Lazy<Repository>) :
     Authenticator {
     override fun authenticate(route: Route?, response: Response): Request {
-        return if (response.code == 401) {
-            runBlocking {
-                val refreshToken = repository.get().getRefreshTokenAsync()
-                repository.get().saveToken(refreshToken)
+        return runBlocking {
+            val accessToken = repository.get().getAccessTokenAsync()
+            val isExpired = accessToken.hasExpired()
+            if (!isExpired) {
+                Timber.i("Token hasn't expired. Using existing")
                 response.request
                     .newBuilder()
-                    .addHeader("Authorization", "Bearer ".plus(refreshToken.token)).build()
-            }
-        } else {
-            runBlocking {
-                val accessToken = repository.get().getAccessTokenAsync()
+                    .addHeader("Authorization", "Bearer ".plus(accessToken.token)).build()
+            } else {
+                Timber.i("Token has expired. Refreshing token")
+                val newAccessToken = repository.get().getAccessTokenAsync()
+                repository.get().saveToken(newAccessToken)
                 response.request
                     .newBuilder()
                     .addHeader("Authorization", "Bearer ".plus(accessToken.token)).build()
             }
-
         }
     }
 }

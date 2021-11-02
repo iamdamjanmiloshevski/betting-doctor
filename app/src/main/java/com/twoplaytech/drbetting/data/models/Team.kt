@@ -25,6 +25,7 @@
 package com.twoplaytech.drbetting.data.models
 
 import android.os.Parcelable
+import androidx.annotation.Keep
 import com.twoplaytech.drbetting.util.Constants.TEAM_LOGO
 import com.twoplaytech.drbetting.util.Constants.TEAM_NAME
 import com.twoplaytech.drbetting.util.checkImageExtension
@@ -35,6 +36,7 @@ import kotlinx.android.parcel.Parcelize
     Created on 3/10/21 12:26 PM
 
 */
+@Keep
 @Parcelize
 data class Team(var name: String = "", var logo: String = "") : Parcelable {
     constructor(data: Map<*, *>) : this() {
