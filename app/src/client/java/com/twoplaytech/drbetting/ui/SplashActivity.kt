@@ -25,12 +25,24 @@
 package com.twoplaytech.drbetting.ui
 
 import android.content.Intent
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import timber.log.Timber
+
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        try {
+            val pInfo: PackageInfo =
+               packageManager.getPackageInfo(packageName, 0)
+            Timber.e("Version name ${pInfo.versionName}")
+            Timber.e("Version code ${pInfo.longVersionCode}")
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
         startActivity(Intent(this, MainActivity::class.java))
     }
 }

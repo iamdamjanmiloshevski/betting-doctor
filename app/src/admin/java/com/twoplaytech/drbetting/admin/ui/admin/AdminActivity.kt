@@ -40,7 +40,6 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.afollestad.materialdialogs.MaterialDialog
-import com.twoplaytech.drbetting.BuildConfig
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.common.BaseAdminActivity
 import com.twoplaytech.drbetting.admin.ui.auth.LoginActivity
@@ -62,7 +61,6 @@ import com.twoplaytech.drbetting.ui.common.OnBettingTipClickedListener
 import com.twoplaytech.drbetting.ui.viewmodels.BettingTipsViewModel
 import com.twoplaytech.drbetting.util.getSportColor
 import com.twoplaytech.drbetting.util.getSportFromIndex
-import timber.log.Timber
 
 class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
     OnBettingTipClickedListener, PopupMenu.OnMenuItemClickListener, View.OnClickListener {
@@ -80,8 +78,6 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
         super.onCreate(savedInstanceState)
         initBinding()
         setContentView(binding.root)
-        Timber.e("Version number ${BuildConfig.VERSION_CODE}")
-        Timber.e("Version name ${BuildConfig.VERSION_NAME}")
         getExtras(intent)
         initUI()
     }

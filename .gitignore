@@ -213,8 +213,7 @@ fabric.properties
 
 !/gradle/wrapper/gradle-wrapper.jar
 
-# End of https://www.toptal.com/developers/gitignore/api/android,androidstudio
-/app/google-services.json
+
 /gradlew
 /gradlew.bat
 /app/src/admin/google-services.json
@@ -222,3 +221,7 @@ fabric.properties
 google-services.json
 admin.properties
 client.properties
+client-version.properties
+admin-version.properties
+
+# End of https://www.toptal.com/developers/gitignore/api/android,androidstudio

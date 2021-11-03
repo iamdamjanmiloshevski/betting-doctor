@@ -11,13 +11,9 @@ plugins {
 android {
   compileSdkVersion rootProject.ext.targetSdkVersion
   buildToolsVersion rootProject.ext.buildToolsVersion
-
   defaultConfig {
     minSdkVersion rootProject.ext.minSdkVersion
     targetSdkVersion rootProject.ext.targetSdkVersion
-    versionCode generateVersionCode(versionCodeNum)
-    versionName generateVersionName()
-
     multiDexEnabled true
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
   }
@@ -69,6 +65,8 @@ android {
     client {
       dimension "default"
       signingConfig clientConfig
+      versionCode generateVersionCode(false, true)
+      versionName generateVersionName(true)
       applicationId "com.twoplaytech.drbetting"
       manifestPlaceholders = [appLabel: "Doctor Betting"]
       resValue "string", "app_name", "Doctor Betting"
@@ -77,6 +75,8 @@ android {
     admin {
       dimension "default"
       signingConfig adminConfig
+      versionCode generateVersionCode()
+      versionName generateVersionName()
       manifestPlaceholders = [appLabel: "Doctor Betting Admin"]
       applicationId "com.twoplaytech.drbetting.admin"
       resValue "string", "app_name", "Doctor Betting Admin"
@@ -94,33 +94,51 @@ android {
     viewBinding true
   }
 }
-private Integer generateVersionCode(Integer versionCode) {
-  if (versionCode != rootProject.ext.versionCodeNum) return rootProject.ext.versionCodeNum++
-  else return versionCode
+/**
+ *
+ * @param increment - flag used to determine if the version code should be incremented
+ * (set this to true only when you're publishing new version to the Google Play store)
+ * @param isClientFlavor - flag used to determine if the client version properties
+ * should be read (false - read admin, true - read client)
+ * @return - the version number of the app
+ */
+private Integer generateVersionCode(boolean increment = false, boolean isClientFlavor = false) {
+  def versionPropertiesFile = getVersionPropertiesFile(isClientFlavor)
+  Properties versionProperties = new Properties()
+  versionProperties.load(versionPropertiesFile.newDataInputStream())
+  def currentVersion = versionProperties['version.code'].toInteger()
+  if (!increment) return currentVersion else {
+    def newVersion = currentVersion + 1
+    versionProperties['version.code'] = newVersion.toString()
+    versionProperties.store(versionPropertiesFile.newWriter(), null)
+    return newVersion
+  }
 }
-
-private String generateVersionName() {
-  String versionName
-  versionName = "${rootProject.ext.majorVersion}.${rootProject.ext.minorVersion}.${rootProject.ext.patchVersion}"
-  if (rootProject.ext.versionClassifier == null) {
-    if (rootProject.ext.isSnapshot) {
-      ext.versionClassifier = "SNAPSHOT"
-    }
-    if (rootProject.ext.isAlpha) {
-      if (rootProject.ext.alphaOrBetaVersion < 10) {
-        rootProject.ext.versionClassifier = "alpha0${rootProject.ext.alphaOrBetaVersion}"
-      } else rootProject.ext.versionClassifier = "alpha${rootProject.ext.alphaOrBetaVersion}"
-    }
-    if (rootProject.ext.isBeta) {
-      if (rootProject.ext.alphaOrBetaVersion < 10) {
-        rootProject.ext.versionClassifier = "beta${rootProject.ext.alphaOrBetaVersion}"
-      } else rootProject.ext.versionClassifier = "beta${rootProject.ext.alphaOrBetaVersion}"
-    }
-  }
-  if (rootProject.ext.versionClassifier != null) {
-    versionName += "-" + rootProject.ext.versionClassifier
-  }
-  return versionName
+/**
+ *
+ * @param isClientFlavor - flag used to determine if the client version properties
+ * should be read (false - read admin, true - read client)
+ * @return - the version name in semantic format
+ */
+private String generateVersionName(boolean isClientFlavor = false) {
+  def versionPropertiesFile = getVersionPropertiesFile(isClientFlavor)
+  Properties versionProperties = new Properties()
+  versionProperties.load(versionPropertiesFile.newDataInputStream())
+  def major = versionProperties['version.major']
+  def minor = versionProperties['version.minor']
+  def patch = versionProperties['version.patch']
+  return major + "." + minor + "." + patch
+}
+/**
+ * This function is used to fetch the properties file based on a product flavor flag
+ * @param isClientFlavor - flag used to determine if the client version properties
+ * should be read (false - read admin, true - read client)
+ * @return the actual properties file
+ */
+private File getVersionPropertiesFile(boolean isClientFlavor = false) {
+  if (isClientFlavor) {
+    return project.rootProject.file("client-version.properties")
+  } else return project.rootProject.file("admin-version.properties")
 }
 
 dependencies {
