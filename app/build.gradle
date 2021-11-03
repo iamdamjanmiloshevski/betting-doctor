@@ -75,7 +75,7 @@ android {
     admin {
       dimension "default"
       signingConfig adminConfig
-      versionCode generateVersionCode()
+      versionCode generateVersionCode(false,false)
       versionName generateVersionName()
       manifestPlaceholders = [appLabel: "Doctor Betting Admin"]
       applicationId "com.twoplaytech.drbetting.admin"
