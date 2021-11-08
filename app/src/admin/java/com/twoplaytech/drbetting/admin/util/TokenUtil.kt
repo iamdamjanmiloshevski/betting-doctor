@@ -14,3 +14,7 @@ fun AccessToken.hasExpired():Boolean{
     val token = JWT(this.refreshToken)
     return token.expiresAt?.before(Date(System.currentTimeMillis())) ?: true
 }
+fun AccessToken.hasExpiredToken():Boolean{
+    val token = JWT(this.token)
+    return token.expiresAt?.before(Date(System.currentTimeMillis())) ?: true
+}

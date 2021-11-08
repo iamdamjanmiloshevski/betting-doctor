@@ -87,6 +87,7 @@ interface Repository {
     )
 
     suspend fun getAccessTokenAsync(): AccessToken
-    suspend fun getRefreshTokenAsync(): AccessToken
+    fun getRefreshTokenAsync(): AccessToken
     fun sendNotification(topic:String,onSuccess: () -> Unit,onError: (Message) -> Unit)
+    fun getToken():AccessToken?
 }

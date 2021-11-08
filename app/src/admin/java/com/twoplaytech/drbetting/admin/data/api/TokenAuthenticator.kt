@@ -26,9 +26,8 @@ package com.twoplaytech.drbetting.admin.data.api
 
 
 import com.twoplaytech.drbetting.admin.domain.repository.Repository
-import com.twoplaytech.drbetting.admin.util.hasExpired
+import com.twoplaytech.drbetting.admin.util.hasExpiredToken
 import dagger.Lazy
-import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
@@ -45,22 +44,28 @@ import javax.inject.Inject
 class TokenAuthenticator @Inject constructor(private val repository: Lazy<Repository>) :
     Authenticator {
     override fun authenticate(route: Route?, response: Response): Request {
-        return runBlocking {
-            val accessToken = repository.get().getAccessTokenAsync()
-            val isExpired = accessToken.hasExpired()
-            if (!isExpired) {
-                Timber.i("Token hasn't expired. Using existing")
-                response.request
-                    .newBuilder()
-                    .addHeader("Authorization", "Bearer ".plus(accessToken.token)).build()
-            } else {
-                Timber.i("Token has expired. Refreshing token")
-                val newAccessToken = repository.get().getAccessTokenAsync()
-                repository.get().saveToken(newAccessToken)
-                response.request
-                    .newBuilder()
-                    .addHeader("Authorization", "Bearer ".plus(accessToken.token)).build()
+        val accessToken = repository.get().getToken()
+        val hasExpired = accessToken?.hasExpiredToken() ?: false
+            val newRequest:Request? = when (response.code) {
+                403, 401 -> {
+                    accessToken?.let {
+                        if (!hasExpired) {
+                            Timber.i("Token hasn't expired")
+                            request(response.request,it.token)
+                        } else {
+                            Timber.i("Token has expired")
+                            val newToken = repository.get().getRefreshTokenAsync()
+                            request(response.request,newToken.token)
+                        }
+                    }
+
+                } else -> response.request
             }
-        }
+        return newRequest as Request
+    }
+    private fun request(request:Request,token:String):Request{
+        return request.newBuilder().addHeader(
+            "Authorization", "Bearer $token"
+        ).build()
     }
 }

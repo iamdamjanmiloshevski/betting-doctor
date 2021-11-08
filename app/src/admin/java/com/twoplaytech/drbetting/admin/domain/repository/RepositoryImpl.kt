@@ -235,9 +235,13 @@ class RepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getRefreshTokenAsync(): AccessToken {
-        val accessToken = getAccessTokenAsync()
-        return remoteDataSource.refreshTokenAsync(accessToken.refreshToken)
+    override fun getRefreshTokenAsync(): AccessToken {
+        return runBlocking {
+            val accessToken = getAccessTokenAsync()
+            val newToken = remoteDataSource.refreshTokenAsync(accessToken.refreshToken)
+            saveToken(newToken)
+            newToken
+        }
     }
 
     override fun sendNotification(
@@ -245,13 +249,13 @@ class RepositoryImpl @Inject constructor(
         onSuccess: () -> Unit,
         onError: (Message) -> Unit
     ) {
-       launch(coroutineContext){
-           remoteDataSource.sendNotification(topic).catch { cause ->
-               sendErrorMessage(onError,cause)
-           }.collect {
-               onSuccess.invoke()
-           }
-       }
+        launch(coroutineContext) {
+            remoteDataSource.sendNotification(topic).catch { cause ->
+                sendErrorMessage(onError, cause)
+            }.collect {
+                onSuccess.invoke()
+            }
+        }
     }
 
 
@@ -274,6 +278,13 @@ class RepositoryImpl @Inject constructor(
                     onError.invoke(Message("Something went wrong", 0))
                 }
             } ?: onError.invoke(Message("Something went wrong", 0))
+        }
+    }
+
+    override fun getToken(): AccessToken? {
+        val accessTokenJson = localDataSource.getString(KEY_ACCESS_TOKEN)
+        return accessTokenJson?.let {
+            AccessTokenMapper.fromJson(it)
         }
     }
 
