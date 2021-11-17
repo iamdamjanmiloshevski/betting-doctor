@@ -47,4 +47,7 @@ interface UseCasesModule {
 
     @Binds
     fun bindSendFeedbackUseCase(sendUseCaseImpl: SendFeedbackUseCaseImpl): SendFeedbackUseCase
+
+    @Binds
+    fun bindChangeThemeUseCase(changeThemeUseCaseImpl: ChangeThemeUseCaseImpl):ChangeThemeUseCase
 }

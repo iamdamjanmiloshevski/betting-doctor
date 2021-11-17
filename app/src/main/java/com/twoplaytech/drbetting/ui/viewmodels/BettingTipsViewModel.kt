@@ -26,10 +26,11 @@ package com.twoplaytech.drbetting.ui.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.twoplaytech.drbetting.admin.domain.usecases.AppLaunchUseCase
-import com.twoplaytech.drbetting.admin.domain.usecases.GetBettingTipsUseCase
 import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.domain.common.Resource
+import com.twoplaytech.drbetting.domain.usecases.AppLaunchUseCase
+import com.twoplaytech.drbetting.domain.usecases.ChangeThemeUseCase
+import com.twoplaytech.drbetting.domain.usecases.GetBettingTipsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -41,8 +42,8 @@ import javax.inject.Inject
 @HiltViewModel
 class BettingTipsViewModel @Inject constructor(
     private val getBettingTipsUseCase: GetBettingTipsUseCase,
-    private val appLaunchUseCase: AppLaunchUseCase
-
+    private val appLaunchUseCase: AppLaunchUseCase,
+    private val themeUseCase: ChangeThemeUseCase
 ) :
     ViewModel() {
     private val bettingTipsObserver = MutableLiveData<Resource<Any>>()
@@ -64,7 +65,18 @@ class BettingTipsViewModel @Inject constructor(
     fun incrementAppLaunch(){
         appLaunchUseCase.incrementAppLaunch()
     }
+    private val appThemeObserver = MutableLiveData<Int>()
+    fun changeTheme(appTheme: Int) {
+        themeUseCase.saveAppTheme(appTheme)
+        appThemeObserver.value = appTheme
+    }
 
+    fun getAppTheme() {
+        themeUseCase.getAppTheme {
+            appThemeObserver.value = it
+        }
+    }
+    fun observeAppTheme() = appThemeObserver
     fun observeAppLaunch() = appLaunchObserver
     fun observeTips() = bettingTipsObserver
 }

@@ -78,5 +78,12 @@ class MainActivity : BaseActivity() {
             }
         })
     }
-
+    override fun onResume() {
+        super.onResume()
+        observeData()
+    }
+    override fun observeData() {
+        super.observeData()
+        observeAppTheme()
+    }
 }

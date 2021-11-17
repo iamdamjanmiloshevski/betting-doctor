@@ -59,6 +59,7 @@ class FeedbackActivity : BaseActivity(), View.OnClickListener {
                 }
             }
         })
+       observeAppTheme()
     }
 
     private fun clearFocus() {

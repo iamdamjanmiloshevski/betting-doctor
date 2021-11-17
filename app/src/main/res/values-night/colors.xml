@@ -29,7 +29,7 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="black">#FFFFFF</color>
+    <color name="black">#ffffff</color>
     <color name="white">#000000</color>
     <color name="blue">#327DBE</color>
     <color name="silver">#c0c0c0</color>
@@ -41,4 +41,5 @@
     <color name="silver_chalice">#A3A3A3</color>
     <color name="splash_green">#77BB3D</color>
     <color name="icon_tint">#FFFFFF</color>
+    <color name="tip_background">#e5e5e5</color>
 </resources>

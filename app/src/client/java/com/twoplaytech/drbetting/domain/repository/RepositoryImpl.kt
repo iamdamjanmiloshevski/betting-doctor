@@ -32,6 +32,7 @@ import com.twoplaytech.drbetting.data.models.FeedbackMessage
 import com.twoplaytech.drbetting.data.models.Message
 import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.ui.util.Constants.KEY_APP_LAUNCHES
+import com.twoplaytech.drbetting.ui.util.Constants.KEY_DARK_MODE
 import com.twoplaytech.drbetting.ui.util.Constants.KEY_NEW_TIPS_NOTIFICATIONS
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -129,6 +130,16 @@ class RepositoryImpl @Inject constructor(
                 onSuccess.invoke(feedbackMessage)
             }
         }
+    }
+
+    override fun getAppTheme(callback: (Int) -> Unit) {
+        localDataSource.getInt(KEY_DARK_MODE,callback = {
+            callback.invoke(it)
+        })
+    }
+
+    override fun saveAppTheme(appTheme: Int) {
+        localDataSource.saveInt(KEY_DARK_MODE,appTheme)
     }
 
 

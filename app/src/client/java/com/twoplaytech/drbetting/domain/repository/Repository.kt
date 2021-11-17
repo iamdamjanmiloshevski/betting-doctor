@@ -53,4 +53,6 @@ interface Repository {
         onSuccess: (FeedbackMessage) -> Unit,
         onError: (Message) -> Unit
     )
+    fun getAppTheme(callback: (Int) -> Unit)
+    fun saveAppTheme(appTheme:Int)
 }

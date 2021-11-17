@@ -40,6 +40,14 @@ class UserPreferencesActivity : BaseActivity() {
         changeTheme(toolbar = toolbar)
     }
 
+    override fun onResume() {
+        super.onResume()
+        observeData()
+    }
+    override fun observeData() {
+        super.observeData()
+        observeAppTheme()
+    }
     class SettingsFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)

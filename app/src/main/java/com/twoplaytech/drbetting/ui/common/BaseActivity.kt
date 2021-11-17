@@ -31,6 +31,7 @@ import android.view.WindowManager
 import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -53,12 +54,18 @@ abstract class BaseActivity : AppCompatActivity(), IBaseActivityView {
     @Inject
     lateinit var preferencesManager: SharedPreferencesManager
 
-    protected val bettingTipsViewModel:BettingTipsViewModel by viewModels()
-
+    protected val bettingTipsViewModel: BettingTipsViewModel by viewModels()
+    protected var darkMode = 2
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
+
+    override fun onResume() {
+        super.onResume()
+        bettingTipsViewModel.getAppTheme()
+    }
+
 
     override fun changeTheme(
         navView: BottomNavigationView?,
@@ -79,14 +86,13 @@ abstract class BaseActivity : AppCompatActivity(), IBaseActivityView {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = ContextCompat.getColor(this, sport.getSportColor())
             toolbar.background = sport.getSportDrawable(this)
-        } else if(toolbar!=null && view != null){
+        } else if (toolbar != null && view != null) {
             val backgrounds = this.getRandomBackground()
             toolbar.background = backgrounds.first
             view.background = backgrounds.first
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = ContextCompat.getColor(this, backgrounds.second)
-        }
-        else if (sport != null) {
+        } else if (sport != null) {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = ContextCompat.getColor(this, sport.getSportColor())
         } else if (toolbar != null) {
@@ -104,5 +110,15 @@ abstract class BaseActivity : AppCompatActivity(), IBaseActivityView {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = ContextCompat.getColor(this, backgrounds.second)
         }
+    }
+    protected fun observeAppTheme(){
+        bettingTipsViewModel.observeAppTheme().observe(this, {
+            darkMode = it
+            when (it) {
+                0 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                1 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                2 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+            }
+        })
     }
 }

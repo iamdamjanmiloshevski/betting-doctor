@@ -36,10 +36,8 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ProgressBar
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -54,10 +52,8 @@ import com.twoplaytech.drbetting.ui.UserPreferencesActivity
 import com.twoplaytech.drbetting.ui.adapters.OnSettingsItemClickListener
 import com.twoplaytech.drbetting.ui.adapters.SettingsRecyclerViewAdapter
 import com.twoplaytech.drbetting.ui.common.BaseActivity
-import com.twoplaytech.drbetting.ui.util.Constants.KEY_DARK_MODE
 import com.twoplaytech.drbetting.ui.viewmodels.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class SettingsActivity : BaseActivity(), OnSettingsItemClickListener {
@@ -68,6 +64,7 @@ class SettingsActivity : BaseActivity(), OnSettingsItemClickListener {
     private lateinit var webView: WebView
     private lateinit var settingsItems: RecyclerView
     private lateinit var toolbar: Toolbar
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,9 +98,7 @@ class SettingsActivity : BaseActivity(), OnSettingsItemClickListener {
                 )
             )
         }
-        val preferences = PreferenceManager.getDefaultSharedPreferences(this)
-        val notifications = preferences.getBoolean("notifications",true)
-        Timber.e("Notifications $notifications")
+
     }
 
     override fun observeData() {
@@ -125,6 +120,7 @@ class SettingsActivity : BaseActivity(), OnSettingsItemClickListener {
                 }
             }
         })
+        observeAppTheme()
     }
 
     override fun onSettingsItemClick(item: SettingsItem) {
@@ -150,7 +146,6 @@ class SettingsActivity : BaseActivity(), OnSettingsItemClickListener {
                 viewModel.setUrl(THIRD_PARTY_SOFTWARE)
             }
             is SettingsItem.NightMode -> {
-                val darkMode = preferencesManager.getInteger(KEY_DARK_MODE)
                 MaterialDialog(this).show {
                     title(R.string.dark_mode)
                     cancelable(false)
@@ -158,12 +153,7 @@ class SettingsActivity : BaseActivity(), OnSettingsItemClickListener {
                         R.array.dark_mode_options,
                         initialSelection = darkMode
                     ) { _, index, _ ->
-                        when (index) {
-                            0 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                            1 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                            2 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-                        }
-                        preferencesManager.saveInteger(KEY_DARK_MODE, index)
+                        bettingTipsViewModel.changeTheme(index)
                     }
                 }
             }

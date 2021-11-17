@@ -276,7 +276,7 @@ fun Context.writeCopyright(): String {
 fun Context.getVersionName(): String? {
     return try {
         val pInfo: PackageInfo =
-            this.packageManager.getPackageInfo(this.getPackageName(), 0)
+            this.packageManager.getPackageInfo(this.packageName, 0)
         pInfo.versionName
     } catch (e: PackageManager.NameNotFoundException) {
         e.printStackTrace()

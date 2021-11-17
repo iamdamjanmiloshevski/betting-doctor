@@ -59,7 +59,7 @@
       <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#e5e5e5">
+        android:background="@color/tip_background">
 
         <TextView
           android:id="@+id/league"

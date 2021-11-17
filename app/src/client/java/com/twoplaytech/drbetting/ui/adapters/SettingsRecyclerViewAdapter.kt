@@ -48,7 +48,7 @@ class SettingsRecyclerViewAdapter() :
         SettingsItem.ThirdPartySoftware(R.string.third_party_software, R.drawable.ic_third_party),
         SettingsItem.NightMode(R.string.dark_mode,R.drawable.ic_night_mode),
         SettingsItem.Feedback(R.string.feedback,R.drawable.ic_outline_feedback_24),
-        SettingsItem.Notifications(R.string.push_notifications,R.drawable.ic_notifications)
+        SettingsItem.Notifications(R.string.push_notifications,R.drawable.ic_baseline_notifications_none_24)
     )
     private var listener: OnSettingsItemClickListener? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SettingsViewHolder {

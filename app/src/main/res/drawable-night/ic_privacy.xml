@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ MIT License
   ~
@@ -23,16 +22,18 @@
   ~ SOFTWARE.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:title="@string/item_settings"
-        android:icon="@drawable/ic_settings"
-        android:orderInCategory="1"
-        android:id="@+id/action_settings"
-        app:showAsAction="always"/>
-    <item android:title="@string/item_disclaimer"
-        android:id="@+id/action_disclaimer"
-        android:icon="@drawable/ic_disclaimer"
-        android:orderInCategory="2"
-        app:showAsAction="ifRoom"/>
-</menu>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+  android:width="512dp"
+  android:height="512dp"
+  android:viewportWidth="512"
+  android:viewportHeight="512">
+  <path
+    android:fillColor="@color/black"
+    android:pathData="m256,391c57.897,0 105,-47.103 105,-105v-105h-30v-46c0,-41.355 -33.645,-75 -75,-75s-75,33.645 -75,75v46h-30v105c0,57.897 47.103,105 105,105zM211,135c0,-24.813 20.187,-45 45,-45s45,20.187 45,45v46h-90zM181,211h150v75c0,41.355 -33.645,75 -75,75s-75,-33.645 -75,-75z"/>
+  <path
+    android:fillColor="@color/black"
+    android:pathData="m251.879,510.823 l4.121,1.177 4.121,-1.177c130.311,-37.232 220.879,-156.818 220.879,-293.226v-187.597h-68.787l-30,-30h-252.426l-30,30h-68.787v187.597c0,135.532 89.714,255.75 220.879,293.226zM61,60h51.213l30,-30h227.574l30,30h51.213v157.597c0,120.727 -79.972,228.323 -195,263.167 -115.028,-34.845 -195,-142.44 -195,-263.167z"/>
+  <path
+    android:fillColor="@color/black"
+    android:pathData="m241,241h30v90h-30z"/>
+</vector>

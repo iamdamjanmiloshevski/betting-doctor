@@ -98,10 +98,6 @@ abstract class BaseFragment : Fragment(), IBaseView, Toolbar.OnMenuItemClickList
                 startActivity(Intent(requireContext(), SettingsActivity::class.java))
                 true
             }
-            R.id.action_admin_settings -> {
-                activity?.openAdmin()
-                true
-            }
             R.id.action_disclaimer -> {
                 requireContext().showDisclaimer()
                 true
