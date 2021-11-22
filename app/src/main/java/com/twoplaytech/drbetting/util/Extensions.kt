@@ -33,6 +33,7 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.text.format.DateFormat
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
@@ -318,5 +319,13 @@ fun String.toStatus(): TypeStatus {
         "WON" -> TypeStatus.WON
         else -> throw Exception("Unknown type status")
     }
+}
+fun Activity.toGooglePlay(){
+    startActivity(
+        Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("market://details?id=$packageName")
+        )
+    )
 }
 

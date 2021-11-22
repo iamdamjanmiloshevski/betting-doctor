@@ -5,7 +5,7 @@
     <item name="windowNoTitle">true</item>
   </style>
 
-  <style name="Theme.DrBetting.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+  <style name="Theme.DrBetting.AppBarOverlay" parent="ThemeOverlay.AppCompat.DayNight.ActionBar" />
 
-  <style name="Theme.DrBetting.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+  <style name="Theme.DrBetting.PopupOverlay" parent="ThemeOverlay.AppCompat.DayNight" />
 </resources>

@@ -15,6 +15,7 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       android:contentDescription="@string/team_logo_desc"
+      android:textColor="@color/black"
       app:sport="@{sport}"
       app:team="@{team}"
    />
@@ -27,6 +28,7 @@
       android:gravity="center"
       android:text="@{team.name}"
       android:textSize="@dimen/dimen_16sp"
+      android:textColor="@color/black"
       android:textStyle="bold"
       android:fontFamily="@font/aldrich"
       app:layout_constraintStart_toStartOf="parent"

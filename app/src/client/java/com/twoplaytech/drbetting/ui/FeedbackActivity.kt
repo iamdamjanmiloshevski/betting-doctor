@@ -80,7 +80,7 @@ class FeedbackActivity : BaseActivity(), View.OnClickListener {
         toolbar = binding.toolbar
         changeTheme(toolbar = toolbar, view = binding.content.background)
         binding.content.submit.setBackgroundResource(com.twoplaytech.drbetting.util.getRandomBackground().first)
-        toolbar.setNavigationIcon(R.drawable.ic_back)
+        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
         toolbar.setNavigationOnClickListener {
             onBackPressed()
         }

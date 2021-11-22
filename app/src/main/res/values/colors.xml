@@ -42,4 +42,5 @@
   <color name="splash_green">#77BB3D</color>
   <color name="icon_tint">#000000</color>
   <color name="tip_background">#e5e5e5</color>
+  <color name="betting_info_background_color">#C8D2D7</color>
 </resources>

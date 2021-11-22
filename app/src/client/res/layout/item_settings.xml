@@ -21,41 +21,43 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   ~ SOFTWARE.
   -->
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp">
 
-        <variable
-            name="item"
-            type="com.twoplaytech.drbetting.ui.settings.ISettingsItem" />
-    </data>
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp">
+    <ImageView
+      android:id="@+id/iv_item_icon"
+      android:layout_width="40dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="10dp"
+      app:tint="@color/black"
+      app:itemIcon="@{item}"
+      app:layout_constraintEnd_toStartOf="@id/iv_item_icon"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/iv_item_icon"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                app:itemIcon="@{item}"
-                app:layout_constraintEnd_toStartOf="@id/iv_item_icon"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+      android:id="@+id/tv_item_name"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="10dp"
+      android:text="@{item.name}"
+      android:textColor="@color/black"
+      android:textSize="16sp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toEndOf="@id/iv_item_icon"
+      app:layout_constraintTop_toTopOf="parent" />
+  </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/tv_item_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="@{item.name}"
-                android:textSize="16sp"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/iv_item_icon"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+  <data>
+
+    <variable
+      name="item"
+      type="com.twoplaytech.drbetting.ui.settings.ISettingsItem" />
+  </data>
 </layout>

@@ -19,6 +19,7 @@
       android:layout_height="?attr/actionBarSize"
       android:background="?attr/colorPrimary"
       android:elevation="0dp"
+      app:titleTextColor="@color/white"
       app:popupTheme="@style/Theme.DrBetting.PopupOverlay" />
 
   </com.google.android.material.appbar.AppBarLayout>

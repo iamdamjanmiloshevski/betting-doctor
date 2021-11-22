@@ -26,20 +26,28 @@ package com.twoplaytech.drbetting.ui
 
 import android.content.Context
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
+import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.twoplaytech.drbetting.R
+import com.twoplaytech.drbetting.data.models.RateUs
 import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.ui.common.BaseActivity
 import com.twoplaytech.drbetting.ui.util.NotificationsManager
+import com.twoplaytech.drbetting.ui.viewmodels.MainViewModel
 import com.twoplaytech.drbetting.util.showDisclaimer
+import com.twoplaytech.drbetting.util.toGooglePlay
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
+import java.util.*
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
     private var navView: BottomNavigationView? = null
+    private val viewModel:MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,15 +83,52 @@ class MainActivity : BaseActivity() {
             if (appLaunchCount == 0) {
                 context.showDisclaimer()
                 bettingTipsViewModel.incrementAppLaunch()
+            } else if (appLaunchCount > 0 && appLaunchCount % 2 == 0) {
+                viewModel.checkRateUs()
             }
         })
     }
+
     override fun onResume() {
         super.onResume()
         observeData()
     }
+
+    private fun showRateUsDialog() {
+        MaterialDialog(this).show {
+            cancelable(false)
+            title(res = R.string.rate_us_title)
+            message(res = R.string.rate_us_msg)
+            positiveButton(res = R.string.rate_us_choice1, click = {
+                this@MainActivity.toGooglePlay()
+                viewModel.saveRateUs(RateUs.Rate_Us,true)
+                dismiss()
+            })
+            neutralButton(res = R.string.rate_us_choice3, click = {
+                viewModel.saveRateUs(RateUs.No,true)
+                dismiss()
+            })
+            negativeButton(res = R.string.rate_us_choice2, click = {
+                viewModel.saveRateUs(RateUs.MaybeLater,false)
+                dismiss()
+            })
+        }
+    }
+
+
     override fun observeData() {
         super.observeData()
         observeAppTheme()
+        observeRateUs()
+    }
+
+    private fun observeRateUs() {
+        viewModel.observeRateUs().observe(this, { pair ->
+            val isCompleted = pair.second
+            Timber.e("isCompleted $isCompleted")
+            if(!isCompleted){
+                showRateUsDialog()
+            }
+        })
     }
 }

@@ -26,7 +26,6 @@ package com.twoplaytech.drbetting.ui.settings
 
 import android.content.Intent
 import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -53,6 +52,7 @@ import com.twoplaytech.drbetting.ui.adapters.OnSettingsItemClickListener
 import com.twoplaytech.drbetting.ui.adapters.SettingsRecyclerViewAdapter
 import com.twoplaytech.drbetting.ui.common.BaseActivity
 import com.twoplaytech.drbetting.ui.viewmodels.SettingsViewModel
+import com.twoplaytech.drbetting.util.toGooglePlay
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -82,7 +82,7 @@ class SettingsActivity : BaseActivity(), OnSettingsItemClickListener {
         webView = binding.content.webView
         settingsItems = binding.content.rvItems
         changeTheme(toolbar = toolbar)
-        toolbar.setNavigationIcon(R.drawable.ic_back)
+        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
         toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
@@ -132,12 +132,7 @@ class SettingsActivity : BaseActivity(), OnSettingsItemClickListener {
                 viewModel.setUrl(PRIVACY_POLICY)
             }
             is SettingsItem.RateUs -> {
-                startActivity(
-                    Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("market://details?id=$packageName")
-                    )
-                )
+                this.toGooglePlay()
             }
             is SettingsItem.TermsOfUse -> {
                 viewModel.setUrl(TERMS_OF_USE)

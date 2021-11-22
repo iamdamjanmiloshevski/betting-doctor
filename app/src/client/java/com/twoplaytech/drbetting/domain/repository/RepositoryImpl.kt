@@ -27,13 +27,12 @@ package com.twoplaytech.drbetting.domain.repository
 import com.twoplaytech.drbetting.data.datasource.LocalDataSource
 import com.twoplaytech.drbetting.data.datasource.RemoteDataSource
 import com.twoplaytech.drbetting.data.mappers.MessageMapper
-import com.twoplaytech.drbetting.data.models.BettingTip
-import com.twoplaytech.drbetting.data.models.FeedbackMessage
-import com.twoplaytech.drbetting.data.models.Message
-import com.twoplaytech.drbetting.data.models.Sport
+import com.twoplaytech.drbetting.data.models.*
 import com.twoplaytech.drbetting.ui.util.Constants.KEY_APP_LAUNCHES
 import com.twoplaytech.drbetting.ui.util.Constants.KEY_DARK_MODE
 import com.twoplaytech.drbetting.ui.util.Constants.KEY_NEW_TIPS_NOTIFICATIONS
+import com.twoplaytech.drbetting.ui.util.Constants.KEY_RATE_US
+import com.twoplaytech.drbetting.ui.util.Constants.KEY_RATING_COMPLETED
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
@@ -133,15 +132,40 @@ class RepositoryImpl @Inject constructor(
     }
 
     override fun getAppTheme(callback: (Int) -> Unit) {
-        localDataSource.getInt(KEY_DARK_MODE,callback = {
+        localDataSource.getInt(KEY_DARK_MODE, callback = {
             callback.invoke(it)
         })
     }
 
     override fun saveAppTheme(appTheme: Int) {
-        localDataSource.saveInt(KEY_DARK_MODE,appTheme)
+        localDataSource.saveInt(KEY_DARK_MODE, appTheme)
     }
 
+    override fun getRateUs(callback: (RateUs, Boolean) -> Unit) {
+       localDataSource.getBoolean(KEY_RATING_COMPLETED) { isCompleted ->
+            localDataSource.getInt(KEY_RATE_US, callback = { rateUs ->
+                when (rateUs) {
+                    0 -> {
+                        callback.invoke(RateUs.Rate_Us, isCompleted)
+                    }
+                    1 -> {
+                        callback.invoke(RateUs.No, isCompleted)
+                    }
+                    2 -> {
+                        callback.invoke(RateUs.MaybeLater, isCompleted)
+                    }
+                    else -> {
+                        callback.invoke(RateUs.MaybeLater, isCompleted)
+                    }
+                }
+            })
+        }
+    }
+
+    override fun saveRateUs(rateUs: RateUs, isCompleted: Boolean) {
+        localDataSource.saveInt(KEY_RATE_US,rateUs.value)
+        localDataSource.saveBoolean(KEY_RATING_COMPLETED,isCompleted)
+    }
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO

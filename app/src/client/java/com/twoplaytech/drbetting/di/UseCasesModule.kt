@@ -50,4 +50,7 @@ interface UseCasesModule {
 
     @Binds
     fun bindChangeThemeUseCase(changeThemeUseCaseImpl: ChangeThemeUseCaseImpl):ChangeThemeUseCase
+
+    @Binds
+    fun bindRateUsUseCase(rateUsUseImpl: RateUsUseImpl):RateUsUseCase
 }

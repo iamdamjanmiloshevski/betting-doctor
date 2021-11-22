@@ -24,10 +24,7 @@
 
 package com.twoplaytech.drbetting.domain.repository
 
-import com.twoplaytech.drbetting.data.models.BettingTip
-import com.twoplaytech.drbetting.data.models.FeedbackMessage
-import com.twoplaytech.drbetting.data.models.Message
-import com.twoplaytech.drbetting.data.models.Sport
+import com.twoplaytech.drbetting.data.models.*
 
 /*
     Author: Damjan Miloshevski 
@@ -55,4 +52,6 @@ interface Repository {
     )
     fun getAppTheme(callback: (Int) -> Unit)
     fun saveAppTheme(appTheme:Int)
+    fun getRateUs(callback: (RateUs,Boolean) -> Unit)
+    fun saveRateUs(rateUs:RateUs,isCompleted:Boolean = false)
 }
