@@ -84,6 +84,7 @@ abstract class BaseFragment : Fragment(), IBaseView, Toolbar.OnMenuItemClickList
         toolbar.title = getString(titleRes)
         toolbar.setBackgroundResource(sport.getSportResource())
         toolbar.setupWithNavController(navController, appBarConfiguration)
+        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
         setupMenu(toolbar, R.menu.main_menu)
     }
 

@@ -27,6 +27,8 @@ package com.twoplaytech.drbetting.ui
 import android.content.Context
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
@@ -44,9 +46,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), NavController.OnDestinationChangedListener {
     private var navView: BottomNavigationView? = null
-    private val viewModel:MainViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,15 +59,7 @@ class MainActivity : BaseActivity() {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         navView?.setupWithNavController(navController)
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                R.id.navigation_football -> changeTheme(navView, Sport.Football)
-                R.id.navigation_basketball -> changeTheme(navView, Sport.Basketball)
-                R.id.navigation_tennis -> changeTheme(navView, Sport.Tennis)
-                R.id.navigation_handball -> changeTheme(navView, Sport.Handball)
-                R.id.navigation_volleyball -> changeTheme(navView, Sport.Volleyball)
-            }
-        }
+        navController.addOnDestinationChangedListener(this)
         bettingTipsViewModel.getAppLaunchCount()
     }
 
@@ -90,15 +84,10 @@ class MainActivity : BaseActivity() {
     private fun observeRateUs() {
         viewModel.observeRateUs().observe(this, { pair ->
             val isCompleted = pair.second
-            if(!isCompleted){
+            if (!isCompleted) {
                 showRateUsDialog()
             }
         })
-    }
-
-    override fun onResume() {
-        super.onResume()
-        observeData()
     }
 
     private fun showRateUsDialog() {
@@ -108,17 +97,36 @@ class MainActivity : BaseActivity() {
             message(res = R.string.rate_us_msg)
             positiveButton(res = R.string.rate_us_choice1, click = {
                 this@MainActivity.toGooglePlay()
-                viewModel.saveRateUs(RateUs.Rate_Us,true)
+                viewModel.saveRateUs(RateUs.Rate_Us, true)
                 dismiss()
             })
             neutralButton(res = R.string.rate_us_choice3, click = {
-                viewModel.saveRateUs(RateUs.No,true)
+                viewModel.saveRateUs(RateUs.No, true)
                 dismiss()
             })
             negativeButton(res = R.string.rate_us_choice2, click = {
-                viewModel.saveRateUs(RateUs.MaybeLater,false)
+                viewModel.saveRateUs(RateUs.MaybeLater, false)
                 dismiss()
             })
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        observeData()
+    }
+
+    override fun onDestinationChanged(
+        controller: NavController,
+        destination: NavDestination,
+        arguments: Bundle?
+    ) {
+        when (destination.id) {
+            R.id.navigation_football -> changeTheme(navView, Sport.Football)
+            R.id.navigation_basketball -> changeTheme(navView, Sport.Basketball)
+            R.id.navigation_tennis -> changeTheme(navView, Sport.Tennis)
+            R.id.navigation_handball -> changeTheme(navView, Sport.Handball)
+            R.id.navigation_volleyball -> changeTheme(navView, Sport.Volleyball)
         }
     }
 

@@ -5,7 +5,12 @@
     <item name="windowNoTitle">true</item>
   </style>
 
-  <style name="Theme.DrBetting.AppBarOverlay" parent="ThemeOverlay.AppCompat.DayNight.ActionBar" />
+  <style name="Theme.DrBetting.AppBarOverlay" parent="ThemeOverlay.AppCompat.DayNight.ActionBar">
+    <item name="toolbarNavigationButtonStyle">@style/Toolbar.Button.Navigation.Tinted</item>
+  </style>
 
   <style name="Theme.DrBetting.PopupOverlay" parent="ThemeOverlay.AppCompat.DayNight" />
+  <style name="Toolbar.Button.Navigation.Tinted" parent="Widget.AppCompat.Toolbar.Button.Navigation">
+    <item name="tint">@color/white</item>
+  </style>
 </resources>

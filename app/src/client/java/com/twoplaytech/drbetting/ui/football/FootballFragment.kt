@@ -44,6 +44,7 @@ class FootballFragment : BaseFragment() {
     ): View {
         initBinding(inflater, container)
         changeTheme(R.string.heading_football, Sport.Football)
+        binding.toolbar.navigationIcon = null
         initPager(
             listOf(
                 FootballOlderFragment.getInstance(),
