@@ -38,10 +38,9 @@ import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.ui.common.BaseActivity
 import com.twoplaytech.drbetting.ui.util.NotificationsManager
 import com.twoplaytech.drbetting.ui.viewmodels.MainViewModel
-import com.twoplaytech.drbetting.util.showDisclaimer
+import com.twoplaytech.drbetting.util.observeAppLaunchCount
 import com.twoplaytech.drbetting.util.toGooglePlay
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 import java.util.*
 
 @AndroidEntryPoint
@@ -52,7 +51,6 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        showDisclaimer(this)
         toggleNotifications()
         navView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
@@ -78,13 +76,22 @@ class MainActivity : BaseActivity() {
         NotificationsManager.toggleNotifications(areNotificationsEnabled)
     }
 
-    private fun showDisclaimer(context: Context) {
+    private fun observeAppLaunchCount(context: Context) {
         bettingTipsViewModel.observeAppLaunch().observe(this, { appLaunchCount ->
             if (appLaunchCount == 0) {
-                context.showDisclaimer()
-                bettingTipsViewModel.incrementAppLaunch()
-            } else if (appLaunchCount > 0 && appLaunchCount % 2 == 0) {
+                context.observeAppLaunchCount()
+            } else if (appLaunchCount > 0 && appLaunchCount % 10 == 0) {
                 viewModel.checkRateUs()
+            }
+            bettingTipsViewModel.incrementAppLaunch()
+        })
+    }
+
+    private fun observeRateUs() {
+        viewModel.observeRateUs().observe(this, { pair ->
+            val isCompleted = pair.second
+            if(!isCompleted){
+                showRateUsDialog()
             }
         })
     }
@@ -118,17 +125,8 @@ class MainActivity : BaseActivity() {
 
     override fun observeData() {
         super.observeData()
+        observeAppLaunchCount(this)
         observeAppTheme()
         observeRateUs()
-    }
-
-    private fun observeRateUs() {
-        viewModel.observeRateUs().observe(this, { pair ->
-            val isCompleted = pair.second
-            Timber.e("isCompleted $isCompleted")
-            if(!isCompleted){
-                showRateUsDialog()
-            }
-        })
     }
 }

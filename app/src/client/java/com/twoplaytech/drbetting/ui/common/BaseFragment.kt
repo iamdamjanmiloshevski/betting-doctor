@@ -46,7 +46,7 @@ import com.twoplaytech.drbetting.ui.adapters.ChildFragmentViewPager2PagerAdapter
 import com.twoplaytech.drbetting.ui.settings.SettingsActivity
 import com.twoplaytech.drbetting.ui.viewmodels.BettingTipsViewModel
 import com.twoplaytech.drbetting.util.getSportResource
-import com.twoplaytech.drbetting.util.showDisclaimer
+import com.twoplaytech.drbetting.util.observeAppLaunchCount
 
 /*
     Author: Damjan Miloshevski 
@@ -99,7 +99,7 @@ abstract class BaseFragment : Fragment(), IBaseView, Toolbar.OnMenuItemClickList
                 true
             }
             R.id.action_disclaimer -> {
-                requireContext().showDisclaimer()
+                requireContext().observeAppLaunchCount()
                 true
             }
             else -> false

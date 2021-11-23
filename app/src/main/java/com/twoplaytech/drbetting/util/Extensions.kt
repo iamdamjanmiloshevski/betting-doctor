@@ -253,7 +253,7 @@ fun getRandomBackground(): Pair<Int, Int> {
     return Pair(sports[idx], colors[idx])
 }
 
-fun Context.showDisclaimer() {
+fun Context.observeAppLaunchCount() {
     val dialog = AlertDialog.Builder(this)
     dialog.setCancelable(false)
     dialog.setTitle(R.string.item_disclaimer)
