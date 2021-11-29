@@ -182,7 +182,7 @@ fun String.toZonedDate(): ZonedDateTime {
             .withZoneSameInstant(
                 ZoneId.systemDefault()
             )
-    } ?: throw NullPointerException("Date must not be null!")
+    } ?: return ZonedDateTime.now()
 }
 
 fun String.beautifyDate(context: Context): String {
