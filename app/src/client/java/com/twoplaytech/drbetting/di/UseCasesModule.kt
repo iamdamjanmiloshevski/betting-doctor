@@ -53,4 +53,5 @@ interface UseCasesModule {
 
     @Binds
     fun bindRateUsUseCase(rateUsUseImpl: RateUsUseImpl):RateUsUseCase
+
 }

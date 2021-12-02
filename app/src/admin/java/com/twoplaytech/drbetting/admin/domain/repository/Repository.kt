@@ -90,4 +90,6 @@ interface Repository {
     fun getRefreshTokenAsync(): AccessToken
     fun sendNotification(topic:String,onSuccess: () -> Unit,onError: (Message) -> Unit)
     fun getToken():AccessToken?
+    fun getAppTheme(callback: (Int) -> Unit)
+    fun saveAppTheme(appTheme:Int)
 }

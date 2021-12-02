@@ -4,7 +4,6 @@
 
     <application
         android:name="com.twoplaytech.drbetting.admin.App"
-        android:allowBackup="false"
         android:icon="@mipmap/app_logo_admin"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/app_logo_admin_round"

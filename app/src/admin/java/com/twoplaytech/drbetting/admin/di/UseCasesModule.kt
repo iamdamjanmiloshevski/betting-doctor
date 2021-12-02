@@ -25,6 +25,8 @@
 package com.twoplaytech.drbetting.admin.di
 
 import com.twoplaytech.drbetting.admin.domain.usecases.*
+import com.twoplaytech.drbetting.domain.usecases.ChangeThemeUseCase
+import com.twoplaytech.drbetting.domain.usecases.ChangeThemeUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -59,4 +61,7 @@ interface UseCasesModule {
 
     @Binds
     fun sendNotificationUseCase(sendNotificationUseCaseImpl: SendNotificationUseCaseImpl):SendNotificationUseCase
+
+    @Binds
+    fun bindChangeThemeUseCase(changeThemeUseCaseImpl: ChangeThemeUseCaseImpl): ChangeThemeUseCase
 }

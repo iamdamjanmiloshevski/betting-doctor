@@ -294,4 +294,14 @@ class RepositoryImpl @Inject constructor(
     ) {
         onSuccess.invoke(bettingTips)
     }
+    override fun getAppTheme(callback: (Int) -> Unit) {
+        localDataSource.getInt("KEY_DARK_MODE", callback = {
+            callback.invoke(it)
+        })
+    }
+
+    override fun saveAppTheme(appTheme: Int) {
+        localDataSource.saveInt("KEY_DARK_MODE", appTheme)
+    }
+
 }

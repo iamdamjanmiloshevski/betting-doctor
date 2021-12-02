@@ -27,7 +27,6 @@ package com.twoplaytech.drbetting.ui.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.twoplaytech.drbetting.domain.common.Resource
-import com.twoplaytech.drbetting.domain.usecases.ChangeThemeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -36,7 +35,7 @@ import javax.inject.Inject
     Created on 3/23/21 1:53 PM
 */
 @HiltViewModel
-class SettingsViewModel @Inject constructor(private val themeUseCase: ChangeThemeUseCase) :
+class SettingsViewModel @Inject constructor() :
     ViewModel() {
     private val urlObserver = MutableLiveData<Resource<String>>()
 
