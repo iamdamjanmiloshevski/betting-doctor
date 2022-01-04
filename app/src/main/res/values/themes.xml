@@ -23,7 +23,7 @@
   -->
 
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- Base application com.twoplaytech.drbetting.ui.theme. -->
     <style name="Theme.DrBetting" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/splash_green</item>
@@ -35,7 +35,7 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+        <!-- Customize your com.twoplaytech.drbetting.ui.theme here. -->
         <item name="android:textColor">@color/black</item>
     </style>
 

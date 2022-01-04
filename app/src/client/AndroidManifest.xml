@@ -12,20 +12,20 @@
     android:supportsRtl="true"
     android:theme="@style/Theme.DrBetting">
     <activity
-      android:name=".ui.UserPreferencesActivity"
+      android:name="com.twoplaytech.drbetting.ui.UserPreferencesActivity"
       android:exported="true"
       android:label="@string/title_activity_user_preferences" />
     <activity
-      android:name=".ui.NotificationsActivity"
+      android:name="com.twoplaytech.drbetting.ui.NotificationsActivity"
       android:exported="true"
       android:label="@string/title_activity_notifications" />
     <activity
-      android:name=".ui.FeedbackActivity"
+      android:name="com.twoplaytech.drbetting.ui.FeedbackActivity"
       android:exported="true"
       android:label="@string/title_activity_feedback"
       android:theme="@style/Theme.DrBetting.NoActionBar" />
     <activity
-      android:name=".ui.SplashActivity"
+      android:name="com.twoplaytech.drbetting.ui.SplashActivity"
       android:noHistory="true"
       android:theme="@style/SplashScreenTheme">
       <intent-filter>
@@ -36,19 +36,19 @@
       </intent-filter>
     </activity>
     <activity
-      android:name=".ui.AppInfoActivity"
+      android:name="com.twoplaytech.drbetting.ui.AppInfoActivity"
       android:theme="@style/Theme.DrBetting.NoActionBar" />
     <activity
-      android:name=".ui.settings.SettingsActivity"
+      android:name="com.twoplaytech.drbetting.ui.settings.SettingsActivity"
       android:label="@string/title_activity_settings"
       android:theme="@style/Theme.DrBetting.NoActionBar" />
     <activity
-      android:name=".ui.MainActivity"
+      android:name="com.twoplaytech.drbetting.ui.MainActivity"
       android:label="@string/app_name"
       android:screenOrientation="portrait" />
 
     <service
-      android:name=".ui.services.BettingDoctorFirebaseMessagingService"
+      android:name="com.twoplaytech.drbetting.ui.services.BettingDoctorFirebaseMessagingService"
       android:exported="false">
       <intent-filter>
         <action android:name="com.google.firebase.MESSAGING_EVENT" />

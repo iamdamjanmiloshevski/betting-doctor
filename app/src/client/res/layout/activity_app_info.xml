@@ -28,7 +28,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.AppInfoActivity"
+    tools:context="com.twoplaytech.drbetting.ui.AppInfoActivity"
     android:id="@+id/background">
 
     <TextView

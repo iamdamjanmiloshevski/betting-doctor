@@ -58,7 +58,7 @@ import com.twoplaytech.drbetting.data.models.Status
 import com.twoplaytech.drbetting.databinding.ActivityAdminBinding
 import com.twoplaytech.drbetting.ui.adapters.BettingTipsRecyclerViewAdapter
 import com.twoplaytech.drbetting.ui.common.OnBettingTipClickedListener
-import com.twoplaytech.drbetting.ui.viewmodels.BettingTipsViewModel
+import com.twoplaytech.drbetting.admin.ui.viewmodels.BettingTipsViewModel
 import com.twoplaytech.drbetting.util.getSportColor
 import com.twoplaytech.drbetting.util.getSportFromIndex
 

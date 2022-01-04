@@ -1,9 +1,12 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-  ext.kotlin_version = "1.4.31"
+  ext {
+    compose_version = '1.0.1'
+  }
+  ext.kotlin_version = "1.5.31"
   ext.hilt_version = '2.38.1'
   ext.google_services_version = '4.3.5'
-  ext.gradle_version = '7.0.3'
+  ext.gradle_version = '7.0.4'
   ext.crashlytics_gradle_version = '2.5.2'
   repositories {
     google()
@@ -28,7 +31,7 @@ ext{
   firebaseBomVersion = '26.8.0'
   glideVersion = '4.12.0'
   xCryptoVersion = '1.0.0'
-  targetSdkVersion = 30
+  targetSdkVersion = 31
   minSdkVersion = 23
   buildToolsVersion = "30.0.3"
   majorVersion = 3//MAJOR version when you make incompatible API changes
@@ -46,7 +49,7 @@ ext{
   retrofitVersion = '2.9.0'
   okHttpVersion = '4.9.0'
   gsonVersion = '2.8.7'
-  localhost_ip = "192.168.100.4:8080"
+  localhost_ip = "192.168.0.114:8080"
   work_version = "2.6.0"
   jwtDecode_version="2.0.0"
   stethoVersion = "1.6.0"

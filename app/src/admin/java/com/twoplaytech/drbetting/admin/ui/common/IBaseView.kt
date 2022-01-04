@@ -22,30 +22,33 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.data.models
+package com.twoplaytech.drbetting.admin.ui.common
 
-import android.os.Parcelable
-import androidx.annotation.Keep
-import kotlinx.android.parcel.Parcelize
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.annotation.MenuRes
+import androidx.annotation.StringRes
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
+import com.twoplaytech.drbetting.admin.ui.viewmodels.BettingTipsViewModel
+import com.twoplaytech.drbetting.data.models.Sport
 
 /*
     Author: Damjan Miloshevski 
-    Created on 7.7.21 12:27
-    Project: Dr.Betting
-    © 2Play Tech  2021. All rights reserved
+    Created on 3/10/21 11:17 AM
 */
-@Keep
-@Parcelize
-data class BettingTip(
-    var leagueName: String,
-    var teamHome: Team?,
-    var teamAway: Team?,
-    var gameTime: String,
-    var bettingType: String,
-    var status: TypeStatus,
-    var result: String,
-    var _id: String?= null,
-    var sport: Sport,
-    val coefficient:String? = null,
-    val ticketId:String? = null
-):Parcelable
+interface IBaseView {
+    fun initBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    )
+
+    fun initPager(screens: List<Fragment>) {}
+    val viewModel: BettingTipsViewModel
+    fun initUI() {}
+    fun setUpDataAdapter() {}
+    fun changeTheme(@StringRes titleStringRes: Int, sport: Sport) {}
+    fun setupToolbar(@StringRes titleRes: Int, sport: Sport) {}
+    fun setupMenu(toolbar: Toolbar,@MenuRes menuRes:Int){}
+    fun observeData(){}
+}

@@ -22,30 +22,16 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.data.models
+package com.twoplaytech.drbetting.sportsanalyst.domain.repository
 
-import android.os.Parcelable
-import androidx.annotation.Keep
-import kotlinx.android.parcel.Parcelize
+import com.twoplaytech.drbetting.sportsanalyst.data.models.Ticket
 
 /*
     Author: Damjan Miloshevski 
-    Created on 7.7.21 12:27
+    Created on 7.7.21 12:18
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-@Keep
-@Parcelize
-data class BettingTip(
-    var leagueName: String,
-    var teamHome: Team?,
-    var teamAway: Team?,
-    var gameTime: String,
-    var bettingType: String,
-    var status: TypeStatus,
-    var result: String,
-    var _id: String?= null,
-    var sport: Sport,
-    val coefficient:String? = null,
-    val ticketId:String? = null
-):Parcelable
+interface Repository {
+    fun getTicketByDate(date:String,onSuccess:(Ticket) ->Unit, onError:(String)->Unit)
+}

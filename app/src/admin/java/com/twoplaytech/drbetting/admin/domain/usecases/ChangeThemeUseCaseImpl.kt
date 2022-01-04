@@ -1,6 +1,6 @@
-package com.twoplaytech.drbetting.domain.usecases
+package com.twoplaytech.drbetting.admin.domain.usecases
 
-import com.twoplaytech.drbetting.domain.repository.Repository
+import com.twoplaytech.drbetting.admin.domain.repository.Repository
 import javax.inject.Inject
 
 /*
@@ -9,7 +9,7 @@ import javax.inject.Inject
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-class ChangeThemeUseCaseImpl@Inject constructor(repository: Repository) : UseCase(repository),ChangeThemeUseCase {
+class ChangeThemeUseCaseImpl @Inject constructor(repository: Repository) : UseCase(repository),ChangeThemeUseCase {
     override fun getAppTheme(callback: (Int) -> Unit) {
         repository.getAppTheme { callback.invoke(it) }
     }
