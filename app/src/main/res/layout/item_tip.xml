@@ -49,9 +49,9 @@
       android:layout_height="wrap_content"
       android:layout_marginBottom="1.5dp"
       android:background="#e5e5e5"
+      android:elevation="@dimen/dimen_10dp"
       app:cardCornerRadius="20dp"
       app:cardMaxElevation="25dp"
-      android:elevation="@dimen/dimen_10dp"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@id/gameTime">
@@ -61,21 +61,44 @@
         android:layout_height="match_parent"
         android:background="@color/tip_background">
 
-        <TextView
-          android:id="@+id/league"
-          android:layout_width="0dp"
+        <LinearLayout
+          android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:text="@{bettingType.leagueName}"
-          android:fontFamily="@font/aldrich"
-          android:gravity="center"
-          android:layout_marginTop="@dimen/dimen_10dp"
-          android:layout_marginStart="@dimen/dimen_10dp"
-          android:layout_marginEnd="@dimen/dimen_10dp"
-          android:textColor="@color/black"
-          app:layout_constraintTop_toBottomOf="@id/teamHome"
-          app:layout_constraintEnd_toStartOf="@id/teamAway"
-          app:layout_constraintStart_toEndOf="@id/teamHome"
-          app:layout_constraintTop_toTopOf="parent" />
+          android:layout_margin="20dp"
+          android:id="@+id/bettingInfoLyt"
+          android:orientation="horizontal"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@id/teamHome">
+
+          <com.twoplaytech.drbetting.ui.views.BettingInfoView
+            android:id="@+id/bettingInfo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:infoTitle="@string/betting_tip"
+            app:infoType="betting"
+            android:layout_weight="1"
+           android:layout_margin="@dimen/dimen_10dp"
+            />
+          <com.twoplaytech.drbetting.ui.views.BettingInfoView
+            android:id="@+id/bettingCoefficient"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:infoTitle="@string/coefficient"
+            app:infoType="coefficient"
+
+            android:layout_weight="1"
+            android:layout_margin="@dimen/dimen_10dp"
+            />
+          <com.twoplaytech.drbetting.ui.views.BettingInfoView
+            android:id="@+id/status"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:infoTitle="@string/status"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/dimen_10dp"
+            app:infoType="status" />
+        </LinearLayout>
 
         <TextView
           android:id="@+id/gameResult"
@@ -84,34 +107,30 @@
           android:fontFamily="@font/aldrich"
           android:gravity="center"
           android:text="@{bettingType.result}"
+          android:textColor="@color/black"
           android:textSize="42sp"
           android:textStyle="bold"
-          android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@id/bettingInfo"
+          app:layout_constraintBottom_toTopOf="@id/bettingInfoLyt"
           app:layout_constraintEnd_toStartOf="@id/teamAway"
           app:layout_constraintStart_toEndOf="@id/teamHome"
           app:layout_constraintTop_toBottomOf="@id/league" />
 
 
-        <com.twoplaytech.drbetting.ui.views.BettingInfoView
-          android:id="@+id/bettingInfo"
-          android:layout_width="wrap_content"
+        <TextView
+          android:id="@+id/league"
+          android:layout_width="0dp"
           android:layout_height="wrap_content"
-          app:infoTitle="@string/betting_tip"
-          app:infoType="betting"
-          android:layout_margin="20dp"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toBottomOf="@id/teamHome" />
-
-        <com.twoplaytech.drbetting.ui.views.BettingInfoView
-          android:id="@+id/status"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          app:infoTitle="@string/status"
-          app:infoType="status"
-          android:layout_margin="20dp"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintTop_toBottomOf="@id/teamHome" />
+          android:layout_marginEnd="@dimen/dimen_10dp"
+          android:layout_marginStart="@dimen/dimen_10dp"
+          android:layout_marginTop="@dimen/dimen_10dp"
+          android:fontFamily="@font/aldrich"
+          android:gravity="center"
+          android:text="@{bettingType.leagueName}"
+          android:textColor="@color/black"
+          app:layout_constraintEnd_toStartOf="@id/teamAway"
+          app:layout_constraintStart_toEndOf="@id/teamHome"
+          app:layout_constraintTop_toBottomOf="@id/teamHome"
+          app:layout_constraintTop_toTopOf="parent" />
 
         <com.twoplaytech.drbetting.ui.views.TeamView
           android:id="@+id/teamHome"

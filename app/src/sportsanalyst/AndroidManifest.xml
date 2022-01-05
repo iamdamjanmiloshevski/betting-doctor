@@ -6,7 +6,6 @@
     android:label="@string/app_name">
     <activity
       android:name="com.twoplaytech.drbetting.sportsanalyst.ui.TicketActivity"
-      android:label="@string/title_activity_ticket"
       android:theme="@style/Theme.DrBetting.NoActionBar"
       android:exported="true">
       <intent-filter>

@@ -2,6 +2,7 @@ package com.twoplaytech.drbetting.sportsanalyst.ui.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.twoplaytech.drbetting.data.mappers.MessageMapper
 import com.twoplaytech.drbetting.domain.common.Resource
 import com.twoplaytech.drbetting.sportsanalyst.data.models.Ticket
 import com.twoplaytech.drbetting.sportsanalyst.domain.usecases.GetTicketByDateUseCase
@@ -23,7 +24,7 @@ class TicketsViewModel @Inject constructor(private val getTicketByDateUseCase: G
         getTicketByDateUseCase.getTicketByDate(date, onSuccess = {
             ticketObserver.postValue(Resource.success(null, it))
         }, onError = {
-            ticketObserver.postValue(Resource.error(it, null))
+            ticketObserver.postValue(Resource.error(MessageMapper.toJson(it), null))
         })
     }
 

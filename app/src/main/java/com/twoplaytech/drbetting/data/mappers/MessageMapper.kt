@@ -35,4 +35,5 @@ import com.twoplaytech.drbetting.util.GsonUtil
 */
 object MessageMapper {
     fun fromJson(json:String) = GsonUtil.fromJson<Message>(json)
+    fun toJson(message: Message) = GsonUtil.toJson(message)
 }

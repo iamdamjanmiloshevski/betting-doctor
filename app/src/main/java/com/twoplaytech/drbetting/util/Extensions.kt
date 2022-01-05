@@ -196,7 +196,7 @@ fun String.beautifyDate(context: Context): String {
 
 fun String.toDate(): Date? {
     var date: Date? = null
-    val simpleDateFormat = SimpleDateFormat("MMM d, yyyy hh:mm:ss a", Locale.getDefault())
+    val simpleDateFormat = SimpleDateFormat("MMM d, yyyy, hh:mm:ss a", Locale.getDefault())
     try {
         date = simpleDateFormat.parse(this)
     } catch (e: Exception) {

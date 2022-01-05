@@ -30,7 +30,7 @@
         <item name="colorPrimaryVariant">@color/splash_green</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/orange</item>
+        <item name="colorSecondary">@color/splash_green</item>
         <item name="colorSecondaryVariant">@color/splash_green</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->

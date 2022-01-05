@@ -76,6 +76,7 @@
     </string-array>
     <string name="betting_tip">Betting</string>
     <string name="status">Status</string>
+  <string name="coefficient">Odds</string>
     <string name="team_logo_desc">team logo</string>
   <string name="rate_us_title">Rate Us</string>
   <string name="rate_us_msg">Enjoying the app? We appreciate your feedback. Can you spare few minutes and rate us?</string>

@@ -4,6 +4,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:background="#a3a3a3"
   tools:context=".sportsanalyst.ui.TicketFragment">
 
   <com.google.android.material.appbar.AppBarLayout
@@ -19,15 +20,34 @@
       android:layout_width="match_parent"
       android:layout_height="?attr/actionBarSize"
       app:popupTheme="@style/AppTheme.AppBarOverlay"
-      app:titleTextColor="@color/white"
-      app:navigationIcon="@drawable/ic_baseline_arrow_back_24"/>
+      app:titleTextColor="@color/black"
+      app:subtitleTextColor="@color/black"/>
 
   </com.google.android.material.appbar.AppBarLayout>
 
+<androidx.constraintlayout.widget.ConstraintLayout
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  app:layout_behavior="@string/appbar_scrolling_view_behavior">
   <androidx.recyclerview.widget.RecyclerView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/rv_tips"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+    />
 
+  <TextView
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:text="Apologies, we have nothing for you"
+    android:textSize="25sp"
+    android:layout_marginStart="@dimen/dimen_10dp"
+    android:layout_marginEnd="@dimen/dimen_10dp"
+    android:textStyle="bold"
+    android:id="@+id/noData"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    android:gravity="center"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

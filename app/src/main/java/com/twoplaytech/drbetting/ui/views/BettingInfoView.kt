@@ -30,7 +30,7 @@ class BettingInfoView(context: Context, attrs: AttributeSet) : ConstraintLayout(
 
     fun setData(text:String? = null, status:TypeStatus? = null){
         when(type){
-            0 -> {
+            0,2 -> {
                 binding.icon.visibility = View.GONE
                 binding.info.visibility = View.VISIBLE
                 binding.info.text = text

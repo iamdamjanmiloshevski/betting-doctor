@@ -3,6 +3,8 @@
   <style name="Theme.DrBetting.NoActionBar">
     <item name="windowActionBar">false</item>
     <item name="windowNoTitle">true</item>
+    <item name="md_corner_radius">16dp</item>
+    <item name="md_color_button_text">@color/splash_green</item>
   </style>
 
   <style name="Theme.DrBetting.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
