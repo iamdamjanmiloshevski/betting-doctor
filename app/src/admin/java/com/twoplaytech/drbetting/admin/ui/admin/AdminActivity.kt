@@ -43,6 +43,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.common.BaseAdminActivity
 import com.twoplaytech.drbetting.admin.ui.auth.LoginActivity
+import com.twoplaytech.drbetting.admin.ui.viewmodels.BettingTipsViewModel
 import com.twoplaytech.drbetting.admin.ui.viewmodels.LoginViewModel
 import com.twoplaytech.drbetting.admin.util.Constants
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_ARGS
@@ -58,9 +59,9 @@ import com.twoplaytech.drbetting.data.models.Status
 import com.twoplaytech.drbetting.databinding.ActivityAdminBinding
 import com.twoplaytech.drbetting.ui.adapters.BettingTipsRecyclerViewAdapter
 import com.twoplaytech.drbetting.ui.common.OnBettingTipClickedListener
-import com.twoplaytech.drbetting.admin.ui.viewmodels.BettingTipsViewModel
 import com.twoplaytech.drbetting.util.getSportColor
 import com.twoplaytech.drbetting.util.getSportFromIndex
+import timber.log.Timber
 
 class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
     OnBettingTipClickedListener, PopupMenu.OnMenuItemClickListener, View.OnClickListener {
@@ -69,6 +70,7 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
     private var sportSelected = 0
     private val viewModel: BettingTipsViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
+    private var isExpanded = false
 
     private val bettingTips = mutableListOf<BettingTip>()
     private val adapter: BettingTipsRecyclerViewAdapter =
@@ -84,7 +86,10 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
 
     override fun initUI() {
         binding.fab.setOnClickListener(this)
+        binding.fabBettingTip.setOnClickListener(this)
+        binding.fabTicket.setOnClickListener(this)
         binding.noDataView.setVisible(false)
+        showFabs()
         adapter.setOnBettingTipClickedListener(this)
         binding.rvBettingTips.adapter = adapter
         binding.rvBettingTips.layoutManager =
@@ -230,8 +235,11 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
     }
 
     private fun changeFabColor(sport: Sport) {
-        binding.fab.backgroundTintList =
-            ColorStateList.valueOf(ContextCompat.getColor(this, sport.getSportColor()))
+        val color = ContextCompat.getColor(this, sport.getSportColor())
+        val fabs = listOf(binding.fab,binding.fabBettingTip,binding.fabTicket)
+        for(fab in fabs){
+            fab.backgroundTintList = ColorStateList.valueOf(color)
+        }
     }
 
     private fun changeData(sport: Sport, typeSelected: Int) {
@@ -335,7 +343,23 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.iv_more -> showMenu(binding.ivMore)
-            R.id.fab -> this.navigateToTips(Constants.VIEW_TYPE_NEW)
+            R.id.fab ->{
+                Timber.e("Is expanded $isExpanded")
+                isExpanded = !isExpanded
+                showFabs()
+            }
+            R.id.fabBettingTip -> this.navigateToTips(Constants.VIEW_TYPE_NEW)
+            R.id.fabTicket -> {}
+        }
+    }
+
+    private fun showFabs() {
+        if(!isExpanded){
+            binding.fabBettingTip.visibility = View.GONE
+            binding.fabTicket.visibility = View.GONE
+        } else {
+            binding.fabBettingTip.visibility = View.VISIBLE
+            binding.fabTicket.visibility = View.VISIBLE
         }
     }
 

@@ -60,21 +60,21 @@ fun setResult(view: AppCompatImageView, status: TypeStatus) {
 
 @BindingAdapter("team", "sport")
 fun loadTeamLogo(view: ImageView, team: Team, sport: Sport) {
-    if (team.logo.endsWith(".svg")) {
-        val requestBuilder = GlideApp.with(view.context)
-            .`as`(PictureDrawable::class.java)
-            .listener(SvgSoftwareLayerSetter())
-        requestBuilder.load(team.logo)
-            .error(sport.getSportPlaceHolder())
-            .into(view)
-    } else {
-        GlideApp.with(view.context)
-            .load(team.logo)
-            .fitCenter()
-            .error(sport.getSportPlaceHolder())
-            .placeholder(R.drawable.progress_animation)
-            .into(view)
-    }
+       if (team.logo.endsWith(".svg")) {
+           val requestBuilder = GlideApp.with(view.context)
+               .`as`(PictureDrawable::class.java)
+               .listener(SvgSoftwareLayerSetter())
+           requestBuilder.load(team.logo)
+               .error(sport.getSportPlaceHolder())
+               .into(view)
+       } else {
+           GlideApp.with(view.context)
+               .load(team.logo)
+               .fitCenter()
+               .error(sport.getSportPlaceHolder())
+               .placeholder(R.drawable.progress_animation)
+               .into(view)
+       }
 }
 
 @BindingAdapter("sportIcon")

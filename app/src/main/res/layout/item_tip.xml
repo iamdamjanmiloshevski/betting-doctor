@@ -64,12 +64,22 @@
         <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_margin="20dp"
+
           android:id="@+id/bettingInfoLyt"
           android:orientation="horizontal"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toBottomOf="@id/teamHome">
+
+          <com.twoplaytech.drbetting.ui.views.BettingInfoView
+            android:id="@+id/sport"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:infoTitle="@string/sport"
+            app:infoType="sport"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/dimen_10dp"
+            />
 
           <com.twoplaytech.drbetting.ui.views.BettingInfoView
             android:id="@+id/bettingInfo"
@@ -86,7 +96,6 @@
             android:layout_height="match_parent"
             app:infoTitle="@string/coefficient"
             app:infoType="coefficient"
-
             android:layout_weight="1"
             android:layout_margin="@dimen/dimen_10dp"
             />

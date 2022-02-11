@@ -27,10 +27,10 @@ package com.twoplaytech.drbetting.admin.ui.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.twoplaytech.drbetting.admin.domain.usecases.AppLaunchUseCase
+import com.twoplaytech.drbetting.admin.domain.usecases.ChangeThemeUseCase
 import com.twoplaytech.drbetting.admin.domain.usecases.GetBettingTipsUseCase
 import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.domain.common.Resource
-import com.twoplaytech.drbetting.domain.usecases.ChangeThemeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

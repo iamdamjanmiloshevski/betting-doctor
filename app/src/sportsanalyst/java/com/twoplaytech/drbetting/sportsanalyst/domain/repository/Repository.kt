@@ -25,6 +25,7 @@
 package com.twoplaytech.drbetting.sportsanalyst.domain.repository
 
 import com.twoplaytech.drbetting.data.models.Message
+import com.twoplaytech.drbetting.sportsanalyst.data.Resource
 import com.twoplaytech.drbetting.sportsanalyst.data.models.Ticket
 
 /*
@@ -35,4 +36,5 @@ import com.twoplaytech.drbetting.sportsanalyst.data.models.Ticket
 */
 interface Repository {
     fun getTicketByDate(date:String,onSuccess:(Ticket) ->Unit, onError:(Message)->Unit)
+   suspend fun getTicketByDate(date: String): Resource<Ticket>
 }

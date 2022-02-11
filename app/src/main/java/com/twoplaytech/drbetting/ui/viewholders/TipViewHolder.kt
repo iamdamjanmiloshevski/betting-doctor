@@ -36,12 +36,14 @@ import com.twoplaytech.drbetting.util.beautifyDate
 
 */
 class TipViewHolder(val binding: ItemTipBinding) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(bettingTip: BettingTip) {
+    fun bind(bettingTip: BettingTip, showSportInItem: Boolean = false) {
         with(bettingTip) {
-            binding.teamHome.setTeamData(this.teamHome!!, this.sport)
-            binding.teamAway.setTeamData(this.teamAway!!, this.sport)
+            this.teamHome?.let {  binding.teamHome.setTeamData(it, this.sport) }
+            this.teamAway?.let { binding.teamAway.setTeamData(it, this.sport) }
             binding.bettingInfo.setData(text = this.bettingType)
             binding.status.setData(status = this.status)
+            binding.sport.setData(sport = bettingTip.sport)
+            if(showSportInItem) binding.sport.visibility = View.INVISIBLE else View.VISIBLE
             if(this.coefficient != null){
                 binding.bettingCoefficient.visibility = View.VISIBLE
                 binding.bettingCoefficient.setData(text = this.coefficient)

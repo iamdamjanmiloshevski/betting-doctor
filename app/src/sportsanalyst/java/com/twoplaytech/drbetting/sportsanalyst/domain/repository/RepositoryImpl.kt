@@ -27,6 +27,7 @@ package com.twoplaytech.drbetting.sportsanalyst.domain.repository
 import com.twoplaytech.drbetting.data.datasource.LocalDataSource
 import com.twoplaytech.drbetting.data.mappers.MessageMapper
 import com.twoplaytech.drbetting.data.models.Message
+import com.twoplaytech.drbetting.sportsanalyst.data.Resource
 import com.twoplaytech.drbetting.sportsanalyst.data.datasource.RemoteDataSource
 import com.twoplaytech.drbetting.sportsanalyst.data.models.Ticket
 import com.twoplaytech.drbetting.sportsanalyst.util.toServerFormatDate
@@ -68,6 +69,19 @@ class RepositoryImpl @Inject constructor(
                onSuccess.invoke(ticket)
            }
        }
+    }
+
+    override suspend fun getTicketByDate(date: String): Resource<Ticket> {
+        val response =  try {
+            Resource.Loading(true)
+            val ticket = remoteDataSource.getTicketByDate1(date)
+            Resource.Success(ticket)
+        }catch (e:Exception){
+            Timber.e("Error while fetching ticket with date $date. Error -> ${e.localizedMessage}")
+          return  Resource.Error(e.message,null)
+        }
+        Resource.Loading(false)
+        return response
     }
 
     private fun sendErrorMessage(

@@ -95,12 +95,49 @@
         android:id="@+id/rv_betting_tips"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         />
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        app:tint="@color/black"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_baseline_add_24" />
+
+    <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom|end"
+      android:id="@+id/floatingButtons"
+      android:orientation="vertical">
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+          android:id="@+id/fabTicket"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/fab_margin"
+          android:gravity="bottom"
+          android:text="Ticket"
+        android:layout_gravity="end"
+          app:icon="@drawable/ic_baseline_add_24"
+          app:layout_anchor="@id/fabBettingTip"
+          app:layout_anchorGravity="top|end"
+          app:srcCompat="@drawable/ic_baseline_add_24"
+          app:tint="@color/black" />
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+          android:id="@+id/fabBettingTip"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/fab_margin"
+          android:gravity="bottom"
+          android:text="Betting tip"
+
+          app:icon="@drawable/ic_baseline_add_24"
+          app:layout_anchor="@id/fab"
+          app:layout_anchorGravity="top|end"
+          app:srcCompat="@drawable/ic_baseline_add_24"
+          app:tint="@color/black" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+          android:id="@+id/fab"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          app:tint="@color/black"
+          android:layout_gravity="end"
+          app:icon="@drawable/ic_baseline_add_24"
+          android:layout_margin="@dimen/fab_margin"
+          app:srcCompat="@drawable/ic_baseline_add_24" />
+    </LinearLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

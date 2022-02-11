@@ -26,6 +26,7 @@
             android:theme="@style/Theme.DrBetting.NoActionBar" />
         <activity android:name="com.twoplaytech.drbetting.admin.ui.AdminSplashActivity"
             android:screenOrientation="portrait"
+          android:exported="true"
             android:theme="@style/SplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

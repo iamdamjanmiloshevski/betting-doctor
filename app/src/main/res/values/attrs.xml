@@ -38,6 +38,7 @@
             <enum name="betting" value="0"/>
             <enum name="status" value="1"/>
             <enum name="coefficient" value="2"/>
+            <enum name="sport" value="3"/>
         </attr>
     </declare-styleable>
 </resources>

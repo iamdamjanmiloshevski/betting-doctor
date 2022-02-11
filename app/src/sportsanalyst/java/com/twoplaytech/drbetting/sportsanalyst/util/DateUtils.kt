@@ -1,6 +1,9 @@
 package com.twoplaytech.drbetting.sportsanalyst.util
 
 import com.twoplaytech.drbetting.util.toZonedDate
+import org.threeten.bp.Instant
+import org.threeten.bp.ZoneId
+import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import java.text.SimpleDateFormat
 import java.util.*
@@ -11,18 +14,23 @@ import java.util.*
     Project: Dr.Betting
     © 2Play Tech  2022. All rights reserved
 */
+val dateFormatter: DateTimeFormatter? = DateTimeFormatter.ofPattern("dd MMM yyyy")
 fun String.beautifyDate(): String {
     val zonedDate = this.toZonedDate()
-    val dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
     return zonedDate.format(dateFormatter)
 }
 
-fun today():String{
+fun Date.format(): String {
+    val zonedDate = ZonedDateTime.ofInstant(Instant.ofEpochMilli(this.time), ZoneId.systemDefault())
+    return zonedDate.format(dateFormatter)
+}
+
+fun today(): String {
     val calendar = Calendar.getInstance()
     return calendar.toServerFormatDate()
 }
 
-fun Calendar.toServerFormatDate():String{
-    val formatter = SimpleDateFormat("dd-MM-yyyy",Locale.getDefault())
+fun Calendar.toServerFormatDate(): String {
+    val formatter = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
     return formatter.format(this.time)
 }

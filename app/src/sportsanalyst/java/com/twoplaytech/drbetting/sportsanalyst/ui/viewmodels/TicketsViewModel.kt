@@ -19,6 +19,8 @@ import javax.inject.Inject
 class TicketsViewModel @Inject constructor(private val getTicketByDateUseCase: GetTicketByDateUseCase) :
     ViewModel() {
     private val ticketObserver = MutableLiveData<Resource<Ticket>>()
+    suspend fun getTicketByDate1(date: String): com.twoplaytech.drbetting.sportsanalyst.data.Resource<Ticket> =
+        getTicketByDateUseCase.getTicketByDate1(date)
 
     fun getTicketByDate(date: String) {
         getTicketByDateUseCase.getTicketByDate(date, onSuccess = {

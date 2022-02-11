@@ -25,8 +25,9 @@
 package com.twoplaytech.drbetting.admin.common
 
 import androidx.activity.viewModels
+import com.twoplaytech.drbetting.admin.ui.common.BaseActivity
 import com.twoplaytech.drbetting.admin.ui.viewmodels.AdminViewModel
-import com.twoplaytech.drbetting.ui.common.BaseActivity
+
 
 /*
     Author: Damjan Miloshevski 
@@ -34,6 +35,6 @@ import com.twoplaytech.drbetting.ui.common.BaseActivity
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-abstract class BaseAdminActivity:BaseActivity() {
+abstract class BaseAdminActivity: BaseActivity() {
     protected val adminViewModel: AdminViewModel by viewModels()
 }

@@ -35,7 +35,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.databinding.FragmentBaseBinding
-import com.twoplaytech.drbetting.ui.common.IBaseView
 import com.twoplaytech.drbetting.admin.ui.viewmodels.BettingTipsViewModel
 import com.twoplaytech.drbetting.util.getSportResource
 

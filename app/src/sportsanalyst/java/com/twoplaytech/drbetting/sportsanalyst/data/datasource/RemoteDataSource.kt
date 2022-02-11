@@ -11,4 +11,5 @@ import kotlinx.coroutines.flow.Flow
 */
 interface RemoteDataSource {
     suspend fun getTicketByDate(date:String): Flow<Ticket>
+    suspend fun getTicketByDate1(date: String):Ticket
 }

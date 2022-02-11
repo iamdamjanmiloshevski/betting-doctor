@@ -24,4 +24,6 @@ class RemoteDataSourceImpl @Inject constructor(private val api: TicketsApi) : Re
     override suspend fun getTicketByDate(date: String): Flow<Ticket> {
         return flow { emit(api.getTicketByDate(date)) }.flowOn(coroutineContext)
     }
+
+    override suspend fun getTicketByDate1(date: String): Ticket { return api.getTicketByDate(date)}
 }

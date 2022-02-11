@@ -37,9 +37,11 @@ import com.twoplaytech.drbetting.ui.viewholders.TipViewHolder
     Created on 3/10/21 1:20 PM
 
 */
-class BettingTipsRecyclerViewAdapter(private val tips: MutableList<BettingTip>) :
+class BettingTipsRecyclerViewAdapter(
+    private val tips: MutableList<BettingTip>
+) :
     RecyclerView.Adapter<TipViewHolder>() {
-    private var listener:OnBettingTipClickedListener? = null
+    private var listener: OnBettingTipClickedListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TipViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -70,7 +72,7 @@ class BettingTipsRecyclerViewAdapter(private val tips: MutableList<BettingTip>) 
         notifyDataSetChanged()
     }
 
-    fun setOnBettingTipClickedListener(listener: OnBettingTipClickedListener){
+    fun setOnBettingTipClickedListener(listener: OnBettingTipClickedListener) {
         this.listener = listener
     }
 }

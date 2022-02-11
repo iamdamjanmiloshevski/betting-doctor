@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:layout_width="@dimen/dimen_100dp"
+  android:layout_width="80dp"
   android:layout_height="wrap_content"
+  android:padding="5dp"
   android:background="@drawable/betting_info_background">
 
   <ImageView
@@ -36,12 +37,12 @@
 
   <TextView
     android:id="@+id/title"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:text="Betting tip"
     android:gravity="center"
     android:fontFamily="@font/aldrich"
-    android:textSize="16sp"
+    android:textSize="14sp"
     android:textColor="@color/black"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"

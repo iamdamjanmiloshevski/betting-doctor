@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.twoplaytech.drbetting.R
+import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.data.models.TypeStatus
 import com.twoplaytech.drbetting.databinding.ViewBettingInfoBinding
 import com.twoplaytech.drbetting.ui.common.CustomViewArgumentsExtractor
 import com.twoplaytech.drbetting.ui.common.ICustomView
+import com.twoplaytech.drbetting.util.getSportPlaceHolder
 import com.twoplaytech.drbetting.util.getStatusResource
 
 /*
@@ -18,19 +20,21 @@ import com.twoplaytech.drbetting.util.getStatusResource
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-class BettingInfoView(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs),ICustomView,CustomViewArgumentsExtractor {
-    private lateinit var binding:ViewBettingInfoBinding
-    private var titleRes:Int = 0
+class BettingInfoView(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs),
+    ICustomView, CustomViewArgumentsExtractor {
+    private lateinit var binding: ViewBettingInfoBinding
+    private var titleRes: Int = 0
     private var type: Int = 0
+
     init {
         initBinding(LayoutInflater.from(context))
         extractAttributes(attrs)
         binding.title.text = context.getString(titleRes)
     }
 
-    fun setData(text:String? = null, status:TypeStatus? = null){
-        when(type){
-            0,2 -> {
+    fun setData(text: String? = null, status: TypeStatus? = null, sport: Sport = Sport.Football) {
+        when (type) {
+            0, 2 -> {
                 binding.icon.visibility = View.GONE
                 binding.info.visibility = View.VISIBLE
                 binding.info.text = text
@@ -40,8 +44,13 @@ class BettingInfoView(context: Context, attrs: AttributeSet) : ConstraintLayout(
                 binding.info.visibility = View.GONE
                 status?.let {
                     binding.icon.setImageResource(it.getStatusResource())
-                }?: binding.icon.setImageResource(R.drawable.tip_unknown)
+                } ?: binding.icon.setImageResource(R.drawable.tip_unknown)
 
+            }
+            3 -> {
+                binding.icon.visibility = View.VISIBLE
+                binding.info.visibility = View.GONE
+                binding.icon.setImageResource(sport.getSportPlaceHolder())
             }
         }
         requestLayout()
@@ -52,7 +61,7 @@ class BettingInfoView(context: Context, attrs: AttributeSet) : ConstraintLayout(
         attrs.let {
             val styledAttributes =
                 context.obtainStyledAttributes(it, R.styleable.BettingInfoView)
-            titleRes = styledAttributes.getResourceId(R.styleable.BettingInfoView_infoTitle,0)
+            titleRes = styledAttributes.getResourceId(R.styleable.BettingInfoView_infoTitle, 0)
             type = styledAttributes.getInteger(R.styleable.BettingInfoView_infoType, 0)
             styledAttributes.recycle()
         }
@@ -60,7 +69,7 @@ class BettingInfoView(context: Context, attrs: AttributeSet) : ConstraintLayout(
 
 
     override fun initBinding(inflater: LayoutInflater) {
-        binding = ViewBettingInfoBinding.inflate(inflater,this,true)
+        binding = ViewBettingInfoBinding.inflate(inflater, this, true)
     }
 
 }
