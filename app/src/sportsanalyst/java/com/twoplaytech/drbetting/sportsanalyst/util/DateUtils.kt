@@ -5,6 +5,7 @@ import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -15,9 +16,33 @@ import java.util.*
     © 2Play Tech  2022. All rights reserved
 */
 val dateFormatter: DateTimeFormatter? = DateTimeFormatter.ofPattern("dd MMM yyyy")
+val calendar = Calendar.getInstance()
 fun String.beautifyDate(): String {
     val zonedDate = this.toZonedDate()
     return zonedDate.format(dateFormatter)
+}
+
+fun ZonedDateTime?.beautify(): String {
+    return try {
+        this?.format(dateFormatter) ?: throw Exception("Unable to format $this into $dateFormatter")
+    } catch (e: Exception) {
+        Timber.e("Error formatting $this. Exception -> $e")
+        ""
+    }
+}
+
+fun Long.toZonedDate(): ZonedDateTime? {
+    return try {
+        ZonedDateTime.ofInstant(Instant.ofEpochMilli(this), ZoneId.systemDefault())
+    } catch (e: Exception) {
+        Timber.e("Error parsing $this into ZonedDateTime. Exception -> $e")
+        ZonedDateTime.now()
+    }
+}
+
+fun Long.toServerDate():String{
+    calendar.timeInMillis = this
+    return calendar.toServerFormatDate()
 }
 
 fun Date.format(): String {
@@ -26,7 +51,6 @@ fun Date.format(): String {
 }
 
 fun today(): String {
-    val calendar = Calendar.getInstance()
     return calendar.toServerFormatDate()
 }
 

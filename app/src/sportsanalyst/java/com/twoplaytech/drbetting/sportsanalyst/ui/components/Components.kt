@@ -3,8 +3,11 @@ package com.twoplaytech.drbetting.sportsanalyst.ui.components
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -21,8 +24,10 @@ import coil.compose.rememberImagePainter
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.data.models.BettingTip
 import com.twoplaytech.drbetting.data.models.Team
+import com.twoplaytech.drbetting.sportsanalyst.data.Resource
 import com.twoplaytech.drbetting.sportsanalyst.ui.theme.Aldrich
 import com.twoplaytech.drbetting.sportsanalyst.ui.theme.SilverChalice
+import com.twoplaytech.drbetting.sportsanalyst.ui.viewmodels.TicketsViewModel
 
 /*
     Author: Damjan Miloshevski 
@@ -47,7 +52,7 @@ fun TipCard(modifier: Modifier = Modifier, bettingTip: BettingTip? = null) {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    Text(text = it.leagueName,fontFamily = Aldrich)
+                    Text(text = it.leagueName, fontFamily = Aldrich)
                 }
                 Spacer(modifier = Modifier.height(2.dp))
                 Row(
@@ -156,5 +161,46 @@ fun TeamInfo(modifier: Modifier = Modifier, team: Team? = null) {
             overflow = TextOverflow.Clip,
             softWrap = true
         )
+    }
+}
+
+@Composable
+fun CenteredItem(
+    modifier: Modifier = Modifier,
+    content: @Composable RowScope.() -> Unit
+) {
+    Row(
+        modifier,
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        content()
+    }
+}
+@Composable
+fun TicketInfo(viewModel: TicketsViewModel) {
+    Surface(modifier = Modifier.fillMaxSize(), color = SilverChalice) {
+        when (val ticket = viewModel.ticket) {
+            is Resource.Error -> {
+                CenteredItem {
+                    Text(text = ticket.message!!)
+                }
+            }
+            is Resource.Loading -> {
+                CenteredItem {
+                    CircularProgressIndicator()
+                }
+            }
+            is Resource.Success -> {
+                ticket.data?.let {
+                    LazyColumn(contentPadding = PaddingValues(10.dp)) {
+                        items(it.tips) { bettingTip ->
+                            TipCard(bettingTip = bettingTip)
+                        }
+                    }
+                }
+
+            }
+        }
     }
 }

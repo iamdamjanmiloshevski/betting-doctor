@@ -1,31 +1,27 @@
 package com.twoplaytech.drbetting.sportsanalyst.ui.screens
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
+import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.produceState
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.twoplaytech.drbetting.sportsanalyst.data.Resource
-import com.twoplaytech.drbetting.sportsanalyst.data.models.Ticket
-import com.twoplaytech.drbetting.sportsanalyst.ui.components.TipCard
+import com.twoplaytech.drbetting.sportsanalyst.ui.components.TicketInfo
 import com.twoplaytech.drbetting.sportsanalyst.ui.theme.SeaGreen
-import com.twoplaytech.drbetting.sportsanalyst.ui.theme.SilverChalice
 import com.twoplaytech.drbetting.sportsanalyst.ui.viewmodels.TicketsViewModel
-import com.twoplaytech.drbetting.sportsanalyst.util.format
-import com.twoplaytech.drbetting.sportsanalyst.util.today
+import com.twoplaytech.drbetting.sportsanalyst.ui.widgets.showDatePicker
+import com.twoplaytech.drbetting.sportsanalyst.util.*
 import java.util.*
 
 /*
@@ -41,33 +37,44 @@ fun Ticket(
     viewModel: TicketsViewModel = hiltViewModel()
 ) {
     val date = Date(System.currentTimeMillis())
+    val activity = LocalContext.current as AppCompatActivity
+    val titleState = remember {
+        mutableStateOf(date.format())
+    }
+    val dateState = remember {
+        mutableStateOf(today())
+    }
     Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
-        TopAppBar(backgroundColor = SeaGreen) {
-            Text(
-                text = "Ticket ${date.format()}",
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp
-            )
+        TicketAppBar(activity, title = titleState.value){
+            titleState.value = it.toZonedDate().beautify()
+            dateState.value = it.toServerDate()
+            viewModel.getTicketByDate2(dateState.value)
         }
     }) {
-        Surface(modifier = Modifier.fillMaxSize(), color = SilverChalice) {
-            val ticket = produceState<Resource<Ticket>>(initialValue = Resource.Loading()) {
-                value = viewModel.getTicketByDate1(today())
-            }.value
-            if (ticket.data == null) {
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    CircularProgressIndicator()
-                }
-            } else {
-               LazyColumn(contentPadding = PaddingValues(10.dp)){
-                  items(ticket.data.tips){bettingTip ->
-                      TipCard(bettingTip = bettingTip)
-                  }
-               }
-            }
-        }
+        TicketInfo(viewModel)
     }
 }
+
+@Composable
+private fun TicketAppBar(
+    activity:AppCompatActivity,
+    title:String,
+    onDateChanged:(Long) -> Unit
+) {
+    TopAppBar(title = {
+        Text(
+            text = "Ticket $title"
+        )
+    }, actions = {
+        Image(
+            imageVector = Icons.Outlined.DateRange,
+            contentDescription = "Date range",
+            modifier = Modifier.clickable {
+                showDatePicker(activity) { newDate ->
+                    newDate?.let {onDateChanged.invoke(newDate)}
+                }
+            }
+        )
+    }, backgroundColor = SeaGreen)
+}
+

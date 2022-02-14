@@ -1,17 +1,28 @@
 <resources>
 
-  <style name="Theme.DrBetting.NoActionBar">
+  <style name="Theme.DrBetting.NoActionBar" parent="Theme.MaterialComponents.Light.Bridge" >
     <item name="windowActionBar">false</item>
     <item name="windowNoTitle">true</item>
     <item name="md_corner_radius">16dp</item>
     <item name="md_color_button_text">@color/splash_green</item>
+    <item name="materialCalendarStyle">@style/Widget.MaterialComponents.MaterialCalendar</item>
+    <item name="materialCalendarFullscreenTheme">
+      @style/ThemeOverlay.MaterialComponents.MaterialCalendar.Fullscreen
+    </item>
+    <item name="materialCalendarTheme">@style/ThemeOverlay.MaterialComponents.MaterialCalendar
+    </item>
+    <item name="android:statusBarColor">@color/seagreen</item>
   </style>
+  <style name="MaterialCalendarTheme" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+    <!-- just override the colors used in the default style -->
+    <item name="colorOnPrimary">@color/white</item>
+    <item name="colorPrimary">@color/seagreen</item>
+  </style>
+  <style name="Theme.DrBetting.AppBarOverlay"  parent="Theme.MaterialComponents.Light.Bridge" />
 
-  <style name="Theme.DrBetting.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+  <style name="Theme.DrBetting.PopupOverlay"  parent="Theme.MaterialComponents.Light.Bridge" />
 
-  <style name="Theme.DrBetting.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-  <style name="Theme.DrBetting" parent="android:Theme.Material.Light.NoActionBar">
-    <item name="android:statusBarColor">@color/purple_700</item>
+  <style name="Theme.DrBetting"  parent="Theme.MaterialComponents.Light.Bridge">
+    <item name="android:statusBarColor">@color/seagreen</item>
   </style>
 </resources>
