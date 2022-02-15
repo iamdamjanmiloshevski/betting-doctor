@@ -48,7 +48,7 @@ fun Ticket(
         TicketAppBar(activity, title = titleState.value){
             titleState.value = it.toZonedDate().beautify()
             dateState.value = it.toServerDate()
-            viewModel.getTicketByDate2(dateState.value)
+            viewModel.getTicketByDate(dateState.value)
         }
     }) {
         TicketInfo(viewModel)

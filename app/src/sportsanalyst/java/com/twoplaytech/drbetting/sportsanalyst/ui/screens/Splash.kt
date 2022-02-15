@@ -36,6 +36,7 @@ fun Splash(navController: NavController = NavController(LocalContext.current)) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            //todo finish screen
             Text(text = "Splash")
         }
 

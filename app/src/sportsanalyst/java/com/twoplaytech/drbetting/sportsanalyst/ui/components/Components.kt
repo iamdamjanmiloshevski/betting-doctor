@@ -15,7 +15,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -28,6 +30,8 @@ import com.twoplaytech.drbetting.sportsanalyst.data.Resource
 import com.twoplaytech.drbetting.sportsanalyst.ui.theme.Aldrich
 import com.twoplaytech.drbetting.sportsanalyst.ui.theme.SilverChalice
 import com.twoplaytech.drbetting.sportsanalyst.ui.viewmodels.TicketsViewModel
+import com.twoplaytech.drbetting.util.getSportPlaceHolder
+import com.twoplaytech.drbetting.util.getStatusResource
 
 /*
     Author: Damjan Miloshevski 
@@ -95,9 +99,22 @@ fun BettingInfo(modifier: Modifier = Modifier, bettingTip: BettingTip? = null) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            BettingCard(title = "Betting tip", infoLabel = it.bettingType)
-            BettingCard(title = "Status", icon = R.drawable.tip_won)
-            BettingCard(title = "Odds", infoLabel = it.coefficient)
+            BettingCard(
+                title = stringResource(R.string.betting_tip),
+                infoLabel = it.bettingType
+            )
+            BettingCard(
+                title = stringResource(R.string.sport),
+                icon = bettingTip.sport.getSportPlaceHolder()
+            )
+            BettingCard(
+                title = stringResource(R.string.status),
+                icon = bettingTip.status.getStatusResource()
+            )
+            BettingCard(
+                title = stringResource(R.string.odds),
+                infoLabel = it.coefficient
+            )
         }
     }
 }
@@ -112,7 +129,7 @@ fun BettingCard(
     Surface(
         modifier = modifier
             .height(80.dp)
-            .width(100.dp),
+            .width(80.dp),
         shape = RoundedCornerShape(20.dp),
         color = SilverChalice
     ) {
@@ -127,9 +144,11 @@ fun BettingCard(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
+                modifier = modifier.padding(start = 5.dp, top = 2.dp),
                 text = title,
                 fontWeight = FontWeight.SemiBold,
-                fontFamily = Aldrich
+                fontFamily = Aldrich,
+                textAlign = TextAlign.Center
             )
             Spacer(modifier = modifier.height(10.dp))
             if (icon != null) {
@@ -138,7 +157,8 @@ fun BettingCard(
                     contentDescription = "Icon status",
                     modifier = modifier.height(20.dp)
                 )
-            } else Text(text = infoLabel.toString())
+            } else Text(text = infoLabel.toString(),fontFamily = Aldrich,
+                textAlign = TextAlign.Center)
         }
     }
 }
@@ -146,22 +166,26 @@ fun BettingCard(
 @Preview
 @Composable
 fun TeamInfo(modifier: Modifier = Modifier, team: Team? = null) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(
-            painter = rememberImagePainter(data = team?.logo),
-            contentDescription = "Sport image",
-            modifier = Modifier.size(40.dp)
-        )
-        Spacer(modifier = modifier.height(10.dp))
-        Text(
-            text = team!!.name,
-            fontFamily = Aldrich,
-            overflow = TextOverflow.Clip,
-            softWrap = true
-        )
-    }
+    team?.let {
+        with(it){
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    painter = rememberImagePainter(data = this@with.logo),
+                    contentDescription = "Sport image",
+                    modifier = Modifier.size(40.dp)
+                )
+                Spacer(modifier = modifier.height(10.dp))
+                Text(
+                    text = this@with.name,
+                    fontFamily = Aldrich,
+                    overflow = TextOverflow.Clip,
+                    softWrap = true
+                )
+            }
+        }
+    } ?: throw NullPointerException("Team must not be null")
 }
 
 @Composable
@@ -183,7 +207,7 @@ fun TicketInfo(viewModel: TicketsViewModel) {
         when (val ticket = viewModel.ticket) {
             is Resource.Error -> {
                 CenteredItem {
-                    Text(text = ticket.message!!)
+                    Text(text = ticket.message.toString())
                 }
             }
             is Resource.Loading -> {

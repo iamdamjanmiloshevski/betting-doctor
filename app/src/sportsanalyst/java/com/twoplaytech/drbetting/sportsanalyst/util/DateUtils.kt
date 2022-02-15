@@ -16,7 +16,8 @@ import java.util.*
     © 2Play Tech  2022. All rights reserved
 */
 val dateFormatter: DateTimeFormatter? = DateTimeFormatter.ofPattern("dd MMM yyyy")
-val calendar = Calendar.getInstance()
+val calendar: Calendar = Calendar.getInstance()
+
 fun String.beautifyDate(): String {
     val zonedDate = this.toZonedDate()
     return zonedDate.format(dateFormatter)

@@ -4,9 +4,6 @@ import com.twoplaytech.drbetting.sportsanalyst.data.api.TicketsApi
 import com.twoplaytech.drbetting.sportsanalyst.data.models.Ticket
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
@@ -21,9 +18,5 @@ class RemoteDataSourceImpl @Inject constructor(private val api: TicketsApi) : Re
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO
 
-    override suspend fun getTicketByDate(date: String): Flow<Ticket> {
-        return flow { emit(api.getTicketByDate(date)) }.flowOn(coroutineContext)
-    }
-
-    override suspend fun getTicketByDate1(date: String): Ticket { return api.getTicketByDate(date)}
+    override suspend fun getTicketByDate(date: String): Ticket { return api.getTicketByDate(date)}
 }

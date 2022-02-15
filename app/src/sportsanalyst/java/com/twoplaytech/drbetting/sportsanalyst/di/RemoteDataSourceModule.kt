@@ -5,7 +5,7 @@ import com.twoplaytech.drbetting.sportsanalyst.data.datasource.RemoteDataSourceI
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dagger.hilt.android.components.ViewModelComponent
 
 /*
     Author: Damjan Miloshevski 
@@ -14,7 +14,7 @@ import dagger.hilt.components.SingletonComponent
     © 2Play Tech  2022. All rights reserved
 */
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ViewModelComponent::class)
 interface RemoteDataSourceModule {
     @Binds
     fun bindRemoteDataSource(remoteDataSourceImpl: RemoteDataSourceImpl):RemoteDataSource

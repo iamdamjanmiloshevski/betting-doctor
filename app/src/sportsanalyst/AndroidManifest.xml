@@ -8,12 +8,6 @@
     android:name="com.twoplaytech.drbetting.sportsanalyst.App"
     android:label="@string/app_name">
     <activity
-      android:name="com.twoplaytech.drbetting.sportsanalyst.ui.TicketActivity"
-      android:exported="true"
-      android:theme="@style/Theme.DrBetting.NoActionBar">
-
-    </activity>
-    <activity
       android:name="com.twoplaytech.drbetting.sportsanalyst.ui.MainActivity"
       android:exported="true"
       android:theme="@style/Theme.DrBetting.NoActionBar">

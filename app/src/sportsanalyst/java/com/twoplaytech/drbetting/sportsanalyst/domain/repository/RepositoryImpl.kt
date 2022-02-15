@@ -24,20 +24,12 @@
 
 package com.twoplaytech.drbetting.sportsanalyst.domain.repository
 
-import com.twoplaytech.drbetting.data.datasource.LocalDataSource
-import com.twoplaytech.drbetting.data.mappers.MessageMapper
-import com.twoplaytech.drbetting.data.models.Message
 import com.twoplaytech.drbetting.sportsanalyst.data.Resource
 import com.twoplaytech.drbetting.sportsanalyst.data.datasource.RemoteDataSource
 import com.twoplaytech.drbetting.sportsanalyst.data.models.Ticket
-import com.twoplaytech.drbetting.sportsanalyst.util.toServerFormatDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
@@ -48,7 +40,6 @@ import kotlin.coroutines.CoroutineContext
     © 2Play Tech  2021. All rights reserved
 */
 class RepositoryImpl @Inject constructor(
-    private val localDataSource: LocalDataSource,
     private val remoteDataSource: RemoteDataSource
 ) :
     Repository,
@@ -56,25 +47,10 @@ class RepositoryImpl @Inject constructor(
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO
 
-    override fun getTicketByDate(
-        date: String,
-        onSuccess: (Ticket) -> Unit,
-        onError: (Message) -> Unit
-    ) {
-       launch(coroutineContext){
-           remoteDataSource.getTicketByDate(date).catch { throwable ->
-               Timber.e(throwable)
-              sendErrorMessage(onError,throwable)
-           }.collect { ticket ->
-               onSuccess.invoke(ticket)
-           }
-       }
-    }
-
     override suspend fun getTicketByDate(date: String): Resource<Ticket> {
         val response =  try {
             Resource.Loading(true)
-            val ticket = remoteDataSource.getTicketByDate1(date)
+            val ticket = remoteDataSource.getTicketByDate(date)
             Resource.Success(ticket)
         }catch (e:Exception){
             Timber.e("Error while fetching ticket with date $date. Error -> ${e.localizedMessage}")
@@ -82,24 +58,5 @@ class RepositoryImpl @Inject constructor(
         }
         Resource.Loading(false)
         return response
-    }
-
-    private fun sendErrorMessage(
-        onError: (Message) -> Unit,
-        throwable: Throwable
-    ) {
-        if (throwable is retrofit2.HttpException) {
-            val response = throwable.response()
-            response?.let { serverResponse ->
-                try {
-                    serverResponse.errorBody()?.let { errorBody ->
-                        val errorMessage = MessageMapper.fromJson(errorBody.string())
-                        onError.invoke(errorMessage)
-                    } ?: onError.invoke(Message("Something went wrong", 0,Calendar.getInstance().toServerFormatDate()))
-                } catch (e: Exception) {
-                    onError.invoke(Message("Something went wrong", 0,Calendar.getInstance().toServerFormatDate()))
-                }
-            } ?: onError.invoke(Message("Something went wrong", 0,Calendar.getInstance().toServerFormatDate()))
-        }
     }
 }

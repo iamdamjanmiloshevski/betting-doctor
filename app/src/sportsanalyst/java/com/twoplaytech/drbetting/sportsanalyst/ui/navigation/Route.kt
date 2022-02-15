@@ -8,6 +8,5 @@ package com.twoplaytech.drbetting.sportsanalyst.ui.navigation
 */
 enum class Route {
     Splash,
-    Ticket,
-    TipDetails
+    Ticket
 }
