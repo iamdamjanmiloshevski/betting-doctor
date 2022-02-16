@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.twoplaytech.drbetting.data.models.Ticket
 import com.twoplaytech.drbetting.sportsanalyst.data.Resource
-import com.twoplaytech.drbetting.sportsanalyst.data.models.Ticket
 import com.twoplaytech.drbetting.sportsanalyst.domain.usecases.GetTicketByDateUseCase
 import com.twoplaytech.drbetting.sportsanalyst.util.today
 import dagger.hilt.android.lifecycle.HiltViewModel

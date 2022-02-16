@@ -1,7 +1,7 @@
 package com.twoplaytech.drbetting.sportsanalyst.data.datasource
 
+import com.twoplaytech.drbetting.data.models.Ticket
 import com.twoplaytech.drbetting.sportsanalyst.data.api.TicketsApi
-import com.twoplaytech.drbetting.sportsanalyst.data.models.Ticket
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject

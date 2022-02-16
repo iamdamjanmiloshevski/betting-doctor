@@ -1,7 +1,7 @@
 package com.twoplaytech.drbetting.sportsanalyst.domain.usecases
 
 import com.twoplaytech.drbetting.sportsanalyst.data.Resource
-import com.twoplaytech.drbetting.sportsanalyst.data.models.Ticket
+import com.twoplaytech.drbetting.data.models.Ticket
 import com.twoplaytech.drbetting.sportsanalyst.domain.repository.Repository
 import javax.inject.Inject
 

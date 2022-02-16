@@ -26,10 +26,7 @@ package com.twoplaytech.drbetting.admin.data.api
 
 import com.twoplaytech.drbetting.admin.data.models.AccessToken
 import com.twoplaytech.drbetting.admin.data.models.UserInput
-import com.twoplaytech.drbetting.data.models.BettingTip
-import com.twoplaytech.drbetting.data.models.BettingTipInput
-import com.twoplaytech.drbetting.data.models.Message
-import com.twoplaytech.drbetting.data.models.Sport
+import com.twoplaytech.drbetting.data.models.*
 import retrofit2.http.*
 
 /*
@@ -70,4 +67,19 @@ interface BettingDoctorAPI {
 
     @POST("users/notifications/{topic}")
     suspend fun sendNotification(@Path("topic") notificationsTopic:String)
+
+    @GET("betting-tickets")
+    suspend fun getTickets():List<Ticket>
+
+    @GET("betting-tickets/{id}")
+    suspend fun getTicketById(@Path("id") id:String): Ticket
+
+    @POST("betting-tickets")
+    suspend fun insertTicket(@Body ticket: Ticket):Ticket
+
+    @POST("betting-tickets")
+    suspend fun updateTicket(@Body ticket: Ticket):Ticket
+
+    @DELETE("betting-tickets/{id}")
+    suspend fun deleteTicketById(@Path("id")id:String):Message
 }

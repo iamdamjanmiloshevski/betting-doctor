@@ -27,10 +27,7 @@ package com.twoplaytech.drbetting.admin.data.datasource
 import com.twoplaytech.drbetting.admin.data.api.BettingDoctorAPI
 import com.twoplaytech.drbetting.admin.data.models.AccessToken
 import com.twoplaytech.drbetting.admin.data.models.UserInput
-import com.twoplaytech.drbetting.data.models.BettingTip
-import com.twoplaytech.drbetting.data.models.BettingTipInput
-import com.twoplaytech.drbetting.data.models.Message
-import com.twoplaytech.drbetting.data.models.Sport
+import com.twoplaytech.drbetting.data.models.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -93,6 +90,16 @@ class RemoteDataSourceImpl @Inject constructor(private val api: BettingDoctorAPI
         return flow { emit(api.sendNotification(topic)) }.flowOn(coroutineContext)
 
     }
+
+    override suspend fun getTickets(): List<Ticket> {return api.getTickets()}
+
+    override suspend fun getTicketById(id: String): Ticket {return api.getTicketById(id)}
+
+    override suspend fun insertTicket(ticket: Ticket): Ticket {return api.insertTicket(ticket)}
+
+    override suspend fun updateTicket(ticket: Ticket): Ticket {return api.updateTicket(ticket)}
+
+    override suspend fun deleteTicketById(id: String): Message {return api.deleteTicketById(id)}
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main

@@ -24,13 +24,11 @@
 
 package com.twoplaytech.drbetting.admin.domain.repository
 
+import com.twoplaytech.drbetting.admin.data.Resource
 import com.twoplaytech.drbetting.admin.data.models.AccessToken
 import com.twoplaytech.drbetting.admin.data.models.Credentials
 import com.twoplaytech.drbetting.admin.data.models.UserInput
-import com.twoplaytech.drbetting.data.models.BettingTip
-import com.twoplaytech.drbetting.data.models.BettingTipInput
-import com.twoplaytech.drbetting.data.models.Message
-import com.twoplaytech.drbetting.data.models.Sport
+import com.twoplaytech.drbetting.data.models.*
 
 /*
     Author: Damjan Miloshevski 
@@ -92,4 +90,13 @@ interface Repository {
     fun getToken():AccessToken?
     fun getAppTheme(callback: (Int) -> Unit)
     fun saveAppTheme(appTheme:Int)
+
+
+    suspend fun getTickets():Resource<List<Ticket>>
+    suspend fun getTicketById( id:String): Resource<Ticket>
+    suspend fun insertTicket(ticket: Ticket): Resource<Ticket>
+    suspend fun updateTicket( ticket: Ticket): Resource<Ticket>
+    suspend fun deleteTicketById(id:String):Resource<Message>
+
+
 }

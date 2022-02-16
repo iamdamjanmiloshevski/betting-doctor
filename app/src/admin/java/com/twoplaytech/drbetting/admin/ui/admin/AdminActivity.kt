@@ -43,6 +43,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.common.BaseAdminActivity
 import com.twoplaytech.drbetting.admin.ui.auth.LoginActivity
+import com.twoplaytech.drbetting.admin.ui.ticket.TicketActivity
 import com.twoplaytech.drbetting.admin.ui.viewmodels.BettingTipsViewModel
 import com.twoplaytech.drbetting.admin.ui.viewmodels.LoginViewModel
 import com.twoplaytech.drbetting.admin.util.Constants
@@ -52,7 +53,6 @@ import com.twoplaytech.drbetting.admin.util.Constants.KEY_TYPE
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_VIEW_TYPE
 import com.twoplaytech.drbetting.admin.util.Constants.VIEW_TYPE_EDIT
 import com.twoplaytech.drbetting.admin.util.SessionVerifierWorker
-import com.twoplaytech.drbetting.data.*
 import com.twoplaytech.drbetting.data.models.BettingTip
 import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.data.models.Status
@@ -107,25 +107,25 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
     }
 
     private fun checkSession() {
-        bettingTipsViewModel.observeAppLaunch().observe(this,{appLaunchesCount ->
-            if (appLaunchesCount>0) {
+        bettingTipsViewModel.observeAppLaunch().observe(this) { appLaunchesCount ->
+            if (appLaunchesCount > 0) {
                 val sessionVerifierWorkRequest =
                     OneTimeWorkRequestBuilder<SessionVerifierWorker>().build()
                 WorkManager.getInstance(this).enqueue(sessionVerifierWorkRequest)
                 WorkManager.getInstance(this).getWorkInfoByIdLiveData(sessionVerifierWorkRequest.id)
                     .observe(this,
                         { workInfo ->
-                            if(workInfo.state ==  WorkInfo.State.FAILED){
+                            if (workInfo.state == WorkInfo.State.FAILED) {
                                 MaterialDialog(this).show {
                                     title(null, getString(R.string.session))
                                     message(R.string.session_expired)
                                     cancelable(false)
-                                    positiveButton(android.R.string.ok,null) {
+                                    positiveButton(android.R.string.ok, null) {
                                         dismiss()
                                         logout()
                                     }
                                 }
-                            }else if(workInfo.state == WorkInfo.State.SUCCEEDED){
+                            } else if (workInfo.state == WorkInfo.State.SUCCEEDED) {
                                 observeData()
                             }
                         }
@@ -134,7 +134,7 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
                 bettingTipsViewModel.incrementAppLaunch()
                 observeData()
             }
-        })
+        }
     }
 
     private fun initSpinners() {
@@ -349,7 +349,9 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
                 showFabs()
             }
             R.id.fabBettingTip -> this.navigateToTips(Constants.VIEW_TYPE_NEW)
-            R.id.fabTicket -> {}
+            R.id.fabTicket -> {
+                startActivity(Intent(this,TicketActivity::class.java))
+            }
         }
     }
 

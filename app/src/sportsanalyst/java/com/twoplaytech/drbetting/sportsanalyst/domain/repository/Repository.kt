@@ -24,8 +24,8 @@
 
 package com.twoplaytech.drbetting.sportsanalyst.domain.repository
 
+import com.twoplaytech.drbetting.data.models.Ticket
 import com.twoplaytech.drbetting.sportsanalyst.data.Resource
-import com.twoplaytech.drbetting.sportsanalyst.data.models.Ticket
 
 /*
     Author: Damjan Miloshevski 

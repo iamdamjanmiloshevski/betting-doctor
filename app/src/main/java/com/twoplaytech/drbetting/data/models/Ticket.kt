@@ -1,8 +1,7 @@
-package com.twoplaytech.drbetting.sportsanalyst.data.models
+package com.twoplaytech.drbetting.data.models
 
 
 import com.google.gson.annotations.SerializedName
-import com.twoplaytech.drbetting.data.models.BettingTip
 
 data class Ticket(
     @SerializedName("date")

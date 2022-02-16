@@ -30,6 +30,7 @@ import com.twoplaytech.drbetting.sportsanalyst.data.Resource
 import com.twoplaytech.drbetting.sportsanalyst.ui.theme.Aldrich
 import com.twoplaytech.drbetting.sportsanalyst.ui.theme.SilverChalice
 import com.twoplaytech.drbetting.sportsanalyst.ui.viewmodels.TicketsViewModel
+import com.twoplaytech.drbetting.ui.common.CenteredItem
 import com.twoplaytech.drbetting.util.getSportPlaceHolder
 import com.twoplaytech.drbetting.util.getStatusResource
 
@@ -188,19 +189,7 @@ fun TeamInfo(modifier: Modifier = Modifier, team: Team? = null) {
     } ?: throw NullPointerException("Team must not be null")
 }
 
-@Composable
-fun CenteredItem(
-    modifier: Modifier = Modifier,
-    content: @Composable RowScope.() -> Unit
-) {
-    Row(
-        modifier,
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        content()
-    }
-}
+
 @Composable
 fun TicketInfo(viewModel: TicketsViewModel) {
     Surface(modifier = Modifier.fillMaxSize(), color = SilverChalice) {

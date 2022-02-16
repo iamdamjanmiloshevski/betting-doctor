@@ -24,9 +24,9 @@
 
 package com.twoplaytech.drbetting.sportsanalyst.domain.repository
 
+import com.twoplaytech.drbetting.data.models.Ticket
 import com.twoplaytech.drbetting.sportsanalyst.data.Resource
 import com.twoplaytech.drbetting.sportsanalyst.data.datasource.RemoteDataSource
-import com.twoplaytech.drbetting.sportsanalyst.data.models.Ticket
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import timber.log.Timber

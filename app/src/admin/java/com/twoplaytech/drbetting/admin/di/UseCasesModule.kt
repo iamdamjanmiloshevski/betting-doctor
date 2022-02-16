@@ -62,4 +62,7 @@ interface UseCasesModule {
 
     @Binds
     fun bindChangeThemeUseCase(changeThemeUseCaseImpl: ChangeThemeUseCaseImpl): ChangeThemeUseCase
+
+    @Binds
+    fun bindGetTicketsUseCase(getTicketsUseCase: GetTicketsUseCaseImpl):GetTicketsUseCase
 }

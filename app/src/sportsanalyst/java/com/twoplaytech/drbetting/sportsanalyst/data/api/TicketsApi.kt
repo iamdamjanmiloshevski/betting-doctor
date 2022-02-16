@@ -1,6 +1,6 @@
 package com.twoplaytech.drbetting.sportsanalyst.data.api
 
-import com.twoplaytech.drbetting.sportsanalyst.data.models.Ticket
+import com.twoplaytech.drbetting.data.models.Ticket
 import retrofit2.http.GET
 import retrofit2.http.Query
 
