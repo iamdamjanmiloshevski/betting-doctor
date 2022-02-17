@@ -25,7 +25,6 @@ class TicketsViewModel @Inject constructor(private val getTicketsUseCase: GetTic
 
     init {
         getTickets()
-      //  getTicketByDate(today())
     }
 
     fun getTickets(){
@@ -42,19 +41,19 @@ class TicketsViewModel @Inject constructor(private val getTicketsUseCase: GetTic
         }
     }
 
-    fun getTicketByDate(date: String) {
+    fun getTicketById(id: String) {
         viewModelScope.launch {
-//            ticket = when(val response = getTicketByDateUseCase.getTicketByDate(date)){
-//                is Resource.Error -> {
-//                    Resource.Error(response.message,null)
-//                }
-//                is Resource.Loading -> {
-//                    Resource.Loading(null)
-//                }
-//                is Resource.Success -> {
-//                    Resource.Success(response.data)
-//                }
-//            }
+            ticket = when(val response = getTicketsUseCase.getTicketById(id)){
+                is Resource.Error -> {
+                    Resource.Error(response.message,null)
+                }
+                is Resource.Loading -> {
+                    Resource.Loading(null)
+                }
+                is Resource.Success -> {
+                    Resource.Success(response.data)
+                }
+            }
         }
     }
 }

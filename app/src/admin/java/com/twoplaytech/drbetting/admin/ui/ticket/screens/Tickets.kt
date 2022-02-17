@@ -1,14 +1,18 @@
 package com.twoplaytech.drbetting.admin.ui.ticket.screens
 
-import androidx.activity.ComponentActivity
-import androidx.compose.foundation.layout.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -19,6 +23,7 @@ import androidx.navigation.NavController
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.data.Resource
 import com.twoplaytech.drbetting.admin.ui.ticket.components.TicketCard
+import com.twoplaytech.drbetting.admin.ui.ticket.components.TicketFloatingActionButton
 import com.twoplaytech.drbetting.admin.ui.ticket.components.TicketsAppBar
 import com.twoplaytech.drbetting.admin.ui.ticket.navigation.TicketRoute
 import com.twoplaytech.drbetting.admin.ui.viewmodels.TicketsViewModel
@@ -33,7 +38,7 @@ import com.twoplaytech.drbetting.ui.common.CenteredItem
 @Preview
 @Composable
 fun Tickets(
-    activity: ComponentActivity = LocalContext.current as ComponentActivity,
+    activity: AppCompatActivity = LocalContext.current as AppCompatActivity,
     navController: NavController = NavController(LocalContext.current),
     ticketsViewModel: TicketsViewModel = hiltViewModel()
 ) {
@@ -60,6 +65,7 @@ fun Tickets(
                         LazyColumn(contentPadding = PaddingValues(10.dp)) {
                             items(it) { ticket ->
                                 TicketCard(ticket = ticket) { id ->
+                                    ticketsViewModel.getTicketById(id)
                                     navController.navigate(
                                         TicketRoute.route(TicketRoute.AddOrUpdateTicket)
                                             .plus("?ticketId=${id}")
@@ -70,23 +76,24 @@ fun Tickets(
                     }
                 }
             }
-            Row(
-                modifier = Modifier.padding(end = 10.dp, bottom = 10.dp),
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.Bottom
-            ) {
-                FloatingActionButton(onClick = {
-
-                }, backgroundColor = colorResource(id = R.color.seagreen)) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "Add ticket icon",
-                        modifier = Modifier.size(25.dp)
+            TicketFloatingActionButton(
+                modifier = Modifier.padding(
+                    end = 10.dp,
+                    bottom = 10.dp
+                ),
+                icon = Icons.Default.Add,
+                contentDescription = "Add Ticket Icon"
+            ){
+                navController.navigate(
+                    TicketRoute.route(
+                        TicketRoute.AddOrUpdateTicket
                     )
-                }
+                )
             }
         }
     }
 }
+
+
 
 

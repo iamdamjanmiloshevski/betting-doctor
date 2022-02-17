@@ -15,4 +15,8 @@ class GetTicketsUseCaseImpl @Inject constructor(repository: Repository):UseCase(
     override suspend fun getTickets(): Resource<List<Ticket>> {
         return repository.getTickets()
     }
+
+    override suspend fun getTicketById(id: String): Resource<Ticket> {
+        return repository.getTicketById(id)
+    }
 }

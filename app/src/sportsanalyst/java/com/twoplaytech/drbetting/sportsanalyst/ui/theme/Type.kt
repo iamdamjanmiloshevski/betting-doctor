@@ -28,4 +28,3 @@ val Typography = Typography(
     )
     */
 )
-val Aldrich = FontFamily(Font(R.font.aldrich))

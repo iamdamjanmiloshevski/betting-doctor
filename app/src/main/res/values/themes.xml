@@ -24,7 +24,7 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application com.twoplaytech.drbetting.ui.theme. -->
-    <style name="Theme.DrBetting" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.DrBetting" parent="Theme.MaterialComponents.NoActionBar.Bridge">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/splash_green</item>
         <item name="colorPrimaryVariant">@color/splash_green</item>
@@ -59,5 +59,10 @@
         <item name="android:windowBackground">@drawable/splash_screen_background</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+    </style>
+    <style name="MaterialCalendarTheme" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <!-- just override the colors used in the default style -->
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimary">@color/seagreen</item>
     </style>
 </resources>

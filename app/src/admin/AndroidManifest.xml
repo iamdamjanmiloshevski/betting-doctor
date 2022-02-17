@@ -14,7 +14,7 @@
       android:name="com.twoplaytech.drbetting.admin.ui.ticket.TicketActivity"
       android:exported="false"
       android:label="@string/title_activity_ticket"
-      android:theme="@style/Theme.DrBetting" />
+      android:theme="@style/Theme.MaterialComponents.NoActionBar.Bridge"/>
     <activity
       android:name="com.twoplaytech.drbetting.admin.ui.admin.BettingTipActivity"
       android:label="@string/title_activity_betting_tip"

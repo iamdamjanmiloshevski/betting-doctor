@@ -329,3 +329,9 @@ fun Activity.toGooglePlay(){
     )
 }
 
+fun Long.beautify():String{
+    val zdt = ZonedDateTime.ofInstant(Instant.ofEpochMilli(this), ZoneId.systemDefault())
+    val dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+    return zdt.format(dtf)
+
+}

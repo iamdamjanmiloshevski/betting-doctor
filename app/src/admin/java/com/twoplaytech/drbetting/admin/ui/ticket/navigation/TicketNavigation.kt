@@ -1,6 +1,6 @@
 package com.twoplaytech.drbetting.admin.ui.ticket.navigation
 
-import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
@@ -20,7 +20,7 @@ import com.twoplaytech.drbetting.admin.ui.viewmodels.TicketsViewModel
     © 2Play Technologies  2022. All rights reserved
 */
 @Composable
-fun TicketNavigation(activity:ComponentActivity? = null) {
+fun TicketNavigation(activity:AppCompatActivity? = null) {
     val navController = rememberNavController()
     val ticketsViewModel = hiltViewModel<TicketsViewModel>()
     NavHost(navController, startDestination = TicketRoute.Tickets.name) {
@@ -42,7 +42,7 @@ fun TicketNavigation(activity:ComponentActivity? = null) {
             } ?: throw Exception("Please provide arguments for destination ${TicketRoute.route(TicketRoute.AddOrUpdateTicket)}")
         }
         composable(TicketRoute.route(TicketRoute.AddBettingTip)) {
-            AddBettingTip(navController,ticketsViewModel)
+            AddBettingTip(activity,navController,ticketsViewModel)
         }
     }
 }

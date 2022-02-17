@@ -11,4 +11,5 @@ import com.twoplaytech.drbetting.data.models.Ticket
 */
 interface GetTicketsUseCase {
     suspend fun getTickets():Resource<List<Ticket>>
+    suspend fun getTicketById(id:String):Resource<Ticket>
 }
