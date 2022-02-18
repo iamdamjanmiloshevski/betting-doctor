@@ -12,7 +12,7 @@
     android:theme="@style/Theme.DrBetting">
     <activity
       android:name="com.twoplaytech.drbetting.admin.ui.ticket.TicketActivity"
-      android:exported="false"
+      android:exported="true"
       android:label="@string/title_activity_ticket"
       android:theme="@style/Theme.MaterialComponents.NoActionBar.Bridge"/>
     <activity

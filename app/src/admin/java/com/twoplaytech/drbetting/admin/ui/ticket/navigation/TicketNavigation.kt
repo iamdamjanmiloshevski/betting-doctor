@@ -42,7 +42,7 @@ fun TicketNavigation(activity:AppCompatActivity? = null) {
             } ?: throw Exception("Please provide arguments for destination ${TicketRoute.route(TicketRoute.AddOrUpdateTicket)}")
         }
         composable(TicketRoute.route(TicketRoute.AddBettingTip)) {
-            AddBettingTip(activity,navController,ticketsViewModel)
+            AddBettingTip(activity,navController)
         }
     }
 }

@@ -27,7 +27,7 @@ class TicketsViewModel @Inject constructor(private val getTicketsUseCase: GetTic
         getTickets()
     }
 
-    fun getTickets(){
+    private fun getTickets(){
         viewModelScope.launch {
             tickets = when(val response = getTicketsUseCase.getTickets()){
                 is Resource.Error -> {Resource.Error(response.message,null)}
