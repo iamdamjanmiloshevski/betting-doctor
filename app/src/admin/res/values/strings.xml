@@ -63,6 +63,8 @@
   <string name="team_home_hint">ex. Manchester United</string>
   <string name="team_away_hint">ex. Chelsea</string>
   <string name="title_activity_ticket">TicketActivity</string>
+  <string name="result">Result</string>
+  <string name="result_hint">2-1</string>
   <string-array name="types">
     <item>Older</item>
     <item>Upcoming</item>

@@ -29,6 +29,11 @@ import android.widget.TextView
 import androidx.annotation.DrawableRes
 import com.afollestad.materialdialogs.MaterialDialog
 import com.twoplaytech.drbetting.R
+import com.twoplaytech.drbetting.admin.ui.ticket.widgets.DropdownType
+import com.twoplaytech.drbetting.data.models.Sport
+import com.twoplaytech.drbetting.data.models.TypeStatus
+import com.twoplaytech.drbetting.util.getSportPlaceHolder
+import com.twoplaytech.drbetting.util.getStatusResource
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -82,4 +87,29 @@ fun TextView.changeDrawable(@DrawableRes resource:Int){
 fun Date.beautify():String{
     val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm")
     return sdf.format(this)
+}
+fun DropdownType.getIconFromTypeFromSelectedItem(
+    item: String
+): Int {
+    val icon = when (this) {
+        DropdownType.SPORT -> {
+            when (item) {
+                "Football" -> Sport.Football.getSportPlaceHolder()
+                "Basketball" -> Sport.Basketball.getSportPlaceHolder()
+                "Tennis" -> Sport.Tennis.getSportPlaceHolder()
+                "Handball" -> Sport.Handball.getSportPlaceHolder()
+                "Volleyball" -> Sport.Volleyball.getSportPlaceHolder()
+                else -> throw Exception("Unknown sport type")
+            }
+        }
+        DropdownType.STATUS -> {
+            when (item) {
+                "Unknown" -> TypeStatus.UNKNOWN.getStatusResource()
+                "Won" -> TypeStatus.WON.getStatusResource()
+                "Lost" -> TypeStatus.LOST.getStatusResource()
+                else -> throw Exception("Unknown status type")
+            }
+        }
+    }
+    return icon
 }
