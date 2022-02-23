@@ -13,12 +13,16 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.ui.ticket.components.BettingTipForm
 import com.twoplaytech.drbetting.admin.ui.ticket.components.MenuAction
 import com.twoplaytech.drbetting.admin.ui.ticket.components.TicketsAppBar
+import com.twoplaytech.drbetting.admin.ui.viewmodels.TicketsViewModel
+import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.Sport.Companion.toSport
+import com.twoplaytech.drbetting.data.models.Team
+import com.twoplaytech.drbetting.util.toStatus
 
 /*
     Author: Damjan Miloshevski 
@@ -26,45 +30,63 @@ import com.twoplaytech.drbetting.admin.ui.ticket.components.TicketsAppBar
     Project: Dr.Betting
     © 2Play Technologies  2022. All rights reserved
 */
-@Preview
 @Composable
 fun AddBettingTip(
+    ticketId:String? = null,
     activity: AppCompatActivity? = null,
-    navController: NavController = NavController(LocalContext.current)
+    navController: NavController = NavController(LocalContext.current),
+    viewModel:TicketsViewModel
 ) {
+    val leagueName = rememberSaveable() {
+        mutableStateOf("")
+    }
+    val homeTeam = rememberSaveable() {
+        mutableStateOf("")
+    }
+    val awayTeam = rememberSaveable() {
+        mutableStateOf("")
+    }
+    val bettingTip = rememberSaveable() {
+        mutableStateOf("")
+    }
+    val result = rememberSaveable() {
+        mutableStateOf("")
+    }
+    val gameTime = rememberSaveable() {
+        mutableStateOf("")
+    }
+    val sport = rememberSaveable() {
+        mutableStateOf("Football")
+    }
+    val status = rememberSaveable() {
+        mutableStateOf("Unknown")
+    }
+    val coefficient = rememberSaveable() {
+        mutableStateOf("")
+    }
     Scaffold(topBar = {
         TicketsAppBar(title = "Add new Betting tip", navController = navController, actions = {
             MenuAction(
                 icon = Icons.Default.Check,
                 contentDescription = "Save icon"
-            ) { //todo save tip
+            ) {
+                val bettingTip = BettingTip(
+                    leagueName.value,
+                    Team(homeTeam.value),
+                    Team(awayTeam.value),
+                    gameTime.value,
+                    bettingTip.value,
+                    status.value.uppercase().toStatus(),
+                    result.value,
+                    sport = sport.value.toSport(),
+                    ticketId = ticketId,
+                    coefficient = coefficient.value
+                    )
+                viewModel.bettingTips.add(bettingTip)
+                navController.navigateUp()
             }
         })
     }) {
-        val leagueName = rememberSaveable() {
-            mutableStateOf("")
-        }
-        val homeTeam = rememberSaveable() {
-            mutableStateOf("")
-        }
-        val awayTeam = rememberSaveable() {
-            mutableStateOf("")
-        }
-        val bettingTip = rememberSaveable() {
-            mutableStateOf("")
-        }
-        val result = rememberSaveable() {
-            mutableStateOf("")
-        }
-        val gameTime = rememberSaveable() {
-            mutableStateOf("")
-        }
-        val sport = rememberSaveable() {
-            mutableStateOf("Football")
-        }
-        val status = rememberSaveable() {
-            mutableStateOf("Unknown")
-        }
         val chosenSportIcon = rememberSaveable {
             mutableStateOf(R.drawable.soccer_ball)
         }
@@ -97,6 +119,7 @@ fun AddBettingTip(
                 onOpenCloseSportSpinner,
                 isOpenSpinnerStatus,
                 status,
+                coefficient,
                 chosenStatusIcon,
                 onOpenCloseStatusSpinner
             )

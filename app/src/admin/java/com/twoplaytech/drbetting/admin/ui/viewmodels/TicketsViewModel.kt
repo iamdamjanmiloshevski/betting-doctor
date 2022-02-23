@@ -1,14 +1,20 @@
 package com.twoplaytech.drbetting.admin.ui.viewmodels
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.twoplaytech.drbetting.admin.data.Resource
+import com.twoplaytech.drbetting.admin.data.models.TicketInput
 import com.twoplaytech.drbetting.admin.domain.usecases.GetTicketsUseCase
+import com.twoplaytech.drbetting.admin.domain.usecases.InsertTicketUseCase
+import com.twoplaytech.drbetting.admin.domain.usecases.UpdateTicketUseCase
+import com.twoplaytech.drbetting.data.models.BettingTip
 import com.twoplaytech.drbetting.data.models.Ticket
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,9 +25,14 @@ import javax.inject.Inject
     © 2Play Technologies  2022. All rights reserved
 */
 @HiltViewModel
-class TicketsViewModel @Inject constructor(private val getTicketsUseCase: GetTicketsUseCase) :ViewModel() {
+class TicketsViewModel @Inject constructor(
+    private val getTicketsUseCase: GetTicketsUseCase,
+    private val insertTicketUseCase: InsertTicketUseCase,
+    private val updateTicketUseCase: UpdateTicketUseCase
+) :ViewModel() {
     var ticket: Resource<Ticket?> by mutableStateOf(Resource.Success(null))
     var tickets:Resource<List<Ticket>> by mutableStateOf(Resource.Success(emptyList()))
+    var bettingTips = mutableStateListOf<BettingTip>()
 
     init {
         getTickets()
@@ -55,5 +66,13 @@ class TicketsViewModel @Inject constructor(private val getTicketsUseCase: GetTic
                 }
             }
         }
+    }
+
+    fun insertTicket(ticketInput:TicketInput){
+        viewModelScope.launch(Dispatchers.IO) { insertTicketUseCase.insertTicket(ticketInput) }
+    }
+
+    fun updateTicket(ticketInput: TicketInput) {
+        viewModelScope.launch(Dispatchers.IO) { updateTicketUseCase.updateTicket(ticketInput)}
     }
 }

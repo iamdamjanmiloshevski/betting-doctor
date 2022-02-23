@@ -55,7 +55,9 @@ fun TipCard(
 ) {
     bettingTip?.let {
         Card(
-            modifier = modifier.clickable { onItemClicked.invoke(bettingTip) },
+            modifier = modifier
+                .padding(bottom = 10.dp)
+                .clickable { onItemClicked.invoke(bettingTip) },
             shape = RoundedCornerShape(20.dp),
             backgroundColor = Color.White,
             elevation = 5.dp

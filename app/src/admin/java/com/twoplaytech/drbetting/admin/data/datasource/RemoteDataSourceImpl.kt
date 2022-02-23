@@ -26,6 +26,7 @@ package com.twoplaytech.drbetting.admin.data.datasource
 
 import com.twoplaytech.drbetting.admin.data.api.BettingDoctorAPI
 import com.twoplaytech.drbetting.admin.data.models.AccessToken
+import com.twoplaytech.drbetting.admin.data.models.TicketInput
 import com.twoplaytech.drbetting.admin.data.models.UserInput
 import com.twoplaytech.drbetting.data.models.*
 import kotlinx.coroutines.CoroutineScope
@@ -95,9 +96,9 @@ class RemoteDataSourceImpl @Inject constructor(private val api: BettingDoctorAPI
 
     override suspend fun getTicketById(id: String): Ticket {return api.getTicketById(id)}
 
-    override suspend fun insertTicket(ticket: Ticket): Ticket {return api.insertTicket(ticket)}
+    override suspend fun insertTicket(ticket: TicketInput): Ticket {return api.insertTicket(ticket)}
 
-    override suspend fun updateTicket(ticket: Ticket): Ticket {return api.updateTicket(ticket)}
+    override suspend fun updateTicket(ticket: TicketInput): Ticket {return api.updateTicket(ticket)}
 
     override suspend fun deleteTicketById(id: String): Message {return api.deleteTicketById(id)}
 

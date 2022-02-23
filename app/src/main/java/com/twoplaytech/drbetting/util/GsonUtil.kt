@@ -24,7 +24,7 @@
 
 package com.twoplaytech.drbetting.util
 
-import com.google.gson.*
+import com.google.gson.GsonBuilder
 
 /*
     Author: Damjan Miloshevski 
@@ -35,7 +35,7 @@ import com.google.gson.*
 object GsonUtil {
     val gson = GsonBuilder()
         .setDateFormat("MMM dd, yyyy, hh:MM:ss a z")
-        .setPrettyPrinting().create()
+        .create()
 
     fun <G> toJson(model:G):String{
         return gson.toJson(model)

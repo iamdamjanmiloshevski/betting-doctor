@@ -46,5 +46,16 @@ enum class Sport:Parcelable {
     @SerializedName("Handball")
     Handball,
     @SerializedName("Volleyball")
-    Volleyball
+    Volleyball;
+
+    companion object{
+        fun String.toSport() = when(this){
+            "Football" -> Football
+            "Basketball" -> Basketball
+            "Tennis" -> Tennis
+            "Handball" -> Handball
+            "Volleyball" -> Volleyball
+            else -> throw Exception("Unknown sport detected")
+        }
+    }
 }

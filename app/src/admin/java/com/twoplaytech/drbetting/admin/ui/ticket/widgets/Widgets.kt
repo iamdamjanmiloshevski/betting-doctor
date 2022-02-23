@@ -1,5 +1,6 @@
 package com.twoplaytech.drbetting.admin.ui.ticket.widgets
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Spacer
@@ -15,9 +16,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.datetime.dateTimePicker
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.util.getIconFromTypeFromSelectedItem
+import java.util.*
 
 /*
     Author: Damjan Miloshevski 
@@ -36,7 +40,16 @@ fun showDatePicker(
     picker.show(activity.supportFragmentManager, picker.toString())
     picker.addOnPositiveButtonClickListener { onDateSelected(it) }
 }
-
+fun showDateTimePicker(context: Context, onDateSelected: (Calendar?) -> Unit){
+    MaterialDialog(context)
+        .cancelable(false)
+        .show {
+        dateTimePicker(show24HoursView = true) { _, dateTime ->
+            // Use dateTime (Calendar)
+            onDateSelected.invoke(dateTime)
+        }
+    }
+}
 @Preview
 @Composable
 fun DropDownList(

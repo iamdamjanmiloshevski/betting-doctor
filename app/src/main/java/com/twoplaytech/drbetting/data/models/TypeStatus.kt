@@ -43,5 +43,15 @@ enum class TypeStatus : Parcelable {
     @SerializedName("WON")
     WON,
     @SerializedName("LOST")
-    LOST
+    LOST;
+
+    companion object{
+        fun String.toTypeStatus():TypeStatus =
+             when(this){
+                "Won" -> WON
+                "Lost" -> LOST
+                "Unknown" -> UNKNOWN
+                else -> throw Exception("Unknown TypeStatus detected")
+            }
+    }
 }

@@ -30,6 +30,7 @@ import com.twoplaytech.drbetting.admin.data.mappers.AccessTokenMapper
 import com.twoplaytech.drbetting.admin.data.mappers.CredentialsMapper
 import com.twoplaytech.drbetting.admin.data.models.AccessToken
 import com.twoplaytech.drbetting.admin.data.models.Credentials
+import com.twoplaytech.drbetting.admin.data.models.TicketInput
 import com.twoplaytech.drbetting.admin.data.models.UserInput
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_ACCESS_TOKEN
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_APP_LAUNCHES
@@ -326,7 +327,7 @@ class RepositoryImpl @Inject constructor(
         return response
     }
 
-    override suspend fun insertTicket(ticket: Ticket): Resource<Ticket> {
+    override suspend fun insertTicket(ticket: TicketInput): Resource<Ticket> {
         val response = try{
             Resource.Loading(true)
             val ticketResource = remoteDataSource.insertTicket(ticket)
@@ -338,7 +339,7 @@ class RepositoryImpl @Inject constructor(
         return response
     }
 
-    override suspend fun updateTicket(ticket: Ticket): Resource<Ticket> {
+    override suspend fun updateTicket(ticket: TicketInput): Resource<Ticket> {
         val response = try{
             Resource.Loading(true)
             val ticketResource = remoteDataSource.updateTicket(ticket)

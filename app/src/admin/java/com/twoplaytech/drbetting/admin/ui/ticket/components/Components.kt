@@ -36,9 +36,9 @@ import androidx.navigation.NavController
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.ui.ticket.widgets.DropDownList
 import com.twoplaytech.drbetting.admin.ui.ticket.widgets.DropdownType
-import com.twoplaytech.drbetting.admin.ui.ticket.widgets.showDatePicker
+import com.twoplaytech.drbetting.admin.ui.ticket.widgets.showDateTimePicker
 import com.twoplaytech.drbetting.data.models.Ticket
-import com.twoplaytech.drbetting.util.beautify
+import com.twoplaytech.drbetting.util.toStringDate
 
 /*
     Author: Damjan Miloshevski 
@@ -51,13 +51,15 @@ import com.twoplaytech.drbetting.util.beautify
 fun TicketCard(
     modifier: Modifier = Modifier,
     ticket: Ticket? = null,
-    onClick: (String) -> Unit = {}
+    onClick: (Ticket) -> Unit = {}
 ) {
     ticket?.let {
         Card(
             modifier = modifier
                 .padding(bottom = 10.dp)
-                .clickable { onClick.invoke(ticket.id) },
+                .clickable {
+                    onClick.invoke(it)
+                },
             shape = RoundedCornerShape(20.dp),
             backgroundColor = Color.White
         ) {
@@ -88,7 +90,7 @@ fun TicketCard(
 fun TicketsAppBar(
     modifier: Modifier = Modifier,
     title: String,
-    hasBackNavigation:Boolean = true,
+    hasBackNavigation: Boolean = true,
     navController: NavController? = null,
     activity: ComponentActivity? = null,
     actions: @Composable RowScope.() -> Unit = {}
@@ -99,18 +101,19 @@ fun TicketsAppBar(
         },
         modifier = modifier,
         navigationIcon = {
-          if(hasBackNavigation){
-              IconButton(onClick = {
-                  if(activity != null) activity.onBackPressed()
-                  else navController?.navigateUp()
-              }) {
-                  Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Arrow back")
-              }
-          }else Box(){}
-        },actions = actions,
+            if (hasBackNavigation) {
+                IconButton(onClick = {
+                    if (activity != null) activity.onBackPressed()
+                    else navController?.navigateUp()
+                }) {
+                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Arrow back")
+                }
+            } else Box() {}
+        }, actions = actions,
         backgroundColor = colorResource(id = R.color.seagreen)
     )
 }
+
 @Composable
 fun TicketFloatingActionButton(
     modifier: Modifier = Modifier,
@@ -123,7 +126,10 @@ fun TicketFloatingActionButton(
         horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.Bottom
     ) {
-        FloatingActionButton(onClick = onClick, backgroundColor = colorResource(id = R.color.seagreen)) {
+        FloatingActionButton(
+            onClick = onClick,
+            backgroundColor = colorResource(id = R.color.seagreen)
+        ) {
             Icon(
                 imageVector = icon,
                 contentDescription = contentDescription,
@@ -134,11 +140,12 @@ fun TicketFloatingActionButton(
 }
 
 @Composable
-fun MenuAction(icon:ImageVector, contentDescription: String?, onActionClick:()->Unit){
+fun MenuAction(icon: ImageVector, contentDescription: String?, onActionClick: () -> Unit) {
     IconButton(onClick = onActionClick) {
         Icon(imageVector = icon, contentDescription = contentDescription)
     }
 }
+
 @Composable
 fun InputField(
     modifier: Modifier = Modifier,
@@ -151,7 +158,8 @@ fun InputField(
     onAction: KeyboardActions = KeyboardActions.Default,
     onClick: () -> Unit = {}
 ) {
-    OutlinedTextField(value = valueState.value,
+    OutlinedTextField(
+        value = valueState.value,
         onValueChange = { valueState.value = it },
         singleLine = isSingleLine,
         textStyle = TextStyle(fontSize = 18.sp, color = MaterialTheme.colors.onBackground),
@@ -164,26 +172,27 @@ fun InputField(
         keyboardActions = onAction
     )
 }
+
 @Composable
 fun TextInput(
     modifier: Modifier = Modifier,
     title: String,
     content: @Composable () -> Unit
-){
-        Column(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(start = 10.dp, end = 10.dp),
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.SpaceEvenly
-        ) {
-            Text(text = title)
-            content()
-        }
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(start = 10.dp, end = 10.dp),
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.SpaceEvenly
+    ) {
+        Text(text = title)
+        content()
+    }
 }
 
 @Composable
- fun BettingTipForm(
+fun BettingTipForm(
     leagueName: MutableState<String>,
     homeTeam: MutableState<String>,
     awayTeam: MutableState<String>,
@@ -197,6 +206,7 @@ fun TextInput(
     onOpenCloseSportSpinner: (Boolean) -> Unit,
     isOpenSpinnerStatus: MutableState<Boolean>,
     status: MutableState<String>,
+    coefficient: MutableState<String>,
     chosenStatusIcon: MutableState<Int>,
     onOpenCloseStatusSpinner: (Boolean) -> Unit
 ) {
@@ -211,16 +221,31 @@ fun TextInput(
             InputField(valueState = leagueName, labelId = stringResource(id = R.string.hint_league))
         }
         TextInput(title = stringResource(id = R.string.team_home)) {
-            InputField(valueState = homeTeam, labelId = stringResource(id = R.string.team_home_hint))
+            InputField(
+                valueState = homeTeam,
+                labelId = stringResource(id = R.string.team_home_hint)
+            )
         }
         TextInput(title = stringResource(id = R.string.team_away)) {
-            InputField(valueState = awayTeam, labelId = stringResource(id = R.string.team_away_hint))
+            InputField(
+                valueState = awayTeam,
+                labelId = stringResource(id = R.string.team_away_hint)
+            )
         }
         TextInput(title = stringResource(id = R.string.hint_betting_tip_heading)) {
-            InputField(valueState = bettingTip, labelId = stringResource(id = R.string.hint_betting_tip))
+            InputField(
+                valueState = bettingTip,
+                labelId = stringResource(id = R.string.hint_betting_tip)
+            )
         }
         TextInput(title = stringResource(R.string.result)) {
             InputField(valueState = result, labelId = stringResource(R.string.result_hint))
+        }
+        TextInput(title = stringResource(R.string.coefficient)) {
+            InputField(
+                valueState = coefficient,
+                labelId = stringResource(R.string.coefficient_hint)
+            )
         }
         TextInput(title = stringResource(id = R.string.hint_game_time_heading)) {
             InputField(
@@ -229,8 +254,10 @@ fun TextInput(
                 enabled = false
             ) {
                 activity?.let {
-                    showDatePicker(activity) {
-                        gameTime.value = it!!.beautify()
+                    showDateTimePicker(activity){ calendar ->
+                        calendar?.let {
+                            gameTime.value = it.time.toStringDate()
+                        }
                     }
                 }
             }
@@ -260,13 +287,13 @@ fun TextInput(
 }
 
 @Composable
- fun DropDownSpinner(
-    title:String,
-    items:List<String>,
+fun DropDownSpinner(
+    title: String,
+    items: List<String>,
     type: DropdownType,
     isOpen: MutableState<Boolean>,
     chosenValue: MutableState<String>,
-    chosenValueIcon:MutableState<Int>,
+    chosenValueIcon: MutableState<Int>,
     openCloseOfDropDownList: (Boolean) -> Unit
 ) {
     Surface(modifier = Modifier
@@ -313,8 +340,8 @@ fun TextInput(
                 }
             }
             DropDownList(
-                requestToOpen = isOpen.value, list = items,type, openCloseOfDropDownList
-            ) {chosenItem, icon ->
+                requestToOpen = isOpen.value, list = items, type, openCloseOfDropDownList
+            ) { chosenItem, icon ->
                 chosenValue.value = chosenItem
                 chosenValueIcon.value = icon
             }

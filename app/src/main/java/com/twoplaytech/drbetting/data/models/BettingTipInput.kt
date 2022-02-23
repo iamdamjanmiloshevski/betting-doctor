@@ -18,5 +18,7 @@ data class BettingTipInput(
     var status: String,
     var result: String,
     var _id: String?,
-    var sport: String
+    var sport: String,
+    val coefficient:String? = null,
+    val ticketId:String? = null
 )

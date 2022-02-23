@@ -23,9 +23,10 @@ object BettingTipMapper {
                 status = this.status.name,
                 this.result,
                 this._id,
-                sport = this.sport.name
+                sport = this.sport.name,
+                coefficient,
+                ticketId
             )
         }
-
     }
 }

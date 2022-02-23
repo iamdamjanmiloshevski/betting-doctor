@@ -7,7 +7,7 @@ data class Ticket(
     @SerializedName("date")
     val date: String,
     @SerializedName("_id")
-    val id: String,
+    val id: String? = null,
     @SerializedName("tips")
-    val tips: List<BettingTip>
+    var tips: List<BettingTip>
 )

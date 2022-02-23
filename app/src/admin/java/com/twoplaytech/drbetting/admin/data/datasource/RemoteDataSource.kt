@@ -25,6 +25,7 @@
 package com.twoplaytech.drbetting.admin.data.datasource
 
 import com.twoplaytech.drbetting.admin.data.models.AccessToken
+import com.twoplaytech.drbetting.admin.data.models.TicketInput
 import com.twoplaytech.drbetting.admin.data.models.UserInput
 import com.twoplaytech.drbetting.data.models.*
 import kotlinx.coroutines.flow.Flow
@@ -60,7 +61,7 @@ interface RemoteDataSource {
 
     suspend fun getTickets():List<Ticket>
     suspend fun getTicketById( id:String): Ticket
-    suspend fun insertTicket(ticket: Ticket): Ticket
-    suspend fun updateTicket( ticket: Ticket): Ticket
+    suspend fun insertTicket(ticket: TicketInput): Ticket
+    suspend fun updateTicket( ticket: TicketInput): Ticket
     suspend fun deleteTicketById(id:String):Message
 }

@@ -20,29 +20,54 @@ import com.twoplaytech.drbetting.admin.ui.viewmodels.TicketsViewModel
     © 2Play Technologies  2022. All rights reserved
 */
 @Composable
-fun TicketNavigation(activity:AppCompatActivity? = null) {
+fun TicketNavigation(activity: AppCompatActivity? = null) {
     val navController = rememberNavController()
     val ticketsViewModel = hiltViewModel<TicketsViewModel>()
     NavHost(navController, startDestination = TicketRoute.Tickets.name) {
         composable(TicketRoute.route(TicketRoute.Tickets)) {
-            Tickets(activity!!,navController,ticketsViewModel)
+            activity?.let {
+                Tickets(activity, navController, ticketsViewModel)
+            }
         }
         composable(
-            TicketRoute.route(TicketRoute.AddOrUpdateTicket).plus("?ticketId={ticketId}"),
-        arguments = listOf( navArgument("ticketId") {
-            nullable = true
-            defaultValue = null
-            type = NavType.StringType
-        })
-            ) {backStackEntry->
+            TicketRoute.route(TicketRoute.AddOrUpdateTicket).plus("?ticket={ticket}"),
+            arguments = listOf(navArgument("ticket") {
+                nullable = true
+                defaultValue = null
+                type = NavType.StringType
+            })
+        ) { backStackEntry ->
+            val arguments = backStackEntry.arguments
+            arguments?.let { args ->
+                val ticketJson = args["ticket"] as String?
+                    AddOrUpdateTicket(navController,ticketJson, ticketsViewModel = ticketsViewModel)
+            } ?: throw Exception(
+                "Please provide arguments for destination ${
+                    TicketRoute.route(
+                        TicketRoute.AddOrUpdateTicket
+                    )
+                }"
+            )
+        }
+        composable(
+            TicketRoute.route(TicketRoute.AddBettingTip).plus("?ticketId={ticketId}"),
+            arguments = listOf(navArgument("ticketId") {
+                nullable = true
+                defaultValue = null
+                type = NavType.StringType
+            })
+        ) { backStackEntry ->
             val arguments = backStackEntry.arguments
             arguments?.let { args ->
                 val ticketId = args["ticketId"] as String?
-                AddOrUpdateTicket(navController,ticketId,ticketsViewModel)
-            } ?: throw Exception("Please provide arguments for destination ${TicketRoute.route(TicketRoute.AddOrUpdateTicket)}")
-        }
-        composable(TicketRoute.route(TicketRoute.AddBettingTip)) {
-            AddBettingTip(activity,navController)
+                AddBettingTip(ticketId, activity, navController,ticketsViewModel)
+            } ?: throw Exception(
+                "Please provide arguments for destination ${
+                    TicketRoute.route(
+                        TicketRoute.AddBettingTip
+                    )
+                }"
+            )
         }
     }
 }

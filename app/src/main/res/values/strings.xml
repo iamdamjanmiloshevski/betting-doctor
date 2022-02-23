@@ -84,4 +84,5 @@
   <string name="rate_us_choice1">Rate Now</string>
   <string name="rate_us_choice2">No, thank you</string>
   <string name="rate_us_choice3">Maybe later!</string>
+  <string name="coefficient_hint">1.50</string>
 </resources>

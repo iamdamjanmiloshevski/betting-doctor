@@ -28,6 +28,7 @@ import com.twoplaytech.drbetting.admin.ui.ticket.components.TicketsAppBar
 import com.twoplaytech.drbetting.admin.ui.ticket.navigation.TicketRoute
 import com.twoplaytech.drbetting.admin.ui.viewmodels.TicketsViewModel
 import com.twoplaytech.drbetting.ui.common.CenteredItem
+import com.twoplaytech.drbetting.util.GsonUtil
 
 /*
     Author: Damjan Miloshevski 
@@ -64,11 +65,10 @@ fun Tickets(
                     tickets.data?.let {
                         LazyColumn(contentPadding = PaddingValues(10.dp)) {
                             items(it) { ticket ->
-                                TicketCard(ticket = ticket) { id ->
-                                    ticketsViewModel.getTicketById(id)
+                                TicketCard(ticket = ticket) { ticketSelected ->
                                     navController.navigate(
                                         TicketRoute.route(TicketRoute.AddOrUpdateTicket)
-                                            .plus("?ticketId=${id}")
+                                            .plus("?ticket=${GsonUtil.toJson(ticketSelected).trim()}")
                                     )
                                 }
                             }
