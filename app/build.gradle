@@ -200,6 +200,7 @@ dependencies {
   implementation 'com.google.firebase:firebase-firestore-ktx'
   implementation 'com.google.firebase:firebase-auth-ktx'
   implementation 'com.google.firebase:firebase-messaging'
+  implementation 'com.google.firebase:firebase-appcheck-safetynet:16.0.0-beta04'
   //endregion
 
   //region Glide

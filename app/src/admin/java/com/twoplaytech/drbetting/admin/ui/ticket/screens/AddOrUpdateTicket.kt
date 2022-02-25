@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -53,17 +54,22 @@ fun AddOrUpdateTicket(
     val ticketTitle = remember {
         mutableStateOf(today().beautify())
     }
+    val isVisible = rememberSaveable() {
+        mutableStateOf(true)
+    }
     val ticket:Ticket? = ticketJson?.let { GsonUtil.fromJson(it) }
     Scaffold(topBar = {
         TicketsAppBar(title = ticketTitle.value, navController = navController, actions = {
             MenuAction(
                 icon = Icons.Default.Check,
-                contentDescription = "Save icon"
+                contentDescription = "Save icon",
+                isVisible
             ) {
+                isVisible.value = false
                 val tips = ticketsViewModel.bettingTips
                 if (ticket != null) {
-                    ticket.tips = tips
-                    ticketsViewModel.updateTicket(TicketMapper.toTicketInput(ticket))
+                ticket.tips = tips
+                ticketsViewModel.updateTicket(TicketMapper.toTicketInput(ticket))
                 } else {
                     val newTicket =
                         Ticket(
@@ -72,7 +78,7 @@ fun AddOrUpdateTicket(
                         )
                     ticketsViewModel.insertTicket(TicketMapper.toTicketInput(newTicket))
                 }
-                navController.navigateUp()
+               navController.navigateUp()
             }
         })
     }) {

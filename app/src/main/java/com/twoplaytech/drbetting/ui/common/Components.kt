@@ -11,7 +11,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -26,6 +25,7 @@ import com.twoplaytech.drbetting.data.models.BettingTip
 import com.twoplaytech.drbetting.data.models.Team
 import com.twoplaytech.drbetting.util.getSportPlaceHolder
 import com.twoplaytech.drbetting.util.getStatusResource
+import timber.log.Timber
 
 /*
     Author: Damjan Miloshevski 
@@ -59,7 +59,6 @@ fun TipCard(
                 .padding(bottom = 10.dp)
                 .clickable { onItemClicked.invoke(bettingTip) },
             shape = RoundedCornerShape(20.dp),
-            backgroundColor = Color.White,
             elevation = 5.dp
         ) {
             Column {
@@ -181,23 +180,24 @@ fun BettingCard(
 @Composable
 fun TeamInfo(modifier: Modifier = Modifier, team: Team? = null) {
     team?.let {
-        with(it){
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Timber.e(it.logo)
                 Image(
-                    painter = rememberImagePainter(data = this@with.logo),
+                    painter = rememberImagePainter(data = it.logo, builder = {
+                        placeholder(R.drawable.soccer_ball)
+                    }),
                     contentDescription = "Sport image",
                     modifier = Modifier.size(40.dp)
                 )
                 Spacer(modifier = modifier.height(10.dp))
                 Text(
-                    text = this@with.name,
+                    text = it.name,
                     fontFamily = Aldrich,
                     overflow = TextOverflow.Clip,
                     softWrap = true
                 )
             }
-        }
     } ?: throw NullPointerException("Team must not be null")
 }

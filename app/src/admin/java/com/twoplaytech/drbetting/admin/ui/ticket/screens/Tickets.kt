@@ -43,6 +43,7 @@ fun Tickets(
     navController: NavController = NavController(LocalContext.current),
     ticketsViewModel: TicketsViewModel = hiltViewModel()
 ) {
+    ticketsViewModel.getTickets()
     Scaffold(topBar = {
         TicketsAppBar(title = "Tickets", activity = activity)
     }) {

@@ -26,7 +26,6 @@ package com.twoplaytech.drbetting.persistence
 
 import android.content.Context
 import android.security.keystore.KeyGenParameterSpec
-import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import javax.inject.Singleton
 
@@ -36,13 +35,14 @@ import javax.inject.Singleton
 */
 @Singleton
 class SharedPreferencesManager(context: Context) : IPreferences {
-    private val sharedPreferences = EncryptedSharedPreferences.create(
-        "doctor_betting_shared_preferences",
-        masterKeyAlias,
-        context,
-        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-    )
+//    private val sharedPreferences = EncryptedSharedPreferences.create(
+//        "doctor_betting_shared_preferences",
+//        masterKeyAlias,
+//        context,
+//        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+//        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+//    )
+    private val sharedPreferences = context.getSharedPreferences("doctor_betting_shared_preferences",Context.MODE_PRIVATE)
 
     override val keyGenParameterSpec: KeyGenParameterSpec
         get() = MasterKeys.AES256_GCM_SPEC

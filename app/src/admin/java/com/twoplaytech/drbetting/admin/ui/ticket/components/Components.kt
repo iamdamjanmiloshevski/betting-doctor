@@ -140,10 +140,12 @@ fun TicketFloatingActionButton(
 }
 
 @Composable
-fun MenuAction(icon: ImageVector, contentDescription: String?, onActionClick: () -> Unit) {
-    IconButton(onClick = onActionClick) {
-        Icon(imageVector = icon, contentDescription = contentDescription)
-    }
+fun MenuAction(icon: ImageVector, contentDescription: String?, isVisible:MutableState<Boolean>,onActionClick: () -> Unit) {
+    if(isVisible.value){
+        IconButton(onClick = onActionClick) {
+            Icon(imageVector = icon, contentDescription = contentDescription)
+        }
+    }else Box() {}
 }
 
 @Composable

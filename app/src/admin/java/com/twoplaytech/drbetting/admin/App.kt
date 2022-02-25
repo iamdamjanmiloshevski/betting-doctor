@@ -28,12 +28,14 @@ import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import com.facebook.stetho.Stetho
+import com.google.firebase.FirebaseApp
+import com.google.firebase.appcheck.FirebaseAppCheck
+import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.twoplaytech.drbetting.BuildConfig
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import javax.inject.Inject
-
 /*
     Author: Damjan Miloshevski 
     Created on 3/9/21 2:35 PM
@@ -45,11 +47,20 @@ class App : Application(), Configuration.Provider {
     lateinit var workerFactory: HiltWorkerFactory
     override fun onCreate() {
         super.onCreate()
+        initFirebase(this)
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
         Stetho.initializeWithDefaults(this)
         AndroidThreeTen.init(this)
+    }
+
+    private fun initFirebase(app: App) {
+        FirebaseApp.initializeApp(app)
+        val firebaseAppCheck = FirebaseAppCheck.getInstance()
+        firebaseAppCheck.installAppCheckProviderFactory(
+            SafetyNetAppCheckProviderFactory.getInstance()
+        )
     }
 
     override fun getWorkManagerConfiguration() =
