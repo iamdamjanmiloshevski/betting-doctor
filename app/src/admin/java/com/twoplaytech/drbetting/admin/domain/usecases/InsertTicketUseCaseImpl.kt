@@ -1,9 +1,12 @@
 package com.twoplaytech.drbetting.admin.domain.usecases
 
-import com.twoplaytech.drbetting.admin.data.Resource
 import com.twoplaytech.drbetting.admin.data.models.TicketInput
 import com.twoplaytech.drbetting.admin.domain.repository.Repository
 import com.twoplaytech.drbetting.data.models.Ticket
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 /*
@@ -14,6 +17,6 @@ import javax.inject.Inject
 */
 class InsertTicketUseCaseImpl @Inject constructor(repository: Repository) : InsertTicketUseCase,
     UseCase(repository) {
-    override suspend fun insertTicket(ticket: TicketInput): Resource<Ticket> =
-        repository.insertTicket(ticket)
+    override suspend fun insertTicket(ticket: TicketInput): Flow<Ticket> =
+        flow { emit(repository.insertTicket(ticket)) }.flowOn(Dispatchers.IO)
 }

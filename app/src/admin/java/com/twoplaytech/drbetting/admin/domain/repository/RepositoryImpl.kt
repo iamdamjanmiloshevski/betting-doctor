@@ -24,7 +24,6 @@
 
 package com.twoplaytech.drbetting.admin.domain.repository
 
-import com.twoplaytech.drbetting.admin.data.Resource
 import com.twoplaytech.drbetting.admin.data.datasource.RemoteDataSource
 import com.twoplaytech.drbetting.admin.data.mappers.AccessTokenMapper
 import com.twoplaytech.drbetting.admin.data.mappers.CredentialsMapper
@@ -303,64 +302,13 @@ class RepositoryImpl @Inject constructor(
         localDataSource.saveInt("KEY_DARK_MODE", appTheme)
     }
 
-    override suspend fun getTickets(): Resource<List<Ticket>> {
-        val response = try{
-            Resource.Loading(true)
-            val tickets = remoteDataSource.getTickets()
-            Resource.Success(tickets)
-        }catch (e:Exception){
-            Timber.e("Error while fetching tickets. Error -> ${e.localizedMessage}")
-            return  Resource.Error("Something went wrong",null)
-        }
-        return response
-    }
+    override suspend fun getTickets(): List<Ticket> = remoteDataSource.getTickets()
 
-    override suspend fun getTicketById(id: String): Resource<Ticket> {
-        val response = try{
-            Resource.Loading(true)
-            val ticket = remoteDataSource.getTicketById(id)
-            Resource.Success(ticket)
-        }catch (e:Exception){
-            Timber.e("Error while fetching ticket with $id. Error -> ${e.localizedMessage}")
-            return  Resource.Error("Something went wrong",null)
-        }
-        return response
-    }
+    override suspend fun getTicketById(id: String): Ticket = remoteDataSource.getTicketById(id)
 
-    override suspend fun insertTicket(ticket: TicketInput): Resource<Ticket> {
-        val response = try{
-            Resource.Loading(true)
-            val ticketResource = remoteDataSource.insertTicket(ticket)
-            Resource.Success(ticketResource)
-        }catch (e:Exception){
-            Timber.e("Error while inserting $ticket. Error -> ${e.localizedMessage}")
-            return  Resource.Error("Something went wrong",null)
-        }
-        return response
-    }
+    override suspend fun insertTicket(ticket: TicketInput): Ticket =remoteDataSource.insertTicket(ticket)
 
-    override suspend fun updateTicket(ticket: TicketInput): Resource<Ticket> {
-        val response = try{
-            Resource.Loading(true)
-            val ticketResource = remoteDataSource.updateTicket(ticket)
-            Resource.Success(ticketResource)
-        }catch (e:Exception){
-            Timber.e("Error while updating $ticket. Error -> ${e.localizedMessage}")
-            return  Resource.Error("Something went wrong",null)
-        }
-        return response
-    }
+    override suspend fun updateTicket(ticket: TicketInput): Ticket  = remoteDataSource.updateTicket(ticket)
 
-    override suspend fun deleteTicketById(id: String): Resource<Message> {
-        val response = try{
-            Resource.Loading(true)
-            val message = remoteDataSource.deleteTicketById(id)
-            Resource.Success(message)
-        }catch (e:Exception){
-            Timber.e("Error while deleting ticket with $id. Error -> ${e.localizedMessage}")
-            return  Resource.Error("Something went wrong",null)
-        }
-        return response
-    }
-
+    override suspend fun deleteTicketById(id: String): Message = remoteDataSource.deleteTicketById(id)
 }

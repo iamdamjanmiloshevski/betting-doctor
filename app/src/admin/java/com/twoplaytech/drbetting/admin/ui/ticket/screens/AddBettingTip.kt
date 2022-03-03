@@ -64,7 +64,7 @@ fun AddBettingTip(
     val coefficient = rememberSaveable() {
         mutableStateOf("")
     }
-    val isVisible = rememberSaveable() {
+    val isVisible = remember {
         mutableStateOf(true)
     }
     Scaffold(topBar = {
@@ -74,7 +74,7 @@ fun AddBettingTip(
                 contentDescription = "Save icon",
                 isVisible
             ) {
-                val bettingTip = BettingTip(
+                val bTip = BettingTip(
                     leagueName.value,
                     Team(homeTeam.value),
                     Team(awayTeam.value),
@@ -86,8 +86,7 @@ fun AddBettingTip(
                     ticketId = ticketId,
                     coefficient = coefficient.value
                     )
-                isVisible.value = false
-                viewModel.bettingTips.add(bettingTip)
+                viewModel.bettingTips.add(bTip)
                 navController.navigateUp()
             }
         })

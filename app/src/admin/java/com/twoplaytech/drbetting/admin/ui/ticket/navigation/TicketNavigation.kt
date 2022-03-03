@@ -29,25 +29,8 @@ fun TicketNavigation(activity: AppCompatActivity? = null) {
                 Tickets(activity, navController, ticketsViewModel)
             }
         }
-        composable(
-            TicketRoute.route(TicketRoute.AddOrUpdateTicket).plus("?ticket={ticket}"),
-            arguments = listOf(navArgument("ticket") {
-                nullable = true
-                defaultValue = null
-                type = NavType.StringType
-            })
-        ) { backStackEntry ->
-            val arguments = backStackEntry.arguments
-            arguments?.let { args ->
-                val ticketJson = args["ticket"] as String?
-                    AddOrUpdateTicket(navController,ticketJson, ticketsViewModel = ticketsViewModel)
-            } ?: throw Exception(
-                "Please provide arguments for destination ${
-                    TicketRoute.route(
-                        TicketRoute.AddOrUpdateTicket
-                    )
-                }"
-            )
+        composable(TicketRoute.route(TicketRoute.AddOrUpdateTicket)){
+            AddOrUpdateTicket(navController, ticketsViewModel = ticketsViewModel)
         }
         composable(
             TicketRoute.route(TicketRoute.AddBettingTip).plus("?ticketId={ticketId}"),

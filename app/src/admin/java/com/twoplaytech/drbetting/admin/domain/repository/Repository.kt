@@ -24,7 +24,6 @@
 
 package com.twoplaytech.drbetting.admin.domain.repository
 
-import com.twoplaytech.drbetting.admin.data.Resource
 import com.twoplaytech.drbetting.admin.data.models.AccessToken
 import com.twoplaytech.drbetting.admin.data.models.Credentials
 import com.twoplaytech.drbetting.admin.data.models.TicketInput
@@ -93,11 +92,11 @@ interface Repository {
     fun saveAppTheme(appTheme:Int)
 
 
-    suspend fun getTickets():Resource<List<Ticket>>
-    suspend fun getTicketById( id:String): Resource<Ticket>
-    suspend fun insertTicket(ticket: TicketInput): Resource<Ticket>
-    suspend fun updateTicket( ticket: TicketInput): Resource<Ticket>
-    suspend fun deleteTicketById(id:String):Resource<Message>
+    suspend fun getTickets():List<Ticket>
+    suspend fun getTicketById( id:String): Ticket
+    suspend fun insertTicket(ticket: TicketInput): Ticket
+    suspend fun updateTicket( ticket: TicketInput): Ticket
+    suspend fun deleteTicketById(id:String):Message
 
 
 }

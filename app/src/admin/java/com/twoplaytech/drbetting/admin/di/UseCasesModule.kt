@@ -70,4 +70,6 @@ interface UseCasesModule {
     fun bindsInsertTicketUseCase(insertTicketUseCaseImpl: InsertTicketUseCaseImpl):InsertTicketUseCase
     @Binds
     fun bindsUpdateTicketUseCase(updateTicketUseCaseImpl: UpdateTicketUseCaseImpl):UpdateTicketUseCase
+    @Binds
+    fun bindDeleteTicketUseCase(deleteTicketUseCaseImpl: DeleteTicketUseCaseImpl):DeleteTicketUseCase
 }

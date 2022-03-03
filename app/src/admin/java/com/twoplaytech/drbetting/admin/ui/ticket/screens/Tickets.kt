@@ -13,22 +13,21 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.twoplaytech.drbetting.R
-import com.twoplaytech.drbetting.admin.data.Resource
+import com.twoplaytech.drbetting.admin.ui.common.TicketUiState
+import com.twoplaytech.drbetting.admin.ui.common.TicketsUiState
 import com.twoplaytech.drbetting.admin.ui.ticket.components.TicketCard
 import com.twoplaytech.drbetting.admin.ui.ticket.components.TicketFloatingActionButton
 import com.twoplaytech.drbetting.admin.ui.ticket.components.TicketsAppBar
 import com.twoplaytech.drbetting.admin.ui.ticket.navigation.TicketRoute
 import com.twoplaytech.drbetting.admin.ui.viewmodels.TicketsViewModel
 import com.twoplaytech.drbetting.ui.common.CenteredItem
-import com.twoplaytech.drbetting.util.GsonUtil
 
 /*
     Author: Damjan Miloshevski 
@@ -36,12 +35,11 @@ import com.twoplaytech.drbetting.util.GsonUtil
     Project: Dr.Betting
     © 2Play Technologies  2022. All rights reserved
 */
-@Preview
 @Composable
 fun Tickets(
     activity: AppCompatActivity = LocalContext.current as AppCompatActivity,
     navController: NavController = NavController(LocalContext.current),
-    ticketsViewModel: TicketsViewModel = hiltViewModel()
+    ticketsViewModel: TicketsViewModel
 ) {
     ticketsViewModel.getTickets()
     Scaffold(topBar = {
@@ -51,31 +49,36 @@ fun Tickets(
             modifier = Modifier.fillMaxSize(),
             color = colorResource(id = R.color.silver_chalice)
         ) {
-            when (val tickets = ticketsViewModel.tickets) {
-                is Resource.Error -> {
+            when (val state = ticketsViewModel.ticketsUiState.collectAsState().value) {
+                is TicketsUiState.Error -> {
+                    val message = state.exception.localizedMessage
                     CenteredItem {
-                        Text(text = tickets.message.toString())
+                        Text(text = message)
                     }
                 }
-                is Resource.Loading -> {
+                TicketsUiState.Loading -> {
                     CenteredItem {
                         CircularProgressIndicator()
                     }
                 }
-                is Resource.Success -> {
-                    tickets.data?.let {
-                        LazyColumn(contentPadding = PaddingValues(10.dp)) {
-                            items(it) { ticket ->
-                                TicketCard(ticket = ticket) { ticketSelected ->
+                is TicketsUiState.Success -> {
+                    val tickets = state.tickets
+                    LazyColumn(contentPadding = PaddingValues(10.dp)) {
+                        items(tickets) { ticket ->
+                            TicketCard(ticket = ticket, onLongPress = {
+                                ticketsViewModel.deleteTicket(it)
+                            }) { ticketSelected ->
+                                ticketSelected.id?.let {
+                                    ticketsViewModel.getTicketById(it)
                                     navController.navigate(
                                         TicketRoute.route(TicketRoute.AddOrUpdateTicket)
-                                            .plus("?ticket=${GsonUtil.toJson(ticketSelected).trim()}")
                                     )
                                 }
                             }
                         }
                     }
                 }
+                else -> throw Exception("I don't know what state I'm in")
             }
             TicketFloatingActionButton(
                 modifier = Modifier.padding(
@@ -84,7 +87,8 @@ fun Tickets(
                 ),
                 icon = Icons.Default.Add,
                 contentDescription = "Add Ticket Icon"
-            ){
+            ) {
+                ticketsViewModel.setTicketState(TicketUiState.NewTicket)
                 navController.navigate(
                     TicketRoute.route(
                         TicketRoute.AddOrUpdateTicket

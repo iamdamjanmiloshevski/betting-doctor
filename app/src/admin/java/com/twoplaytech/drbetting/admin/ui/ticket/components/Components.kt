@@ -46,25 +46,27 @@ import com.twoplaytech.drbetting.util.toStringDate
     Project: Dr.Betting
     © 2Play Technologies  2022. All rights reserved
 */
+@OptIn(ExperimentalFoundationApi::class)
 @Preview
 @Composable
 fun TicketCard(
     modifier: Modifier = Modifier,
     ticket: Ticket? = null,
+    onLongPress: (id: String) -> Unit = {},
     onClick: (Ticket) -> Unit = {}
 ) {
-    ticket?.let {
+    ticket?.let { ticket1 ->
         Card(
             modifier = modifier
                 .padding(bottom = 10.dp)
-                .clickable {
-                    onClick.invoke(it)
-                },
+                .combinedClickable(
+                    onLongClick = { ticket1.id?.let { onLongPress.invoke(it) } },
+                    onClick = { onClick.invoke(ticket1) }),
             shape = RoundedCornerShape(20.dp),
             backgroundColor = Color.White
         ) {
             Column(modifier = modifier.fillMaxWidth()) {
-                with(it) {
+                with(ticket1) {
                     Text(
                         text = "Ticket ${this.id}",
                         modifier = modifier.padding(5.dp),
@@ -140,12 +142,17 @@ fun TicketFloatingActionButton(
 }
 
 @Composable
-fun MenuAction(icon: ImageVector, contentDescription: String?, isVisible:MutableState<Boolean>,onActionClick: () -> Unit) {
-    if(isVisible.value){
+fun MenuAction(
+    icon: ImageVector,
+    contentDescription: String?,
+    isVisible: MutableState<Boolean>,
+    onActionClick: () -> Unit
+) {
+    if (isVisible.value) {
         IconButton(onClick = onActionClick) {
             Icon(imageVector = icon, contentDescription = contentDescription)
         }
-    }else Box() {}
+    } else Box() {}
 }
 
 @Composable
@@ -246,17 +253,19 @@ fun BettingTipForm(
         TextInput(title = stringResource(R.string.coefficient)) {
             InputField(
                 valueState = coefficient,
-                labelId = stringResource(R.string.coefficient_hint)
+                labelId = stringResource(R.string.coefficient_hint),
+                keyboardType = KeyboardType.Number
             )
         }
         TextInput(title = stringResource(id = R.string.hint_game_time_heading)) {
             InputField(
                 valueState = gameTime,
                 labelId = stringResource(id = R.string.hint_game_time),
-                enabled = false
+                enabled = false,
+                imeAction = ImeAction.Done
             ) {
                 activity?.let {
-                    showDateTimePicker(activity){ calendar ->
+                    showDateTimePicker(activity) { calendar ->
                         calendar?.let {
                             gameTime.value = it.time.toStringDate()
                         }

@@ -1,7 +1,8 @@
 package com.twoplaytech.drbetting.admin.domain.usecases
 
-import com.twoplaytech.drbetting.admin.data.Resource
 import com.twoplaytech.drbetting.data.models.Ticket
+import kotlinx.coroutines.flow.Flow
+
 
 /*
     Author: Damjan Miloshevski 
@@ -10,6 +11,6 @@ import com.twoplaytech.drbetting.data.models.Ticket
     © 2Play Technologies  2022. All rights reserved
 */
 interface GetTicketsUseCase {
-    suspend fun getTickets():Resource<List<Ticket>>
-    suspend fun getTicketById(id:String):Resource<Ticket>
+    suspend fun getTickets():Flow<List<Ticket>>
+    suspend fun getTicketById(id:String):Flow<Ticket>
 }

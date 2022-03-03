@@ -1,8 +1,8 @@
 package com.twoplaytech.drbetting.admin.domain.usecases
 
-import com.twoplaytech.drbetting.admin.data.Resource
 import com.twoplaytech.drbetting.admin.data.models.TicketInput
 import com.twoplaytech.drbetting.data.models.Ticket
+import kotlinx.coroutines.flow.Flow
 
 /*
     Author: Damjan Miloshevski 
@@ -11,5 +11,5 @@ import com.twoplaytech.drbetting.data.models.Ticket
     © 2Play Technologies  2022. All rights reserved
 */
 interface InsertTicketUseCase {
-    suspend fun insertTicket(ticket: TicketInput): Resource<Ticket>
+    suspend fun insertTicket(ticket: TicketInput): Flow<Ticket>
 }
