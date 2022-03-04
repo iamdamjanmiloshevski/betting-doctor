@@ -25,6 +25,7 @@
 package com.twoplaytech.drbetting.admin.data.datasource
 
 import com.twoplaytech.drbetting.admin.data.models.AccessToken
+import com.twoplaytech.drbetting.admin.data.models.RefreshToken
 import com.twoplaytech.drbetting.admin.data.models.TicketInput
 import com.twoplaytech.drbetting.admin.data.models.UserInput
 import com.twoplaytech.drbetting.data.models.*
@@ -54,8 +55,7 @@ interface RemoteDataSource {
     suspend fun deleteBettingTip(id: String): Flow<Message>
 
     suspend fun signIn(userInput: UserInput): Flow<AccessToken>
-    suspend fun refreshToken(refreshToken: String): Flow<AccessToken>
-    suspend fun refreshTokenAsync(refreshToken: String): AccessToken
+    suspend fun refreshToken(refreshToken: RefreshToken):AccessToken
     suspend fun sendNotification(topic:String):Flow<Unit>
 
 

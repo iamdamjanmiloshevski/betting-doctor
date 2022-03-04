@@ -27,10 +27,7 @@ package com.twoplaytech.drbetting.admin.domain.repository
 import com.twoplaytech.drbetting.admin.data.datasource.RemoteDataSource
 import com.twoplaytech.drbetting.admin.data.mappers.AccessTokenMapper
 import com.twoplaytech.drbetting.admin.data.mappers.CredentialsMapper
-import com.twoplaytech.drbetting.admin.data.models.AccessToken
-import com.twoplaytech.drbetting.admin.data.models.Credentials
-import com.twoplaytech.drbetting.admin.data.models.TicketInput
-import com.twoplaytech.drbetting.admin.data.models.UserInput
+import com.twoplaytech.drbetting.admin.data.models.*
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_ACCESS_TOKEN
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_APP_LAUNCHES
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_LOGGED_IN
@@ -209,19 +206,14 @@ class RepositoryImpl @Inject constructor(
         })
     }
 
-    override fun refreshToken(
-        refreshToken: String,
-        onSuccess: (AccessToken) -> Unit,
-        onError: (Message) -> Unit
-    ) {
-        launch {
-            remoteDataSource.refreshToken(refreshToken).catch { cause ->
-                sendErrorMessage(onError, cause)
-            }.collect { accessToken ->
-                saveToken(accessToken)
-                onSuccess.invoke(accessToken)
-            }
-        }
+
+
+    override  fun refreshToken(refreshToken: RefreshToken): AccessToken {
+       return runBlocking {
+        val refreshedToken = remoteDataSource.refreshToken(refreshToken)
+           saveToken(refreshedToken)
+           refreshedToken
+       }
     }
 
     override suspend fun getAccessTokenAsync(): AccessToken {
@@ -233,14 +225,14 @@ class RepositoryImpl @Inject constructor(
         )
     }
 
-    override fun getRefreshTokenAsync(): AccessToken {
-        return runBlocking {
-            val accessToken = getAccessTokenAsync()
-            val newToken = remoteDataSource.refreshTokenAsync(accessToken.refreshToken)
-            saveToken(newToken)
-            newToken
-        }
-    }
+//    override fun getRefreshTokenAsync(): AccessToken {
+//        return runBlocking {
+//            val accessToken = getAccessTokenAsync()
+//            val newToken = remoteDataSource.refreshTokenAsync(accessToken.refreshToken)
+//            saveToken(newToken)
+//            newToken
+//        }
+//    }
 
     override fun sendNotification(
         topic: String,
@@ -300,6 +292,14 @@ class RepositoryImpl @Inject constructor(
 
     override fun saveAppTheme(appTheme: Int) {
         localDataSource.saveInt("KEY_DARK_MODE", appTheme)
+    }
+
+    override fun userCredentials(): Credentials? {
+        val credentialsJson = localDataSource.getString(KEY_USER_CREDENTIALS)
+        credentialsJson?.let {
+            val credentialsDataModel = CredentialsMapper.fromCredentialsJson(it)
+            return CredentialsMapper.toCredentials(credentialsDataModel)
+        } ?: return null
     }
 
     override suspend fun getTickets(): List<Ticket> = remoteDataSource.getTickets()

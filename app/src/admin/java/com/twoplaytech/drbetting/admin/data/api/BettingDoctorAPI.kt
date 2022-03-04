@@ -25,6 +25,7 @@
 package com.twoplaytech.drbetting.admin.data.api
 
 import com.twoplaytech.drbetting.admin.data.models.AccessToken
+import com.twoplaytech.drbetting.admin.data.models.RefreshToken
 import com.twoplaytech.drbetting.admin.data.models.TicketInput
 import com.twoplaytech.drbetting.admin.data.models.UserInput
 import com.twoplaytech.drbetting.data.models.*
@@ -63,8 +64,8 @@ interface BettingDoctorAPI {
     @POST("users/signin")
     suspend fun signIn(@Body userInput: UserInput): AccessToken
 
-    @GET("users/tokens/refresh-token/{refreshToken}")
-    suspend fun refreshToken(@Path("refreshToken") refreshToken:String): AccessToken
+    @POST("users/token")
+    suspend fun refreshToken(@Body refreshToken: RefreshToken): AccessToken
 
     @POST("users/notifications/{topic}")
     suspend fun sendNotification(@Path("topic") notificationsTopic:String)

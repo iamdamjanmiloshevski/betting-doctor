@@ -25,6 +25,7 @@
 package com.twoplaytech.drbetting.admin.data.api
 
 
+import com.twoplaytech.drbetting.admin.data.models.RefreshToken
 import com.twoplaytech.drbetting.admin.domain.repository.Repository
 import com.twoplaytech.drbetting.admin.util.hasExpiredToken
 import dagger.Lazy
@@ -45,25 +46,35 @@ class TokenAuthenticator @Inject constructor(private val repository: Lazy<Reposi
     Authenticator {
     override fun authenticate(route: Route?, response: Response): Request {
         val accessToken = repository.get().getToken()
+        val userCredentials = repository.get().userCredentials()
         val hasExpired = accessToken?.hasExpiredToken() ?: false
-            val newRequest:Request? = when (response.code) {
-                403, 401 -> {
-                    accessToken?.let {
-                        if (!hasExpired) {
-                            Timber.i("Token hasn't expired")
-                            request(response.request,it.token)
-                        } else {
-                            Timber.i("Token has expired")
-                            val newToken = repository.get().getRefreshTokenAsync()
-                            request(response.request,newToken.token)
+        val newRequest: Request? = when (response.code) {
+            403, 401 -> {
+                accessToken?.let {
+                    if (!hasExpired) {
+                        Timber.i("Token hasn't expired")
+                        request(response.request, it.token)
+                    } else {
+                        Timber.i("Token has expired")
+                        userCredentials?.let { credentials ->
+                            val newToken = repository.get().refreshToken(
+                                RefreshToken(
+                                    it.refreshToken,
+                                    credentials.email
+                                )
+                            )
+                            request(response.request, newToken.token)
                         }
                     }
+                }
 
-                } else -> response.request
             }
+            else -> response.request
+        }
         return newRequest as Request
     }
-    private fun request(request:Request,token:String):Request{
+
+    private fun request(request: Request, token: String): Request {
         return request.newBuilder().addHeader(
             "Authorization", "Bearer $token"
         ).build()

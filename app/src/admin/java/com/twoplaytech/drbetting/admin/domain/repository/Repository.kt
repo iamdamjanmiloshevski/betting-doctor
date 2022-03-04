@@ -24,10 +24,7 @@
 
 package com.twoplaytech.drbetting.admin.domain.repository
 
-import com.twoplaytech.drbetting.admin.data.models.AccessToken
-import com.twoplaytech.drbetting.admin.data.models.Credentials
-import com.twoplaytech.drbetting.admin.data.models.TicketInput
-import com.twoplaytech.drbetting.admin.data.models.UserInput
+import com.twoplaytech.drbetting.admin.data.models.*
 import com.twoplaytech.drbetting.data.models.*
 
 /*
@@ -78,19 +75,14 @@ interface Repository {
         onError: (Message) -> Unit
     )
 
-    fun refreshToken(
-        refreshToken: String,
-        onSuccess: (AccessToken) -> Unit,
-        onError: (Message) -> Unit
-    )
 
+     fun refreshToken(refreshToken: RefreshToken): AccessToken
     suspend fun getAccessTokenAsync(): AccessToken
-    fun getRefreshTokenAsync(): AccessToken
     fun sendNotification(topic:String,onSuccess: () -> Unit,onError: (Message) -> Unit)
     fun getToken():AccessToken?
     fun getAppTheme(callback: (Int) -> Unit)
     fun saveAppTheme(appTheme:Int)
-
+    fun userCredentials():Credentials?
 
     suspend fun getTickets():List<Ticket>
     suspend fun getTicketById( id:String): Ticket

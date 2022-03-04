@@ -94,9 +94,14 @@ fun AddOrUpdateTicket(
                     CenteredItem { CircularProgressIndicator() }
                 }
                 TicketUiState.NewTicket -> {
-                    CenteredItem {
-                        Text(text = "No tips for this ticket. Please add some")
-                    }
+                   if(bettingTipsState.isNotEmpty() ){
+                       isVisible.value = true
+                       ShowBettingTips(bettingTipsState)
+                   }else{
+                       CenteredItem {
+                           Text(text = "No tips for this ticket")
+                       }
+                   }
                 }
                 is TicketUiState.Success -> {
                     ticket = state.ticket

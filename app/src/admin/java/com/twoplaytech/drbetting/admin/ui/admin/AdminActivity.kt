@@ -368,7 +368,7 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
     override fun onResume() {
         super.onResume()
         bettingTipsViewModel.getAppLaunchCount()
-        checkSession()
+        //checkSession()
         when (typeSelected) {
             0 -> requestOlderData(sportSelected.getSportFromIndex())
             1 -> requestTodayData(sportSelected.getSportFromIndex())
