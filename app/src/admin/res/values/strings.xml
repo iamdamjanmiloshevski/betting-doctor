@@ -65,6 +65,11 @@
   <string name="title_activity_ticket">TicketActivity</string>
   <string name="result">Result</string>
   <string name="result_hint">2-1</string>
+  <string name="error_league_name">Please provide a league name</string>
+  <string name="error_home_team">Please provide home team</string>
+  <string name="error_betting_tip">Please provide betting tip</string>
+  <string name="error_odds">Please provide odds</string>
+  <string name="error_game_time">Please provide game time</string>
   <string-array name="types">
     <item>Older</item>
     <item>Upcoming</item>

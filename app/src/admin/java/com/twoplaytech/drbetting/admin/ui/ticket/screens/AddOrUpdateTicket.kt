@@ -68,6 +68,7 @@ fun AddOrUpdateTicket(
                 if (ticket != null) {
                     ticket?.let {
                         it.tips = bettingTipsState
+                        isVisible.value = false
                         ticketsViewModel.updateTicket(TicketMapper.toTicketInput(it))
                     } ?: throw NullPointerException("Ticket must not be null!")
                 } else {
@@ -76,9 +77,9 @@ fun AddOrUpdateTicket(
                             date = Calendar.getInstance().time.toStringDate(),
                             tips = bettingTipsState
                         )
+                    isVisible.value = false
                     ticketsViewModel.insertTicket(TicketMapper.toTicketInput(newTicket))
                 }
-                navController.navigateUp()
             }
         })
     }) {
@@ -106,6 +107,10 @@ fun AddOrUpdateTicket(
                 is TicketUiState.Success -> {
                     ticket = state.ticket
                     TicketInfo(isVisible,ticket,bettingTipsState, ticketsViewModel, ticketTitle)
+                    if(state.isInserted){
+                        bettingTipsState.clear()
+                        navController.navigateUp()
+                    }
                 }
                 else -> throw Exception("I don't know what state I'm in")
             }

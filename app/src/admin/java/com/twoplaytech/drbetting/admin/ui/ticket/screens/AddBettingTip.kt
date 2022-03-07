@@ -13,8 +13,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.twoplaytech.drbetting.R
+import com.twoplaytech.drbetting.admin.ui.common.FieldValidator
 import com.twoplaytech.drbetting.admin.ui.ticket.components.BettingTipForm
 import com.twoplaytech.drbetting.admin.ui.ticket.components.MenuAction
 import com.twoplaytech.drbetting.admin.ui.ticket.components.TicketsAppBar
@@ -32,10 +34,10 @@ import com.twoplaytech.drbetting.util.toStatus
 */
 @Composable
 fun AddBettingTip(
-    ticketId:String? = null,
+    ticketId: String? = null,
     activity: AppCompatActivity? = null,
     navController: NavController = NavController(LocalContext.current),
-    viewModel:TicketsViewModel
+    viewModel: TicketsViewModel
 ) {
     val leagueName = rememberSaveable() {
         mutableStateOf("")
@@ -67,24 +69,12 @@ fun AddBettingTip(
     val isVisible = remember {
         mutableStateOf(true)
     }
-    val errorLeagueName = remember{
-        mutableStateOf(false)
-    }
-    val errorHomeTeam =  remember{
-        mutableStateOf(false)
-    }
-    val errorAwayTeam = remember{
-        mutableStateOf(false)
-    }
-    val errorBettingTip =  remember{
-        mutableStateOf(false)
-    }
-    val errorOdds =  remember{
-        mutableStateOf(false)
-    }
-    val errorGameTime = remember{
-        mutableStateOf(false)
-    }
+    val leagueNameValidator = FieldValidator(stringResource(id = R.string.error_league_name))
+    val homeTeamValidator = FieldValidator(stringResource(id = R.string.error_home_team))
+    val awayTeamValidator = FieldValidator(stringResource(id = R.string.error_away_team))
+    val bettingTipValidator = FieldValidator(stringResource(id = R.string.error_betting_tip))
+    val oddsValidator = FieldValidator(stringResource(id = R.string.error_odds))
+    val gameTimeValidator = FieldValidator(stringResource(id = R.string.error_game_time))
     Scaffold(topBar = {
         TicketsAppBar(title = "Add new Betting tip", navController = navController, actions = {
             MenuAction(
@@ -94,22 +84,22 @@ fun AddBettingTip(
             ) {
                 when {
                     leagueName.value.isEmpty() -> {
-                        errorLeagueName.value = true
+                        leagueNameValidator.hasError.value = true
                     }
                     homeTeam.value.isEmpty() -> {
-                        errorHomeTeam.value = true
+                        homeTeamValidator.hasError.value = true
                     }
                     awayTeam.value.isEmpty() -> {
-                        errorAwayTeam.value = true
+                        awayTeamValidator.hasError.value = true
                     }
                     bettingTip.value.isEmpty() -> {
-                        errorBettingTip.value = true
+                        bettingTipValidator.hasError.value = true
                     }
                     coefficient.value.isEmpty() -> {
-                        errorOdds.value = true
+                        oddsValidator.hasError.value = true
                     }
                     gameTime.value.isEmpty() -> {
-                        errorGameTime.value = true
+                        gameTimeValidator.hasError.value = true
                     }
                     else -> {
                         val bTip = BettingTip(
@@ -163,12 +153,12 @@ fun AddBettingTip(
                 onOpenCloseSportSpinner,
                 isOpenSpinnerStatus,
                 status,
-                isErrorLeagueName = errorLeagueName,
-                isErrorHomeTeam = errorHomeTeam,
-                isErrorAwayTeam = errorAwayTeam,
-                isErrorBettingTip = errorBettingTip,
-                isErrorOdds = errorOdds,
-                isErrorGameTime = errorGameTime,
+                leagueNameValidator,
+                homeTeamValidator,
+                awayTeamValidator,
+                bettingTipValidator,
+                oddsValidator,
+                gameTimeValidator,
                 coefficient,
                 chosenStatusIcon,
                 onOpenCloseStatusSpinner

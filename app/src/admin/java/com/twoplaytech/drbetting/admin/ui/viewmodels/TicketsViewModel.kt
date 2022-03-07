@@ -91,7 +91,7 @@ class TicketsViewModel @Inject constructor(
             }.onCompletion { cause ->
                cause?.let {  _ticketUiState.value = TicketUiState.Error(cause) }
             }.collect {
-                _ticketUiState.value = TicketUiState.Success(it)
+                _ticketUiState.value = TicketUiState.Success(it,true)
             }
 
         }
@@ -106,7 +106,7 @@ class TicketsViewModel @Inject constructor(
             }.onCompletion { cause ->
                 cause?.let {  _ticketUiState.value = TicketUiState.Error(cause) }
             }.collect {
-                _ticketUiState.value = TicketUiState.Success(it)
+                _ticketUiState.value = TicketUiState.Success(it,true)
             }
         }
     }

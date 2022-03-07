@@ -15,7 +15,6 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.twoplaytech.drbetting.R
+import com.twoplaytech.drbetting.admin.ui.common.Validator
 import com.twoplaytech.drbetting.admin.ui.ticket.widgets.DropDownList
 import com.twoplaytech.drbetting.admin.ui.ticket.widgets.DropdownType
 import com.twoplaytech.drbetting.admin.ui.ticket.widgets.showDateTimePicker
@@ -161,8 +161,7 @@ fun MenuAction(
 fun InputField(
     modifier: Modifier = Modifier,
     valueState: MutableState<String>,
-    isError: MutableState<Boolean> = mutableStateOf(false),
-    errorMessage: String? = null,
+    validator: Validator? = null,
     labelId: String,
     enabled: Boolean = true,
     isSingleLine: Boolean = true,
@@ -175,35 +174,38 @@ fun InputField(
         OutlinedTextField(
             value = valueState.value,
             onValueChange = {
-                isError.value = false
+                validator?.hasError?.value = false
                 valueState.value = it
             },
             modifier = modifier
                 .fillMaxWidth()
                 .clickable {
-                    if (!enabled){
-                        isError.value = false
+                    if (!enabled) {
+                        validator?.hasError?.value = false
                         onClick.invoke()
-                    }},
+                    }
+                },
             trailingIcon = {
-                if (isError.value) Icon(
-                    imageVector = Icons.Filled.Error,
-                    contentDescription = "error Icon",
-                    tint = MaterialTheme.colors.error
-                )
+                validator?.let {
+                    if (validator.hasError.value) Icon(
+                        imageVector = Icons.Filled.Error,
+                        contentDescription = "error Icon",
+                        tint = MaterialTheme.colors.error
+                    )
+                }
             },
             singleLine = isSingleLine,
             textStyle = TextStyle(fontSize = 18.sp, color = MaterialTheme.colors.onBackground),
             enabled = enabled,
             label = { Text(text = labelId) },
-            isError = isError.value,
+            isError = validator?.let { validator.hasError.value } ?: false,
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction),
             keyboardActions = onAction
         )
-        if (isError.value) {
-            errorMessage?.let {
+        validator?.let {
+            if (validator.hasError.value) {
                 Text(
-                    text = errorMessage,
+                    text = validator.message,
                     color = MaterialTheme.colors.error,
                     style = MaterialTheme.typography.caption,
                     modifier = Modifier.padding(start = 16.dp)
@@ -246,22 +248,16 @@ fun BettingTipForm(
     onOpenCloseSportSpinner: (Boolean) -> Unit,
     isOpenSpinnerStatus: MutableState<Boolean>,
     status: MutableState<String>,
-    isErrorLeagueName: MutableState<Boolean>,
-    isErrorHomeTeam: MutableState<Boolean>,
-    isErrorAwayTeam: MutableState<Boolean>,
-    isErrorBettingTip: MutableState<Boolean>,
-    isErrorOdds: MutableState<Boolean>,
-    isErrorGameTime: MutableState<Boolean>,
+    leagueNameValidator: Validator,
+    homeTeamValidator: Validator,
+    awayTeamValidator: Validator,
+    bettingTipValidator: Validator,
+    oddsValidator: Validator,
+    gameTimeValidator: Validator,
     coefficient: MutableState<String>,
     chosenStatusIcon: MutableState<Int>,
     onOpenCloseStatusSpinner: (Boolean) -> Unit
 ) {
-    val errorLeagueNameMsg = "Please provide a league name"
-    val errorHomeTeamMsg = "Please provide home team"
-    val errorAwayTeamMsg = "Please provide away team"
-    val errorBettingTipMsg = "Please provide betting tip"
-    val errorOddsMsg = "Please provide odds"
-    val errorGameTimeMsg = "Please provide game time"
     Column(
         modifier = Modifier
             .padding(10.dp)
@@ -273,29 +269,28 @@ fun BettingTipForm(
             InputField(
                 valueState = leagueName,
                 labelId = stringResource(id = R.string.hint_league),
-                isError = isErrorLeagueName,
-                errorMessage = errorLeagueNameMsg
+                validator = leagueNameValidator
             )
         }
         TextInput(title = stringResource(id = R.string.team_home)) {
             InputField(
                 valueState = homeTeam,
                 labelId = stringResource(id = R.string.team_home_hint),
-                isError = isErrorHomeTeam, errorMessage = errorHomeTeamMsg
+                validator = homeTeamValidator
             )
         }
         TextInput(title = stringResource(id = R.string.team_away)) {
             InputField(
                 valueState = awayTeam,
                 labelId = stringResource(id = R.string.team_away_hint),
-                isError = isErrorAwayTeam, errorMessage = errorAwayTeamMsg
+                validator = awayTeamValidator
             )
         }
         TextInput(title = stringResource(id = R.string.hint_betting_tip_heading)) {
             InputField(
                 valueState = bettingTip,
                 labelId = stringResource(id = R.string.hint_betting_tip),
-                isError = isErrorBettingTip, errorMessage = errorBettingTipMsg
+                validator = bettingTipValidator
             )
         }
         TextInput(title = stringResource(R.string.result)) {
@@ -308,7 +303,7 @@ fun BettingTipForm(
             InputField(
                 valueState = coefficient,
                 labelId = stringResource(R.string.coefficient_hint),
-                isError = isErrorOdds, errorMessage = errorOddsMsg,
+                validator = oddsValidator,
                 keyboardType = KeyboardType.Number,
             )
         }
@@ -316,7 +311,7 @@ fun BettingTipForm(
             InputField(
                 valueState = gameTime,
                 labelId = stringResource(id = R.string.hint_game_time),
-                isError = isErrorGameTime, errorMessage = errorGameTimeMsg,
+                validator = gameTimeValidator,
                 enabled = false,
                 imeAction = ImeAction.Done
             ) {

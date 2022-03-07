@@ -15,7 +15,7 @@ sealed class TicketsUiState{
 }
 sealed class TicketUiState{
     object NewTicket:TicketUiState()
-    data class Success(val ticket:Ticket):TicketUiState()
+    data class Success(val ticket:Ticket, val isInserted:Boolean = false):TicketUiState()
     object Loading:TicketUiState()
     data class Error(val exception:Throwable):TicketUiState()
 }
