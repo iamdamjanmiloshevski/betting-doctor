@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.data.models.Team
 import com.twoplaytech.drbetting.util.getSportPlaceHolder
 import com.twoplaytech.drbetting.util.getStatusResource
@@ -77,14 +78,14 @@ fun TipCard(
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    TeamInfo(team = it.teamHome)
+                    TeamInfo(team = it.teamHome, sport = it.sport)
                     Text(
                         text = it.result,
                         fontSize = 42.sp,
                         fontWeight = FontWeight.ExtraBold,
                         fontFamily = Aldrich
                     )
-                    TeamInfo(team = it.teamAway)
+                    TeamInfo(team = it.teamAway,sport = it.sport)
                 }
                 Spacer(modifier = Modifier.height(10.dp))
                 BettingInfo(
@@ -178,7 +179,7 @@ fun BettingCard(
 
 @Preview
 @Composable
-fun TeamInfo(modifier: Modifier = Modifier, team: Team? = null) {
+fun TeamInfo(modifier: Modifier = Modifier, team: Team? = null,sport: Sport = Sport.Football) {
     team?.let {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -186,7 +187,8 @@ fun TeamInfo(modifier: Modifier = Modifier, team: Team? = null) {
                 Timber.e(it.logo)
                 Image(
                     painter = rememberImagePainter(data = it.logo, builder = {
-                        placeholder(R.drawable.soccer_ball)
+                        placeholder(sport.getSportPlaceHolder())
+                        error(sport.getSportPlaceHolder())
                     }),
                     contentDescription = "Sport image",
                     modifier = Modifier.size(40.dp)

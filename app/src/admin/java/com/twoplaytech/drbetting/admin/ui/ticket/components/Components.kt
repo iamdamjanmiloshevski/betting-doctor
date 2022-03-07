@@ -10,10 +10,12 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -159,6 +161,8 @@ fun MenuAction(
 fun InputField(
     modifier: Modifier = Modifier,
     valueState: MutableState<String>,
+    isError: MutableState<Boolean> = mutableStateOf(false),
+    errorMessage: String? = null,
     labelId: String,
     enabled: Boolean = true,
     isSingleLine: Boolean = true,
@@ -167,19 +171,46 @@ fun InputField(
     onAction: KeyboardActions = KeyboardActions.Default,
     onClick: () -> Unit = {}
 ) {
-    OutlinedTextField(
-        value = valueState.value,
-        onValueChange = { valueState.value = it },
-        singleLine = isSingleLine,
-        textStyle = TextStyle(fontSize = 18.sp, color = MaterialTheme.colors.onBackground),
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable { if (!enabled) onClick.invoke() },
-        enabled = enabled,
-        label = { Text(text = labelId) },
-        keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction),
-        keyboardActions = onAction
-    )
+    Column {
+        OutlinedTextField(
+            value = valueState.value,
+            onValueChange = {
+                isError.value = false
+                valueState.value = it
+            },
+            modifier = modifier
+                .fillMaxWidth()
+                .clickable {
+                    if (!enabled){
+                        isError.value = false
+                        onClick.invoke()
+                    }},
+            trailingIcon = {
+                if (isError.value) Icon(
+                    imageVector = Icons.Filled.Error,
+                    contentDescription = "error Icon",
+                    tint = MaterialTheme.colors.error
+                )
+            },
+            singleLine = isSingleLine,
+            textStyle = TextStyle(fontSize = 18.sp, color = MaterialTheme.colors.onBackground),
+            enabled = enabled,
+            label = { Text(text = labelId) },
+            isError = isError.value,
+            keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction),
+            keyboardActions = onAction
+        )
+        if (isError.value) {
+            errorMessage?.let {
+                Text(
+                    text = errorMessage,
+                    color = MaterialTheme.colors.error,
+                    style = MaterialTheme.typography.caption,
+                    modifier = Modifier.padding(start = 16.dp)
+                )
+            }
+        }
+    }
 }
 
 @Composable
@@ -215,10 +246,22 @@ fun BettingTipForm(
     onOpenCloseSportSpinner: (Boolean) -> Unit,
     isOpenSpinnerStatus: MutableState<Boolean>,
     status: MutableState<String>,
+    isErrorLeagueName: MutableState<Boolean>,
+    isErrorHomeTeam: MutableState<Boolean>,
+    isErrorAwayTeam: MutableState<Boolean>,
+    isErrorBettingTip: MutableState<Boolean>,
+    isErrorOdds: MutableState<Boolean>,
+    isErrorGameTime: MutableState<Boolean>,
     coefficient: MutableState<String>,
     chosenStatusIcon: MutableState<Int>,
     onOpenCloseStatusSpinner: (Boolean) -> Unit
 ) {
+    val errorLeagueNameMsg = "Please provide a league name"
+    val errorHomeTeamMsg = "Please provide home team"
+    val errorAwayTeamMsg = "Please provide away team"
+    val errorBettingTipMsg = "Please provide betting tip"
+    val errorOddsMsg = "Please provide odds"
+    val errorGameTimeMsg = "Please provide game time"
     Column(
         modifier = Modifier
             .padding(10.dp)
@@ -227,40 +270,53 @@ fun BettingTipForm(
         horizontalAlignment = Alignment.Start
     ) {
         TextInput(title = stringResource(id = R.string.hint_league_title)) {
-            InputField(valueState = leagueName, labelId = stringResource(id = R.string.hint_league))
+            InputField(
+                valueState = leagueName,
+                labelId = stringResource(id = R.string.hint_league),
+                isError = isErrorLeagueName,
+                errorMessage = errorLeagueNameMsg
+            )
         }
         TextInput(title = stringResource(id = R.string.team_home)) {
             InputField(
                 valueState = homeTeam,
-                labelId = stringResource(id = R.string.team_home_hint)
+                labelId = stringResource(id = R.string.team_home_hint),
+                isError = isErrorHomeTeam, errorMessage = errorHomeTeamMsg
             )
         }
         TextInput(title = stringResource(id = R.string.team_away)) {
             InputField(
                 valueState = awayTeam,
-                labelId = stringResource(id = R.string.team_away_hint)
+                labelId = stringResource(id = R.string.team_away_hint),
+                isError = isErrorAwayTeam, errorMessage = errorAwayTeamMsg
             )
         }
         TextInput(title = stringResource(id = R.string.hint_betting_tip_heading)) {
             InputField(
                 valueState = bettingTip,
-                labelId = stringResource(id = R.string.hint_betting_tip)
+                labelId = stringResource(id = R.string.hint_betting_tip),
+                isError = isErrorBettingTip, errorMessage = errorBettingTipMsg
             )
         }
         TextInput(title = stringResource(R.string.result)) {
-            InputField(valueState = result, labelId = stringResource(R.string.result_hint))
+            InputField(
+                valueState = result,
+                labelId = stringResource(R.string.result_hint),
+            )
         }
         TextInput(title = stringResource(R.string.coefficient)) {
             InputField(
                 valueState = coefficient,
                 labelId = stringResource(R.string.coefficient_hint),
-                keyboardType = KeyboardType.Number
+                isError = isErrorOdds, errorMessage = errorOddsMsg,
+                keyboardType = KeyboardType.Number,
             )
         }
         TextInput(title = stringResource(id = R.string.hint_game_time_heading)) {
             InputField(
                 valueState = gameTime,
                 labelId = stringResource(id = R.string.hint_game_time),
+                isError = isErrorGameTime, errorMessage = errorGameTimeMsg,
                 enabled = false,
                 imeAction = ImeAction.Done
             ) {

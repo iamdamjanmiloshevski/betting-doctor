@@ -67,6 +67,24 @@ fun AddBettingTip(
     val isVisible = remember {
         mutableStateOf(true)
     }
+    val errorLeagueName = remember{
+        mutableStateOf(false)
+    }
+    val errorHomeTeam =  remember{
+        mutableStateOf(false)
+    }
+    val errorAwayTeam = remember{
+        mutableStateOf(false)
+    }
+    val errorBettingTip =  remember{
+        mutableStateOf(false)
+    }
+    val errorOdds =  remember{
+        mutableStateOf(false)
+    }
+    val errorGameTime = remember{
+        mutableStateOf(false)
+    }
     Scaffold(topBar = {
         TicketsAppBar(title = "Add new Betting tip", navController = navController, actions = {
             MenuAction(
@@ -74,20 +92,42 @@ fun AddBettingTip(
                 contentDescription = "Save icon",
                 isVisible
             ) {
-                val bTip = BettingTip(
-                    leagueName.value,
-                    Team(homeTeam.value),
-                    Team(awayTeam.value),
-                    gameTime.value,
-                    bettingTip.value,
-                    status.value.uppercase().toStatus(),
-                    result.value,
-                    sport = sport.value.toSport(),
-                    ticketId = ticketId,
-                    coefficient = coefficient.value
-                    )
-                viewModel.bettingTips.add(bTip)
-                navController.navigateUp()
+                when {
+                    leagueName.value.isEmpty() -> {
+                        errorLeagueName.value = true
+                    }
+                    homeTeam.value.isEmpty() -> {
+                        errorHomeTeam.value = true
+                    }
+                    awayTeam.value.isEmpty() -> {
+                        errorAwayTeam.value = true
+                    }
+                    bettingTip.value.isEmpty() -> {
+                        errorBettingTip.value = true
+                    }
+                    coefficient.value.isEmpty() -> {
+                        errorOdds.value = true
+                    }
+                    gameTime.value.isEmpty() -> {
+                        errorGameTime.value = true
+                    }
+                    else -> {
+                        val bTip = BettingTip(
+                            leagueName.value,
+                            Team(homeTeam.value),
+                            Team(awayTeam.value),
+                            gameTime.value,
+                            bettingTip.value,
+                            status.value.uppercase().toStatus(),
+                            result.value,
+                            sport = sport.value.toSport(),
+                            ticketId = ticketId,
+                            coefficient = coefficient.value
+                        )
+                        viewModel.bettingTips.add(bTip)
+                        navController.navigateUp()
+                    }
+                }
             }
         })
     }) {
@@ -123,6 +163,12 @@ fun AddBettingTip(
                 onOpenCloseSportSpinner,
                 isOpenSpinnerStatus,
                 status,
+                isErrorLeagueName = errorLeagueName,
+                isErrorHomeTeam = errorHomeTeam,
+                isErrorAwayTeam = errorAwayTeam,
+                isErrorBettingTip = errorBettingTip,
+                isErrorOdds = errorOdds,
+                isErrorGameTime = errorGameTime,
                 coefficient,
                 chosenStatusIcon,
                 onOpenCloseStatusSpinner
