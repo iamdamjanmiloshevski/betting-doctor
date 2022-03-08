@@ -12,6 +12,7 @@ import com.twoplaytech.drbetting.admin.domain.usecases.DeleteTicketUseCase
 import com.twoplaytech.drbetting.admin.domain.usecases.GetTicketsUseCase
 import com.twoplaytech.drbetting.admin.domain.usecases.InsertTicketUseCase
 import com.twoplaytech.drbetting.admin.domain.usecases.UpdateTicketUseCase
+import com.twoplaytech.drbetting.admin.ui.common.BettingTipUiState
 import com.twoplaytech.drbetting.admin.ui.common.TicketUiState
 import com.twoplaytech.drbetting.admin.ui.common.TicketsUiState
 import com.twoplaytech.drbetting.data.models.BettingTip
@@ -41,6 +42,8 @@ class TicketsViewModel @Inject constructor(
     val ticketsUiState: StateFlow<TicketsUiState?> = _ticketsUiState
     private val _ticketUiState: MutableStateFlow<TicketUiState?> = MutableStateFlow(null)
     val ticketUiState: StateFlow<TicketUiState?> = _ticketUiState
+    private val _bettingTipUiState: MutableStateFlow<BettingTipUiState?> = MutableStateFlow(null)
+    val bettingTipUiState: StateFlow<BettingTipUiState?> = _bettingTipUiState
     val bettingTips = mutableStateListOf<BettingTip>()
     var initialList = listOf<BettingTip>()
 
@@ -65,9 +68,11 @@ class TicketsViewModel @Inject constructor(
 
         }
     }
+
     fun setTicketState(ticketUiState: TicketUiState) {
         _ticketUiState.value = ticketUiState
     }
+
     fun getTicketById(id: String) {
         viewModelScope.launch {
             getTicketsUseCase.getTicketById(id)
@@ -89,9 +94,9 @@ class TicketsViewModel @Inject constructor(
             }.onStart {
                 _ticketUiState.value = TicketUiState.Loading
             }.onCompletion { cause ->
-               cause?.let {  _ticketUiState.value = TicketUiState.Error(cause) }
+                cause?.let { _ticketUiState.value = TicketUiState.Error(cause) }
             }.collect {
-                _ticketUiState.value = TicketUiState.Success(it,true)
+                _ticketUiState.value = TicketUiState.Success(it, true)
             }
 
         }
@@ -104,23 +109,47 @@ class TicketsViewModel @Inject constructor(
             }.onStart {
                 _ticketUiState.value = TicketUiState.Loading
             }.onCompletion { cause ->
-                cause?.let {  _ticketUiState.value = TicketUiState.Error(cause) }
+                cause?.let { _ticketUiState.value = TicketUiState.Error(cause) }
             }.collect {
-                _ticketUiState.value = TicketUiState.Success(it,true)
+                _ticketUiState.value = TicketUiState.Success(it, true)
             }
         }
     }
-    fun deleteTicket(id:String){
+
+    fun deleteTicket(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
             deleteTicketUseCase.deleteTicket(id).catch { cause ->
                 _ticketUiState.value = TicketUiState.Error(cause)
             }.onStart {
                 _ticketUiState.value = TicketUiState.Loading
             }.onCompletion { cause ->
-                cause?.let {  _ticketUiState.value = TicketUiState.Error(cause) }
+                cause?.let { _ticketUiState.value = TicketUiState.Error(cause) }
             }.collect {
                 Timber.e(it.message)
             }
         }
+    }
+
+    fun getBettingTipById(id: String) {
+        _bettingTipUiState.value = BettingTipUiState.Loading
+        viewModelScope.launch {
+            if (bettingTips.isEmpty()) {
+                _bettingTipUiState.value = BettingTipUiState.Error(Exception("No items"))
+            } else {
+                val filtered = bettingTips.filter { bettingTip -> bettingTip._id == id }
+                if (filtered.isNotEmpty()) {
+                    _bettingTipUiState.value = BettingTipUiState.Success(filtered.first())
+                } else _bettingTipUiState.value = BettingTipUiState.Error(Exception("No items"))
+            }
+        }
+    }
+    fun updateBettingTip(bettingTip: BettingTip) {
+            val iterator = bettingTips.listIterator()
+            while (iterator.hasNext()) {
+                val bTip = iterator.next()
+                if (bTip._id == bettingTip._id) {
+                    iterator.set(bettingTip)
+                }
+            }
     }
 }

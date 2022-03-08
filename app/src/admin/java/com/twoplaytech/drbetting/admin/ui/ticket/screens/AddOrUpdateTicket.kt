@@ -28,6 +28,7 @@ import com.twoplaytech.drbetting.admin.ui.ticket.components.TicketsAppBar
 import com.twoplaytech.drbetting.admin.ui.ticket.navigation.TicketRoute
 import com.twoplaytech.drbetting.admin.ui.viewmodels.TicketsViewModel
 import com.twoplaytech.drbetting.admin.util.beautify
+import com.twoplaytech.drbetting.admin.util.update
 import com.twoplaytech.drbetting.data.models.BettingTip
 import com.twoplaytech.drbetting.data.models.Ticket
 import com.twoplaytech.drbetting.ui.common.CenteredItem
@@ -67,7 +68,7 @@ fun AddOrUpdateTicket(
             ) {
                 if (ticket != null) {
                     ticket?.let {
-                        it.tips = bettingTipsState
+                        it.tips.update(bettingTipsState)
                         isVisible.value = false
                         ticketsViewModel.updateTicket(TicketMapper.toTicketInput(it))
                     } ?: throw NullPointerException("Ticket must not be null!")
@@ -95,19 +96,26 @@ fun AddOrUpdateTicket(
                     CenteredItem { CircularProgressIndicator() }
                 }
                 TicketUiState.NewTicket -> {
-                   if(bettingTipsState.isNotEmpty() ){
-                       isVisible.value = true
-                       ShowBettingTips(bettingTipsState)
-                   }else{
-                       CenteredItem {
-                           Text(text = "No tips for this ticket")
-                       }
-                   }
+                    if (bettingTipsState.isNotEmpty()) {
+                        isVisible.value = true
+                        ShowBettingTips(navController, bettingTipsState, ticketsViewModel)
+                    } else {
+                        CenteredItem {
+                            Text(text = "No tips for this ticket")
+                        }
+                    }
                 }
                 is TicketUiState.Success -> {
                     ticket = state.ticket
-                    TicketInfo(isVisible,ticket,bettingTipsState, ticketsViewModel, ticketTitle)
-                    if(state.isInserted){
+                    TicketInfo(
+                        navController,
+                        isVisible,
+                        ticket,
+                        bettingTipsState,
+                        ticketsViewModel,
+                        ticketTitle
+                    )
+                    if (state.isInserted) {
                         bettingTipsState.clear()
                         navController.navigateUp()
                     }
@@ -127,14 +135,14 @@ fun AddOrUpdateTicket(
                     ticket?.let {
                         navController.navigate(
                             TicketRoute.route(
-                                TicketRoute.AddBettingTip
-                            ).plus("?ticketId=${it.id}")
+                                TicketRoute.AddOrUpdateBettingTip
+                            ).plus("?ticketId=${it.id},?tipId=${null}")
                         )
                     }
                 } else {
                     navController.navigate(
                         TicketRoute.route(
-                            TicketRoute.AddBettingTip
+                            TicketRoute.AddOrUpdateBettingTip
                         )
                     )
                 }
@@ -146,6 +154,7 @@ fun AddOrUpdateTicket(
 
 @Composable
 private fun TicketInfo(
+    navController: NavController,
     isVisible: MutableState<Boolean>,
     ticket: Ticket?,
     bettingTipsState: SnapshotStateList<BettingTip>,
@@ -159,20 +168,26 @@ private fun TicketInfo(
         with(ticket) {
             if (bettingTipsState.isNotEmpty()) {
                 tips.forEach {
-                    if (!ticketsViewModel.bettingTips.contains(it)) ticketsViewModel.bettingTips.add(
-                        it
-                    )
+                    if (!ticketsViewModel.bettingTips.contains(it)){
+                        ticketsViewModel.bettingTips.add(
+                            it
+                        )
+                    }
                 }
             } else ticketsViewModel.bettingTips.addAll(tips)
-            ShowBettingTips(bettingTipsState)
+            ShowBettingTips(navController, bettingTipsState,this.id)
         }
     } else {
-        ShowBettingTips(bettingTipsState)
+        ShowBettingTips(navController, bettingTipsState)
     }
 }
 
 @Composable
-private fun ShowBettingTips(bettingTips: SnapshotStateList<BettingTip>) {
+private fun ShowBettingTips(
+    navController: NavController,
+    bettingTips: SnapshotStateList<BettingTip>,
+    ticketId: String?=null
+) {
     if (bettingTips.isNullOrEmpty()) {
         CenteredItem {
             Text(text = "No tips for this ticket. Please add some")
@@ -180,7 +195,11 @@ private fun ShowBettingTips(bettingTips: SnapshotStateList<BettingTip>) {
     } else {
         LazyColumn(contentPadding = PaddingValues(10.dp)) {
             items(bettingTips) { bettingTip: BettingTip ->
-                TipCard(bettingTip = bettingTip) {}
+                TipCard(bettingTip = bettingTip) {
+                        navController.navigate(
+                            TicketRoute.route(TicketRoute.AddOrUpdateBettingTip).plus("?ticketId=${ticketId},?tipId=${it._id}")
+                        )
+                }
             }
         }
     }

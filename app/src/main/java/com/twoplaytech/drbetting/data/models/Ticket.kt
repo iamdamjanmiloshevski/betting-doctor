@@ -9,5 +9,5 @@ data class Ticket(
     @SerializedName("_id")
     val id: String? = null,
     @SerializedName("tips")
-    var tips: List<BettingTip>
+    var tips: MutableList<BettingTip>
 )

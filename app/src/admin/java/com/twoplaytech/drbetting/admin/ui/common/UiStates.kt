@@ -1,5 +1,6 @@
 package com.twoplaytech.drbetting.admin.ui.common
 
+import com.twoplaytech.drbetting.data.models.BettingTip
 import com.twoplaytech.drbetting.data.models.Ticket
 
 /*
@@ -18,4 +19,9 @@ sealed class TicketUiState{
     data class Success(val ticket:Ticket, val isInserted:Boolean = false):TicketUiState()
     object Loading:TicketUiState()
     data class Error(val exception:Throwable):TicketUiState()
+}
+sealed class BettingTipUiState{
+    data class Success(val bettingTip:BettingTip):BettingTipUiState()
+    object Loading:BettingTipUiState()
+    data class Error(val exception:Throwable):BettingTipUiState()
 }

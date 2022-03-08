@@ -33,8 +33,12 @@ fun TicketNavigation(activity: AppCompatActivity? = null) {
             AddOrUpdateTicket(navController, ticketsViewModel = ticketsViewModel)
         }
         composable(
-            TicketRoute.route(TicketRoute.AddBettingTip).plus("?ticketId={ticketId}"),
+            TicketRoute.route(TicketRoute.AddOrUpdateBettingTip).plus("?ticketId={ticketId},?tipId={tipId}"),
             arguments = listOf(navArgument("ticketId") {
+                nullable = true
+                defaultValue = null
+                type = NavType.StringType
+            },navArgument("tipId") {
                 nullable = true
                 defaultValue = null
                 type = NavType.StringType
@@ -43,11 +47,12 @@ fun TicketNavigation(activity: AppCompatActivity? = null) {
             val arguments = backStackEntry.arguments
             arguments?.let { args ->
                 val ticketId = args["ticketId"] as String?
-                AddBettingTip(ticketId, activity, navController,ticketsViewModel)
+                val tipId = args["tipId"] as String?
+                AddBettingTip(ticketId,tipId, activity, navController,ticketsViewModel)
             } ?: throw Exception(
                 "Please provide arguments for destination ${
                     TicketRoute.route(
-                        TicketRoute.AddBettingTip
+                        TicketRoute.AddOrUpdateBettingTip
                     )
                 }"
             )

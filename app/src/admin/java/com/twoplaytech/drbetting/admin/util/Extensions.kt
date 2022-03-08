@@ -30,6 +30,7 @@ import androidx.annotation.DrawableRes
 import com.afollestad.materialdialogs.MaterialDialog
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.ui.ticket.widgets.DropdownType
+import com.twoplaytech.drbetting.data.models.BettingTip
 import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.data.models.TypeStatus
 import com.twoplaytech.drbetting.util.getSportPlaceHolder
@@ -112,4 +113,21 @@ fun DropdownType.getIconFromTypeFromSelectedItem(
         }
     }
     return icon
+}
+
+/**
+ * @return Returns updated list of BettingTip
+ *
+ * @param updatedList
+ */
+fun MutableList<BettingTip>.update(updatedList:List<BettingTip>){
+    for(idx in this.indices){
+        for(idy in updatedList.indices){
+            val item = this[idx]
+            val updatedItem = updatedList[idy]
+            if((item._id == updatedItem._id) && item != updatedItem){
+               this[idx] = updatedItem
+            }
+        }
+    }
 }

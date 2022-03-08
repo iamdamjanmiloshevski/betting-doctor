@@ -26,7 +26,6 @@ import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.data.models.Team
 import com.twoplaytech.drbetting.util.getSportPlaceHolder
 import com.twoplaytech.drbetting.util.getStatusResource
-import timber.log.Timber
 
 /*
     Author: Damjan Miloshevski 
@@ -106,7 +105,10 @@ fun TipCard(
 
 @Preview
 @Composable
-fun BettingInfo(modifier: Modifier = Modifier, bettingTip: BettingTip? = null) {
+fun BettingInfo(
+    modifier: Modifier = Modifier,
+    bettingTip: BettingTip? = null
+) {
     bettingTip?.let {
         Row(
             modifier = modifier,
@@ -179,12 +181,15 @@ fun BettingCard(
 
 @Preview
 @Composable
-fun TeamInfo(modifier: Modifier = Modifier, team: Team? = null,sport: Sport = Sport.Football) {
+fun TeamInfo(
+    modifier: Modifier = Modifier,
+    team: Team? = null,
+    sport: Sport = Sport.Football
+) {
     team?.let {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Timber.e(it.logo)
                 Image(
                     painter = rememberImagePainter(data = it.logo, builder = {
                         placeholder(sport.getSportPlaceHolder())

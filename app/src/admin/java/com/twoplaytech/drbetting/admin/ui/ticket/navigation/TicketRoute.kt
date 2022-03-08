@@ -9,13 +9,13 @@ package com.twoplaytech.drbetting.admin.ui.ticket.navigation
 enum class TicketRoute {
     Tickets,
     AddOrUpdateTicket,
-    AddBettingTip;
+    AddOrUpdateBettingTip;
 
     companion object {
         fun route(route:TicketRoute):String = when(route){
             Tickets -> Tickets.name
             AddOrUpdateTicket -> AddOrUpdateTicket.name
-            AddBettingTip -> AddBettingTip.name
+            AddOrUpdateBettingTip -> AddOrUpdateBettingTip.name
         }
     }
 }
