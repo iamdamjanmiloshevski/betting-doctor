@@ -32,10 +32,5 @@
         android:id="@+id/LoginFragment"
         android:name="com.twoplaytech.drbetting.admin.ui.auth.LoginFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_login">
-
-        <argument
-            android:name="backgroundId"
-            app:argType="reference" />
-    </fragment>
+        tools:layout="@layout/fragment_login"/>
 </navigation>

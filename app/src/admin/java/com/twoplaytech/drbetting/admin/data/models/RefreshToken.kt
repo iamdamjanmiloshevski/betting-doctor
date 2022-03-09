@@ -24,9 +24,12 @@
 
 package com.twoplaytech.drbetting.admin.data.models
 
+import androidx.annotation.Keep
+
 /*
     Author: Damjan Miloshevski 
     Created on 03/03/2022
     Project: betting-doctor
 */
+@Keep
 data class RefreshToken(val token:String,val userEmail:String)

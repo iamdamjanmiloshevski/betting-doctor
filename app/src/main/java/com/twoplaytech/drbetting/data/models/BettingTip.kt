@@ -37,15 +37,15 @@ import kotlinx.android.parcel.Parcelize
 @Keep
 @Parcelize
 data class BettingTip(
-    var leagueName: String,
-    var teamHome: Team?,
-    var teamAway: Team?,
-    var gameTime: String,
-    var bettingType: String,
-    var status: TypeStatus,
-    var result: String,
-    var _id: String?= null,
-    var sport: Sport,
+    val leagueName: String,
+    val teamHome: Team?,
+    val teamAway: Team?,
+    val gameTime: String,
+    val bettingType: String,
+    val status: TypeStatus,
+    val result: String,
+    val _id: String?= null,
+    val sport: Sport,
     val coefficient:String? = null,
     val ticketId:String? = null
 ):Parcelable

@@ -26,42 +26,22 @@ package com.twoplaytech.drbetting.admin.ui.auth
 
 import android.os.Bundle
 import android.view.View
-import android.view.WindowManager
-import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
-import androidx.navigation.findNavController
-import com.twoplaytech.drbetting.R
-import com.twoplaytech.drbetting.admin.ui.auth.LoginFragment.Companion.KEY_BACKGROUND_RESOURCE
 import com.twoplaytech.drbetting.admin.ui.common.BaseActivity
-import com.twoplaytech.drbetting.admin.util.getRandomBackground
 import com.twoplaytech.drbetting.databinding.ActivityLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class LoginActivity : BaseActivity() {
     private lateinit var binding: ActivityLoginBinding
-    var backgroundId:Int = R.drawable.gradient_blue
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        changeLoginTheme()
         initBinding()
         setContentView(binding.root)
         binding.toolbar.visibility = View.GONE
         setSupportActionBar(binding.toolbar)
-        findNavController(R.id.nav_host_fragment).setGraph(
-            R.navigation.nav_graph,
-            bundleOf(KEY_BACKGROUND_RESOURCE to backgroundId)
-        )
     }
 
     override fun initBinding() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
-    }
-
-    private fun changeLoginTheme() {
-        val backgroundPair = getRandomBackground()
-        backgroundId = backgroundPair.first
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.statusBarColor = ContextCompat.getColor(this,backgroundPair.second)
     }
 }

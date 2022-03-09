@@ -29,6 +29,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.google.android.material.snackbar.Snackbar
 import com.twoplaytech.drbetting.R
@@ -36,6 +38,7 @@ import com.twoplaytech.drbetting.admin.ui.admin.AdminActivity
 import com.twoplaytech.drbetting.admin.ui.common.BaseFragment
 import com.twoplaytech.drbetting.admin.ui.viewmodels.LoginViewModel
 import com.twoplaytech.drbetting.admin.util.dispatchCredentialsDialog
+import com.twoplaytech.drbetting.admin.util.getRandomBackground
 import com.twoplaytech.drbetting.admin.util.isValidPasswordFormat
 import com.twoplaytech.drbetting.data.models.Status
 import com.twoplaytech.drbetting.databinding.FragmentLoginBinding
@@ -52,17 +55,25 @@ class LoginFragment : BaseFragment() {
     private var email: String = ""
     private var pwd: String = ""
     private var credentialsSaved = false
-    private var backgroundId = 0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         initBinding(inflater, container)
+        changeLoginTheme()
         initUI()
         initListeners()
         return loginBinding.root
     }
 
+    private fun changeLoginTheme() {
+        val backgroundPair = getRandomBackground()
+        activity?.let {
+            it.window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            it.window.statusBarColor = ContextCompat.getColor(requireContext(),backgroundPair.second)
+            loginBinding.lytLogin.background = ContextCompat.getDrawable(requireContext(),backgroundPair.first)
+        }
+    }
     private fun initListeners() {
         loginBinding.btLogin.setOnClickListener {
             when {
@@ -197,10 +208,6 @@ class LoginFragment : BaseFragment() {
 
 
     override fun initUI() {
-        arguments?.let {
-            backgroundId = it.getInt(KEY_BACKGROUND_RESOURCE)
-            loginBinding.lytLogin.setBackgroundResource(backgroundId)
-        }
         loginBinding.loadingView.show(false)
         loginViewModel.enableLogin(false)
         loginViewModel.retrieveCredentials()

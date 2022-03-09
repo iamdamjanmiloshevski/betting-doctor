@@ -86,6 +86,7 @@ fun AddBettingTip(
     val bettingTipValidator = FieldValidator(stringResource(id = R.string.error_betting_tip))
     val oddsValidator = FieldValidator(stringResource(id = R.string.error_odds))
     val gameTimeValidator = FieldValidator(stringResource(id = R.string.error_game_time))
+
     Scaffold(topBar = {
         TicketsAppBar(title = "Add new Betting tip", navController = navController, actions = {
             MenuAction(
@@ -152,7 +153,7 @@ fun AddBettingTip(
             val onOpenCloseStatusSpinner: (Boolean) -> Unit = {
                 isOpenSpinnerStatus.value = it
             }
-            if (tipId != null) {
+            if (tipId != null && tipId != "null") {
                 when (val state = viewModel.bettingTipUiState.collectAsState().value) {
                     is BettingTipUiState.Error -> {
                         CenteredItem {

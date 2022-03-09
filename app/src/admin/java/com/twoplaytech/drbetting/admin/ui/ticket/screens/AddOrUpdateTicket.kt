@@ -56,6 +56,9 @@ fun AddOrUpdateTicket(
     val isVisible = remember {
         mutableStateOf(false)
     }
+    val enableNewTips = remember {
+        mutableStateOf(false)
+    }
     val bettingTipsState = remember {
         ticketsViewModel.bettingTips
     }
@@ -96,9 +99,10 @@ fun AddOrUpdateTicket(
                     CenteredItem { CircularProgressIndicator() }
                 }
                 TicketUiState.NewTicket -> {
+                    enableNewTips.value = true
                     if (bettingTipsState.isNotEmpty()) {
                         isVisible.value = true
-                        ShowBettingTips(navController, bettingTipsState, ticketsViewModel)
+                        ShowBettingTips(navController, bettingTipsState)
                     } else {
                         CenteredItem {
                             Text(text = "No tips for this ticket")
@@ -115,14 +119,15 @@ fun AddOrUpdateTicket(
                         ticketsViewModel,
                         ticketTitle
                     )
-                    if (state.isInserted) {
+                    if (state.modified) {
+                        enableNewTips.value = false
                         bettingTipsState.clear()
                         navController.navigateUp()
                     }
                 }
                 else -> throw Exception("I don't know what state I'm in")
             }
-
+        if(enableNewTips.value){
             TicketFloatingActionButton(
                 modifier = Modifier.padding(
                     end = 10.dp,
@@ -148,6 +153,7 @@ fun AddOrUpdateTicket(
                 }
             }
         }
+        }
     }
 }
 
@@ -164,16 +170,27 @@ private fun TicketInfo(
     if (ticket != null) {
         ticketTitle.value = ticket.date
         ticketsViewModel.initialList = ticket.tips
-        isVisible.value = ticketsViewModel.initialList.size < ticketsViewModel.bettingTips.size
+        isVisible.value =  ticketsViewModel.initialList.size < ticketsViewModel.bettingTips.size
         with(ticket) {
             if (bettingTipsState.isNotEmpty()) {
-                tips.forEach {
-                    if (!ticketsViewModel.bettingTips.contains(it)){
-                        ticketsViewModel.bettingTips.add(
-                            it
+                tips.forEachIndexed { index, bettingTip ->
+                    val iTip = ticketsViewModel.bettingTips[index]
+                    if(bettingTip._id == iTip._id){
+                        iTip.copy(
+                            leagueName = bettingTip.leagueName,
+                            teamHome = bettingTip.teamHome,
+                            teamAway = bettingTip.teamAway,
+                            gameTime = bettingTip.gameTime,
+                            bettingType = bettingTip.bettingType,
+                            status = bettingTip.status,
+                            result = bettingTip.result,
+                            sport = bettingTip.sport,
+                            coefficient = bettingTip.coefficient,
+                            ticketId = bettingTip.ticketId
                         )
-                    }
+                    }else ticketsViewModel.bettingTips.add(bettingTip)
                 }
+                isVisible.value = tips != ticketsViewModel.bettingTips
             } else ticketsViewModel.bettingTips.addAll(tips)
             ShowBettingTips(navController, bettingTipsState,this.id)
         }

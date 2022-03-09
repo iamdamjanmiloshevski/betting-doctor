@@ -1,5 +1,6 @@
 package com.twoplaytech.drbetting.admin.data.models
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 import com.twoplaytech.drbetting.data.models.BettingTipInput
 
@@ -9,6 +10,7 @@ import com.twoplaytech.drbetting.data.models.BettingTipInput
     Project: Dr.Betting
     © 2Play Technologies  2022. All rights reserved
 */
+@Keep
 data class TicketInput(
 @SerializedName("date")
 val date: String,

@@ -46,12 +46,12 @@ class TicketsViewModel @Inject constructor(
     val bettingTipUiState: StateFlow<BettingTipUiState?> = _bettingTipUiState
     val bettingTips = mutableStateListOf<BettingTip>()
     var initialList = listOf<BettingTip>()
-
     init {
         getTickets()
     }
 
     fun getTickets() {
+        bettingTips.clear()
         viewModelScope.launch {
             getTicketsUseCase.getTickets()
                 .catch { cause ->
