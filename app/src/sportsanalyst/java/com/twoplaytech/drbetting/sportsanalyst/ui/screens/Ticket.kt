@@ -89,10 +89,10 @@ fun TicketInfo(viewModel: TicketsViewModel) {
     }
 }
 @Composable
-private fun TicketAppBar(
+ fun TicketAppBar(
     activity:AppCompatActivity,
     title:String,
-    onDateChanged:(Long) -> Unit
+    onDateChanged:(Long) -> Unit = {}
 ) {
     TopAppBar(title = {
         Text(
