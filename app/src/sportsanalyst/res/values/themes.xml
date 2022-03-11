@@ -12,6 +12,9 @@
     <item name="materialCalendarTheme">@style/ThemeOverlay.MaterialComponents.MaterialCalendar
     </item>
     <item name="android:statusBarColor">@color/seagreen</item>
+    <item name="windowSplashScreenBackground">@color/splash_green</item>
+    <item name="windowSplashScreenAnimatedIcon">@drawable/ic_notification_icon</item>
+    <item name="windowSplashScreenAnimationDuration">1000</item>
   </style>
   <style name="MaterialCalendarTheme" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
     <!-- just override the colors used in the default style -->

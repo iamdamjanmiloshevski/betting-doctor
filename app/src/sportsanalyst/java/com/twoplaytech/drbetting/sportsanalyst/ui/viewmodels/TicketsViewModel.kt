@@ -1,15 +1,12 @@
 package com.twoplaytech.drbetting.sportsanalyst.ui.viewmodels
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.twoplaytech.drbetting.data.models.Ticket
-import com.twoplaytech.drbetting.sportsanalyst.data.Resource
-import com.twoplaytech.drbetting.sportsanalyst.domain.usecases.GetTicketByDateUseCase
+import com.twoplaytech.drbetting.sportsanalyst.domain.repository.Repository
+import com.twoplaytech.drbetting.sportsanalyst.ui.state.TicketUiState
 import com.twoplaytech.drbetting.sportsanalyst.util.today
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,9 +17,10 @@ import javax.inject.Inject
     © 2Play Tech  2022. All rights reserved
 */
 @HiltViewModel
-class TicketsViewModel @Inject constructor(private val getTicketByDateUseCase: GetTicketByDateUseCase) :
+class TicketsViewModel @Inject constructor(private val repository: Repository) :
     ViewModel() {
-    var ticket: Resource<Ticket?> by mutableStateOf(Resource.Success(null))
+    private val _ticketUiState:MutableStateFlow<TicketUiState?> = MutableStateFlow(null)
+    val ticketUiState:StateFlow<TicketUiState?> = _ticketUiState
 
     init {
         getTicketByDate(today())
@@ -30,17 +28,17 @@ class TicketsViewModel @Inject constructor(private val getTicketByDateUseCase: G
 
      fun getTicketByDate(date: String) {
         viewModelScope.launch {
-            ticket = when(val response = getTicketByDateUseCase.getTicketByDate(date)){
-                is Resource.Error -> {
-                    Resource.Error(response.message,null)
+            repository.getTicketByDate(date)
+                .onStart {
+                    _ticketUiState.value = TicketUiState.Loading
                 }
-                is Resource.Loading -> {
-                    Resource.Loading(null)
+                .catch { cause->
+                    _ticketUiState.value = TicketUiState.Error(cause)
+                }.collect { ticket->
+                    if(ticket.tips.isEmpty()){
+                        _ticketUiState.value = TicketUiState.Error(Throwable("No betting tips available"))
+                    }else   _ticketUiState.value = TicketUiState.Success(ticket.tips)
                 }
-                is Resource.Success -> {
-                    Resource.Success(response.data)
-                }
-            }
         }
     }
 }

@@ -10,6 +10,8 @@
     <activity
       android:name="com.twoplaytech.drbetting.sportsanalyst.ui.MainActivity"
       android:exported="true"
+      android:icon="@mipmap/ic_launcher_analyst"
+    android:roundIcon="@mipmap/ic_launcher_analyst_round"
       android:theme="@style/Theme.DrBetting.NoActionBar">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />

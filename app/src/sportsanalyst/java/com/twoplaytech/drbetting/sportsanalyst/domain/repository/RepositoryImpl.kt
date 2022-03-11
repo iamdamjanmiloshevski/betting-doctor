@@ -25,11 +25,12 @@
 package com.twoplaytech.drbetting.sportsanalyst.domain.repository
 
 import com.twoplaytech.drbetting.data.models.Ticket
-import com.twoplaytech.drbetting.sportsanalyst.data.Resource
 import com.twoplaytech.drbetting.sportsanalyst.data.datasource.RemoteDataSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import timber.log.Timber
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
@@ -47,16 +48,6 @@ class RepositoryImpl @Inject constructor(
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO
 
-    override suspend fun getTicketByDate(date: String): Resource<Ticket> {
-        val response =  try {
-            Resource.Loading(true)
-            val ticket = remoteDataSource.getTicketByDate(date)
-            Resource.Success(ticket)
-        }catch (e:Exception){
-            Timber.e("Error while fetching ticket with date $date. Error -> ${e.localizedMessage}")
-          return  Resource.Error(e.message,null)
-        }
-        Resource.Loading(false)
-        return response
-    }
+    override suspend fun getTicketByDate(date: String): Flow<Ticket> =
+        flow { emit(remoteDataSource.getTicketByDate(date)) }.flowOn(coroutineContext)
 }

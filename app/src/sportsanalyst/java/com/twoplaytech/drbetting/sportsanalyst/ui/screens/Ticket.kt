@@ -3,25 +3,31 @@ package com.twoplaytech.drbetting.sportsanalyst.ui.screens
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import com.twoplaytech.drbetting.sportsanalyst.ui.components.TicketInfo
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.twoplaytech.drbetting.sportsanalyst.ui.state.TicketUiState
 import com.twoplaytech.drbetting.sportsanalyst.ui.theme.SeaGreen
+import com.twoplaytech.drbetting.sportsanalyst.ui.theme.SilverChalice
 import com.twoplaytech.drbetting.sportsanalyst.ui.viewmodels.TicketsViewModel
 import com.twoplaytech.drbetting.sportsanalyst.ui.widgets.showDatePicker
 import com.twoplaytech.drbetting.sportsanalyst.util.*
+import com.twoplaytech.drbetting.ui.common.CenteredItem
+import com.twoplaytech.drbetting.ui.common.TipCard
+import timber.log.Timber
 import java.util.*
 
 /*
@@ -30,11 +36,9 @@ import java.util.*
     Project: Dr.Betting
     © 2Play Technologies  2022. All rights reserved
 */
-@Preview
 @Composable
 fun Ticket(
-    navController: NavController = NavController(LocalContext.current),
-    viewModel: TicketsViewModel = hiltViewModel()
+    viewModel: TicketsViewModel
 ) {
     val date = Date(System.currentTimeMillis())
     val activity = LocalContext.current as AppCompatActivity
@@ -54,7 +58,36 @@ fun Ticket(
         TicketInfo(viewModel)
     }
 }
-
+@Composable
+fun TicketInfo(viewModel: TicketsViewModel) {
+    Surface(modifier = Modifier.fillMaxSize(), color = SilverChalice) {
+        when (val state = viewModel.ticketUiState.collectAsState().value) {
+            is TicketUiState.Error -> {
+                Timber.e(state.exception)
+                CenteredItem {
+                    Text(
+                        text = state.exception.toUserMessage(),
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+            TicketUiState.Loading ->{
+                CenteredItem {
+                    CircularProgressIndicator()
+                }
+            }
+            is TicketUiState.Success -> {
+                LazyColumn(contentPadding = PaddingValues(10.dp)) {
+                    items(state.data) { bettingTip ->
+                        TipCard(bettingTip = bettingTip)
+                    }
+                }
+            }
+            null -> {}
+        }
+    }
+}
 @Composable
 private fun TicketAppBar(
     activity:AppCompatActivity,
@@ -63,7 +96,7 @@ private fun TicketAppBar(
 ) {
     TopAppBar(title = {
         Text(
-            text = "Ticket $title"
+            text = title
         )
     }, actions = {
         Image(

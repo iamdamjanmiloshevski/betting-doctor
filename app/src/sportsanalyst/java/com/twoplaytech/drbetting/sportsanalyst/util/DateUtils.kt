@@ -15,7 +15,7 @@ import java.util.*
     Project: Dr.Betting
     © 2Play Tech  2022. All rights reserved
 */
-val dateFormatter: DateTimeFormatter? = DateTimeFormatter.ofPattern("dd MMM yyyy")
+val dateFormatter: DateTimeFormatter? = DateTimeFormatter.ofPattern("dd MMMM yyyy")
 val calendar: Calendar = Calendar.getInstance()
 
 fun String.beautifyDate(): String {

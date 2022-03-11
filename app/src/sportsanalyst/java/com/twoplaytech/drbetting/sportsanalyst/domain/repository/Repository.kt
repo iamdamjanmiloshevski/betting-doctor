@@ -25,7 +25,7 @@
 package com.twoplaytech.drbetting.sportsanalyst.domain.repository
 
 import com.twoplaytech.drbetting.data.models.Ticket
-import com.twoplaytech.drbetting.sportsanalyst.data.Resource
+import kotlinx.coroutines.flow.Flow
 
 /*
     Author: Damjan Miloshevski 
@@ -34,5 +34,5 @@ import com.twoplaytech.drbetting.sportsanalyst.data.Resource
     © 2Play Tech  2021. All rights reserved
 */
 interface Repository {
-   suspend fun getTicketByDate(date: String): Resource<Ticket>
+   suspend fun getTicketByDate(date: String): Flow<Ticket>
 }
