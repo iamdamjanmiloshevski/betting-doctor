@@ -8,41 +8,48 @@
     android:label="@string/app_name"
     android:fullBackupContent="@xml/backup_descriptor"
     android:networkSecurityConfig="@xml/network_config"
-    android:roundIcon="@mipmap/app_logo_admin_round"
+    android:roundIcon="@drawable/app_logo"
     android:supportsRtl="true"
-    android:theme="@style/Theme.DrBetting"
+    android:theme="@style/Theme.App.StartingAdmin"
     android:dataExtractionRules="@xml/data_extraction_rules">
     <activity
       android:name="com.twoplaytech.drbetting.admin.ui.ticket.TicketActivity"
       android:exported="true"
+      android:screenOrientation="portrait"
       android:label="@string/title_activity_ticket"
       android:theme="@style/Theme.MaterialComponents.NoActionBar.Bridge"/>
     <activity
       android:name="com.twoplaytech.drbetting.admin.ui.admin.BettingTipActivity"
       android:label="@string/title_activity_betting_tip"
+      android:exported="true"
+      android:screenOrientation="portrait"
       android:theme="@style/Theme.DrBetting.NoActionBar" />
     <activity
       android:name="com.twoplaytech.drbetting.admin.ui.admin.AdminActivity"
       android:label="@string/title_activity_admin"
+      android:exported="true"
       android:screenOrientation="portrait"
       android:theme="@style/Theme.DrBetting.NoActionBar" />
     <activity
       android:name="com.twoplaytech.drbetting.admin.ui.auth.LoginActivity"
       android:label="@string/title_activity_login"
-      android:screenOrientation="portrait"
-      android:theme="@style/Theme.DrBetting.NoActionBar" />
-    <activity
-      android:name="com.twoplaytech.drbetting.admin.ui.AdminSplashActivity"
       android:exported="true"
       android:screenOrientation="portrait"
-      android:theme="@style/SplashScreenTheme">
+      android:theme="@style/Theme.DrBetting.NoActionBar" >
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 
         <category android:name="android.intent.category.LAUNCHER" />
         <category android:name="android.intent.category.DEFAULT" />
       </intent-filter>
-    </activity> <!-- If you want to disable android.startup completely. -->
+    </activity>
+    <activity
+      android:name="com.twoplaytech.drbetting.admin.ui.AdminSplashActivity"
+      android:exported="true"
+      android:screenOrientation="portrait"
+      android:theme="@style/SplashScreenTheme"/>
+
+    <!-- If you want to disable android.startup completely. -->
     <provider
       android:name="androidx.startup.InitializationProvider"
       android:authorities="${applicationId}.androidx-startup"

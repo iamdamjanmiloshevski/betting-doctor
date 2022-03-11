@@ -36,4 +36,13 @@
   <style name="Theme.DrBetting" parent="android:Theme.Material.Light.NoActionBar">
     <item name="android:statusBarColor">@color/purple_700</item>
   </style>
+  <style name="Theme.App.StartingAdmin" parent="Theme.SplashScreen.IconBackground">
+    <item name="windowSplashScreenBackground">@color/splash_green</item>
+    <item name="windowSplashScreenAnimatedIcon">@drawable/app_logo</item>
+    <item name="windowSplashScreenAnimationDuration">2000</item>  # Required for
+    # animated icons
+
+    // Set the theme of the Activity that directly follows your splash screen.
+    <item name="postSplashScreenTheme">@style/Theme.DrBetting</item>  # Required.
+  </style>
 </resources>

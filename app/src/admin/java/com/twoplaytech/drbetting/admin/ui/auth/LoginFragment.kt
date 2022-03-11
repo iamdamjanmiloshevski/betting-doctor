@@ -55,6 +55,7 @@ class LoginFragment : BaseFragment() {
     private var email: String = ""
     private var pwd: String = ""
     private var credentialsSaved = false
+    private var backgroundId = R.drawable.gradient_blue
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -68,6 +69,7 @@ class LoginFragment : BaseFragment() {
 
     private fun changeLoginTheme() {
         val backgroundPair = getRandomBackground()
+        backgroundId = backgroundPair.first
         activity?.let {
             it.window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             it.window.statusBarColor = ContextCompat.getColor(requireContext(),backgroundPair.second)

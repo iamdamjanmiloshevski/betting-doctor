@@ -26,6 +26,7 @@ package com.twoplaytech.drbetting.admin.ui.auth
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.twoplaytech.drbetting.admin.ui.common.BaseActivity
 import com.twoplaytech.drbetting.databinding.ActivityLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,6 +35,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class LoginActivity : BaseActivity() {
     private lateinit var binding: ActivityLoginBinding
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         initBinding()
         setContentView(binding.root)
