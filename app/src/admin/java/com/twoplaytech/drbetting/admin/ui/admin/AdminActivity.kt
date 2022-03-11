@@ -113,23 +113,22 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
                     OneTimeWorkRequestBuilder<SessionVerifierWorker>().build()
                 WorkManager.getInstance(this).enqueue(sessionVerifierWorkRequest)
                 WorkManager.getInstance(this).getWorkInfoByIdLiveData(sessionVerifierWorkRequest.id)
-                    .observe(this,
-                        { workInfo ->
-                            if (workInfo.state == WorkInfo.State.FAILED) {
-                                MaterialDialog(this).show {
-                                    title(null, getString(R.string.session))
-                                    message(R.string.session_expired)
-                                    cancelable(false)
-                                    positiveButton(android.R.string.ok, null) {
-                                        dismiss()
-                                        logout()
-                                    }
+                    .observe(this
+                    ) { workInfo ->
+                        if (workInfo.state == WorkInfo.State.FAILED) {
+                            MaterialDialog(this).show {
+                                title(null, getString(R.string.session))
+                                message(R.string.session_expired)
+                                cancelable(false)
+                                positiveButton(android.R.string.ok, null) {
+                                    dismiss()
+                                    logout()
                                 }
-                            } else if (workInfo.state == WorkInfo.State.SUCCEEDED) {
-                                observeData()
                             }
+                        } else if (workInfo.state == WorkInfo.State.SUCCEEDED) {
+                            observeData()
                         }
-                    )
+                    }
             } else {
                 bettingTipsViewModel.incrementAppLaunch()
                 observeData()
@@ -149,7 +148,7 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
     }
 
     override fun observeData() {
-        viewModel.observeTips().observe(this, { resource ->
+        viewModel.observeTips().observe(this) { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
                     val items = resource.data as List<BettingTip>
@@ -161,22 +160,22 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
                 Status.LOADING -> {
                 }
             }
-        })
-        adminViewModel.observeDeletedTip().observe(this,
-            { resource ->
-                when (resource.status) {
-                    Status.SUCCESS -> {
-                        changeData(sportSelected.getSportFromIndex(), typeSelected)
-                    }
-                    Status.ERROR -> {
-                    }
-                    Status.LOADING -> {
-                    }
+        }
+        adminViewModel.observeDeletedTip().observe(this
+        ) { resource ->
+            when (resource.status) {
+                Status.SUCCESS -> {
+                    changeData(sportSelected.getSportFromIndex(), typeSelected)
                 }
-            })
-        adminViewModel.observeNotifications().observe(this,{
-            Toast.makeText(this,it,Toast.LENGTH_SHORT).show()
-        })
+                Status.ERROR -> {
+                }
+                Status.LOADING -> {
+                }
+            }
+        }
+        adminViewModel.observeNotifications().observe(this) {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun initBinding() {
@@ -368,11 +367,11 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
     override fun onResume() {
         super.onResume()
         bettingTipsViewModel.getAppLaunchCount()
-        //checkSession()
         when (typeSelected) {
             0 -> requestOlderData(sportSelected.getSportFromIndex())
             1 -> requestTodayData(sportSelected.getSportFromIndex())
         }
+        observeData()
     }
 
     private fun showMenu(anchor: View?) {

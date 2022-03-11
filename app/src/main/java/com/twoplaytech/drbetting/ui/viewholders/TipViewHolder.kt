@@ -44,10 +44,6 @@ class TipViewHolder(val binding: ItemTipBinding) : RecyclerView.ViewHolder(bindi
             binding.status.setData(status = this.status)
             binding.sport.setData(sport = bettingTip.sport)
             if(showSportInItem) binding.sport.visibility = View.INVISIBLE else View.VISIBLE
-            if(this.coefficient != null){
-                binding.bettingCoefficient.visibility = View.VISIBLE
-                binding.bettingCoefficient.setData(text = this.coefficient)
-            }else binding.bettingCoefficient.visibility = View.INVISIBLE
             binding.gameTime.text = this.gameTime.beautifyDate(binding.root.context)
         }
     }
