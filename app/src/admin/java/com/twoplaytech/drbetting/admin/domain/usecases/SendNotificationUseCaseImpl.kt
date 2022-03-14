@@ -26,6 +26,9 @@ package com.twoplaytech.drbetting.admin.domain.usecases
 
 import com.twoplaytech.drbetting.admin.domain.repository.Repository
 import com.twoplaytech.drbetting.data.models.Message
+import com.twoplaytech.drbetting.data.models.Notification
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 /*
@@ -37,12 +40,16 @@ import javax.inject.Inject
 class SendNotificationUseCaseImpl @Inject constructor(repository: Repository) : UseCase(repository),
     SendNotificationUseCase {
     override fun sendNotification(
-        topic: String,
-        onSuccess: () -> Unit,
+        notification: Notification,
+        onSuccess: (Notification) -> Unit,
         onError: (Message) -> Unit
     ) {
-        repository.sendNotification(topic, onSuccess = {
-            onSuccess.invoke()
+        repository.sendNotification(notification, onSuccess = {
+            onSuccess.invoke(notification)
         }, onError = { onError.invoke(it) })
+    }
+
+    override suspend fun sendNotification(notification: Notification): Flow<Notification> {
+     return flow { emit(  repository.sendNotification(notification)) }
     }
 }

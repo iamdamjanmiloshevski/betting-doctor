@@ -1,6 +1,6 @@
-package com.twoplaytech.drbetting.sportsanalyst.data.mappers
+package com.twoplaytech.drbetting.data.mappers
 
-import com.twoplaytech.drbetting.sportsanalyst.data.Notification
+import com.twoplaytech.drbetting.data.models.Notification
 
 
 /*

@@ -36,7 +36,9 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.text.format.DateFormat
 import android.view.LayoutInflater
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import com.twoplaytech.drbetting.R
@@ -334,4 +336,7 @@ fun Long.beautify():String{
     val dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy")
     return zdt.format(dtf)
 
+}
+fun Context.toast(message:String,duration:Int){
+    Toast.makeText(this,message, duration).show()
 }

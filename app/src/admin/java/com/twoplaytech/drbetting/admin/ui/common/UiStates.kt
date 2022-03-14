@@ -1,6 +1,7 @@
 package com.twoplaytech.drbetting.admin.ui.common
 
 import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.Notification
 import com.twoplaytech.drbetting.data.models.Ticket
 
 /*
@@ -24,4 +25,9 @@ sealed class BettingTipUiState{
     data class Success(val bettingTip:BettingTip):BettingTipUiState()
     object Loading:BettingTipUiState()
     data class Error(val exception:Throwable):BettingTipUiState()
+}
+sealed class NotificationUiState{
+    data class Success(val notification: Notification):NotificationUiState()
+    object Loading:NotificationUiState()
+    data class Error(val exception:Throwable):NotificationUiState()
 }

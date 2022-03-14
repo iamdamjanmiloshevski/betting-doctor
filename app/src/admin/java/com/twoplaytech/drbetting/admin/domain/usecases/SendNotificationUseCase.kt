@@ -25,6 +25,8 @@
 package com.twoplaytech.drbetting.admin.domain.usecases
 
 import com.twoplaytech.drbetting.data.models.Message
+import com.twoplaytech.drbetting.data.models.Notification
+import kotlinx.coroutines.flow.Flow
 
 /*
     Author: Damjan Miloshevski 
@@ -33,5 +35,6 @@ import com.twoplaytech.drbetting.data.models.Message
     © 2Play Tech  2021. All rights reserved
 */
 interface SendNotificationUseCase {
-    fun sendNotification(topic:String,onSuccess: () -> Unit,onError: (Message) -> Unit)
+    fun sendNotification(notification: Notification,onSuccess: (Notification) -> Unit,onError: (Message) -> Unit)
+    suspend fun sendNotification(notification: Notification):Flow<Notification>
 }

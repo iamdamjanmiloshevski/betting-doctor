@@ -225,27 +225,23 @@ class RepositoryImpl @Inject constructor(
         )
     }
 
-//    override fun getRefreshTokenAsync(): AccessToken {
-//        return runBlocking {
-//            val accessToken = getAccessTokenAsync()
-//            val newToken = remoteDataSource.refreshTokenAsync(accessToken.refreshToken)
-//            saveToken(newToken)
-//            newToken
-//        }
-//    }
 
     override fun sendNotification(
-        topic: String,
-        onSuccess: () -> Unit,
+        notification: Notification,
+        onSuccess: (Notification) -> Unit,
         onError: (Message) -> Unit
     ) {
         launch(coroutineContext) {
-            remoteDataSource.sendNotification(topic).catch { cause ->
+            remoteDataSource.sendNotification(notification).catch { cause ->
                 sendErrorMessage(onError, cause)
             }.collect {
-                onSuccess.invoke()
+                onSuccess.invoke(it)
             }
         }
+    }
+
+    override suspend fun sendNotification(notification: Notification): Notification {
+        return remoteDataSource.sendNotification1(notification)
     }
 
 

@@ -8,14 +8,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.twoplaytech.drbetting.admin.data.Resource
 import com.twoplaytech.drbetting.admin.data.models.TicketInput
-import com.twoplaytech.drbetting.admin.domain.usecases.DeleteTicketUseCase
-import com.twoplaytech.drbetting.admin.domain.usecases.GetTicketsUseCase
-import com.twoplaytech.drbetting.admin.domain.usecases.InsertTicketUseCase
-import com.twoplaytech.drbetting.admin.domain.usecases.UpdateTicketUseCase
+import com.twoplaytech.drbetting.admin.domain.usecases.*
 import com.twoplaytech.drbetting.admin.ui.common.BettingTipUiState
+import com.twoplaytech.drbetting.admin.ui.common.NotificationUiState
 import com.twoplaytech.drbetting.admin.ui.common.TicketUiState
 import com.twoplaytech.drbetting.admin.ui.common.TicketsUiState
 import com.twoplaytech.drbetting.data.models.BettingTip
+import com.twoplaytech.drbetting.data.models.Notification
 import com.twoplaytech.drbetting.data.models.Ticket
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -35,7 +34,8 @@ class TicketsViewModel @Inject constructor(
     private val getTicketsUseCase: GetTicketsUseCase,
     private val insertTicketUseCase: InsertTicketUseCase,
     private val updateTicketUseCase: UpdateTicketUseCase,
-    private val deleteTicketUseCase: DeleteTicketUseCase
+    private val deleteTicketUseCase: DeleteTicketUseCase,
+    private val sendNotificationUseCase: SendNotificationUseCase
 ) : ViewModel() {
     var ticket: Resource<Ticket?> by mutableStateOf(Resource.Success(null))
     private val _ticketsUiState: MutableStateFlow<TicketsUiState?> = MutableStateFlow(null)
@@ -44,8 +44,12 @@ class TicketsViewModel @Inject constructor(
     val ticketUiState: StateFlow<TicketUiState?> = _ticketUiState
     private val _bettingTipUiState: MutableStateFlow<BettingTipUiState?> = MutableStateFlow(null)
     val bettingTipUiState: StateFlow<BettingTipUiState?> = _bettingTipUiState
+    private val _notificationState: MutableStateFlow<NotificationUiState?> =
+        MutableStateFlow(null)
+    val notificationState:StateFlow<NotificationUiState?> = _notificationState
     val bettingTips = mutableStateListOf<BettingTip>()
     var initialList = listOf<BettingTip>()
+
     init {
         getTickets()
     }
@@ -143,13 +147,28 @@ class TicketsViewModel @Inject constructor(
             }
         }
     }
+
     fun updateBettingTip(bettingTip: BettingTip) {
-            val iterator = bettingTips.listIterator()
-            while (iterator.hasNext()) {
-                val bTip = iterator.next()
-                if (bTip._id == bettingTip._id) {
-                    iterator.set(bettingTip)
-                }
+        val iterator = bettingTips.listIterator()
+        while (iterator.hasNext()) {
+            val bTip = iterator.next()
+            if (bTip._id == bettingTip._id) {
+                iterator.set(bettingTip)
             }
+        }
+    }
+
+    fun sendNotification(topic: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            sendNotificationUseCase.sendNotification(Notification(topic))
+                .onStart {
+                    Timber.i("Sending notification to topic $topic")
+                    _notificationState.value = NotificationUiState.Loading
+                }.catch { e ->
+                    _notificationState.value = NotificationUiState.Error(e)
+                }.collect {
+                    _notificationState.value = NotificationUiState.Success(it)
+                }
+        }
     }
 }

@@ -11,8 +11,8 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.twoplaytech.drbetting.R
-import com.twoplaytech.drbetting.sportsanalyst.data.Notification
-import com.twoplaytech.drbetting.sportsanalyst.data.mappers.NotificationMapperImpl
+import com.twoplaytech.drbetting.data.mappers.NotificationMapperImpl
+import com.twoplaytech.drbetting.data.models.Notification
 import com.twoplaytech.drbetting.sportsanalyst.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -25,7 +25,7 @@ import kotlin.random.Random
     © 2Play Technologies  2022. All rights reserved
 */
 @AndroidEntryPoint
-class SportsAnalystMessagingService: FirebaseMessagingService() {
+class DoctorBettingMessagingService: FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         if(!message.data.isNullOrEmpty()){
             sendNotification(NotificationMapperImpl.toNotification(  message.data))
@@ -36,7 +36,7 @@ class SportsAnalystMessagingService: FirebaseMessagingService() {
      *
      * @param messageBody FCM message body received.
      */
-    private fun sendNotification(notification:Notification) {
+    private fun sendNotification(notification: Notification) {
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {

@@ -32,7 +32,6 @@
       android:theme="@style/Theme.DrBetting.NoActionBar" />
     <activity
       android:name="com.twoplaytech.drbetting.admin.ui.auth.LoginActivity"
-      android:label="@string/title_activity_login"
       android:exported="true"
       android:screenOrientation="portrait"
       android:theme="@style/Theme.DrBetting.NoActionBar" >
@@ -43,11 +42,6 @@
         <category android:name="android.intent.category.DEFAULT" />
       </intent-filter>
     </activity>
-    <activity
-      android:name="com.twoplaytech.drbetting.admin.ui.AdminSplashActivity"
-      android:exported="true"
-      android:screenOrientation="portrait"
-      android:theme="@style/SplashScreenTheme"/>
 
     <!-- If you want to disable android.startup completely. -->
     <provider

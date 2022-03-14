@@ -85,11 +85,14 @@ class RemoteDataSourceImpl @Inject constructor(private val api: BettingDoctorAPI
         api.refreshToken(refreshToken)
 
 
-
-    override suspend fun sendNotification(topic: String): Flow<Unit> {
-        return flow { emit(api.sendNotification(topic)) }.flowOn(coroutineContext)
+    override suspend fun sendNotification(notification: Notification): Flow<Notification> {
+        return flow { emit(api.sendNotification(notification)) }.flowOn(coroutineContext)
 
     }
+
+    override suspend fun sendNotification1(notification: Notification): Notification =
+        api.sendNotification(notification)
+
 
     override suspend fun getTickets(): List<Ticket> {
         return api.getTickets()

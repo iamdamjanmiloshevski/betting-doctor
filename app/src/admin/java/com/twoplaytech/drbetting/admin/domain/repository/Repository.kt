@@ -66,29 +66,42 @@ interface Repository {
     fun saveLogin(shouldStayLoggedIn: Boolean)
     fun saveUserCredentials(email: String, password: String)
     fun saveToken(accessToken: AccessToken)
+
     fun incrementAppLaunch()
+
     fun retrieveUserCredentials(onSuccess: (Credentials) -> Unit, onError: (Throwable) -> Unit)
     fun isAlreadyLoggedIn(callback: (Boolean) -> Unit)
+
     fun getAppLaunchesCount(callback: (Int) -> Unit)
+
+
     fun getAccessToken(
         onSuccess: (AccessToken) -> Unit,
         onError: (Message) -> Unit
     )
-
-
-     fun refreshToken(refreshToken: RefreshToken): AccessToken
+    fun refreshToken(refreshToken: RefreshToken): AccessToken
+    fun getToken(): AccessToken?
     suspend fun getAccessTokenAsync(): AccessToken
-    fun sendNotification(topic:String,onSuccess: () -> Unit,onError: (Message) -> Unit)
-    fun getToken():AccessToken?
-    fun getAppTheme(callback: (Int) -> Unit)
-    fun saveAppTheme(appTheme:Int)
-    fun userCredentials():Credentials?
 
-    suspend fun getTickets():List<Ticket>
-    suspend fun getTicketById( id:String): Ticket
+
+    fun sendNotification(
+        notification: Notification,
+        onSuccess: (Notification) -> Unit,
+        onError: (Message) -> Unit
+    )
+    suspend fun sendNotification(notification: Notification):Notification
+
+
+    fun getAppTheme(callback: (Int) -> Unit)
+    fun saveAppTheme(appTheme: Int)
+
+    fun userCredentials(): Credentials?
+
+    suspend fun getTickets(): List<Ticket>
+    suspend fun getTicketById(id: String): Ticket
     suspend fun insertTicket(ticket: TicketInput): Ticket
-    suspend fun updateTicket( ticket: TicketInput): Ticket
-    suspend fun deleteTicketById(id:String):Message
+    suspend fun updateTicket(ticket: TicketInput): Ticket
+    suspend fun deleteTicketById(id: String): Message
 
 
 }

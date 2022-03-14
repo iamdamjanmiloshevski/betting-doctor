@@ -67,8 +67,8 @@ interface BettingDoctorAPI {
     @POST("users/token")
     suspend fun refreshToken(@Body refreshToken: RefreshToken): AccessToken
 
-    @POST("users/notifications/{topic}")
-    suspend fun sendNotification(@Path("topic") notificationsTopic:String)
+    @POST("users/notifications")
+    suspend fun sendNotification(@Body notification: Notification): Notification
 
     @GET("betting-tickets")
     suspend fun getTickets():List<Ticket>

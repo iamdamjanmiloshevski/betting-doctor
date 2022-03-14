@@ -33,6 +33,7 @@ import com.twoplaytech.drbetting.admin.domain.usecases.SendNotificationUseCase
 import com.twoplaytech.drbetting.admin.domain.usecases.UpdateBettingTipUseCase
 import com.twoplaytech.drbetting.data.models.BettingTip
 import com.twoplaytech.drbetting.data.models.Message
+import com.twoplaytech.drbetting.data.models.Notification
 import com.twoplaytech.drbetting.domain.common.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -86,8 +87,8 @@ class AdminViewModel @Inject constructor(
     }
 
     fun sendNotification(topic: String = "new-tips") {
-        sendNotificationUseCase.sendNotification(topic, onSuccess = {
-            notificationsObserver.postValue("Notification sent successfully")
+        sendNotificationUseCase.sendNotification(Notification(topic), onSuccess = {
+            notificationsObserver.postValue(it.message)
         }, onError = {
             notificationsObserver.postValue("Something went wrong while trying to send notification")
         })

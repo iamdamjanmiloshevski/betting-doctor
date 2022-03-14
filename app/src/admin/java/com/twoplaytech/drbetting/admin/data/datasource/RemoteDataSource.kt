@@ -56,8 +56,8 @@ interface RemoteDataSource {
 
     suspend fun signIn(userInput: UserInput): Flow<AccessToken>
     suspend fun refreshToken(refreshToken: RefreshToken):AccessToken
-    suspend fun sendNotification(topic:String):Flow<Unit>
-
+    suspend fun sendNotification(notification: Notification):Flow<Notification>
+    suspend fun sendNotification1(notification: Notification):Notification
 
     suspend fun getTickets():List<Ticket>
     suspend fun getTicketById( id:String): Ticket

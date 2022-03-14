@@ -20,7 +20,7 @@
       </intent-filter>
     </activity>
     <service
-    android:name="com.twoplaytech.drbetting.sportsanalyst.service.SportsAnalystMessagingService"
+    android:name="com.twoplaytech.drbetting.sportsanalyst.service.DoctorBettingMessagingService"
     android:exported="false">
     <intent-filter>
     <action android:name="com.google.firebase.MESSAGING_EVENT" />
