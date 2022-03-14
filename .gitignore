@@ -129,14 +129,6 @@ output.json
 *.ipr
 *~
 *.swp
-
-# Keystore files
-*.jks
-*.keystore
-
-# Google Services (e.g. APIs or Firebase)
- app/google-services.json
-
 # Android Patch
 
 # External native build folder generated in Android Studio 2.2 and later
@@ -218,10 +210,11 @@ fabric.properties
 /gradlew.bat
 /app/src/admin/google-services.json
 /app/src/client/google-services.json
+/app/src/sportsanalyst/google-services.json
 google-services.json
 admin.properties
 client.properties
 client-version.properties
 admin-version.properties
-
+sports-analyst.properties
 # End of https://www.toptal.com/developers/gitignore/api/android,androidstudio

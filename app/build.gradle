@@ -32,6 +32,12 @@ android {
   def adminPassword = adminProperties['key.pwd']
   def adminKeyLocation = adminProperties['key.location']
 
+  Properties sportsAnalystProperties = new Properties()
+  sportsAnalystProperties.load(project.rootProject.file("sports-analyst.properties").newDataInputStream())
+  def sportsAnalystKeyAlias = sportsAnalystProperties['key.alias']
+  def sportsAnalystPassword = sportsAnalystProperties['key.pwd']
+  def sportsAnalystKeyLocation = sportsAnalystProperties['key.location']
+
   signingConfigs {
     client {
       keyAlias clientKeyAlias
@@ -44,6 +50,12 @@ android {
       keyPassword adminPassword
       storeFile file(adminKeyLocation)
       storePassword adminPassword
+    }
+    sportsAnalyst{
+      keyAlias sportsAnalystKeyAlias
+      keyPassword sportsAnalystPassword
+      storeFile file(sportsAnalystKeyLocation)
+      storePassword sportsAnalystPassword
     }
   }
 
@@ -65,6 +77,7 @@ android {
   productFlavors {
     def clientConfig = signingConfigs.client
     def adminConfig = signingConfigs.admin
+    def sportsAnalystConfig = signingConfigs.sportsAnalyst
     client {
       dimension "default"
       signingConfig clientConfig
@@ -87,6 +100,9 @@ android {
 
     sportsAnalyst{
       dimension "default"
+      signingConfig sportsAnalystConfig
+      versionCode 1
+      versionName "1.0.0"
       applicationId "com.twoplaytech.drbetting.sportsanalyst"
       manifestPlaceholders = [appLabel: "Sports Analyst"]
       resValue "string", "app_name", "Sports Analyst"
