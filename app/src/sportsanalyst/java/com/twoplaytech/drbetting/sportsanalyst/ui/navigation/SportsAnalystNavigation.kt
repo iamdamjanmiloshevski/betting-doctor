@@ -5,8 +5,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.twoplaytech.drbetting.sportsanalyst.ui.screens.Settings
 import com.twoplaytech.drbetting.sportsanalyst.ui.screens.Ticket
-import com.twoplaytech.drbetting.sportsanalyst.ui.viewmodels.TicketsViewModel
+import com.twoplaytech.drbetting.sportsanalyst.ui.screens.settings.SettingsViewModel
+import com.twoplaytech.drbetting.sportsanalyst.ui.screens.tickets.TicketsViewModel
 
 /*
     Author: Damjan Miloshevski 
@@ -20,7 +22,11 @@ fun SportsAnalystNavigation() {
     NavHost(navController = navController, startDestination = Route.Ticket.name) {
         composable(Route.Ticket.name) {
             val viewModel = hiltViewModel<TicketsViewModel>()
-            Ticket(viewModel)
+            Ticket(navController,viewModel)
+        }
+        composable(Route.Settings.name){
+            val viewModel = hiltViewModel<SettingsViewModel>()
+            Settings(navController,viewModel)
         }
     }
 }

@@ -7,6 +7,5 @@ package com.twoplaytech.drbetting.sportsanalyst.ui.navigation
     © 2Play Technologies  2022. All rights reserved
 */
 enum class Route {
-    Splash,
-    Ticket
+    Ticket,Settings
 }

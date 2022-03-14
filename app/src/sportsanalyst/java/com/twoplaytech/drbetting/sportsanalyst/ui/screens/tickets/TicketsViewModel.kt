@@ -1,4 +1,4 @@
-package com.twoplaytech.drbetting.sportsanalyst.ui.viewmodels
+package com.twoplaytech.drbetting.sportsanalyst.ui.screens.tickets
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

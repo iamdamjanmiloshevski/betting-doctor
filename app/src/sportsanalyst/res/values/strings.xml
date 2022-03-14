@@ -4,4 +4,7 @@
   <string name="sport">Sport</string>
   <string name="status">Status</string>
   <string name="odds">Odds</string>
+  <string name="receive_string_notification">Receive push notifications</string>
+  <string name="push_notifications_enabled">Push notifications are enabled</string>
+  <string name="push_notifications_disabled">Push notifications are disabled</string>
 </resources>

@@ -2,8 +2,6 @@ package com.twoplaytech.drbetting.sportsanalyst.ui.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -11,10 +9,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.twoplaytech.drbetting.R
+import com.twoplaytech.drbetting.sportsanalyst.ui.components.SportsAnalystAppBar
+import com.twoplaytech.drbetting.sportsanalyst.ui.screens.settings.SettingsViewModel
 import com.twoplaytech.drbetting.sportsanalyst.ui.theme.SeaGreen
 import com.twoplaytech.drbetting.sportsanalyst.ui.theme.SomeGreen
 
@@ -24,19 +26,17 @@ import com.twoplaytech.drbetting.sportsanalyst.ui.theme.SomeGreen
     Project: Dr.Betting
     © 2Play Technologies  2022. All rights reserved
 */
-@Preview
 @Composable
-fun Settings() {
-
-    val checkedState = remember { mutableStateOf(true) }
+fun Settings(
+    navController: NavController,
+    settingsViewModel: SettingsViewModel
+) {
+    val checkedState = remember { mutableStateOf(settingsViewModel.pushNotificationsState.value) }
     Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
-        TopAppBar(title = {
-            Text(
-                text = "Settings"
-            )
-        }, navigationIcon = {
-            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Go back icon")
-        }, backgroundColor = SeaGreen)
+        SportsAnalystAppBar(
+            title = stringResource(id = R.string.item_settings), true, onBackPressed = {
+                navController.navigateUp()
+            })
     }) {
         Column(
             modifier = Modifier
@@ -45,17 +45,19 @@ fun Settings() {
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.Start
         ) {
-            val pushNotificationsCategory = "Push notifications"
+            val pushNotificationsCategory = stringResource(id = R.string.push_notifications)
             SettingCategory(pushNotificationsCategory) {
-                val settingTitle = "Receive push notifications"
-                val enabledSettingMessage = "Push notifications are enabled"
-                val disabledSettingMessage = "Push notifications are disabled"
+                val settingTitle = stringResource(R.string.receive_string_notification)
+                val enabledSettingMessage = stringResource(R.string.push_notifications_enabled)
+                val disabledSettingMessage = stringResource(R.string.push_notifications_disabled)
                 SettingSwitch(
                     settingTitle,
                     checkedState,
                     enabledSettingMessage,
                     disabledSettingMessage
-                )
+                ) {
+                    settingsViewModel.enableNotifications(it)
+                }
             }
         }
     }
@@ -86,7 +88,8 @@ private fun SettingSwitch(
     settingTitle: String,
     checkedState: MutableState<Boolean>,
     enabledSettingMessage: String,
-    disabledSettingMessage: String
+    disabledSettingMessage: String,
+    onSettingChanged: (Boolean) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -102,7 +105,10 @@ private fun SettingSwitch(
         )
         Switch(
             checked = checkedState.value,
-            onCheckedChange = { checkedState.value = it },
+            onCheckedChange = {
+                checkedState.value = it
+                onSettingChanged.invoke(it)
+            },
             colors = SwitchDefaults.colors(
                 checkedThumbColor = SeaGreen,
                 checkedTrackColor = SomeGreen,
