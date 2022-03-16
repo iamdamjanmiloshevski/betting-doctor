@@ -107,6 +107,7 @@ class TicketsViewModel @Inject constructor(
     }
 
     fun updateTicket(ticketInput: TicketInput) {
+        Timber.e("Updating ticket")
         viewModelScope.launch(Dispatchers.IO) {
             updateTicketUseCase.updateTicket(ticketInput).catch { cause ->
                 _ticketUiState.value = TicketUiState.Error(cause)

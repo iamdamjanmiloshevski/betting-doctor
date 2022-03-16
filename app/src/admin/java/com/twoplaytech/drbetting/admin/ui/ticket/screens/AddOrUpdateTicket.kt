@@ -109,42 +109,76 @@ fun AddOrUpdateTicket(
             color = colorResource(id = R.color.silver_chalice)
         ) {
             val context = LocalContext.current
-            ticket = observeTicketState(
-                ticketsViewModel,
-                enableNewTips,
-                bettingTipsState,
-                isVisible,
-                navController,
-                ticket,
-                ticketTitle
-            )
-            if (enableNewTips.value) {
-                TicketFloatingActionButton(
-                    modifier = Modifier.padding(
-                        end = 10.dp,
-                        bottom = 10.dp
-                    ),
-                    icon = Icons.Default.Add,
-                    contentDescription = "Add Betting Tip Icon"
-                ) {
-                    if (ticket != null) {
-                        ticket?.let {
-                            navController.navigate(
-                                TicketRoute.route(
-                                    TicketRoute.AddOrUpdateBettingTip
-                                ).plus("?ticketId=${it.id},?tipId=${null}")
-                            )
-                        }
+            when (val state = ticketsViewModel.ticketUiState.collectAsState().value) {
+                is TicketUiState.Error -> {
+
+                }
+                TicketUiState.Loading -> {
+                    CenteredItem { CircularProgressIndicator() }
+                }
+                TicketUiState.NewTicket -> {
+                    enableNewTips.value = true
+                    if (bettingTipsState.isNotEmpty()) {
+                        isVisible.value = true
+                        ShowBettingTips(navController, bettingTipsState)
                     } else {
-                        navController.navigate(
-                            TicketRoute.route(
-                                TicketRoute.AddOrUpdateBettingTip
-                            )
-                        )
+                        CenteredItem {
+                            Text(text = "No tips for this ticket")
+                        }
                     }
                 }
+                is TicketUiState.Success -> {
+                     ticket = state.ticket
+                    TicketInfo(
+                        navController,
+                        isVisible,
+                        ticket,
+                        bettingTipsState,
+                        ticketsViewModel,
+                        ticketTitle
+                    )
+                    if (state.modified) {
+                        enableNewTips.value = false
+                        bettingTipsState.clear()
+                        navController.navigateUp()
+                    }
+                }
+                else -> throw Exception("I don't know what state I'm in")
             }
+            ShowFloatingActionButton(enableNewTips, ticket, navController)
             ObserveNotifications(ticketsViewModel, context)
+        }
+    }
+}
+
+@Composable
+private fun ShowFloatingActionButton(
+    enableNewTips: MutableState<Boolean>,
+    ticket: Ticket?,
+    navController: NavController
+) {
+    if (enableNewTips.value) {
+        TicketFloatingActionButton(
+            modifier = Modifier.padding(
+                end = 10.dp,
+                bottom = 10.dp
+            ),
+            icon = Icons.Default.Add,
+            contentDescription = "Add Betting Tip Icon"
+        ) {
+            if (ticket != null) {
+                    navController.navigate(
+                        TicketRoute.route(
+                            TicketRoute.AddOrUpdateBettingTip
+                        ).plus("?ticketId=${ticket.id},?tipId=${null}")
+                    )
+            } else {
+                navController.navigate(
+                    TicketRoute.route(
+                        TicketRoute.AddOrUpdateBettingTip
+                    )
+                )
+            }
         }
     }
 }
@@ -172,57 +206,6 @@ private fun ObserveNotifications(
 }
 
 @Composable
-private fun observeTicketState(
-    ticketsViewModel: TicketsViewModel,
-    enableNewTips: MutableState<Boolean>,
-    bettingTipsState: SnapshotStateList<BettingTip>,
-    isVisible: MutableState<Boolean>,
-    navController: NavController,
-    ticket: Ticket?,
-    ticketTitle: MutableState<String>
-): Ticket? {
-    var ticket = ticket
-    when (val state = ticketsViewModel.ticketUiState.collectAsState().value) {
-        is TicketUiState.Error -> {
-
-        }
-        TicketUiState.Loading -> {
-            CenteredItem { CircularProgressIndicator() }
-        }
-        TicketUiState.NewTicket -> {
-            enableNewTips.value = true
-            if (bettingTipsState.isNotEmpty()) {
-                isVisible.value = true
-                ShowBettingTips(navController, bettingTipsState)
-            } else {
-                CenteredItem {
-                    Text(text = "No tips for this ticket")
-                }
-            }
-        }
-        is TicketUiState.Success -> {
-            ticket = state.ticket
-            TicketInfo(
-                navController,
-                isVisible,
-                ticket,
-                bettingTipsState,
-                ticketsViewModel,
-                ticketTitle
-            )
-            if (state.modified) {
-                enableNewTips.value = false
-                bettingTipsState.clear()
-                navController.navigateUp()
-            }
-        }
-        else -> throw Exception("I don't know what state I'm in")
-    }
-    return ticket
-}
-
-
-@Composable
 private fun TicketInfo(
     navController: NavController,
     isVisible: MutableState<Boolean>,
@@ -237,6 +220,7 @@ private fun TicketInfo(
         isVisible.value = ticketsViewModel.initialList.size < ticketsViewModel.bettingTips.size
         with(ticket) {
             if (bettingTipsState.isNotEmpty()) {
+
                 tips.forEachIndexed { index, bettingTip ->
                     val iTip = ticketsViewModel.bettingTips[index]
                     if (bettingTip._id == iTip._id) {
@@ -277,6 +261,8 @@ private fun ShowBettingTips(
         LazyColumn(contentPadding = PaddingValues(10.dp)) {
             items(bettingTips) { bettingTip: BettingTip ->
                 TipCard(bettingTip = bettingTip) {
+                    Timber.e("Betting tip id ${it._id}")
+                    Timber.e("Ticket id $ticketId")
                     navController.navigate(
                         TicketRoute.route(TicketRoute.AddOrUpdateBettingTip)
                             .plus("?ticketId=${ticketId},?tipId=${it._id}")

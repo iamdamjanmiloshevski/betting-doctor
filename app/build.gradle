@@ -84,8 +84,8 @@ android {
       versionCode generateVersionCode(false, true)
       versionName generateVersionName(true)
       applicationId "com.twoplaytech.drbetting"
-      manifestPlaceholders = [appLabel: "Doctor Betting"]
-      resValue "string", "app_name", "Doctor Betting"
+      manifestPlaceholders = [appLabel: "Soccer Tips"]
+      resValue "string", "app_name", "Soccer Tips"
     }
 
     admin {
@@ -93,9 +93,9 @@ android {
       signingConfig adminConfig
       versionCode generateVersionCode(false,false)
       versionName generateVersionName()
-      manifestPlaceholders = [appLabel: "Doctor Betting Admin"]
+      manifestPlaceholders = [appLabel: "2Play Admin"]
       applicationId "com.twoplaytech.drbetting.admin"
-      resValue "string", "app_name", "Doctor Betting Admin"
+      resValue "string", "app_name", "2Play Admin"
     }
 
     sportsAnalyst{
