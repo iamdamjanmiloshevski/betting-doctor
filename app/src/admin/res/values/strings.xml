@@ -70,6 +70,7 @@
   <string name="error_betting_tip">Please provide betting tip</string>
   <string name="error_odds">Please provide odds</string>
   <string name="error_game_time">Please provide game time</string>
+  <string name="delete_tip_title">Delete tip?</string>
   <string-array name="types">
     <item>Older</item>
     <item>Upcoming</item>

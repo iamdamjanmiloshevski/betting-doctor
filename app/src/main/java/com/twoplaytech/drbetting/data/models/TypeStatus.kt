@@ -27,7 +27,6 @@ package com.twoplaytech.drbetting.data.models
 import android.os.Parcelable
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
-import kotlinx.android.parcel.Parcelize
 
 /*
     Author: Damjan Miloshevski 
@@ -36,8 +35,7 @@ import kotlinx.android.parcel.Parcelize
     © 2Play Tech  2021. All rights reserved
 */
 @Keep
-@Parcelize
-enum class TypeStatus : Parcelable {
+enum class TypeStatus {
     @SerializedName("UNKNOWN")
     UNKNOWN,
     @SerializedName("WON")

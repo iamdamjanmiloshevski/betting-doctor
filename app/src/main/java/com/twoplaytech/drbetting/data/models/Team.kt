@@ -24,12 +24,12 @@
 
 package com.twoplaytech.drbetting.data.models
 
+import android.os.Parcel
 import android.os.Parcelable
 import androidx.annotation.Keep
 import com.twoplaytech.drbetting.util.Constants.TEAM_LOGO
 import com.twoplaytech.drbetting.util.Constants.TEAM_NAME
 import com.twoplaytech.drbetting.util.checkImageExtension
-import kotlinx.android.parcel.Parcelize
 
 /*
     Author: Damjan Miloshevski 
@@ -37,8 +37,12 @@ import kotlinx.android.parcel.Parcelize
 
 */
 @Keep
-@Parcelize
 data class Team(var name: String = "", var logo: String = "") : Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readString() ?: "",
+        parcel.readString() ?: ""
+    )
+
     constructor(data: Map<*, *>) : this() {
         name = if (data.containsKey(TEAM_NAME)
             && data[TEAM_NAME] != null) {
@@ -55,6 +59,25 @@ data class Team(var name: String = "", var logo: String = "") : Parcelable {
             }
         } else {
             ""
+        }
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(name)
+        parcel.writeString(logo)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Team> {
+        override fun createFromParcel(parcel: Parcel): Team {
+            return Team(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Team?> {
+            return arrayOfNulls(size)
         }
     }
 

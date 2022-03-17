@@ -24,9 +24,9 @@
 
 package com.twoplaytech.drbetting.data.models
 
+import android.os.Parcel
 import android.os.Parcelable
 import androidx.annotation.Keep
-import kotlinx.android.parcel.Parcelize
 
 /*
     Author: Damjan Miloshevski 
@@ -35,7 +35,6 @@ import kotlinx.android.parcel.Parcelize
     © 2Play Tech  2021. All rights reserved
 */
 @Keep
-@Parcelize
 data class BettingTip(
     val leagueName: String,
     val teamHome: Team?,
@@ -48,4 +47,46 @@ data class BettingTip(
     val sport: Sport,
     val coefficient:String? = null,
     val ticketId:String? = null
-):Parcelable
+):Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readString() ?: "",
+        parcel.readParcelable(Team::class.java.classLoader),
+        parcel.readParcelable(Team::class.java.classLoader),
+        parcel.readString()?: "",
+        parcel.readString()  ?: "",
+        TypeStatus.valueOf(parcel.readString() ?: "UNKNOWN"),
+        parcel.readString()  ?: "",
+        parcel.readString() ?: "",
+        Sport.valueOf(parcel.readString() ?: "Football"),
+        parcel.readString() ?: "",
+        parcel.readString() ?: ""
+    )
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(leagueName)
+        parcel.writeParcelable(teamHome, flags)
+        parcel.writeParcelable(teamAway, flags)
+        parcel.writeString(gameTime)
+        parcel.writeString(bettingType)
+        parcel.writeString(status.name)
+        parcel.writeString(result)
+        parcel.writeString(_id)
+        parcel.writeString(sport.name)
+        parcel.writeString(coefficient)
+        parcel.writeString(ticketId)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<BettingTip> {
+        override fun createFromParcel(parcel: Parcel): BettingTip {
+            return BettingTip(parcel)
+        }
+
+        override fun newArray(size: Int): Array<BettingTip?> {
+            return arrayOfNulls(size)
+        }
+    }
+}

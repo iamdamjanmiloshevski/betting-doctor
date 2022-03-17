@@ -28,7 +28,7 @@ import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -52,10 +52,10 @@ class BettingTipActivity : BaseAdminActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initBinding()
-        setContentView(binding.root)
         intent.extras.extractArguments()
+        initBinding()
         initUI()
+        setContentView(binding.root)
     }
 
     override fun onResume() {
@@ -71,14 +71,13 @@ class BettingTipActivity : BaseAdminActivity() {
     override fun initUI() {
         setSupportActionBar(binding.toolbar)
         binding.loadingView.isVisible = false
-        navController = findNavController(R.id.nav_host_fragment_content_betting_tip)
-        navController.setGraph(
-            R.navigation.nav_graph_betting_tip, bundleOf(
-                KEY_BETTING_TIP to bettingTip
-            )
-        )
-        appBarConfiguration = AppBarConfiguration(navController.graph)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_betting_tip) as NavHostFragment
+        navController = navHostFragment.navController
         setSupportActionBar(binding.toolbar)
+        navController.setGraph(R.navigation.nav_graph_betting_tip, bundleOf(
+            KEY_BETTING_TIP to bettingTip
+        ))
+        appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
     }
 
@@ -125,8 +124,8 @@ class BettingTipActivity : BaseAdminActivity() {
     private fun Bundle?.extractArguments() {
         this?.let { args ->
             with(args) {
-                val args = this.getBundle(Constants.KEY_BETTING_ARGS)
-                args?.let { bettingArgs ->
+                val newArgs = this.getBundle(Constants.KEY_BETTING_ARGS)
+                newArgs?.let { bettingArgs ->
                     viewType = bettingArgs.getInt(Constants.KEY_TYPE)
                     bettingTip = bettingArgs.getParcelable(KEY_BETTING_TIP)
                     when (viewType) {

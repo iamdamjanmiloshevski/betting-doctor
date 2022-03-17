@@ -27,11 +27,12 @@ package com.twoplaytech.drbetting.admin.ui.admin
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.navArgs
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.common.OnDropdownItemSelectedListener
 import com.twoplaytech.drbetting.admin.ui.common.BaseFragment
 import com.twoplaytech.drbetting.admin.ui.viewmodels.AdminViewModel
-import com.twoplaytech.drbetting.admin.util.Constants
+import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_TIP
 import com.twoplaytech.drbetting.admin.views.ChooserView
 import com.twoplaytech.drbetting.data.models.*
 import com.twoplaytech.drbetting.databinding.FragmentBettingTipBinding
@@ -41,6 +42,7 @@ import java.util.*
 class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
 
     private lateinit var _binding: FragmentBettingTipBinding
+    private val args:BettingTipFragmentArgs? by navArgs()
     private val adminViewModel: AdminViewModel by activityViewModels()
     private var bettingTip: BettingTip? = null
     private var cancel = false
@@ -57,11 +59,14 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
         setHasOptionsMenu(true)
         _binding.cvSports.setOnDropDownItemSelectedListener(this)
         _binding.cvStatus.setOnDropDownItemSelectedListener(this)
-        arguments?.let {
-            bettingTip = it.getParcelable(Constants.KEY_BETTING_TIP)
-        }
-        populateExistingTip(bettingTip)
         return _binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        arguments?.let {
+            bettingTip = it.getParcelable(KEY_BETTING_TIP)
+            populateExistingTip(bettingTip)
+        }
     }
 
     override fun onResume() {

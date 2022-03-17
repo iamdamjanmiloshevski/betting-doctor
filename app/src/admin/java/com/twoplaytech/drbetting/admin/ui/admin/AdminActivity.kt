@@ -61,7 +61,6 @@ import com.twoplaytech.drbetting.ui.adapters.BettingTipsRecyclerViewAdapter
 import com.twoplaytech.drbetting.ui.common.OnBettingTipClickedListener
 import com.twoplaytech.drbetting.util.getSportColor
 import com.twoplaytech.drbetting.util.getSportFromIndex
-import timber.log.Timber
 
 class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
     OnBettingTipClickedListener, PopupMenu.OnMenuItemClickListener, View.OnClickListener {
@@ -242,6 +241,8 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
     }
 
     private fun changeData(sport: Sport, typeSelected: Int) {
+        if(isExpanded) isExpanded = false
+        showFabs()
         when (typeSelected) {
             0 -> requestOlderData(sport)
             1 -> requestTodayData(sport)
@@ -274,8 +275,8 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
     override fun onTipLongClick(tip: BettingTip) {
         MaterialDialog(this).show {
             cancelable(false)
-            title(null, "Delete tip?")
-            message(null, "Are you sure that you want to delete this tip?")
+            title(null, getString(R.string.delete_tip_title))
+            message(null, getString(R.string.delete_tip_message))
             positiveButton(android.R.string.ok, null) {
                 tip._id?.let { id -> adminViewModel.deleteBettingTip(id) }
             }
@@ -285,7 +286,7 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
         }
     }
 
-    private fun navigateToTips(viewType: Int, tip: BettingTip? = null) {
+    private fun navigateToTips(viewType: Int, tip: BettingTip?) {
         preferencesManager.saveInteger(KEY_VIEW_TYPE, typeSelected)
         val intent = Intent(this, BettingTipActivity::class.java)
         val args = bundleOf(
@@ -343,11 +344,10 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
         when (v?.id) {
             R.id.iv_more -> showMenu(binding.ivMore)
             R.id.fab ->{
-                Timber.e("Is expanded $isExpanded")
                 isExpanded = !isExpanded
                 showFabs()
             }
-            R.id.fabBettingTip -> this.navigateToTips(Constants.VIEW_TYPE_NEW)
+            R.id.fabBettingTip -> this.navigateToTips(Constants.VIEW_TYPE_NEW,null)
             R.id.fabTicket -> {
                 startActivity(Intent(this,TicketActivity::class.java))
             }
