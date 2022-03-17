@@ -42,7 +42,6 @@ import java.util.*
 class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
 
     private lateinit var _binding: FragmentBettingTipBinding
-    private val args:BettingTipFragmentArgs? by navArgs()
     private val adminViewModel: AdminViewModel by activityViewModels()
     private var bettingTip: BettingTip? = null
     private var cancel = false
