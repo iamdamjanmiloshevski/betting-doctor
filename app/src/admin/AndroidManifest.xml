@@ -7,11 +7,9 @@
     android:icon="@mipmap/app_logo_admin"
     android:label="@string/app_name"
     android:fullBackupContent="@xml/backup_descriptor"
-    android:networkSecurityConfig="@xml/network_config"
     android:roundIcon="@drawable/app_logo"
     android:supportsRtl="true"
-    android:theme="@style/Theme.App.StartingAdmin"
-    android:dataExtractionRules="@xml/data_extraction_rules">
+    android:theme="@style/Theme.App.StartingAdmin">
     <activity
       android:name="com.twoplaytech.drbetting.admin.ui.ticket.TicketActivity"
       android:exported="true"
