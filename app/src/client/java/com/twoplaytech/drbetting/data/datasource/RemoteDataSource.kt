@@ -24,8 +24,10 @@
 
 package com.twoplaytech.drbetting.data.datasource
 
+import com.twoplaytech.drbetting.data.common.Either
 import com.twoplaytech.drbetting.data.models.BettingTip
 import com.twoplaytech.drbetting.data.models.FeedbackMessage
+import com.twoplaytech.drbetting.data.models.Message
 import com.twoplaytech.drbetting.data.models.Sport
 import kotlinx.coroutines.flow.Flow
 
@@ -37,14 +39,19 @@ import kotlinx.coroutines.flow.Flow
 */
 interface RemoteDataSource {
     suspend fun getBettingTips(): Flow<List<BettingTip>>
+    suspend fun getBettingTipsKtor():Either<Message,List<BettingTip>>
     suspend fun getBettingTipsBySport(
         sport: Sport,
         upcoming: Boolean = false
     ): Flow<List<BettingTip>>
 
+    suspend fun getBettingTipsBySportKtor(
+        sport: Sport,
+        upcoming: Boolean = false):Either<Message,List<BettingTip>>
     suspend fun getBettingTipById(
         id: String
     ): Flow<BettingTip>
 
+    suspend fun getBettingTipByIdKtor(id: String):Either<Message,BettingTip>
     suspend fun sendFeedback(feedbackMessage: FeedbackMessage):Flow<FeedbackMessage>
 }

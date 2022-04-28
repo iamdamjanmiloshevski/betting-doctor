@@ -57,6 +57,7 @@ class FootballUpcomingFragment : BaseChildFragment() {
     override fun onResume() {
         super.onResume()
         viewModel.getBettingTips(Sport.Football,true)
+        viewModel.getBettingTips1(Sport.Football,true)
     }
 
     companion object {

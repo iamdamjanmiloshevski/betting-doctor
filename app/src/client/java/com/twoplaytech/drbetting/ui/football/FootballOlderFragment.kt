@@ -56,6 +56,7 @@ class FootballOlderFragment:BaseChildFragment() {
     override fun onResume() {
         super.onResume()
         viewModel.getBettingTips(Sport.Football,false)
+        viewModel.getBettingTips1(Sport.Football,false)
     }
 
     companion object{

@@ -2,6 +2,7 @@ package com.twoplaytech.drbetting.sportsanalyst.ui.screens.tickets
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.twoplaytech.drbetting.data.common.Either
 import com.twoplaytech.drbetting.sportsanalyst.domain.repository.Repository
 import com.twoplaytech.drbetting.sportsanalyst.ui.state.TicketUiState
 import com.twoplaytech.drbetting.sportsanalyst.util.today
@@ -28,16 +29,23 @@ class TicketsViewModel @Inject constructor(private val repository: Repository) :
 
      fun getTicketByDate(date: String) {
         viewModelScope.launch {
-            repository.getTicketByDate(date)
-                .onStart {
-                    _ticketUiState.value = TicketUiState.Loading
-                }
+            repository.getTicketByDate1(date).onStart {
+                _ticketUiState.value = TicketUiState.Loading
+            }
                 .catch { cause->
                     _ticketUiState.value = TicketUiState.Error(cause)
-                }.collect { ticket->
-                    if(ticket.tips.isEmpty()){
-                        _ticketUiState.value = TicketUiState.Error(Throwable("No betting tips available"))
-                    }else   _ticketUiState.value = TicketUiState.Success(ticket.tips)
+                }.collect { either ->
+                    when(either){
+                        is Either.Failure -> {
+                            _ticketUiState.value = TicketUiState.Error(Throwable(either.message.message))
+                        }
+                        is Either.Response -> {
+                            val ticket = either.data
+                            ticket.let {
+                                _ticketUiState.value = TicketUiState.Success(it.tips)
+                            }
+                        }
+                    }
                 }
         }
     }

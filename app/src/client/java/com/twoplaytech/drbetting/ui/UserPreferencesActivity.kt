@@ -51,16 +51,16 @@ class UserPreferencesActivity : BaseActivity() {
     class SettingsFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.notifications_preferences_key)))
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.notifications_preferences_key))!!)
         }
 
-        private fun bindPreferenceSummaryToValue(preference: Preference?) {
-            preference?.onPreferenceChangeListener = preferenceListener
+        private fun bindPreferenceSummaryToValue(preference: Preference) {
+            preference.onPreferenceChangeListener = preferenceListener
             preferenceListener.onPreferenceChange(
                 preference,
                 PreferenceManager
-                    .getDefaultSharedPreferences(preference?.context)
-                    .getBoolean(preference?.key, true)
+                    .getDefaultSharedPreferences(preference.context)
+                    .getBoolean(preference.key, true)
             )
         }
 

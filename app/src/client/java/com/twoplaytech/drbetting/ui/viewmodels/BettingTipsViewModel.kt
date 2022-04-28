@@ -26,12 +26,23 @@ package com.twoplaytech.drbetting.ui.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.twoplaytech.drbetting.data.common.Either
+import com.twoplaytech.drbetting.data.models.BettingTip
 import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.domain.common.Resource
+import com.twoplaytech.drbetting.domain.repository.Repository
 import com.twoplaytech.drbetting.domain.usecases.AppLaunchUseCase
 import com.twoplaytech.drbetting.domain.usecases.ChangeThemeUseCase
 import com.twoplaytech.drbetting.domain.usecases.GetBettingTipsUseCase
+import com.twoplaytech.drbetting.network.resources.BettingTips
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 /*
@@ -43,28 +54,52 @@ import javax.inject.Inject
 class BettingTipsViewModel @Inject constructor(
     private val getBettingTipsUseCase: GetBettingTipsUseCase,
     private val appLaunchUseCase: AppLaunchUseCase,
-    private val themeUseCase: ChangeThemeUseCase
+    private val themeUseCase: ChangeThemeUseCase,
+    private val repository: Repository
 ) :
     ViewModel() {
     private val bettingTipsObserver = MutableLiveData<Resource<Any>>()
     private val appLaunchObserver = MutableLiveData<Int>()
+    private val bettingTips: MutableStateFlow<List<BettingTip>> = MutableStateFlow(emptyList())
+    val _bettingTIps = bettingTips
+
+    fun getBettingTips1(sport: Sport, upcoming: Boolean) {
+        viewModelScope.launch {
+            repository.getBettingTipsBySport(sport, false).onStart {
+
+            }.catch { e ->
+                Timber.e(e)
+            }.collectLatest { either ->
+                when (either) {
+                    is Either.Failure -> {
+                        Timber.e("Response" + either.message.message)
+                    }
+                    is Either.Response -> {
+                        Timber.e("Response ${either.data.size}")
+                    }
+                }
+            }
+        }
+    }
 
     fun getBettingTips(sport: Sport, upcoming: Boolean) {
         getBettingTipsUseCase.getBettingTipsBySport(sport, upcoming, onSuccess = { bettingTips ->
             bettingTipsObserver.postValue(Resource.success(null, bettingTips))
         }, onError = { message ->
-            bettingTipsObserver.postValue(Resource.error(message.message,null ))
+            bettingTipsObserver.postValue(Resource.error(message.message, null))
         })
     }
 
-    fun getAppLaunchCount(){
+    fun getAppLaunchCount() {
         appLaunchUseCase.getAppLaunchesCount {
             appLaunchObserver.value = it
         }
     }
-    fun incrementAppLaunch(){
+
+    fun incrementAppLaunch() {
         appLaunchUseCase.incrementAppLaunch()
     }
+
     private val appThemeObserver = MutableLiveData<Int>()
     fun changeTheme(appTheme: Int) {
         themeUseCase.saveAppTheme(appTheme)
@@ -76,6 +111,7 @@ class BettingTipsViewModel @Inject constructor(
             appThemeObserver.value = it
         }
     }
+
     fun observeAppTheme() = appThemeObserver
     fun observeAppLaunch() = appLaunchObserver
     fun observeTips() = bettingTipsObserver

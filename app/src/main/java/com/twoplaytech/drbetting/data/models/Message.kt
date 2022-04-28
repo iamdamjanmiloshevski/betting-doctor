@@ -33,4 +33,4 @@ import androidx.annotation.Keep
     © 2Play Technologies  2021. All rights reserved
 */
 @Keep
-data class Message(val message: String, val code: Int,val date:String = "")
+data class Message(val message: String, val code: Int = 404, val date: String = "")

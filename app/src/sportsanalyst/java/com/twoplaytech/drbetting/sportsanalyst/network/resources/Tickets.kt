@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c)  2021 Damjan Miloshevski
+ * Copyright (c) 2021 2Play Technologies Ltd.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,35 +22,23 @@
  * SOFTWARE.
  */
 
-package com.twoplaytech.drbetting.sportsanalyst.domain.repository
+package com.twoplaytech.drbetting.sportsanalyst.network.resources
 
-import com.twoplaytech.drbetting.data.models.Message
-import com.twoplaytech.drbetting.data.models.Ticket
-import com.twoplaytech.drbetting.data.common.Either
-import com.twoplaytech.drbetting.sportsanalyst.data.datasource.RemoteDataSource
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
+import com.twoplaytech.drbetting.sportsanalyst.util.Constants.ID_ROUTE
+import com.twoplaytech.drbetting.sportsanalyst.util.Constants.TICKETS_ROUTE
+import io.ktor.resources.*
+import kotlinx.serialization.Serializable
 
 /*
     Author: Damjan Miloshevski 
-    Created on 7.7.21 12:18
-    Project: Dr.Betting
-    © 2Play Tech  2021. All rights reserved
+    Created on 21/04/2022
+    Project: betting-doctor
 */
-class RepositoryImpl @Inject constructor(
-    private val remoteDataSource: RemoteDataSource
-) :
-    Repository,
-    CoroutineScope {
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.IO
 
-    override suspend fun getTicketByDate1(date: String): Flow<Either<Message, Ticket>> =
-        flow { emit(remoteDataSource.getTicketByDate(date)) }
-
+@Serializable
+@Resource(TICKETS_ROUTE)
+class Tickets(val date:String? = null) {
+    @Serializable
+    @Resource(ID_ROUTE)
+    class Id(val parent: Tickets, val id:String)
 }

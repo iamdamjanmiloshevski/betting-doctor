@@ -24,6 +24,7 @@
 
 package com.twoplaytech.drbetting.domain.repository
 
+import com.twoplaytech.drbetting.data.common.Either
 import com.twoplaytech.drbetting.data.datasource.LocalDataSource
 import com.twoplaytech.drbetting.data.datasource.RemoteDataSource
 import com.twoplaytech.drbetting.data.mappers.MessageMapper
@@ -35,8 +36,7 @@ import com.twoplaytech.drbetting.ui.util.Constants.KEY_RATE_US
 import com.twoplaytech.drbetting.ui.util.Constants.KEY_RATING_COMPLETED
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -65,6 +65,10 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getBettingTips(): Flow<Either<Message, List<BettingTip>>> =
+        flow { emit(remoteDataSource.getBettingTipsKtor()) }.flowOn(coroutineContext)
+
+
     override fun getBettingTipsBySport(
         sport: Sport,
         upcoming: Boolean,
@@ -81,6 +85,12 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getBettingTipsBySport(
+        sport: Sport,
+        upcoming: Boolean
+    ): Flow<Either<Message, List<BettingTip>>> =
+        flow { emit(remoteDataSource.getBettingTipsBySportKtor(sport, upcoming)) }
+
     override fun getBettingTipById(
         id: String,
         onSuccess: (BettingTip) -> Unit,
@@ -93,6 +103,10 @@ class RepositoryImpl @Inject constructor(
                 onSuccess.invoke(bettingTip)
             }
         }
+    }
+
+    override suspend fun getBettingTipById(id: String): Flow<Either<Message, BettingTip>> = flow {
+        emit(remoteDataSource.getBettingTipByIdKtor(id))
     }
 
 
@@ -142,7 +156,7 @@ class RepositoryImpl @Inject constructor(
     }
 
     override fun getRateUs(callback: (RateUs, Boolean) -> Unit) {
-       localDataSource.getBoolean(KEY_RATING_COMPLETED) { isCompleted ->
+        localDataSource.getBoolean(KEY_RATING_COMPLETED) { isCompleted ->
             localDataSource.getInt(KEY_RATE_US, callback = { rateUs ->
                 when (rateUs) {
                     0 -> {
@@ -163,8 +177,8 @@ class RepositoryImpl @Inject constructor(
     }
 
     override fun saveRateUs(rateUs: RateUs, isCompleted: Boolean) {
-        localDataSource.saveInt(KEY_RATE_US,rateUs.value)
-        localDataSource.saveBoolean(KEY_RATING_COMPLETED,isCompleted)
+        localDataSource.saveInt(KEY_RATE_US, rateUs.value)
+        localDataSource.saveBoolean(KEY_RATING_COMPLETED, isCompleted)
     }
 
     override val coroutineContext: CoroutineContext

@@ -24,15 +24,25 @@
 
 package com.twoplaytech.drbetting.data.datasource
 
+import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.data.api.BettingDoctorAPI
+import com.twoplaytech.drbetting.data.common.Either
 import com.twoplaytech.drbetting.data.models.BettingTip
 import com.twoplaytech.drbetting.data.models.FeedbackMessage
+import com.twoplaytech.drbetting.data.models.Message
 import com.twoplaytech.drbetting.data.models.Sport
+import com.twoplaytech.drbetting.network.resources.BettingTips
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.resources.*
+import io.ktor.http.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
@@ -42,10 +52,36 @@ import kotlin.coroutines.CoroutineContext
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-class RemoteDataSourceImpl @Inject constructor(private val api: BettingDoctorAPI) :
+class RemoteDataSourceImpl @Inject constructor(
+    private val client: HttpClient,
+    private val api: BettingDoctorAPI
+) :
     RemoteDataSource, CoroutineScope {
     override suspend fun getBettingTips(): Flow<List<BettingTip>> {
         return flow { emit(api.getBettingTips()) }.flowOn(coroutineContext)
+    }
+
+    override suspend fun getBettingTipsKtor(): Either<Message, List<BettingTip>>{
+        return try{
+            val httpResponse = client.get(BettingTips)
+            when (httpResponse.status) {
+                HttpStatusCode.OK -> Either.Response(httpResponse.body())
+                HttpStatusCode.NoContent -> Either.Failure(httpResponse.body())
+                else -> Either.Failure(httpResponse.body())
+            }
+        } catch (ex: RedirectResponseException) {
+            // 3xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ClientRequestException) {
+            // 4xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ServerResponseException) {
+            // 5xx - response
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        }
     }
 
     override suspend fun getBettingTipsBySport(
@@ -58,8 +94,87 @@ class RemoteDataSourceImpl @Inject constructor(private val api: BettingDoctorAPI
         }
     }
 
+    override suspend fun getBettingTipsBySportKtor(
+        sport: Sport,
+        upcoming: Boolean
+    ): Either<Message, List<BettingTip>> {
+        when (upcoming) {
+            true -> {
+                return try {
+                    val httpResponse =
+                        client.get(BettingTips.Sport.Upcoming(BettingTips.Sport(sport = sport.name)))
+                    when (httpResponse.status) {
+                        HttpStatusCode.OK -> Either.Response(httpResponse.body())
+                        HttpStatusCode.NoContent -> Either.Failure(httpResponse.body())
+                        else -> Either.Failure(httpResponse.body())
+                    }
+                } catch (ex: RedirectResponseException) {
+                    // 3xx - responses
+                    Timber.e(ex)
+                    Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+                } catch (ex: ClientRequestException) {
+                    // 4xx - responses
+                    Timber.e(ex)
+                    Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+                } catch (ex: ServerResponseException) {
+                    // 5xx - response
+                    Timber.e(ex)
+                    Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+                }
+            }
+            false -> {
+              return try {
+                    val httpResponse =
+                        client.get(BettingTips.Sport.Older(BettingTips.Sport(sport = sport.name)))
+                    when (httpResponse.status) {
+                        HttpStatusCode.OK -> Either.Response(httpResponse.body())
+                        HttpStatusCode.NoContent -> Either.Failure(httpResponse.body())
+                        else -> Either.Failure(httpResponse.body())
+                    }
+                } catch (ex: RedirectResponseException) {
+                    // 3xx - responses
+                    Timber.e(ex)
+                    Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+                } catch (ex: ClientRequestException) {
+                    // 4xx - responses
+                    Timber.e(ex)
+                    Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+                } catch (ex: ServerResponseException) {
+                    // 5xx - response
+                    Timber.e(ex)
+                    Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+                }
+            }
+        }
+    }
+
+
+
     override suspend fun getBettingTipById(id: String): Flow<BettingTip> {
         return flow { emit(api.getBettingTipById(id)) }.flowOn(coroutineContext)
+    }
+
+    override suspend fun getBettingTipByIdKtor(id: String): Either<Message, BettingTip> {
+        return try{
+            val httpResponse = client.get(BettingTips.Id(id = id))
+            when (httpResponse.status) {
+                HttpStatusCode.OK -> Either.Response(httpResponse.body())
+                HttpStatusCode.NoContent -> Either.Failure(httpResponse.body())
+                else -> Either.Failure(httpResponse.body())
+            }
+        } catch (ex: RedirectResponseException) {
+            // 3xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ClientRequestException) {
+            // 4xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ServerResponseException) {
+            // 5xx - response
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        }
     }
 
     override suspend fun sendFeedback(feedbackMessage: FeedbackMessage): Flow<FeedbackMessage> {

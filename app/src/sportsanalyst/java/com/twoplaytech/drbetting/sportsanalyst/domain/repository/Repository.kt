@@ -24,7 +24,9 @@
 
 package com.twoplaytech.drbetting.sportsanalyst.domain.repository
 
+import com.twoplaytech.drbetting.data.models.Message
 import com.twoplaytech.drbetting.data.models.Ticket
+import com.twoplaytech.drbetting.data.common.Either
 import kotlinx.coroutines.flow.Flow
 
 /*
@@ -34,5 +36,5 @@ import kotlinx.coroutines.flow.Flow
     © 2Play Tech  2021. All rights reserved
 */
 interface Repository {
-   suspend fun getTicketByDate(date: String): Flow<Ticket>
+   suspend fun getTicketByDate1(date: String): Flow<Either<Message,Ticket>>
 }

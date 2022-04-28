@@ -53,7 +53,6 @@ fun Ticket(
         mutableStateOf(today())
     }
 
-
     Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
         SportsAnalystAppBar(title = titleState.value) {
             Icon(
@@ -92,7 +91,7 @@ fun TicketInfo(viewModel: TicketsViewModel) {
                 Timber.e(state.exception)
                 CenteredItem {
                     Text(
-                        text = state.exception.toUserMessage(),
+                        text = state.exception.message?: "Something went wrong",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold
                     )

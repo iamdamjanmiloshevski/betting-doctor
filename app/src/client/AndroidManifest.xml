@@ -16,10 +16,6 @@
       android:exported="true"
       android:label="@string/title_activity_user_preferences" />
     <activity
-      android:name="com.twoplaytech.drbetting.ui.NotificationsActivity"
-      android:exported="true"
-      android:label="@string/title_activity_notifications" />
-    <activity
       android:name="com.twoplaytech.drbetting.ui.FeedbackActivity"
       android:exported="true"
       android:label="@string/title_activity_feedback"
@@ -27,6 +23,7 @@
     <activity
       android:name="com.twoplaytech.drbetting.ui.SplashActivity"
       android:noHistory="true"
+      android:exported="true"
       android:theme="@style/SplashScreenTheme">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
@@ -41,10 +38,12 @@
     <activity
       android:name="com.twoplaytech.drbetting.ui.settings.SettingsActivity"
       android:label="@string/title_activity_settings"
+      android:exported="true"
       android:theme="@style/Theme.DrBetting.NoActionBar" />
     <activity
       android:name="com.twoplaytech.drbetting.ui.MainActivity"
       android:label="@string/app_name"
+      android:exported="true"
       android:screenOrientation="portrait" />
 
     <service

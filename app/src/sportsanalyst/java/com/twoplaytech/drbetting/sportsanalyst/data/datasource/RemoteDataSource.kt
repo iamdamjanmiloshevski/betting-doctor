@@ -1,6 +1,8 @@
 package com.twoplaytech.drbetting.sportsanalyst.data.datasource
 
+import com.twoplaytech.drbetting.data.models.Message
 import com.twoplaytech.drbetting.data.models.Ticket
+import com.twoplaytech.drbetting.data.common.Either
 
 /*
     Author: Damjan Miloshevski 
@@ -9,5 +11,5 @@ import com.twoplaytech.drbetting.data.models.Ticket
     © 2Play Tech  2022. All rights reserved
 */
 interface RemoteDataSource {
-    suspend fun getTicketByDate(date: String): Ticket
+    suspend fun getTicketByDate(date: String):Either<Message,Ticket>
 }

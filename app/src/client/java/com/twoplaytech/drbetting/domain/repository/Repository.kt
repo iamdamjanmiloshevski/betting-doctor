@@ -24,7 +24,9 @@
 
 package com.twoplaytech.drbetting.domain.repository
 
+import com.twoplaytech.drbetting.data.common.Either
 import com.twoplaytech.drbetting.data.models.*
+import kotlinx.coroutines.flow.Flow
 
 /*
     Author: Damjan Miloshevski 
@@ -34,6 +36,8 @@ import com.twoplaytech.drbetting.data.models.*
 */
 interface Repository {
     fun getBettingTips(onSuccess: (List<BettingTip>) -> Unit, onError: (Message) -> Unit)
+    suspend fun getBettingTips(): Flow<Either<Message, List<BettingTip>>>
+
     fun getBettingTipsBySport(
         sport: Sport,
         upcoming: Boolean = false,
@@ -41,7 +45,11 @@ interface Repository {
         onError: (Message) -> Unit
     )
 
+    suspend fun getBettingTipsBySport( sport: Sport,
+                                       upcoming: Boolean = false):Flow<Either<Message,List<BettingTip>>>
+
     fun getBettingTipById(id: String, onSuccess: (BettingTip) -> Unit, onError: (Message) -> Unit)
+    suspend fun getBettingTipById(id: String):Flow<Either<Message,BettingTip>>
     fun incrementAppLaunch()
     fun getAppLaunchesCount(callback: (Int) -> Unit)
     fun receiveNotifications(topic: String)
