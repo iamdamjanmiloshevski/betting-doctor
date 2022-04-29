@@ -50,7 +50,6 @@ class VolleyballUpcomingFragment : BaseChildFragment() {
     }
 
     override fun initUI() {
-        binding.noDataView.setVisible(false)
         setUpDataAdapter()
     }
 

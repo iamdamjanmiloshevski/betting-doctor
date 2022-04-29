@@ -38,17 +38,8 @@ import com.twoplaytech.drbetting.ui.viewmodels.BettingTipsViewModel
     Created on 3/10/21 11:17 AM
 */
 interface IBaseView {
-    fun initBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    )
-
-    fun initPager(screens: List<Fragment>) {}
-    val viewModel: BettingTipsViewModel
-    fun initUI() {}
-    fun setUpDataAdapter() {}
-    fun changeTheme(@StringRes titleStringRes: Int, sport: Sport) {}
-    fun setupToolbar(@StringRes titleRes: Int, sport: Sport) {}
-    fun setupMenu(toolbar: Toolbar,@MenuRes menuRes:Int){}
-    fun observeData(){}
+    fun initPager(screens: List<Fragment>)
+    fun changeTheme(@StringRes titleStringRes: Int, sport: Sport)
+    fun setupToolbar(@StringRes titleRes: Int, sport: Sport)
+    fun setupMenu(toolbar: Toolbar, @MenuRes menuRes: Int)
 }

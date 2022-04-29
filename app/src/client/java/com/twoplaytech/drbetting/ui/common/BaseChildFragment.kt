@@ -24,19 +24,25 @@
 
 package com.twoplaytech.drbetting.ui.common
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.twoplaytech.drbetting.data.models.BettingTip
 import com.twoplaytech.drbetting.data.models.Status
 import com.twoplaytech.drbetting.databinding.FragmentChildBinding
 import com.twoplaytech.drbetting.ui.adapters.BettingTipsRecyclerViewAdapter
+import com.twoplaytech.drbetting.ui.states.BettingTipsUiState
 import com.twoplaytech.drbetting.ui.viewmodels.BettingTipsViewModel
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 /*
@@ -44,17 +50,19 @@ import timber.log.Timber
     Created on 3/10/21 12:35 PM
 
 */
-abstract class BaseChildFragment : Fragment(), IBaseView {
+abstract class BaseChildFragment : Fragment(), BaseChildView, UiInitializer, BindingInitializer {
     protected lateinit var binding: FragmentChildBinding
-    override val viewModel: BettingTipsViewModel by activityViewModels()
+    protected val viewModel: BettingTipsViewModel by activityViewModels()
     private val bettingTips = mutableListOf<BettingTip>()
     protected val adapter: BettingTipsRecyclerViewAdapter =
         BettingTipsRecyclerViewAdapter(bettingTips)
+
     override fun initBinding(inflater: LayoutInflater, container: ViewGroup?) {
         binding = FragmentChildBinding.inflate(inflater, container, false)
     }
 
     override fun setUpDataAdapter() {
+        binding.noDataView.setVisible(false)
         binding.rvBettingTips.adapter = adapter
         binding.rvBettingTips.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -63,29 +71,42 @@ abstract class BaseChildFragment : Fragment(), IBaseView {
                 val isVisible = adapter.itemCount > 0
                 binding.rvBettingTips.visibility = if (isVisible) View.VISIBLE else View.GONE
                 binding.noDataView.setVisible(!isVisible)
-                binding.progressBar.visibility = View.GONE
             }
         })
+    }
+
+    override fun showLoader(show: Boolean) {
+        if (show) binding.progressBar.visibility = View.VISIBLE else View.GONE
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        observeData()
     }
 
     override fun observeData() {
-        viewModel.observeTips().observe(viewLifecycleOwner, { resource->
-            when(resource.status){
-                Status.SUCCESS ->{
-                    val items = resource.data as List<BettingTip>
-                    adapter.addData(items)
-                }
-                Status.ERROR -> {
-                    Toast.makeText(requireContext(),"Something went wrong", Toast.LENGTH_SHORT).show()
-                }
-                Status.LOADING -> {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.bettingTipsState.collect { uiState ->
+                    when (uiState) {
+                        is BettingTipsUiState.Error -> {
+                            showLoader(false)
+                            Toast.makeText(
+                                requireContext(),
+                                "Something went wrong",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        BettingTipsUiState.Loading -> showLoader(true)
+                        is BettingTipsUiState.Success -> {
+                            showLoader(false)
+                            binding.progressBar.visibility = View.GONE
+                            val tips = uiState.tips
+                            adapter.addData(tips)
+                        }
+                    }
                 }
             }
-        })
-    }
-
-    override fun onResume() {
-        super.onResume()
-        observeData()
+        }
     }
 }

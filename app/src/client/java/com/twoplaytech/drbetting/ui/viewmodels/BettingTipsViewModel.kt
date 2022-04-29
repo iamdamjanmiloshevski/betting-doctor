@@ -36,11 +36,9 @@ import com.twoplaytech.drbetting.domain.usecases.AppLaunchUseCase
 import com.twoplaytech.drbetting.domain.usecases.ChangeThemeUseCase
 import com.twoplaytech.drbetting.domain.usecases.GetBettingTipsUseCase
 import com.twoplaytech.drbetting.network.resources.BettingTips
+import com.twoplaytech.drbetting.ui.states.BettingTipsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -60,34 +58,27 @@ class BettingTipsViewModel @Inject constructor(
     ViewModel() {
     private val bettingTipsObserver = MutableLiveData<Resource<Any>>()
     private val appLaunchObserver = MutableLiveData<Int>()
-    private val bettingTips: MutableStateFlow<List<BettingTip>> = MutableStateFlow(emptyList())
-    val _bettingTIps = bettingTips
+    private val _bettingTipsState:MutableStateFlow<BettingTipsUiState> = MutableStateFlow(BettingTipsUiState.Loading)
+    val bettingTipsState:StateFlow<BettingTipsUiState> = _bettingTipsState
 
-    fun getBettingTips1(sport: Sport, upcoming: Boolean) {
+    fun getBettingTips(sport: Sport, upcoming: Boolean) {
         viewModelScope.launch {
-            repository.getBettingTipsBySport(sport, false).onStart {
-
+            repository.getBettingTipsBySport(sport, upcoming).onStart {
+                _bettingTipsState.value = BettingTipsUiState.Loading
             }.catch { e ->
                 Timber.e(e)
+                _bettingTipsState.value = BettingTipsUiState.Error(e.message?:"Something went wrong")
             }.collectLatest { either ->
                 when (either) {
                     is Either.Failure -> {
-                        Timber.e("Response" + either.message.message)
+                        _bettingTipsState.value = BettingTipsUiState.Error(either.message.message)
                     }
                     is Either.Response -> {
-                        Timber.e("Response ${either.data.size}")
+                        _bettingTipsState.value = BettingTipsUiState.Success(either.data)
                     }
                 }
             }
         }
-    }
-
-    fun getBettingTips(sport: Sport, upcoming: Boolean) {
-        getBettingTipsUseCase.getBettingTipsBySport(sport, upcoming, onSuccess = { bettingTips ->
-            bettingTipsObserver.postValue(Resource.success(null, bettingTips))
-        }, onError = { message ->
-            bettingTipsObserver.postValue(Resource.error(message.message, null))
-        })
     }
 
     fun getAppLaunchCount() {
@@ -114,5 +105,4 @@ class BettingTipsViewModel @Inject constructor(
 
     fun observeAppTheme() = appThemeObserver
     fun observeAppLaunch() = appLaunchObserver
-    fun observeTips() = bettingTipsObserver
 }

@@ -38,7 +38,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 */
 @AndroidEntryPoint
-class FootballUpcomingFragment : BaseChildFragment() {
+class FootballUpcomingFragment:BaseChildFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -50,14 +50,12 @@ class FootballUpcomingFragment : BaseChildFragment() {
     }
 
     override fun initUI() {
-        binding.noDataView.setVisible(false)
         setUpDataAdapter()
     }
 
     override fun onResume() {
         super.onResume()
         viewModel.getBettingTips(Sport.Football,true)
-        viewModel.getBettingTips1(Sport.Football,true)
     }
 
     companion object {

@@ -49,14 +49,12 @@ class FootballOlderFragment:BaseChildFragment() {
         return binding.root
     }
     override fun initUI() {
-        binding.noDataView.setVisible(false)
         setUpDataAdapter()
     }
 
     override fun onResume() {
         super.onResume()
         viewModel.getBettingTips(Sport.Football,false)
-        viewModel.getBettingTips1(Sport.Football,false)
     }
 
     companion object{

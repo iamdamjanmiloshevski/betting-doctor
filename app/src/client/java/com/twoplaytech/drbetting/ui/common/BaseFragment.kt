@@ -52,10 +52,10 @@ import com.twoplaytech.drbetting.util.observeAppLaunchCount
     Author: Damjan Miloshevski 
     Created on 3/10/21 11:15 AM
 */
-abstract class BaseFragment : Fragment(), IBaseView, Toolbar.OnMenuItemClickListener {
+abstract class BaseFragment : Fragment(), IBaseView, BindingInitializer,Toolbar.OnMenuItemClickListener {
     protected lateinit var binding: FragmentBaseBinding
     private lateinit var pagerAdapter: ChildFragmentViewPager2PagerAdapter
-    override val viewModel: BettingTipsViewModel by activityViewModels()
+    private val viewModel: BettingTipsViewModel by activityViewModels()
 
     override fun initBinding(inflater: LayoutInflater, container: ViewGroup?) {
         binding = FragmentBaseBinding.inflate(inflater, container, false)

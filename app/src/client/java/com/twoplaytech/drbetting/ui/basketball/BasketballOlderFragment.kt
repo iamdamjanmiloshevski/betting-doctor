@@ -49,7 +49,6 @@ class BasketballOlderFragment:BaseChildFragment(){
         return binding.root
     }
     override fun initUI() {
-        binding.noDataView.setVisible(false)
         setUpDataAdapter()
     }
 

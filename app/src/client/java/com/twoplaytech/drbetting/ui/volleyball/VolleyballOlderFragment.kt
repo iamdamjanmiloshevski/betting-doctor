@@ -49,7 +49,6 @@ class VolleyballOlderFragment:BaseChildFragment() {
         return binding.root
     }
     override fun initUI() {
-        binding.noDataView.setVisible(false)
         setUpDataAdapter()
     }
     companion object{
