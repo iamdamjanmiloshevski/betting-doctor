@@ -5,16 +5,24 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.data.models.FeedbackMessage
 import com.twoplaytech.drbetting.data.models.Status
 import com.twoplaytech.drbetting.databinding.ActivityFeedbackBinding
 import com.twoplaytech.drbetting.ui.common.BaseActivity
 import com.twoplaytech.drbetting.ui.common.TextWatcher
+import com.twoplaytech.drbetting.ui.states.FeedbackUiState
 import com.twoplaytech.drbetting.ui.viewmodels.FeedbackViewModel
+import com.twoplaytech.drbetting.util.getRandomBackground
 import com.twoplaytech.drbetting.util.isValidEmail
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class FeedbackActivity : BaseActivity(), View.OnClickListener {
@@ -30,35 +38,62 @@ class FeedbackActivity : BaseActivity(), View.OnClickListener {
         binding = ActivityFeedbackBinding.inflate(layoutInflater)
         setSupportActionBar(binding.toolbar)
         initUI()
+        observeData()
         setContentView(binding.root)
     }
 
-    override fun onResume() {
-        super.onResume()
-        observeData()
-    }
 
     override fun observeData() {
-        feedbackViewModel.observeFeedback().observe(this, Observer { resource ->
-            when (resource.status) {
-                Status.SUCCESS -> {
-                    binding.content.loadingView.show(false)
-                    Toast.makeText(this, resource.message, Toast.LENGTH_SHORT).show()
-                    clearFocus()
-                }
-                Status.ERROR -> {
-                    binding.content.loadingView.show(false)
-                    Toast.makeText(this, resource.message, Toast.LENGTH_SHORT).show()
-                    clearFocus()
-                }
-                Status.LOADING -> {
-                    val backgrounds = com.twoplaytech.drbetting.util.getRandomBackground()
-                    binding.content.loadingView.setText(resource.message ?: "")
-                    binding.content.loadingView.setBackground(backgroundResource = backgrounds.first)
-                    binding.content.loadingView.show(true)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                feedbackViewModel.feedbackState.collectLatest { uiState ->
+                    when(uiState){
+                        is FeedbackUiState.Error -> {
+                            binding.content.loadingView.show(false)
+                            Timber.e(uiState.message)
+                            Toast.makeText(this@FeedbackActivity, uiState.message, Toast.LENGTH_SHORT).show()
+                            clearFocus()
+                        }
+                        FeedbackUiState.Loading -> {
+                            val backgrounds = com.twoplaytech.drbetting.util.getRandomBackground()
+                            binding.content.loadingView.setText("Sending feedback... Please wait")
+                            binding.content.loadingView.setBackground(backgroundResource = backgrounds.first)
+                            binding.content.loadingView.show(true)
+                        }
+                        is FeedbackUiState.Success -> {
+                            binding.content.loadingView.show(false)
+                            Toast.makeText(this@FeedbackActivity, "Success", Toast.LENGTH_SHORT).show()
+                            clearFocus()
+                        }
+                        FeedbackUiState.Neutral -> {
+                            /**
+                             * do nothing
+                             */
+                        }
+                    }
                 }
             }
-        })
+        }
+//        feedbackViewModel.observeFeedback().observe(this, Observer { resource ->
+//            when (resource.status) {
+//                Status.SUCCESS -> {
+//                    binding.content.loadingView.show(false)
+//                    Toast.makeText(this, resource.message, Toast.LENGTH_SHORT).show()
+//                    clearFocus()
+//                }
+//                Status.ERROR -> {
+//                    binding.content.loadingView.show(false)
+//                    Toast.makeText(this, resource.message, Toast.LENGTH_SHORT).show()
+//                    clearFocus()
+//                }
+//                Status.LOADING -> {
+//                    val backgrounds = com.twoplaytech.drbetting.util.getRandomBackground()
+//                    binding.content.loadingView.setText(resource.message ?: "")
+//                    binding.content.loadingView.setBackground(backgroundResource = backgrounds.first)
+//                    binding.content.loadingView.show(true)
+//                }
+//            }
+//        })
        observeAppTheme()
     }
 

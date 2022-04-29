@@ -25,6 +25,7 @@
 package com.twoplaytech.drbetting.data.models
 
 import androidx.annotation.Keep
+import kotlinx.serialization.Serializable
 
 
 /*

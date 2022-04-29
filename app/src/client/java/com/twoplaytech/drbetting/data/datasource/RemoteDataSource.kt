@@ -54,4 +54,5 @@ interface RemoteDataSource {
 
     suspend fun getBettingTipByIdKtor(id: String):Either<Message,BettingTip>
     suspend fun sendFeedback(feedbackMessage: FeedbackMessage):Flow<FeedbackMessage>
+    suspend fun sendFeedbackKtor(feedbackMessage: FeedbackMessage):Either<Message,FeedbackMessage>
 }

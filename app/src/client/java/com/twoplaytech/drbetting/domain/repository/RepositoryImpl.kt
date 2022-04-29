@@ -145,6 +145,11 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun sendFeedback(feedbackMessage: FeedbackMessage): Flow<Either<Message, FeedbackMessage>> =
+        flow {
+            emit(remoteDataSource.sendFeedbackKtor(feedbackMessage))
+        }.flowOn(coroutineContext)
+
     override fun getAppTheme(callback: (Int) -> Unit) {
         localDataSource.getInt(KEY_DARK_MODE, callback = {
             callback.invoke(it)

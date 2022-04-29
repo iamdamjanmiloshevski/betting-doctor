@@ -58,6 +58,7 @@ interface Repository {
         onSuccess: (FeedbackMessage) -> Unit,
         onError: (Message) -> Unit
     )
+    suspend fun sendFeedback(feedbackMessage: FeedbackMessage):Flow<Either<Message,FeedbackMessage>>
     fun getAppTheme(callback: (Int) -> Unit)
     fun saveAppTheme(appTheme:Int)
     fun getRateUs(callback: (RateUs,Boolean) -> Unit)

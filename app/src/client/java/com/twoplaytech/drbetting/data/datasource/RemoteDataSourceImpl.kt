@@ -32,10 +32,12 @@ import com.twoplaytech.drbetting.data.models.FeedbackMessage
 import com.twoplaytech.drbetting.data.models.Message
 import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.network.resources.BettingTips
+import com.twoplaytech.drbetting.network.resources.Users
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.resources.*
+import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -61,8 +63,8 @@ class RemoteDataSourceImpl @Inject constructor(
         return flow { emit(api.getBettingTips()) }.flowOn(coroutineContext)
     }
 
-    override suspend fun getBettingTipsKtor(): Either<Message, List<BettingTip>>{
-        return try{
+    override suspend fun getBettingTipsKtor(): Either<Message, List<BettingTip>> {
+        return try {
             val httpResponse = client.get(BettingTips)
             when (httpResponse.status) {
                 HttpStatusCode.OK -> Either.Response(httpResponse.body())
@@ -123,7 +125,7 @@ class RemoteDataSourceImpl @Inject constructor(
                 }
             }
             false -> {
-              return try {
+                return try {
                     val httpResponse =
                         client.get(BettingTips.Sport.Older(BettingTips.Sport(sport = sport.name)))
                     when (httpResponse.status) {
@@ -149,13 +151,12 @@ class RemoteDataSourceImpl @Inject constructor(
     }
 
 
-
     override suspend fun getBettingTipById(id: String): Flow<BettingTip> {
         return flow { emit(api.getBettingTipById(id)) }.flowOn(coroutineContext)
     }
 
     override suspend fun getBettingTipByIdKtor(id: String): Either<Message, BettingTip> {
-        return try{
+        return try {
             val httpResponse = client.get(BettingTips.Id(id = id))
             when (httpResponse.status) {
                 HttpStatusCode.OK -> Either.Response(httpResponse.body())
@@ -179,6 +180,36 @@ class RemoteDataSourceImpl @Inject constructor(
 
     override suspend fun sendFeedback(feedbackMessage: FeedbackMessage): Flow<FeedbackMessage> {
         return flow { emit(api.sendFeedback(feedbackMessage)) }.flowOn(coroutineContext)
+    }
+
+    override suspend fun sendFeedbackKtor(feedbackMessage: FeedbackMessage): Either<Message, FeedbackMessage> {
+        return try {
+            val httpResponse = client.post(Users.Feedback()) {
+                contentType(ContentType.Application.Json)
+                setBody(feedbackMessage)
+            }
+            when (httpResponse.status) {
+                HttpStatusCode.Created -> Either.Response(httpResponse.body())
+                HttpStatusCode.NoContent -> Either.Failure(httpResponse.body())
+                else -> {
+                    val message = httpResponse.body() as Message
+                    Timber.e("$message")
+                    Either.Failure(message)
+                }
+            }
+        } catch (ex: RedirectResponseException) {
+            // 3xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ClientRequestException) {
+            // 4xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ServerResponseException) {
+            // 5xx - response
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        }
     }
 
     override val coroutineContext: CoroutineContext
