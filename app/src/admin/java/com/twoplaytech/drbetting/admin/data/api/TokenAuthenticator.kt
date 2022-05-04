@@ -57,13 +57,13 @@ class TokenAuthenticator @Inject constructor(private val repository: Lazy<Reposi
                     } else {
                         Timber.i("Token has expired")
                         userCredentials?.let { credentials ->
-                            val newToken = repository.get().refreshToken(
-                                RefreshToken(
-                                    it.refreshToken,
-                                    credentials.email
-                                )
-                            )
-                            request(response.request, newToken.token)
+//                            val newToken = repository.get().refreshToken(
+//                                RefreshToken(
+//                                    it.refreshToken,
+//                                    credentials.email
+//                                )
+//                            )
+                            request(response.request, "newToken.token")
                         }
                     }
                 }

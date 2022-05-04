@@ -1,4 +1,4 @@
-package com.twoplaytech.drbetting.network.resources
+package com.twoplaytech.drbetting.network.resources.bettingtips
 
 import io.ktor.resources.*
 import kotlinx.serialization.Serializable
@@ -14,16 +14,16 @@ import kotlinx.serialization.Serializable
 class BettingTips{
     @Serializable
     @Resource("{id}")
-    class Id(val parent:BettingTips = BettingTips(), val id:String)
+    class Id(val parent: BettingTips = BettingTips(), val id:String)
     @Serializable
     @Resource("{sport}")
-    class Sport(val parent:BettingTips = BettingTips(),val sport:String){
+    class Sport(val parent: BettingTips = BettingTips(), val sport:String){
         @Serializable
         @Resource("upcoming")
-        class Upcoming(val parent:Sport)
+        class Upcoming(val parent: Sport)
         @Serializable
         @Resource("older")
-        class Older(val parent:Sport)
+        class Older(val parent: Sport)
     }
 }
 

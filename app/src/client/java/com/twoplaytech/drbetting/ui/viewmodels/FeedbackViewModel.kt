@@ -34,7 +34,6 @@ class FeedbackViewModel @Inject constructor(
     private val nameErrorObserver = ObservableBoolean()
     private val emailErrorObserver = ObservableBoolean()
     private val messageErrorObserver = ObservableBoolean()
-    private val feedbackObserver = MutableLiveData<Resource<FeedbackMessage>>()
     private val _feedbackUiState:MutableStateFlow<FeedbackUiState> = MutableStateFlow(FeedbackUiState.Neutral)
     val feedbackState = _feedbackUiState
 
@@ -64,16 +63,9 @@ class FeedbackViewModel @Inject constructor(
                 }
             }
         }
-//        feedbackObserver.postValue(Resource.loading("Sending feedback\nPlease wait...", null))
-//        sendFeedbackUseCase.sendFeedback(feedbackMessage, onSuccess = {
-//            feedbackObserver.postValue(Resource.success("Success", it))
-//        }, onError = {
-//            feedbackObserver.postValue(Resource.error(it.message, null))
-//        })
     }
 
     fun emailError() = emailErrorObserver.get()
     fun nameError() = nameErrorObserver.get()
     fun messageError() = messageErrorObserver.get()
-    fun observeFeedback() = feedbackObserver
 }

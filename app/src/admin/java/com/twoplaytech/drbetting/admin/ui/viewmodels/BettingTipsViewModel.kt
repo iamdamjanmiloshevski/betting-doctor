@@ -26,12 +26,18 @@ package com.twoplaytech.drbetting.admin.ui.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.twoplaytech.drbetting.admin.domain.repository.Repository
 import com.twoplaytech.drbetting.admin.domain.usecases.AppLaunchUseCase
 import com.twoplaytech.drbetting.admin.domain.usecases.ChangeThemeUseCase
-import com.twoplaytech.drbetting.admin.domain.usecases.GetBettingTipsUseCase
+import com.twoplaytech.drbetting.admin.ui.common.BettingTipsUiState
+import com.twoplaytech.drbetting.data.common.Either
 import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.domain.common.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 /*
@@ -41,20 +47,33 @@ import javax.inject.Inject
 */
 @HiltViewModel
 class BettingTipsViewModel @Inject constructor(
-    private val getBettingTipsUseCase: GetBettingTipsUseCase,
     private val appLaunchUseCase: AppLaunchUseCase,
-    private val themeUseCase: ChangeThemeUseCase
+    private val themeUseCase: ChangeThemeUseCase,
+    private val repository: Repository
 ) :
     ViewModel() {
-    private val bettingTipsObserver = MutableLiveData<Resource<Any>>()
     private val appLaunchObserver = MutableLiveData<Int>()
+    private val _bettingTipsState: MutableStateFlow<BettingTipsUiState> = MutableStateFlow(BettingTipsUiState.Loading)
+    val bettingTipsState: StateFlow<BettingTipsUiState> = _bettingTipsState
 
     fun getBettingTips(sport: Sport, upcoming: Boolean) {
-        getBettingTipsUseCase.getBettingTipsBySport(sport, upcoming, onSuccess = { bettingTips ->
-            bettingTipsObserver.postValue(Resource.success(null, bettingTips))
-        }, onError = { message ->
-            bettingTipsObserver.postValue(Resource.error(message.message,null ))
-        })
+        viewModelScope.launch {
+            repository.getBettingTipsBySport(sport, upcoming).onStart {
+                _bettingTipsState.value = BettingTipsUiState.Loading
+            }.catch { e ->
+                Timber.e(e)
+                _bettingTipsState.value = BettingTipsUiState.Error(e)
+            }.collectLatest { either ->
+                when (either) {
+                    is Either.Failure -> {
+                        _bettingTipsState.value = BettingTipsUiState.Error(Throwable(either.message.message))
+                    }
+                    is Either.Response -> {
+                        _bettingTipsState.value = BettingTipsUiState.Success(either.data)
+                    }
+                }
+            }
+        }
     }
 
     fun getAppLaunchCount(){
@@ -78,5 +97,4 @@ class BettingTipsViewModel @Inject constructor(
     }
     fun observeAppTheme() = appThemeObserver
     fun observeAppLaunch() = appLaunchObserver
-    fun observeTips() = bettingTipsObserver
 }

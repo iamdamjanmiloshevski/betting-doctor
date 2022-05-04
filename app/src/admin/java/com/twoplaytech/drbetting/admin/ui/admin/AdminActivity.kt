@@ -34,6 +34,9 @@ import android.widget.*
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.work.OneTimeWorkRequestBuilder
@@ -42,7 +45,10 @@ import androidx.work.WorkManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.common.BaseAdminActivity
+import com.twoplaytech.drbetting.admin.domain.repository.Repository
 import com.twoplaytech.drbetting.admin.ui.auth.LoginActivity
+import com.twoplaytech.drbetting.admin.ui.common.BettingTipUiState
+import com.twoplaytech.drbetting.admin.ui.common.BettingTipsUiState
 import com.twoplaytech.drbetting.admin.ui.ticket.TicketActivity
 import com.twoplaytech.drbetting.admin.ui.viewmodels.BettingTipsViewModel
 import com.twoplaytech.drbetting.admin.ui.viewmodels.LoginViewModel
@@ -53,6 +59,7 @@ import com.twoplaytech.drbetting.admin.util.Constants.KEY_TYPE
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_VIEW_TYPE
 import com.twoplaytech.drbetting.admin.util.Constants.VIEW_TYPE_EDIT
 import com.twoplaytech.drbetting.admin.util.SessionVerifierWorker
+import com.twoplaytech.drbetting.data.datasource.LocalDataSource
 import com.twoplaytech.drbetting.data.models.BettingTip
 import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.data.models.Status
@@ -61,6 +68,11 @@ import com.twoplaytech.drbetting.ui.adapters.BettingTipsRecyclerViewAdapter
 import com.twoplaytech.drbetting.ui.common.OnBettingTipClickedListener
 import com.twoplaytech.drbetting.util.getSportColor
 import com.twoplaytech.drbetting.util.getSportFromIndex
+import dagger.Lazy
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import timber.log.Timber
+import javax.inject.Inject
 
 class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
     OnBettingTipClickedListener, PopupMenu.OnMenuItemClickListener, View.OnClickListener {
@@ -70,7 +82,6 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
     private val viewModel: BettingTipsViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
     private var isExpanded = false
-
     private val bettingTips = mutableListOf<BettingTip>()
     private val adapter: BettingTipsRecyclerViewAdapter =
         BettingTipsRecyclerViewAdapter(bettingTips)
@@ -81,6 +92,7 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
         setContentView(binding.root)
         getExtras(intent)
         initUI()
+        observeData()
     }
 
     override fun initUI() {
@@ -112,7 +124,8 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
                     OneTimeWorkRequestBuilder<SessionVerifierWorker>().build()
                 WorkManager.getInstance(this).enqueue(sessionVerifierWorkRequest)
                 WorkManager.getInstance(this).getWorkInfoByIdLiveData(sessionVerifierWorkRequest.id)
-                    .observe(this
+                    .observe(
+                        this
                     ) { workInfo ->
                         if (workInfo.state == WorkInfo.State.FAILED) {
                             MaterialDialog(this).show {
@@ -147,31 +160,46 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
     }
 
     override fun observeData() {
-        viewModel.observeTips().observe(this) { resource ->
-            when (resource.status) {
-                Status.SUCCESS -> {
-                    val items = resource.data as List<BettingTip>
-                    adapter.addData(items)
-                }
-                Status.ERROR -> {
-                    Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
-                }
-                Status.LOADING -> {
-                }
-            }
-        }
-        adminViewModel.observeDeletedTip().observe(this
-        ) { resource ->
-            when (resource.status) {
-                Status.SUCCESS -> {
-                    changeData(sportSelected.getSportFromIndex(), typeSelected)
-                }
-                Status.ERROR -> {
-                }
-                Status.LOADING -> {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.bettingTipsState.collect { uiState ->
+                    when (uiState) {
+                        is BettingTipsUiState.Error -> {
+                            Toast.makeText(
+                                this@AdminActivity,
+                                "Something went wrong",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        BettingTipsUiState.Loading -> {}
+                        is BettingTipsUiState.Success -> {
+                            val items = uiState.tips
+                            adapter.addData(items)
+                        }
+                    }
                 }
             }
         }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                adminViewModel.bettingTipUiState
+                    .collect { uiState ->
+                    when(uiState){
+                        BettingTipUiState.Deleted ->  changeData(sportSelected.getSportFromIndex(), typeSelected)
+                        is BettingTipUiState.Error -> error(uiState.exception.message ?: "Something went wrong")
+                        BettingTipUiState.Loading -> {}
+                        BettingTipUiState.Neutral -> {
+                            /**
+                             * do nothing
+                             */
+                        }
+                        is BettingTipUiState.Success -> adapter.notifyDataSetChanged()
+                    }
+                }
+
+            }
+        }
+
         adminViewModel.observeNotifications().observe(this) {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         }
@@ -234,14 +262,14 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
 
     private fun changeFabColor(sport: Sport) {
         val color = ContextCompat.getColor(this, sport.getSportColor())
-        val fabs = listOf(binding.fab,binding.fabBettingTip,binding.fabTicket)
-        for(fab in fabs){
+        val fabs = listOf(binding.fab, binding.fabBettingTip, binding.fabTicket)
+        for (fab in fabs) {
             fab.backgroundTintList = ColorStateList.valueOf(color)
         }
     }
 
     private fun changeData(sport: Sport, typeSelected: Int) {
-        if(isExpanded) isExpanded = false
+        if (isExpanded) isExpanded = false
         showFabs()
         when (typeSelected) {
             0 -> requestOlderData(sport)
@@ -316,8 +344,8 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
             R.id.action_notifications -> {
                 MaterialDialog(this).show {
                     cancelable(false)
-                    title(null,"Send notification")
-                    message(null,"Are you sure that you want to notify all the clients?")
+                    title(null, "Send notification")
+                    message(null, "Are you sure that you want to notify all the clients?")
                     positiveButton(android.R.string.ok, null) {
                         adminViewModel.sendNotification()
                     }
@@ -343,19 +371,19 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.iv_more -> showMenu(binding.ivMore)
-            R.id.fab ->{
+            R.id.fab -> {
                 isExpanded = !isExpanded
                 showFabs()
             }
-            R.id.fabBettingTip -> this.navigateToTips(Constants.VIEW_TYPE_NEW,null)
+            R.id.fabBettingTip -> this.navigateToTips(Constants.VIEW_TYPE_NEW, null)
             R.id.fabTicket -> {
-                startActivity(Intent(this,TicketActivity::class.java))
+                startActivity(Intent(this, TicketActivity::class.java))
             }
         }
     }
 
     private fun showFabs() {
-        if(!isExpanded){
+        if (!isExpanded) {
             binding.fabBettingTip.visibility = View.GONE
             binding.fabTicket.visibility = View.GONE
         } else {
@@ -371,7 +399,7 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
             0 -> requestOlderData(sportSelected.getSportFromIndex())
             1 -> requestTodayData(sportSelected.getSportFromIndex())
         }
-        observeData()
+
     }
 
     private fun showMenu(anchor: View?) {

@@ -29,12 +29,22 @@ import com.twoplaytech.drbetting.admin.data.models.AccessToken
 import com.twoplaytech.drbetting.admin.data.models.RefreshToken
 import com.twoplaytech.drbetting.admin.data.models.TicketInput
 import com.twoplaytech.drbetting.admin.data.models.UserInput
+import com.twoplaytech.drbetting.admin.network.resources.users.Users
+import com.twoplaytech.drbetting.data.common.Either
 import com.twoplaytech.drbetting.data.models.*
+import com.twoplaytech.drbetting.network.resources.bettingtips.BettingTips
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.resources.*
+import io.ktor.client.request.*
+import io.ktor.http.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
@@ -44,7 +54,7 @@ import kotlin.coroutines.CoroutineContext
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-class RemoteDataSourceImpl @Inject constructor(private val api: BettingDoctorAPI) :
+class RemoteDataSourceImpl @Inject constructor(private val api: BettingDoctorAPI,private val client:HttpClient) :
     RemoteDataSource, CoroutineScope {
     override suspend fun getBettingTips(): Flow<List<BettingTip>> {
         return flow { emit(api.getBettingTips()) }.flowOn(coroutineContext)
@@ -53,36 +63,203 @@ class RemoteDataSourceImpl @Inject constructor(private val api: BettingDoctorAPI
     override suspend fun getBettingTipsBySport(
         sport: Sport,
         upcoming: Boolean
-    ): Flow<List<BettingTip>> {
-        return when (upcoming) {
-            true -> flow { emit(api.getUpcomingBettingTipsBySport(sport)) }.flowOn(coroutineContext)
-            false -> flow { emit(api.getOlderBettingTipsBySport(sport)) }.flowOn(coroutineContext)
+    ): Either<Message, List<BettingTip>> {
+
+        when (upcoming) {
+            true -> {
+                return try {
+                    val httpResponse =
+                        client.get(BettingTips.Sport.Upcoming(BettingTips.Sport(sport = sport.name)))
+                    when (httpResponse.status) {
+                        HttpStatusCode.OK -> Either.Response(httpResponse.body())
+                        HttpStatusCode.NoContent -> Either.Failure(httpResponse.body())
+                        else -> Either.Failure(httpResponse.body())
+                    }
+                } catch (ex: RedirectResponseException) {
+                    // 3xx - responses
+                    Timber.e(ex)
+                    Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+                } catch (ex: ClientRequestException) {
+                    // 4xx - responses
+                    Timber.e(ex)
+                    Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+                } catch (ex: ServerResponseException) {
+                    // 5xx - response
+                    Timber.e(ex)
+                    Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+                }
+            }
+            false -> {
+                return try {
+                    val httpResponse =
+                        client.get(BettingTips.Sport.Older(BettingTips.Sport(sport = sport.name)))
+                    when (httpResponse.status) {
+                        HttpStatusCode.OK -> Either.Response(httpResponse.body())
+                        HttpStatusCode.NoContent -> Either.Failure(httpResponse.body())
+                        else -> Either.Failure(httpResponse.body())
+                    }
+                } catch (ex: RedirectResponseException) {
+                    // 3xx - responses
+                    Timber.e(ex)
+                    Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+                } catch (ex: ClientRequestException) {
+                    // 4xx - responses
+                    Timber.e(ex)
+                    Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+                } catch (ex: ServerResponseException) {
+                    // 5xx - response
+                    Timber.e(ex)
+                    Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+                }
+            }
         }
     }
 
-    override suspend fun getBettingTipById(id: String): Flow<BettingTip> {
-        return flow { emit(api.getBettingTipById(id)) }.flowOn(coroutineContext)
+    override suspend fun getBettingTipById(id: String): Either<Message, BettingTip> {
+        return try {
+            val httpResponse =
+                client.get(BettingTips.Id(id = id))
+            when (httpResponse.status) {
+                HttpStatusCode.OK -> Either.Response(httpResponse.body())
+                else -> Either.Failure(httpResponse.body())
+            }
+        } catch (ex: RedirectResponseException) {
+            // 3xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ClientRequestException) {
+            // 4xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ServerResponseException) {
+            // 5xx - response
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        }
     }
 
-    override suspend fun insertBettingTip(bettingTip: BettingTipInput): Flow<BettingTip> {
-        return flow { emit(api.insertBettingTip(bettingTip)) }.flowOn(coroutineContext)
+    override suspend fun insertBettingTip(bettingTip: BettingTipInput): Either<Message, BettingTip> {
+        return try {
+            val httpResponse = client.post(BettingTips()){
+                contentType(ContentType.Application.Json)
+                setBody(bettingTip)
+            }
+            when (httpResponse.status) {
+                HttpStatusCode.OK -> Either.Response(httpResponse.body())
+                else -> Either.Failure(httpResponse.body())
+            }
+        } catch (ex: RedirectResponseException) {
+            // 3xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ClientRequestException) {
+            // 4xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ServerResponseException) {
+            // 5xx - response
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        }
     }
 
-    override suspend fun updateBettingTip(bettingTip: BettingTipInput): Flow<BettingTip> {
-        return flow { emit(api.updateBettingTip(bettingTip)) }.flowOn(coroutineContext)
+    override suspend fun updateBettingTip(bettingTip: BettingTipInput): Either<Message, BettingTip> {
+        return try {
+            val httpResponse = client.put(BettingTips()){
+                contentType(ContentType.Application.Json)
+                setBody(bettingTip)
+            }
+            when (httpResponse.status) {
+                HttpStatusCode.OK -> Either.Response(httpResponse.body())
+                else -> Either.Failure(httpResponse.body())
+            }
+        } catch (ex: RedirectResponseException) {
+            // 3xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ClientRequestException) {
+            // 4xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ServerResponseException) {
+            // 5xx - response
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        }
     }
 
-    override suspend fun deleteBettingTip(id: String): Flow<Message> {
-        return flow { emit(api.deleteBettingTip(id)) }.flowOn(coroutineContext)
+    override suspend fun deleteBettingTip(id: String): Either<Message, Int> {
+        return try {
+            val httpResponse = client.delete(BettingTips.Id(id = id))
+            when (httpResponse.status) {
+                HttpStatusCode.OK -> Either.Response(httpResponse.body())
+                else -> Either.Failure(httpResponse.body())
+            }
+        } catch (ex: RedirectResponseException) {
+            // 3xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ClientRequestException) {
+            // 4xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ServerResponseException) {
+            // 5xx - response
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        }
     }
 
-    override suspend fun signIn(userInput: UserInput): Flow<AccessToken> {
-        return flow { emit(api.signIn(userInput)) }.flowOn(coroutineContext)
+    override suspend fun signIn(userInput: UserInput): Either<Message, AccessToken> {
+        return try {
+            val httpResponse = client.post(Users.Login()){
+                contentType(ContentType.Application.Json)
+                setBody(userInput)
+            }
+            when (httpResponse.status) {
+                HttpStatusCode.OK -> Either.Response(httpResponse.body())
+                else -> Either.Failure(httpResponse.body())
+            }
+        } catch (ex: RedirectResponseException) {
+            // 3xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ClientRequestException) {
+            // 4xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ServerResponseException) {
+            // 5xx - response
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        }
     }
 
 
-    override suspend fun refreshToken(refreshToken: RefreshToken): AccessToken =
-        api.refreshToken(refreshToken)
+    override suspend fun refreshToken(refreshToken: RefreshToken): Either<Message, AccessToken> {
+        return try {
+            val httpResponse = client.post(Users.RefreshToken()){
+                contentType(ContentType.Application.Json)
+                setBody(refreshToken)
+            }
+            when (httpResponse.status) {
+                HttpStatusCode.OK -> Either.Response(httpResponse.body())
+                else -> Either.Failure(httpResponse.body())
+            }
+        } catch (ex: RedirectResponseException) {
+            // 3xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ClientRequestException) {
+            // 4xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ServerResponseException) {
+            // 5xx - response
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        }
+    }
 
 
     override suspend fun sendNotification(notification: Notification): Flow<Notification> {

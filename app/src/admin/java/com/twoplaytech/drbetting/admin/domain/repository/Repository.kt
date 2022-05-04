@@ -25,7 +25,9 @@
 package com.twoplaytech.drbetting.admin.domain.repository
 
 import com.twoplaytech.drbetting.admin.data.models.*
+import com.twoplaytech.drbetting.data.common.Either
 import com.twoplaytech.drbetting.data.models.*
+import kotlinx.coroutines.flow.Flow
 
 /*
     Author: Damjan Miloshevski 
@@ -35,33 +37,20 @@ import com.twoplaytech.drbetting.data.models.*
 */
 interface Repository {
     fun getBettingTips(onSuccess: (List<BettingTip>) -> Unit, onError: (Message) -> Unit)
-    fun getBettingTipsBySport(
-        sport: Sport,
-        upcoming: Boolean = false,
-        onSuccess: (List<BettingTip>) -> Unit,
-        onError: (Message) -> Unit
-    )
+    suspend fun getBettingTipsBySport(
+        sport: Sport,upcoming: Boolean=false):Flow<Either<Message,List<BettingTip>>>
+    suspend fun getBettingTipById(id: String):Flow<Either<Message,BettingTip>>
+   suspend fun insertBettingTip(
+        bettingTip: BettingTipInput
+    ):Flow<Either<Message,BettingTip>>
 
-    fun getBettingTipById(id: String, onSuccess: (BettingTip) -> Unit, onError: (Message) -> Unit)
-    fun insertBettingTip(
-        bettingTip: BettingTipInput,
-        onSuccess: (BettingTip) -> Unit,
-        onError: (Message) -> Unit
-    )
+    suspend fun updateBettingTip(
+        bettingTip: BettingTipInput
+    ):Flow<Either<Message,BettingTip>>
 
-    fun updateBettingTip(
-        bettingTip: BettingTipInput,
-        onSuccess: (BettingTip) -> Unit,
-        onError: (Message) -> Unit
-    )
+    suspend fun deleteBettingTip(id: String):Flow<Either<Message,Int>>
 
-    fun deleteBettingTip(id: String, onSuccess: (Message) -> Unit, onError: (Message) -> Unit)
-
-    fun signIn(
-        userInput: UserInput,
-        onSuccess: (AccessToken) -> Unit,
-        onError: (Message) -> Unit
-    )
+    suspend fun signIn(userInput: UserInput): Flow<Either<Message, AccessToken>>
 
     fun saveLogin(shouldStayLoggedIn: Boolean)
     fun saveUserCredentials(email: String, password: String)
@@ -75,13 +64,8 @@ interface Repository {
     fun getAppLaunchesCount(callback: (Int) -> Unit)
 
 
-    fun getAccessToken(
-        onSuccess: (AccessToken) -> Unit,
-        onError: (Message) -> Unit
-    )
-    fun refreshToken(refreshToken: RefreshToken): AccessToken
+    fun getAccessToken():AccessToken?
     fun getToken(): AccessToken?
-    suspend fun getAccessTokenAsync(): AccessToken
 
 
     fun sendNotification(

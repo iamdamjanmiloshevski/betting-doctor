@@ -28,6 +28,7 @@ import com.twoplaytech.drbetting.admin.data.models.AccessToken
 import com.twoplaytech.drbetting.admin.data.models.RefreshToken
 import com.twoplaytech.drbetting.admin.data.models.TicketInput
 import com.twoplaytech.drbetting.admin.data.models.UserInput
+import com.twoplaytech.drbetting.data.common.Either
 import com.twoplaytech.drbetting.data.models.*
 import kotlinx.coroutines.flow.Flow
 
@@ -39,29 +40,30 @@ import kotlinx.coroutines.flow.Flow
 */
 interface RemoteDataSource {
     suspend fun getBettingTips(): Flow<List<BettingTip>>
+
     suspend fun getBettingTipsBySport(
-        sport: Sport,
-        upcoming: Boolean = false
-    ): Flow<List<BettingTip>>
+    sport: Sport,
+    upcoming: Boolean = false):Either<Message,List<BettingTip>>
 
     suspend fun getBettingTipById(
         id: String
-    ): Flow<BettingTip>
+    ):Either<Message,BettingTip>
 
-    suspend fun insertBettingTip(bettingTip: BettingTipInput): Flow<BettingTip>
+    suspend fun insertBettingTip(bettingTip: BettingTipInput): Either<Message,BettingTip>
 
-    suspend fun updateBettingTip(bettingTip: BettingTipInput): Flow<BettingTip>
+    suspend fun updateBettingTip(bettingTip: BettingTipInput): Either<Message,BettingTip>
 
-    suspend fun deleteBettingTip(id: String): Flow<Message>
+    suspend fun deleteBettingTip(id: String): Either<Message,Int>
 
-    suspend fun signIn(userInput: UserInput): Flow<AccessToken>
-    suspend fun refreshToken(refreshToken: RefreshToken):AccessToken
-    suspend fun sendNotification(notification: Notification):Flow<Notification>
-    suspend fun sendNotification1(notification: Notification):Notification
+    suspend fun signIn(userInput: UserInput): Either<Message, AccessToken>
 
-    suspend fun getTickets():List<Ticket>
-    suspend fun getTicketById( id:String): Ticket
+    suspend fun refreshToken(refreshToken: RefreshToken): Either<Message,AccessToken>
+    suspend fun sendNotification(notification: Notification): Flow<Notification>
+    suspend fun sendNotification1(notification: Notification): Notification
+
+    suspend fun getTickets(): List<Ticket>
+    suspend fun getTicketById(id: String): Ticket
     suspend fun insertTicket(ticket: TicketInput): Ticket
-    suspend fun updateTicket( ticket: TicketInput): Ticket
-    suspend fun deleteTicketById(id:String):Message
+    suspend fun updateTicket(ticket: TicketInput): Ticket
+    suspend fun deleteTicketById(id: String): Message
 }

@@ -32,12 +32,13 @@ import com.twoplaytech.drbetting.admin.util.Constants.KEY_ACCESS_TOKEN
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_APP_LAUNCHES
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_LOGGED_IN
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_USER_CREDENTIALS
+import com.twoplaytech.drbetting.data.common.Either
 import com.twoplaytech.drbetting.data.datasource.LocalDataSource
 import com.twoplaytech.drbetting.data.mappers.MessageMapper
 import com.twoplaytech.drbetting.data.models.*
+import io.ktor.client.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
@@ -66,94 +67,39 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getBettingTipsBySport(
+    override suspend fun getBettingTipsBySport(
         sport: Sport,
-        upcoming: Boolean,
-        onSuccess: (List<BettingTip>) -> Unit,
-        onError: (Message) -> Unit
-    ) {
-        launch(coroutineContext) {
-            remoteDataSource.getBettingTipsBySport(sport, upcoming).catch { throwable ->
-                sendErrorMessage(onError, throwable)
-            }.collect { bettingTips ->
-                sendBettingTips(onSuccess, bettingTips)
-            }
-        }
-    }
+        upcoming: Boolean
+    ): Flow<Either<Message, List<BettingTip>>> =
+        flow { emit(remoteDataSource.getBettingTipsBySport(sport, upcoming)) }.flowOn(
+            coroutineContext
+        )
 
-    override fun getBettingTipById(
-        id: String,
-        onSuccess: (BettingTip) -> Unit,
-        onError: (Message) -> Unit
-    ) {
-        launch(coroutineContext) {
-            remoteDataSource.getBettingTipById(id).catch { throwable ->
-                sendErrorMessage(onError, throwable)
-            }.collect { bettingTip ->
-                onSuccess.invoke(bettingTip)
-            }
-        }
-    }
+    override suspend fun getBettingTipById(id: String): Flow<Either<Message, BettingTip>> = flow {
+        emit(remoteDataSource.getBettingTipById(id))
+    }.flowOn(coroutineContext)
 
-    override fun insertBettingTip(
-        bettingTip: BettingTipInput,
-        onSuccess: (BettingTip) -> Unit,
-        onError: (Message) -> Unit
-    ) {
-        launch(coroutineContext) {
-            remoteDataSource.insertBettingTip(bettingTip).catch { throwable ->
-                sendErrorMessage(onError, throwable)
-            }.collect { bettingTip -> onSuccess.invoke(bettingTip) }
-        }
-    }
+    override suspend fun insertBettingTip(bettingTip: BettingTipInput): Flow<Either<Message, BettingTip>> =
+        flow {
+            emit(remoteDataSource.insertBettingTip(bettingTip))
+        }.flowOn(coroutineContext)
 
-    override fun updateBettingTip(
-        bettingTip: BettingTipInput,
-        onSuccess: (BettingTip) -> Unit,
-        onError: (Message) -> Unit
-    ) {
-        launch(coroutineContext) {
-            remoteDataSource.updateBettingTip(bettingTip).catch { cause ->
-                sendErrorMessage(onError, cause)
-            }.collect { bettingTip: BettingTip ->
-                onSuccess.invoke(bettingTip)
-            }
-        }
-    }
+    override suspend fun updateBettingTip(bettingTip: BettingTipInput): Flow<Either<Message, BettingTip>> =
+        flow { emit(remoteDataSource.updateBettingTip(bettingTip)) }.flowOn(coroutineContext)
 
-    override fun deleteBettingTip(
-        id: String,
-        onSuccess: (Message) -> Unit,
-        onError: (Message) -> Unit
-    ) {
-        launch(coroutineContext) {
-            remoteDataSource.deleteBettingTip(id)
-                .catch { cause ->
+    override suspend fun deleteBettingTip(id: String): Flow<Either<Message, Int>> = flow {
+        emit(remoteDataSource.deleteBettingTip(id))
+    }.flowOn(coroutineContext)
 
-                    sendErrorMessage(onError, cause)
-                }
-                .collect { message: Message -> onSuccess.invoke(message) }
-        }
-    }
+    override suspend fun signIn(userInput: UserInput): Flow<Either<Message, AccessToken>> = flow {
+        emit(remoteDataSource.signIn(userInput))
+    }.flowOn(coroutineContext)
 
-    override fun signIn(
-        userInput: UserInput,
-        onSuccess: (AccessToken) -> Unit,
-        onError: (Message) -> Unit
-    ) {
-        launch(coroutineContext) {
-            remoteDataSource.signIn(userInput).catch { throwable ->
-                sendErrorMessage(onError, throwable)
-            }.collect { accessToken ->
-                saveToken(accessToken)
-                onSuccess.invoke(accessToken)
-            }
-        }
-    }
 
     override fun saveLogin(shouldStayLoggedIn: Boolean) {
         localDataSource.saveBoolean(KEY_LOGGED_IN, shouldStayLoggedIn)
     }
+
 
     override fun saveUserCredentials(email: String, password: String) {
         localDataSource.saveString(
@@ -198,33 +144,11 @@ class RepositoryImpl @Inject constructor(
         })
     }
 
-    override fun getAccessToken(onSuccess: (AccessToken) -> Unit, onError: (Message) -> Unit) {
-        localDataSource.getString(KEY_ACCESS_TOKEN, onSuccess = {
-            onSuccess.invoke(AccessTokenMapper.fromJson(it))
-        }, onError = {
-            sendErrorMessage(onError, it)
-        })
+    override fun getAccessToken(): AccessToken?{
+        return localDataSource.getString(KEY_ACCESS_TOKEN)?.let {
+            AccessTokenMapper.fromJson(it)
+        }
     }
-
-
-
-    override  fun refreshToken(refreshToken: RefreshToken): AccessToken {
-       return runBlocking {
-        val refreshedToken = remoteDataSource.refreshToken(refreshToken)
-           saveToken(refreshedToken)
-           refreshedToken
-       }
-    }
-
-    override suspend fun getAccessTokenAsync(): AccessToken {
-        val accessTokenJsonDeferred =
-            coroutineScope { async { localDataSource.getString(KEY_ACCESS_TOKEN) } }
-        val accessTokenJson = accessTokenJsonDeferred.await()
-        return AccessTokenMapper.fromJson(
-            accessTokenJson ?: throw Exception("Unable to parse AccessToken JSON")
-        )
-    }
-
 
     override fun sendNotification(
         notification: Notification,
@@ -280,6 +204,7 @@ class RepositoryImpl @Inject constructor(
     ) {
         onSuccess.invoke(bettingTips)
     }
+
     override fun getAppTheme(callback: (Int) -> Unit) {
         localDataSource.getInt("KEY_DARK_MODE", callback = {
             callback.invoke(it)
@@ -302,9 +227,12 @@ class RepositoryImpl @Inject constructor(
 
     override suspend fun getTicketById(id: String): Ticket = remoteDataSource.getTicketById(id)
 
-    override suspend fun insertTicket(ticket: TicketInput): Ticket =remoteDataSource.insertTicket(ticket)
+    override suspend fun insertTicket(ticket: TicketInput): Ticket =
+        remoteDataSource.insertTicket(ticket)
 
-    override suspend fun updateTicket(ticket: TicketInput): Ticket  = remoteDataSource.updateTicket(ticket)
+    override suspend fun updateTicket(ticket: TicketInput): Ticket =
+        remoteDataSource.updateTicket(ticket)
 
-    override suspend fun deleteTicketById(id: String): Message = remoteDataSource.deleteTicketById(id)
+    override suspend fun deleteTicketById(id: String): Message =
+        remoteDataSource.deleteTicketById(id)
 }

@@ -27,16 +27,24 @@ package com.twoplaytech.drbetting.admin.ui.admin
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.common.OnDropdownItemSelectedListener
 import com.twoplaytech.drbetting.admin.ui.common.BaseFragment
+import com.twoplaytech.drbetting.admin.ui.common.BettingTipUiState
 import com.twoplaytech.drbetting.admin.ui.viewmodels.AdminViewModel
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_TIP
 import com.twoplaytech.drbetting.admin.views.ChooserView
 import com.twoplaytech.drbetting.data.models.*
 import com.twoplaytech.drbetting.databinding.FragmentBettingTipBinding
 import com.twoplaytech.drbetting.util.toStringDate
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 import java.util.*
 
 class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
@@ -48,7 +56,7 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
     private var sportChosen = Sport.Football
     private var statusChosen = TypeStatus.UNKNOWN
     private var sportChosenIdx = 0
-    private lateinit var menu: Menu
+    private  var menu: Menu? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,11 +74,9 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
             bettingTip = it.getParcelable(KEY_BETTING_TIP)
             populateExistingTip(bettingTip)
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
         observeData()
+
+
     }
 
     private fun populateExistingTip(bettingTip: BettingTip?) {
@@ -91,7 +97,7 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
     }
 
      override fun observeData() {
-        adminViewModel.observeValidation().observe(viewLifecycleOwner, { hasErrors ->
+        adminViewModel.observeValidation().observe(viewLifecycleOwner) { hasErrors ->
             when (hasErrors) {
                 true -> {
                 }
@@ -101,15 +107,30 @@ class BettingTipFragment : BaseFragment(), OnDropdownItemSelectedListener {
                     } ?: adminViewModel.insertBettingTip(getTipFromInput())
                 }
             }
-        })
-        adminViewModel.observeForInsertedBettingTip().observe(viewLifecycleOwner, { resource ->
-            val saveIcon = menu.findItem(R.id.action_save)
-            saveIcon.isVisible = resource.status != Status.LOADING
-        })
-        adminViewModel.observeOnUpdatedTip().observe(viewLifecycleOwner, { resource ->
-            val saveIcon = menu.findItem(R.id.action_save)
-            saveIcon.isVisible = resource.status != Status.LOADING
-        })
+        }
+         viewLifecycleOwner.lifecycleScope.launch {
+             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                 adminViewModel.bettingTipUiState
+                     .collectLatest { uiState->
+                     when(uiState){
+                         BettingTipUiState.Deleted -> {}
+                         is BettingTipUiState.Error -> {
+                             val saveIcon = menu?.findItem(R.id.action_save)
+                             saveIcon?.isVisible = false
+                         }
+                         BettingTipUiState.Neutral -> {
+                             val saveIcon = menu?.findItem(R.id.action_save)
+                             saveIcon?.isVisible = false
+                         }
+                         is BettingTipUiState.Success -> {
+                             val saveIcon = menu?.findItem(R.id.action_save)
+                             saveIcon?.isVisible = false
+                         }
+                         else -> {}
+                     }
+                 }
+             }
+         }
     }
 
     private fun getTipFromInput(id: String? = null): BettingTip {

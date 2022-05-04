@@ -35,5 +35,9 @@ import kotlinx.serialization.Serializable
 */
 @Keep
 data class FeedbackMessage(
-    val _id: String? = null, val name: String, val email: String, val message: String, val createdAt: String? = null
+    val _id: String? = null,
+    val name: String,
+    val email: String,
+    val message: String,
+    val createdAt: String? = null
 )

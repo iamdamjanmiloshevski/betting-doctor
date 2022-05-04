@@ -36,12 +36,6 @@ import com.twoplaytech.drbetting.admin.data.models.UserInput
     © 2Play Tech  2021. All rights reserved
 */
 interface SignInUseCase {
-    fun signIn(
-        userInput: UserInput,
-        onSuccess: (AccessToken) -> Unit,
-        onError: (Message) -> Unit
-    )
-
     fun isAlreadyLoggedIn(callback: (Boolean) -> Unit)
     fun saveLogin(shouldStayLoggedIn: Boolean)
     fun saveUserCredentials(email: String, password: String)

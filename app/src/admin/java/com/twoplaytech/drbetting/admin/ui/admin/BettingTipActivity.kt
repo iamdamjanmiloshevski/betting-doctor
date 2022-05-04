@@ -27,6 +27,9 @@ package com.twoplaytech.drbetting.admin.ui.admin
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -34,6 +37,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.admin.common.BaseAdminActivity
+import com.twoplaytech.drbetting.admin.ui.common.BettingTipUiState
 import com.twoplaytech.drbetting.admin.util.Constants
 import com.twoplaytech.drbetting.admin.util.Constants.KEY_BETTING_TIP
 import com.twoplaytech.drbetting.admin.util.Constants.VIEW_TYPE_NEW
@@ -42,6 +46,8 @@ import com.twoplaytech.drbetting.data.models.Sport
 import com.twoplaytech.drbetting.data.models.Status
 import com.twoplaytech.drbetting.databinding.ActivityBettingTipBinding
 import com.twoplaytech.drbetting.util.getSportResource
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class BettingTipActivity : BaseAdminActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -55,13 +61,10 @@ class BettingTipActivity : BaseAdminActivity() {
         intent.extras.extractArguments()
         initBinding()
         initUI()
+        observeData()
         setContentView(binding.root)
     }
 
-    override fun onResume() {
-        super.onResume()
-        observeData()
-    }
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp(appBarConfiguration)
@@ -71,45 +74,44 @@ class BettingTipActivity : BaseAdminActivity() {
     override fun initUI() {
         setSupportActionBar(binding.toolbar)
         binding.loadingView.isVisible = false
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_betting_tip) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_betting_tip) as NavHostFragment
         navController = navHostFragment.navController
         setSupportActionBar(binding.toolbar)
-        navController.setGraph(R.navigation.nav_graph_betting_tip, bundleOf(
-            KEY_BETTING_TIP to bettingTip
-        ))
+        navController.setGraph(
+            R.navigation.nav_graph_betting_tip, bundleOf(
+                KEY_BETTING_TIP to bettingTip
+            )
+        )
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
     }
 
     override fun observeData() {
-        super.observeData()
-        adminViewModel.observeForInsertedBettingTip().observe(this,
-            { resource ->
-                when (resource.status) {
-                    Status.SUCCESS -> {
-                        finish()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                adminViewModel.bettingTipUiState.collectLatest { uiState->
+                    when(uiState){
+                        BettingTipUiState.Deleted -> finish()
+                        is BettingTipUiState.Error -> {}
+                        BettingTipUiState.Loading ->{
+                            binding.loadingView.setText("Saving please wait")
+                           binding.loadingView.isVisible = true
+                        }
+                        BettingTipUiState.Neutral -> {
+                            /**
+                             *
+                             * do nothing
+                             *
+                             */
+                        }
+                        is BettingTipUiState.Success ->  finish()
                     }
-                    Status.ERROR -> {
-                    }
-                    Status.LOADING -> {
-                        binding.loadingView.setText("Saving please wait")
-                        binding.loadingView.isVisible = true
-                    }
-                }
-            })
-        adminViewModel.observeOnUpdatedTip().observe(this,{resource ->
-            when (resource.status) {
-                Status.SUCCESS -> {
-                    finish()
-                }
-                Status.ERROR -> {
-                }
-                Status.LOADING -> {
-                    binding.loadingView.setText("Saving please wait")
-                    binding.loadingView.isVisible = true
+
                 }
             }
-        })
+        }
+
     }
 
     override fun initBinding() {

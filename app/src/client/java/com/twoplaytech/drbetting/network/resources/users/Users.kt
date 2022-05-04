@@ -1,4 +1,4 @@
-package com.twoplaytech.drbetting.network.resources
+package com.twoplaytech.drbetting.network.resources.users
 
 import io.ktor.resources.*
 import kotlinx.serialization.Serializable
@@ -16,5 +16,5 @@ import kotlinx.serialization.Serializable
 class Users {
     @Serializable
     @Resource("feedback")
-    class Feedback(val parent:Users = Users())
+    class Feedback(val parent: Users = Users())
 }

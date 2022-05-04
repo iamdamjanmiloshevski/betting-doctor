@@ -40,17 +40,6 @@ import javax.inject.Inject
 class SignInUseCaseImpl @Inject constructor(
     repository: Repository
 ) : UseCase(repository), SignInUseCase {
-    override fun signIn(
-        userInput: UserInput,
-        onSuccess: (AccessToken) -> Unit,
-        onError: (Message) -> Unit
-    ) {
-        repository.signIn(
-            userInput,
-            onSuccess = { onSuccess.invoke(it) },
-            onError = { onError.invoke(it) })
-    }
-
 
     override fun isAlreadyLoggedIn(callback: (Boolean) -> Unit) {
         repository.isAlreadyLoggedIn {

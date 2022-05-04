@@ -24,15 +24,14 @@
 
 package com.twoplaytech.drbetting.data.datasource
 
-import com.twoplaytech.drbetting.R
 import com.twoplaytech.drbetting.data.api.BettingDoctorAPI
 import com.twoplaytech.drbetting.data.common.Either
 import com.twoplaytech.drbetting.data.models.BettingTip
 import com.twoplaytech.drbetting.data.models.FeedbackMessage
 import com.twoplaytech.drbetting.data.models.Message
 import com.twoplaytech.drbetting.data.models.Sport
-import com.twoplaytech.drbetting.network.resources.BettingTips
-import com.twoplaytech.drbetting.network.resources.Users
+import com.twoplaytech.drbetting.network.resources.bettingtips.BettingTips
+import com.twoplaytech.drbetting.network.resources.users.Users
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*

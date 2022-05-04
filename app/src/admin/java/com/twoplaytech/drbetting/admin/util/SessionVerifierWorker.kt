@@ -49,15 +49,15 @@ class SessionVerifierWorker @AssistedInject constructor(
 ) : CoroutineWorker(context, workerParameters) {
     override suspend fun doWork(): Result {
         var result = Result.failure()
-        repository.getAccessToken(onSuccess = { accessToken ->
-            val token = JWT(accessToken.refreshToken)
-            result = token.expiresAt?.let { expiresAt ->
-                if (expiresAt.before(Date(System.currentTimeMillis()))) Result.failure() else Result.success()
-            } ?: Result.failure()
-        }, onError = {
-            Timber.e(it.message)
-            result = Result.failure()
-        })
+//        repository.getAccessToken(onSuccess = { accessToken ->
+//            val token = JWT(accessToken.refreshToken)
+//            result = token.expiresAt?.let { expiresAt ->
+//                if (expiresAt.before(Date(System.currentTimeMillis()))) Result.failure() else Result.success()
+//            } ?: Result.failure()
+//        }, onError = {
+//            Timber.e(it.message)
+//            result = Result.failure()
+//        })
         return result
     }
 }

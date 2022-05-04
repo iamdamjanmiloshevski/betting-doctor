@@ -39,20 +39,10 @@ import dagger.hilt.android.components.ViewModelComponent
 @Module
 @InstallIn(ViewModelComponent::class)
 interface UseCasesModule {
-    @Binds
-    fun bindInsertBettingTipUseCase(insertBettingTipUseCaseImpl: InsertBettingTipUseCaseImpl): InsertBettingTipUseCase
 
-    @Binds
-    fun bindDeleteBettingUseCase(deleteBettingTipUseCaseImpl: DeleteBettingTipUseCaseImpl): DeleteBettingTipUseCase
-
-    @Binds
-    fun bindUpdateBettingTipsUseCase(updateBettingTipUseCaseImpl: UpdateBettingTipUseCaseImpl): UpdateBettingTipUseCase
 
     @Binds
     fun bindSignInUserUserCase(signInUseCaseImpl: SignInUseCaseImpl): SignInUseCase
-
-    @Binds
-    fun bindGetBettingTipsUseCase(getBettingTipsUseCaseImpl: GetBettingTipsUseCaseImpl):GetBettingTipsUseCase
 
     @Binds
     fun bindAppLaunchUseCase(appLaunchUseCaseImpl: AppLaunchUseCaseImpl): AppLaunchUseCase

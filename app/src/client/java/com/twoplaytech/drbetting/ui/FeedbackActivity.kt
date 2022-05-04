@@ -74,26 +74,6 @@ class FeedbackActivity : BaseActivity(), View.OnClickListener {
                 }
             }
         }
-//        feedbackViewModel.observeFeedback().observe(this, Observer { resource ->
-//            when (resource.status) {
-//                Status.SUCCESS -> {
-//                    binding.content.loadingView.show(false)
-//                    Toast.makeText(this, resource.message, Toast.LENGTH_SHORT).show()
-//                    clearFocus()
-//                }
-//                Status.ERROR -> {
-//                    binding.content.loadingView.show(false)
-//                    Toast.makeText(this, resource.message, Toast.LENGTH_SHORT).show()
-//                    clearFocus()
-//                }
-//                Status.LOADING -> {
-//                    val backgrounds = com.twoplaytech.drbetting.util.getRandomBackground()
-//                    binding.content.loadingView.setText(resource.message ?: "")
-//                    binding.content.loadingView.setBackground(backgroundResource = backgrounds.first)
-//                    binding.content.loadingView.show(true)
-//                }
-//            }
-//        })
        observeAppTheme()
     }
 

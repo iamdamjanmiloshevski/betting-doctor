@@ -32,10 +32,15 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.snackbar.Snackbar
 import com.twoplaytech.drbetting.R
+import com.twoplaytech.drbetting.admin.data.models.AccessToken
 import com.twoplaytech.drbetting.admin.ui.admin.AdminActivity
 import com.twoplaytech.drbetting.admin.ui.common.BaseFragment
+import com.twoplaytech.drbetting.admin.ui.common.LoginUiState
 import com.twoplaytech.drbetting.admin.ui.viewmodels.LoginViewModel
 import com.twoplaytech.drbetting.admin.util.dispatchCredentialsDialog
 import com.twoplaytech.drbetting.admin.util.getRandomBackground
@@ -45,6 +50,8 @@ import com.twoplaytech.drbetting.databinding.FragmentLoginBinding
 import com.twoplaytech.drbetting.ui.common.TextWatcher
 import com.twoplaytech.drbetting.util.isValidEmail
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginFragment : BaseFragment() {
@@ -67,6 +74,11 @@ class LoginFragment : BaseFragment() {
         return loginBinding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        observeData()
+    }
+
     private fun changeLoginTheme() {
         val backgroundPair = getRandomBackground()
         backgroundId = backgroundPair.first
@@ -87,7 +99,7 @@ class LoginFragment : BaseFragment() {
                     loginBinding.lytPassword.error = getString(R.string.pwd_blank_msg)
                     loginViewModel.enableLogin(false)
                 }
-                else -> loginViewModel.login(requireContext(), email, pwd)
+                else -> loginViewModel.login(email, pwd)
             }
         }
         loginBinding.etEmail.addTextChangedListener(TextWatcher { emailInput ->
@@ -114,28 +126,55 @@ class LoginFragment : BaseFragment() {
     }
 
     override fun observeData() {
-        loginViewModel.observeLogin().observe(viewLifecycleOwner, { resource ->
-            when (resource.status) {
-                Status.SUCCESS -> {
-                    proceedToApp()
-                }
-                Status.ERROR -> {
-                    displayLoader(false)
-                    Snackbar.make(
-                        loginBinding.lytLogin,
-                        resource.message.toString(),
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                }
-                Status.LOADING -> {
-                    val msg = resource.message
-                    msg?.let {
-                        displayLoader(true, it)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                loginViewModel.loginUiState.collectLatest { uiState->
+                    when(uiState){
+                        is LoginUiState.Error -> {
+                            displayLoader(false)
+                            Snackbar.make(
+                                loginBinding.lytLogin,
+                                uiState.exception.message ?: "Something went wrong",
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+                        }
+                        LoginUiState.Loading ->  displayLoader(true, "Signing in. Please wait")
+                        LoginUiState.Neutral -> {
+                            /**
+                             *
+                             *  do nothing
+                             *
+                             */
+                        }
+                        is LoginUiState.Success ->   {
+                            proceedToApp(uiState.accessToken)
+                        }
                     }
                 }
             }
-        })
-        loginViewModel.observeForCredentials().observe(viewLifecycleOwner, { resource ->
+        }
+//        loginViewModel.observeLogin().observe(viewLifecycleOwner, { resource ->
+//            when (resource.status) {
+//                Status.SUCCESS -> {
+//                    proceedToApp()
+//                }
+//                Status.ERROR -> {
+//                    displayLoader(false)
+//                    Snackbar.make(
+//                        loginBinding.lytLogin,
+//                        resource.message.toString(),
+//                        Snackbar.LENGTH_SHORT
+//                    ).show()
+//                }
+//                Status.LOADING -> {
+//                    val msg = resource.message
+//                    msg?.let {
+//                        displayLoader(true, it)
+//                    }
+//                }
+//            }
+//        })
+        loginViewModel.observeForCredentials().observe(viewLifecycleOwner) { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
                     if (resource.data != null) {
@@ -157,13 +196,13 @@ class LoginFragment : BaseFragment() {
                 Status.LOADING -> {
                 }
             }
-        })
-        loginViewModel.observeLoginEnabled().observe(viewLifecycleOwner, { isEnabled ->
+        }
+        loginViewModel.observeLoginEnabled().observe(viewLifecycleOwner) { isEnabled ->
             loginBinding.btLogin.isEnabled = isEnabled
-        })
-        loginViewModel.observeShouldStayLoggedIn().observe(viewLifecycleOwner,{
-            if(it) enter()
-        })
+        }
+        loginViewModel.observeShouldStayLoggedIn().observe(viewLifecycleOwner) {
+            if (it) enter()
+        }
     }
 
     private fun displayLoader(shouldDisplay: Boolean, loadingMessage: String = "") {
@@ -182,13 +221,13 @@ class LoginFragment : BaseFragment() {
 
     }
 
-    private fun proceedToApp() {
+    private fun proceedToApp(accessToken: AccessToken?) {
         val shouldKeepUserSignedIn = loginBinding.cbKeepMeSignedIn.isChecked
         if (shouldKeepUserSignedIn) {
-            loginViewModel.saveLogin(shouldKeepUserSignedIn)
+            loginViewModel.saveLogin(accessToken,shouldKeepUserSignedIn)
             askForCredentialsSave()
         } else {
-            loginViewModel.saveLogin(false)
+            loginViewModel.saveLogin(accessToken, false)
             askForCredentialsSave()
         }
     }
@@ -218,11 +257,6 @@ class LoginFragment : BaseFragment() {
 
     override fun initBinding(inflater: LayoutInflater, container: ViewGroup?) {
         loginBinding = FragmentLoginBinding.inflate(inflater, container, false)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        observeData()
     }
 
     private fun enter() {

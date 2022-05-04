@@ -28,14 +28,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.twoplaytech.drbetting.data.common.Either
-import com.twoplaytech.drbetting.data.models.BettingTip
 import com.twoplaytech.drbetting.data.models.Sport
-import com.twoplaytech.drbetting.domain.common.Resource
 import com.twoplaytech.drbetting.domain.repository.Repository
 import com.twoplaytech.drbetting.domain.usecases.AppLaunchUseCase
 import com.twoplaytech.drbetting.domain.usecases.ChangeThemeUseCase
-import com.twoplaytech.drbetting.domain.usecases.GetBettingTipsUseCase
-import com.twoplaytech.drbetting.network.resources.BettingTips
 import com.twoplaytech.drbetting.ui.states.BettingTipsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -50,13 +46,11 @@ import javax.inject.Inject
 */
 @HiltViewModel
 class BettingTipsViewModel @Inject constructor(
-    private val getBettingTipsUseCase: GetBettingTipsUseCase,
     private val appLaunchUseCase: AppLaunchUseCase,
     private val themeUseCase: ChangeThemeUseCase,
     private val repository: Repository
 ) :
     ViewModel() {
-    private val bettingTipsObserver = MutableLiveData<Resource<Any>>()
     private val appLaunchObserver = MutableLiveData<Int>()
     private val _bettingTipsState:MutableStateFlow<BettingTipsUiState> = MutableStateFlow(BettingTipsUiState.Loading)
     val bettingTipsState:StateFlow<BettingTipsUiState> = _bettingTipsState
