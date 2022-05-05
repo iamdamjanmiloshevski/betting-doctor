@@ -39,8 +39,6 @@ import kotlinx.coroutines.flow.Flow
     © 2Play Tech  2021. All rights reserved
 */
 interface RemoteDataSource {
-    suspend fun getBettingTips(): Flow<List<BettingTip>>
-
     suspend fun getBettingTipsBySport(
     sport: Sport,
     upcoming: Boolean = false):Either<Message,List<BettingTip>>
@@ -58,12 +56,11 @@ interface RemoteDataSource {
     suspend fun signIn(userInput: UserInput): Either<Message, AccessToken>
 
     suspend fun refreshToken(refreshToken: RefreshToken): Either<Message,AccessToken>
-    suspend fun sendNotification(notification: Notification): Flow<Notification>
-    suspend fun sendNotification1(notification: Notification): Notification
+    suspend fun sendNotification(notification: Notification): Either<Message,Notification>
 
-    suspend fun getTickets(): List<Ticket>
-    suspend fun getTicketById(id: String): Ticket
-    suspend fun insertTicket(ticket: TicketInput): Ticket
-    suspend fun updateTicket(ticket: TicketInput): Ticket
-    suspend fun deleteTicketById(id: String): Message
+    suspend fun getTickets(): Either<Message,List<Ticket>>
+    suspend fun getTicketById(id: String): Either<Message,Ticket>
+    suspend fun insertTicket(ticket: TicketInput): Either<Message,Ticket>
+    suspend fun updateTicket(ticket: TicketInput): Either<Message,Ticket>
+    suspend fun deleteTicketById(id: String): Either<Message,Message>
 }

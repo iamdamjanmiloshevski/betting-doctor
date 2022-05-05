@@ -8,11 +8,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.twoplaytech.drbetting.admin.data.Resource
 import com.twoplaytech.drbetting.admin.data.models.TicketInput
+import com.twoplaytech.drbetting.admin.domain.repository.Repository
 import com.twoplaytech.drbetting.admin.domain.usecases.*
 import com.twoplaytech.drbetting.admin.ui.common.BettingTipUiState
 import com.twoplaytech.drbetting.admin.ui.common.NotificationUiState
 import com.twoplaytech.drbetting.admin.ui.common.TicketUiState
 import com.twoplaytech.drbetting.admin.ui.common.TicketsUiState
+import com.twoplaytech.drbetting.data.common.Either
 import com.twoplaytech.drbetting.data.models.BettingTip
 import com.twoplaytech.drbetting.data.models.Notification
 import com.twoplaytech.drbetting.data.models.Ticket
@@ -30,13 +32,7 @@ import javax.inject.Inject
     © 2Play Technologies  2022. All rights reserved
 */
 @HiltViewModel
-class TicketsViewModel @Inject constructor(
-    private val getTicketsUseCase: GetTicketsUseCase,
-    private val insertTicketUseCase: InsertTicketUseCase,
-    private val updateTicketUseCase: UpdateTicketUseCase,
-    private val deleteTicketUseCase: DeleteTicketUseCase,
-    private val sendNotificationUseCase: SendNotificationUseCase
-) : ViewModel() {
+class TicketsViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
     var ticket: Resource<Ticket?> by mutableStateOf(Resource.Success(null))
     private val _ticketsUiState: MutableStateFlow<TicketsUiState?> = MutableStateFlow(null)
     val ticketsUiState: StateFlow<TicketsUiState?> = _ticketsUiState
@@ -46,7 +42,7 @@ class TicketsViewModel @Inject constructor(
     val bettingTipUiState: StateFlow<BettingTipUiState?> = _bettingTipUiState
     private val _notificationState: MutableStateFlow<NotificationUiState?> =
         MutableStateFlow(null)
-    val notificationState:StateFlow<NotificationUiState?> = _notificationState
+    val notificationState: StateFlow<NotificationUiState?> = _notificationState
     val bettingTips = mutableStateListOf<BettingTip>()
     var initialList = listOf<BettingTip>()
 
@@ -57,19 +53,25 @@ class TicketsViewModel @Inject constructor(
     fun getTickets() {
         bettingTips.clear()
         viewModelScope.launch {
-            getTicketsUseCase.getTickets()
+            repository.getTickets().onStart {
+                _ticketsUiState.value = TicketsUiState.Loading
+            }
                 .catch { cause ->
                     _ticketsUiState.value = TicketsUiState.Error(cause)
                 }
-                .onStart { _ticketsUiState.value = TicketsUiState.Loading }
-                .onCompletion { cause -> cause?.let { TicketsUiState.Error(it) } }
-                .collect {
-                    if (it.isEmpty()) {
-                        _ticketsUiState.value =
-                            TicketsUiState.Error(Throwable("No tickets available"))
-                    } else _ticketsUiState.value = TicketsUiState.Success(it)
+                .collectLatest { either ->
+                    when (either) {
+                        is Either.Failure -> _ticketsUiState.value =
+                            TicketsUiState.Error(Throwable(either.message.message))
+                        is Either.Response -> {
+                            val tickets = either.data
+                            if (tickets.isEmpty()) {
+                                _ticketsUiState.value =
+                                    TicketsUiState.Error(Throwable("No tickets available"))
+                            } else _ticketsUiState.value = TicketsUiState.Success(tickets)
+                        }
+                    }
                 }
-
         }
     }
 
@@ -79,58 +81,65 @@ class TicketsViewModel @Inject constructor(
 
     fun getTicketById(id: String) {
         viewModelScope.launch {
-            getTicketsUseCase.getTicketById(id)
-                .catch { cause -> _ticketUiState.value = TicketUiState.Error(cause) }
-                .onStart { _ticketUiState.value = TicketUiState.Loading }
-                .onCompletion { cause -> cause?.let { TicketUiState.Error(it) } }
-                .collect {
-                    initialList = it.tips
-                    _ticketUiState.value = TicketUiState.Success(it)
+            repository.getTicketById(id).onStart {
+                _ticketUiState.value = TicketUiState.Loading
+            }.catch { cause ->
+                _ticketUiState.value = TicketUiState.Error(cause)
+            }.collectLatest { either ->
+                when(either){
+                    is Either.Failure ->   _ticketUiState.value = TicketUiState.Error(Throwable(either.message.message))
+                    is Either.Response -> {
+                        val ticket = either.data
+                        initialList = ticket.tips
+                        _ticketUiState.value = TicketUiState.Success(ticket)
+                    }
                 }
+            }
         }
     }
 
 
     fun insertTicket(ticketInput: TicketInput) {
         viewModelScope.launch(Dispatchers.IO) {
-            insertTicketUseCase.insertTicket(ticketInput).catch { cause ->
-                _ticketUiState.value = TicketUiState.Error(cause)
-            }.onStart {
+            repository.insertTicket(ticketInput).onStart {
                 _ticketUiState.value = TicketUiState.Loading
-            }.onCompletion { cause ->
-                cause?.let { _ticketUiState.value = TicketUiState.Error(cause) }
-            }.collect {
-                _ticketUiState.value = TicketUiState.Success(it, true)
+            }.catch { cause ->
+                _ticketUiState.value = TicketUiState.Error(cause)
+            }.collectLatest { either ->
+                when(either){
+                    is Either.Failure -> _ticketUiState.value = TicketUiState.Error(Throwable(either.message.message))
+                    is Either.Response ->  _ticketUiState.value = TicketUiState.Success(either.data, true)
+                }
             }
-
         }
     }
 
     fun updateTicket(ticketInput: TicketInput) {
-        Timber.e("Updating ticket")
         viewModelScope.launch(Dispatchers.IO) {
-            updateTicketUseCase.updateTicket(ticketInput).catch { cause ->
-                _ticketUiState.value = TicketUiState.Error(cause)
-            }.onStart {
+            repository.updateTicket(ticketInput).onStart {
                 _ticketUiState.value = TicketUiState.Loading
-            }.onCompletion { cause ->
-                cause?.let { _ticketUiState.value = TicketUiState.Error(cause) }
-            }.collect {
-                _ticketUiState.value = TicketUiState.Success(it, true)
+            }.catch { cause ->
+                _ticketUiState.value = TicketUiState.Error(cause)
+            }.collectLatest { either ->
+                when(either){
+                    is Either.Failure -> _ticketUiState.value = TicketUiState.Error(Throwable(either.message.message))
+                    is Either.Response ->  _ticketUiState.value = TicketUiState.Success(either.data, true)
+                }
             }
         }
     }
 
     fun deleteTicket(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            deleteTicketUseCase.deleteTicket(id).catch { cause ->
-                _ticketUiState.value = TicketUiState.Error(cause)
-            }.onStart {
+            repository.deleteTicketById(id).onStart {
                 _ticketUiState.value = TicketUiState.Loading
-            }.onCompletion { cause ->
-                cause?.let { _ticketUiState.value = TicketUiState.Error(cause) }
-            }.collect {
-                Timber.e(it.message)
+            }.catch { cause ->
+                _ticketUiState.value = TicketUiState.Error(cause)
+            }.collectLatest { either ->
+                when(either){
+                    is Either.Failure -> TicketUiState.Error(Throwable(either.message.message))
+                    is Either.Response -> Timber.i(either.data.message)
+                }
             }
         }
     }
@@ -160,15 +169,18 @@ class TicketsViewModel @Inject constructor(
     }
 
     fun sendNotification(topic: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            sendNotificationUseCase.sendNotification(Notification(topic))
-                .onStart {
-                    Timber.i("Sending notification to topic $topic")
-                    _notificationState.value = NotificationUiState.Loading
-                }.catch { e ->
+        viewModelScope.launch {
+            repository.sendNotification(Notification(topic))
+                .catch { e ->
                     _notificationState.value = NotificationUiState.Error(e)
-                }.collect {
-                    _notificationState.value = NotificationUiState.Success(it)
+                }
+                .collectLatest { either ->
+                    when (either) {
+                        is Either.Failure -> _notificationState.value =
+                            NotificationUiState.Error(Throwable(either.message.message))
+                        is Either.Response -> _notificationState.value =
+                            NotificationUiState.Success(either.data)
+                    }
                 }
         }
     }

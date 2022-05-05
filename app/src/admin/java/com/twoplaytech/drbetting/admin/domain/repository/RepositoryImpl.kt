@@ -56,16 +56,6 @@ class RepositoryImpl @Inject constructor(
     Repository,
     CoroutineScope {
 
-    override fun getBettingTips(onSuccess: (List<BettingTip>) -> Unit, onError: (Message) -> Unit) {
-        launch(coroutineContext) {
-            remoteDataSource.getBettingTips().catch { throwable ->
-                Timber.e(throwable)
-                sendErrorMessage(onError, throwable)
-            }.collect { bettingTips ->
-                sendBettingTips(onSuccess, bettingTips)
-            }
-        }
-    }
 
     override suspend fun getBettingTipsBySport(
         sport: Sport,
@@ -144,52 +134,16 @@ class RepositoryImpl @Inject constructor(
         })
     }
 
-    override fun getAccessToken(): AccessToken?{
+    override fun getAccessToken(): AccessToken? {
         return localDataSource.getString(KEY_ACCESS_TOKEN)?.let {
             AccessTokenMapper.fromJson(it)
         }
     }
 
-    override fun sendNotification(
-        notification: Notification,
-        onSuccess: (Notification) -> Unit,
-        onError: (Message) -> Unit
-    ) {
-        launch(coroutineContext) {
-            remoteDataSource.sendNotification(notification).catch { cause ->
-                sendErrorMessage(onError, cause)
-            }.collect {
-                onSuccess.invoke(it)
-            }
-        }
-    }
-
-    override suspend fun sendNotification(notification: Notification): Notification {
-        return remoteDataSource.sendNotification1(notification)
-    }
-
-
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO
 
-    private fun sendErrorMessage(
-        onError: (Message) -> Unit,
-        throwable: Throwable
-    ) {
-        if (throwable is retrofit2.HttpException) {
-            val response = throwable.response()
-            response?.let { serverResponse ->
-                try {
-                    serverResponse.errorBody()?.let { errorBody ->
-                        val errorMessage = MessageMapper.fromJson(errorBody.string())
-                        onError.invoke(errorMessage)
-                    } ?: onError.invoke(Message("Something went wrong", 0))
-                } catch (e: Exception) {
-                    onError.invoke(Message("Something went wrong", 0))
-                }
-            } ?: onError.invoke(Message("Something went wrong", 0))
-        }
-    }
+
 
     override fun getToken(): AccessToken? {
         val accessTokenJson = localDataSource.getString(KEY_ACCESS_TOKEN)
@@ -198,12 +152,10 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    private fun sendBettingTips(
-        onSuccess: (List<BettingTip>) -> Unit,
-        bettingTips: List<BettingTip>
-    ) {
-        onSuccess.invoke(bettingTips)
-    }
+    override suspend fun sendNotification(notification: Notification): Flow<Either<Message, Notification>> =
+        flow {
+            emit(remoteDataSource.sendNotification(notification))
+        }.flowOn(coroutineContext)
 
     override fun getAppTheme(callback: (Int) -> Unit) {
         localDataSource.getInt("KEY_DARK_MODE", callback = {
@@ -223,16 +175,22 @@ class RepositoryImpl @Inject constructor(
         } ?: return null
     }
 
-    override suspend fun getTickets(): List<Ticket> = remoteDataSource.getTickets()
+    override suspend fun getTickets(): Flow<Either<Message, List<Ticket>>> = flow{
+        emit(remoteDataSource.getTickets())}.flowOn(coroutineContext)
 
-    override suspend fun getTicketById(id: String): Ticket = remoteDataSource.getTicketById(id)
+        override suspend fun getTicketById(id: String): Flow<Either<Message, Ticket>> = flow<Either<Message, Ticket>> {
+            remoteDataSource.getTicketById(id)
+        }.flowOn(coroutineContext)
 
-    override suspend fun insertTicket(ticket: TicketInput): Ticket =
-        remoteDataSource.insertTicket(ticket)
+    override suspend fun insertTicket(ticket: TicketInput): Flow<Either<Message, Ticket>> = flow {
+        emit( remoteDataSource.insertTicket(ticket))
+    }.flowOn(coroutineContext)
 
-    override suspend fun updateTicket(ticket: TicketInput): Ticket =
+    override suspend fun updateTicket(ticket: TicketInput): Flow<Either<Message, Ticket>> = flow<Either<Message, Ticket>> {
         remoteDataSource.updateTicket(ticket)
+    }.flowOn(coroutineContext)
 
-    override suspend fun deleteTicketById(id: String): Message =
+    override suspend fun deleteTicketById(id: String): Flow<Either<Message, Message>> = flow<Either<Message, Message>> {
         remoteDataSource.deleteTicketById(id)
+    }.flowOn(coroutineContext)
 }

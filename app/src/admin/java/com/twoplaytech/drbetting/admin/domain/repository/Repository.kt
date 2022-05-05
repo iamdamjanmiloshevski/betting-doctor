@@ -36,7 +36,6 @@ import kotlinx.coroutines.flow.Flow
     © 2Play Tech  2021. All rights reserved
 */
 interface Repository {
-    fun getBettingTips(onSuccess: (List<BettingTip>) -> Unit, onError: (Message) -> Unit)
     suspend fun getBettingTipsBySport(
         sport: Sport,upcoming: Boolean=false):Flow<Either<Message,List<BettingTip>>>
     suspend fun getBettingTipById(id: String):Flow<Either<Message,BettingTip>>
@@ -67,25 +66,20 @@ interface Repository {
     fun getAccessToken():AccessToken?
     fun getToken(): AccessToken?
 
-
-    fun sendNotification(
-        notification: Notification,
-        onSuccess: (Notification) -> Unit,
-        onError: (Message) -> Unit
-    )
-    suspend fun sendNotification(notification: Notification):Notification
-
+    suspend fun sendNotification(
+        notification: Notification
+    ):Flow<Either<Message,Notification>>
 
     fun getAppTheme(callback: (Int) -> Unit)
     fun saveAppTheme(appTheme: Int)
 
     fun userCredentials(): Credentials?
 
-    suspend fun getTickets(): List<Ticket>
-    suspend fun getTicketById(id: String): Ticket
-    suspend fun insertTicket(ticket: TicketInput): Ticket
-    suspend fun updateTicket(ticket: TicketInput): Ticket
-    suspend fun deleteTicketById(id: String): Message
+    suspend fun getTickets(): Flow<Either<Message,List<Ticket>>>
+    suspend fun getTicketById(id: String): Flow<Either<Message,Ticket>>
+    suspend fun insertTicket(ticket: TicketInput): Flow<Either<Message,Ticket>>
+    suspend fun updateTicket(ticket: TicketInput): Flow<Either<Message,Ticket>>
+    suspend fun deleteTicketById(id: String): Flow<Either<Message,Message>>
 
 
 }

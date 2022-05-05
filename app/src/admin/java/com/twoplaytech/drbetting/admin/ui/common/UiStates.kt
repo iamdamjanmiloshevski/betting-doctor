@@ -38,6 +38,7 @@ sealed class NotificationUiState{
     data class Success(val notification: Notification):NotificationUiState()
     object Loading:NotificationUiState()
     data class Error(val exception:Throwable):NotificationUiState()
+    object Neutral:NotificationUiState()
 }
 sealed class LoginUiState{
     data class Success(val accessToken: AccessToken):LoginUiState()

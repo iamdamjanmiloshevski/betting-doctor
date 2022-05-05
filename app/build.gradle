@@ -254,21 +254,6 @@ dependencies {
   implementation "com.afollestad.material-dialogs:datetime:$materialDialogsVersion"
   //endregion
 
-  //region Retrofit
-  implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
-  implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
-  //endregion
-
-  //region Gson
-  implementation "com.google.code.gson:gson:$gsonVersion"
-  //endregion
-
-  //region OkHttp
-  implementation(platform("com.squareup.okhttp3:okhttp-bom:$okHttpVersion"))
-  implementation("com.squareup.okhttp3:okhttp")
-  implementation("com.squareup.okhttp3:logging-interceptor")
-  //endregion
-
   //region Timber logger
   implementation "com.jakewharton.timber:timber:$timberLoggerVersion"
   //endregion
@@ -277,18 +262,10 @@ dependencies {
   implementation "androidx.work:work-runtime-ktx:$work_version"
   //endregion
 
-  //region JWTDecode Android
-  implementation "com.auth0.android:jwtdecode:$jwtDecode_version"
-  //endregion
-
   //region ThreeTen Android backport
   implementation "com.jakewharton.threetenabp:threetenabp:$threeTenAndroidBackportVersion"
   //endregion
 
-  //region Facebook Stetho
-  implementation "com.facebook.stetho:stetho:$stethoVersion"
-  implementation "com.facebook.stetho:stetho-okhttp3:$stethoVersion"
-  //endregion
 
   //region Jetpack Compose
 // Integration with activities
@@ -304,7 +281,7 @@ dependencies {
   implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1'
 
   implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0"
-  implementation "androidx.navigation:navigation-compose:2.4.1"
+  implementation "androidx.navigation:navigation-compose:2.4.2"
   implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
   //endregion
 
@@ -317,7 +294,7 @@ dependencies {
   debugImplementation "com.squareup.leakcanary:$leakCanaryVersion"
   //endregion
 
-  testImplementation 'junit:junit:4.+'
-  androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-  androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+  testImplementation 'junit:junit:'
+  androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+  androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }

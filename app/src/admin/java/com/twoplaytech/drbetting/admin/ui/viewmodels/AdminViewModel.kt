@@ -29,8 +29,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.twoplaytech.drbetting.admin.data.mappers.BettingTipMapper
 import com.twoplaytech.drbetting.admin.domain.repository.Repository
-import com.twoplaytech.drbetting.admin.domain.usecases.SendNotificationUseCase
 import com.twoplaytech.drbetting.admin.ui.common.BettingTipUiState
+import com.twoplaytech.drbetting.admin.ui.common.NotificationUiState
 import com.twoplaytech.drbetting.data.common.Either
 import com.twoplaytech.drbetting.data.models.BettingTip
 import com.twoplaytech.drbetting.data.models.Notification
@@ -48,14 +48,15 @@ import javax.inject.Inject
 */
 @HiltViewModel
 class AdminViewModel @Inject constructor(
-    private val sendNotificationUseCase: SendNotificationUseCase,
     private val repository: Repository
 ) : ViewModel() {
     private val fieldValidatorObserver = MutableLiveData<Boolean>()
     private val notificationsObserver = MutableLiveData<String>()
     private val _bettingTipUiState: MutableStateFlow<BettingTipUiState> =
         MutableStateFlow(BettingTipUiState.Neutral)
+    private val _notificationUiState:MutableStateFlow<NotificationUiState> = MutableStateFlow(NotificationUiState.Neutral)
     val bettingTipUiState: StateFlow<BettingTipUiState> = _bettingTipUiState
+    val notificationUiState:StateFlow<NotificationUiState> = _notificationUiState
 
     fun validate(validate: Boolean) {
         fieldValidatorObserver.value = validate
@@ -117,11 +118,18 @@ class AdminViewModel @Inject constructor(
     }
 
     fun sendNotification(topic: String = "new-tips") {
-        sendNotificationUseCase.sendNotification(Notification(topic), onSuccess = {
-            notificationsObserver.postValue(it.message)
-        }, onError = {
-            notificationsObserver.postValue("Something went wrong while trying to send notification")
-        })
+        viewModelScope.launch {
+            repository.sendNotification(Notification(topic))
+                .catch { e->
+                    _notificationUiState.value = NotificationUiState.Error(e)
+                }
+                .collectLatest { either ->
+                when(either){
+                    is Either.Failure -> _notificationUiState.value = NotificationUiState.Error(Throwable(either.message.message))
+                    is Either.Response -> _notificationUiState.value = NotificationUiState.Success(either.data)
+                }
+            }
+        }
     }
 
     fun observeValidation() = fieldValidatorObserver

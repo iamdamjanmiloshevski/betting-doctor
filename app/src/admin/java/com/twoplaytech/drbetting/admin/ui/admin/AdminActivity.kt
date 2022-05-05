@@ -49,6 +49,7 @@ import com.twoplaytech.drbetting.admin.domain.repository.Repository
 import com.twoplaytech.drbetting.admin.ui.auth.LoginActivity
 import com.twoplaytech.drbetting.admin.ui.common.BettingTipUiState
 import com.twoplaytech.drbetting.admin.ui.common.BettingTipsUiState
+import com.twoplaytech.drbetting.admin.ui.common.NotificationUiState
 import com.twoplaytech.drbetting.admin.ui.ticket.TicketActivity
 import com.twoplaytech.drbetting.admin.ui.viewmodels.BettingTipsViewModel
 import com.twoplaytech.drbetting.admin.ui.viewmodels.LoginViewModel
@@ -184,24 +185,41 @@ class AdminActivity : BaseAdminActivity(), AdapterView.OnItemSelectedListener,
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 adminViewModel.bettingTipUiState
                     .collect { uiState ->
-                    when(uiState){
-                        BettingTipUiState.Deleted ->  changeData(sportSelected.getSportFromIndex(), typeSelected)
-                        is BettingTipUiState.Error -> error(uiState.exception.message ?: "Something went wrong")
-                        BettingTipUiState.Loading -> {}
-                        BettingTipUiState.Neutral -> {
-                            /**
-                             * do nothing
-                             */
+                        when (uiState) {
+                            BettingTipUiState.Deleted -> changeData(
+                                sportSelected.getSportFromIndex(),
+                                typeSelected
+                            )
+                            is BettingTipUiState.Error -> error(
+                                uiState.exception.message ?: "Something went wrong"
+                            )
+                            BettingTipUiState.Loading -> {}
+                            BettingTipUiState.Neutral -> {
+                                /**
+                                 * do nothing
+                                 */
+                            }
+                            is BettingTipUiState.Success -> adapter.notifyDataSetChanged()
                         }
-                        is BettingTipUiState.Success -> adapter.notifyDataSetChanged()
                     }
-                }
 
             }
         }
-
-        adminViewModel.observeNotifications().observe(this) {
-            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                adminViewModel.notificationUiState.collectLatest { uiState ->
+                    when (uiState) {
+                        is NotificationUiState.Error -> {}
+                        NotificationUiState.Loading -> {}
+                        NotificationUiState.Neutral -> {}
+                        is NotificationUiState.Success -> Toast.makeText(
+                            this@AdminActivity,
+                            "Notification sent successfully",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
         }
     }
 

@@ -18,4 +18,7 @@ class Users {
     @Serializable
     @Resource("token")
     class RefreshToken(val parent: Users = Users())
+    @Serializable
+    @Resource("notifications")
+    class Notification(val parent:Users = Users())
 }

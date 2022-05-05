@@ -48,18 +48,6 @@ interface UseCasesModule {
     fun bindAppLaunchUseCase(appLaunchUseCaseImpl: AppLaunchUseCaseImpl): AppLaunchUseCase
 
     @Binds
-    fun sendNotificationUseCase(sendNotificationUseCaseImpl: SendNotificationUseCaseImpl):SendNotificationUseCase
-
-    @Binds
     fun bindChangeThemeUseCase(changeThemeUseCaseImpl: ChangeThemeUseCaseImpl): ChangeThemeUseCase
 
-    @Binds
-    fun bindGetTicketsUseCase(getTicketsUseCase: GetTicketsUseCaseImpl):GetTicketsUseCase
-
-    @Binds
-    fun bindsInsertTicketUseCase(insertTicketUseCaseImpl: InsertTicketUseCaseImpl):InsertTicketUseCase
-    @Binds
-    fun bindsUpdateTicketUseCase(updateTicketUseCaseImpl: UpdateTicketUseCaseImpl):UpdateTicketUseCase
-    @Binds
-    fun bindDeleteTicketUseCase(deleteTicketUseCaseImpl: DeleteTicketUseCaseImpl):DeleteTicketUseCase
 }

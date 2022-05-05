@@ -24,11 +24,11 @@
 
 package com.twoplaytech.drbetting.admin.data.datasource
 
-import com.twoplaytech.drbetting.admin.data.api.BettingDoctorAPI
 import com.twoplaytech.drbetting.admin.data.models.AccessToken
 import com.twoplaytech.drbetting.admin.data.models.RefreshToken
 import com.twoplaytech.drbetting.admin.data.models.TicketInput
 import com.twoplaytech.drbetting.admin.data.models.UserInput
+import com.twoplaytech.drbetting.admin.network.resources.tickets.Tickets
 import com.twoplaytech.drbetting.admin.network.resources.users.Users
 import com.twoplaytech.drbetting.data.common.Either
 import com.twoplaytech.drbetting.data.models.*
@@ -41,9 +41,6 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
@@ -54,11 +51,8 @@ import kotlin.coroutines.CoroutineContext
     Project: Dr.Betting
     © 2Play Tech  2021. All rights reserved
 */
-class RemoteDataSourceImpl @Inject constructor(private val api: BettingDoctorAPI,private val client:HttpClient) :
+class RemoteDataSourceImpl @Inject constructor(private val client:HttpClient) :
     RemoteDataSource, CoroutineScope {
-    override suspend fun getBettingTips(): Flow<List<BettingTip>> {
-        return flow { emit(api.getBettingTips()) }.flowOn(coroutineContext)
-    }
 
     override suspend fun getBettingTipsBySport(
         sport: Sport,
@@ -262,33 +256,148 @@ class RemoteDataSourceImpl @Inject constructor(private val api: BettingDoctorAPI
     }
 
 
-    override suspend fun sendNotification(notification: Notification): Flow<Notification> {
-        return flow { emit(api.sendNotification(notification)) }.flowOn(coroutineContext)
+    override suspend fun sendNotification(notification: Notification): Either<Message, Notification> {
+        return try {
+            val httpResponse = client.post(Users.Notification()){
+                contentType(ContentType.Application.Json)
+                setBody(notification)
+            }
+            when (httpResponse.status) {
+                HttpStatusCode.OK -> Either.Response(httpResponse.body())
+                else -> Either.Failure(httpResponse.body())
+            }
+        } catch (ex: RedirectResponseException) {
+            // 3xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ClientRequestException) {
+            // 4xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ServerResponseException) {
+            // 5xx - response
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        }
 
     }
 
-    override suspend fun sendNotification1(notification: Notification): Notification =
-        api.sendNotification(notification)
 
 
-    override suspend fun getTickets(): List<Ticket> {
-        return api.getTickets()
+    override suspend fun getTickets(): Either<Message, List<Ticket>> {
+        return try {
+            val httpResponse = client.get(Tickets())
+            when (httpResponse.status) {
+                HttpStatusCode.OK -> Either.Response(httpResponse.body())
+                else -> Either.Failure(httpResponse.body())
+            }
+        } catch (ex: RedirectResponseException) {
+            // 3xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ClientRequestException) {
+            // 4xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ServerResponseException) {
+            // 5xx - response
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        }
     }
 
-    override suspend fun getTicketById(id: String): Ticket {
-        return api.getTicketById(id)
+    override suspend fun getTicketById(id: String): Either<Message, Ticket> {
+        return try {
+            val httpResponse = client.get(Tickets.Id(id = id))
+            when (httpResponse.status) {
+                HttpStatusCode.OK -> Either.Response(httpResponse.body())
+                else -> Either.Failure(httpResponse.body())
+            }
+        } catch (ex: RedirectResponseException) {
+            // 3xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ClientRequestException) {
+            // 4xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ServerResponseException) {
+            // 5xx - response
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        }
     }
 
-    override suspend fun insertTicket(ticket: TicketInput): Ticket {
-        return api.insertTicket(ticket)
+    override suspend fun insertTicket(ticket: TicketInput): Either<Message, Ticket> {
+        return try{
+            val httpResponse = client.post(Tickets()){
+                contentType(ContentType.Application.Json)
+                setBody(ticket)
+            }
+            when(httpResponse.status){
+                HttpStatusCode.OK -> Either.Response(httpResponse.body())
+                else -> Either.Failure(httpResponse.body())
+            }
+        }catch (ex: RedirectResponseException) {
+            // 3xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ClientRequestException) {
+            // 4xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ServerResponseException) {
+            // 5xx - response
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        }
     }
 
-    override suspend fun updateTicket(ticket: TicketInput): Ticket {
-        return api.updateTicket(ticket)
+    override suspend fun updateTicket(ticket: TicketInput): Either<Message, Ticket> {
+        return try{
+            val httpResponse = client.put(Tickets()){
+                contentType(ContentType.Application.Json)
+                setBody(ticket)
+            }
+            when(httpResponse.status){
+                HttpStatusCode.OK -> Either.Response(httpResponse.body())
+                else -> Either.Failure(httpResponse.body())
+            }
+        }catch (ex: RedirectResponseException) {
+            // 3xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ClientRequestException) {
+            // 4xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ServerResponseException) {
+            // 5xx - response
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        }
     }
 
-    override suspend fun deleteTicketById(id: String): Message {
-        return api.deleteTicketById(id)
+    override suspend fun deleteTicketById(id: String): Either<Message, Message> {
+        return try{
+            val httpResponse = client.delete(Tickets.Id(id = id))
+            when(httpResponse.status){
+                HttpStatusCode.OK -> Either.Response(httpResponse.body())
+                else -> Either.Failure(httpResponse.body())
+            }
+        }catch (ex: RedirectResponseException) {
+            // 3xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ClientRequestException) {
+            // 4xx - responses
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        } catch (ex: ServerResponseException) {
+            // 5xx - response
+            Timber.e(ex)
+            Either.Failure(Message(message = ex.cause?.message ?: "Error"))
+        }
     }
 
     override val coroutineContext: CoroutineContext
